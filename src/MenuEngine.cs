@@ -8,7 +8,6 @@ namespace Ahk
 {
     public class MenuEngine
     {
-        private readonly MainForm _form;
         private readonly MenuCollection _menuCollection;
         private readonly Stack<Menu> _stack;
         private readonly Timer _textChangedTimer;
@@ -16,7 +15,7 @@ namespace Ahk
 
         public MenuEngine(MainForm form, MenuCollection menuCollection)
         {
-            _form = form;
+            Form = form;
             _menuCollection = menuCollection;
 
             _stack = new Stack<Menu>();
@@ -34,11 +33,13 @@ namespace Ahk
 
         private string Filter { get; set; }
 
-        private ListBox ListBox => _form.ListBox;
+        private MainForm Form { get; }
 
-        private TextBox SearchBar => _form.TextBox;
+        private ListBox ListBox => Form.ListBox;
 
-        private Label StackLabel => _form.StackLabel;
+        private TextBox SearchBar => Form.TextBox;
+
+        private Label StackLabel => Form.StackLabel;
 
         private List<Menu> Items
         {
@@ -97,6 +98,19 @@ namespace Ahk
                 handled = OnSpaceKeyPressed();
             }
 
+            if (args.KeyCode == Keys.Enter)
+            {
+                handled = OnEnterKeyPressed();
+            }
+
+            if (args.KeyCode == Keys.Back)
+            {
+                if (Control.ModifierKeys == Keys.Control)
+                {
+                    
+                }
+            }
+
             if (handled)
             {
                 args.SuppressKeyPress = true;
@@ -104,25 +118,58 @@ namespace Ahk
             }
         }
 
+        private bool OnEnterKeyPressed()
+        {
+            if (IsExecutableMenu && ExecutableItems.Count > 0)
+            {
+                ExecuteItem(ExecutableItems[0]);
+
+            }
+            else if (!IsExecutableMenu && Items.Count > 0)
+            {
+                PushMenu(Items[0]);
+            }
+            return true;
+        }
+
+        private void ExecuteItem(ExecutableItem executableItem)
+        {
+            var menu = (ExecutableMenu)_stack.Peek();
+            menu.Execute(executableItem);
+            _stack.Clear();
+            ClearSearchBar();
+            ReloadStackLabel();
+            LoadItems();
+            Form.Visible = false;
+        }
+
         private bool OnSpaceKeyPressed()
         {
-            if (Items.Count == 0 && !IsExecutableMenu)
+            if (IsExecutableMenu)
+            {
+                return false;
+            }
+
+            return ProcessSelectedItemIfAny();
+        }
+
+        private bool ProcessSelectedItemIfAny()
+        {
+            if (Items.Count == 0)
             {
                 return true;
             }
 
-            Menu selectedMenu = Items[0];
-            if (selectedMenu.SubItems.Count == 0)
+            var executableMenu = Items[0] as ExecutableMenu;
+            if (executableMenu != null)
             {
-                var executableMenu = selectedMenu as ExecutableMenu;
-                if (executableMenu != null)
-                {
-                    PushExecutableMenu(executableMenu);
-                }
-                return true;
+                PushExecutableMenu(executableMenu);
+            }
+            else
+            {
+                PushMenu(Items[0]);
             }
 
-            PushMenu(selectedMenu);
             return true;
         }
 
@@ -167,7 +214,7 @@ namespace Ahk
 
         private void ReloadStackLabel()
         {
-            StackLabel.Text = "> " + string.Join(" > ", _stack.Select(x => x.Name));
+            StackLabel.Text = "> " + string.Join(" > ", _stack.Reverse().Select(x => x.Name));
         }
 
         private void OnTextBoxTextChanged()
