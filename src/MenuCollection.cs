@@ -30,7 +30,7 @@ namespace Ahk
             var menu = new ExecutableMenu
             {
                 Name = "update",
-                Execute = x => SvnUpdate(x.Parameter)
+                Execute = x => SvnUpdate(x.Value)
             };
             menu.LoadItemsFromFile(Configuration.RepositoriesPath);
 
@@ -49,7 +49,7 @@ namespace Ahk
             var menu = new ExecutableMenu
             {
                 Name = "solution",
-                Execute = x => System.Diagnostics.Process.Start(x.Parameter),
+                Execute = x => System.Diagnostics.Process.Start(x.Value),
             };
             menu.LoadItemsFromFile(Configuration.SolutionsPath);
 
@@ -61,7 +61,7 @@ namespace Ahk
             var menu = new ExecutableMenu
             {
                 Name = "url",
-                Execute = x => System.Diagnostics.Process.Start(x.Parameter),
+                Execute = x => System.Diagnostics.Process.Start(x.Value),
             };
             menu.LoadItemsFromFile(Configuration.UrlsPath);
 
@@ -73,7 +73,7 @@ namespace Ahk
             var menu = new ExecutableMenu
             {
                 Name = "file",
-                Execute = x => System.Diagnostics.Process.Start(x.Parameter),
+                Execute = x => System.Diagnostics.Process.Start(x.Value),
             };
             menu.LoadItemsFromFile(Configuration.FilesPath);
 
@@ -84,7 +84,7 @@ namespace Ahk
             var menu = new ExecutableMenu
             {
                 Name = "program",
-                Execute = x => System.Diagnostics.Process.Start(x.Parameter),
+                Execute = x => System.Diagnostics.Process.Start(x.Value),
             };
             menu.LoadItemsFromFile(Configuration.ProgramsPath);
 

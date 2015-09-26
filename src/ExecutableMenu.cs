@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -18,12 +19,8 @@ namespace Ahk
 
         public void LoadItemsFromFile(string path)
         {
-            List<ExecutableItem> items = File.ReadAllLines(path)
-                .Where(x => !string.IsNullOrWhiteSpace(x))
-                .Select(x => new ExecutableItem(x))
-                .Where(x => x.Name != null && x.Parameter != null)
-                .ToList();
-
+            var menuStorage = new MenuStorage(path);
+            IEnumerable<ExecutableItem> items = menuStorage.LoadExecutableItems();
             ExecutableItems.AddRange(items);
         }
     }
