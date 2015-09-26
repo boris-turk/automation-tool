@@ -10,6 +10,10 @@ namespace Ahk
 
         public static string UrlsPath => Path.Combine(RootDirectory, "urls.txt");
 
+        public static string SolutionsPath => Path.Combine(RootDirectory, "solutions.txt");
+
+        public static string RepositoriesPath => Path.Combine(RootDirectory, "repositories.txt");
+
         public static string ProgramsPath => Path.Combine(RootDirectory, "programs.txt");
     }
 }

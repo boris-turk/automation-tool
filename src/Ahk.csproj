@@ -64,10 +64,9 @@
     <Compile Include="MenuCollection.cs" />
     <Compile Include="MenuEngine.cs" />
     <Compile Include="MenuItemComparator.cs" />
+    <Compile Include="MenuStorage.cs" />
     <Compile Include="Messages\CopyDataStruct.cs" />
     <Compile Include="Messages\WindowMessages.cs" />
-    <Compile Include="OpenMenu.cs" />
-    <Compile Include="PasteMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">

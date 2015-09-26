@@ -28,7 +28,6 @@ namespace Ahk
             SearchBar.KeyDown += OnTextBoxOnKeyDown;
 
             ClearSearchBar();
-            LoadItems();
         }
 
         private string Filter { get; set; }
@@ -65,7 +64,8 @@ namespace Ahk
 
         private bool MatchesFilter(string text)
         {
-            return text.IndexOf(Filter, StringComparison.CurrentCultureIgnoreCase) >= 0;
+            string[] words = Filter.ToLower().Split(' ');
+            return words.All(x => text.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) >= 0);
         }
 
         private List<ExecutableItem> ExecutableItems
@@ -103,12 +103,40 @@ namespace Ahk
                 handled = OnEnterKeyPressed();
             }
 
-            if (args.KeyCode == Keys.Back)
+            if (args.KeyCode == Keys.Down)
             {
-                if (Control.ModifierKeys == Keys.Control)
+                SelectItem(ListBox.SelectedIndex + 1);
+                handled = true;
+            }
+
+            if (args.KeyCode == Keys.Up)
+            {
+                SelectItem(ListBox.SelectedIndex - 1);
+                handled = true;
+            }
+
+            if (args.KeyCode == Keys.Escape)
+            {
+                CloseMenuEngine();
+                handled = true;
+            }
+
+            if (args.KeyData == (Keys.Control | Keys.Back))
+            {
+                SendKeys.SendWait("^+{LEFT}{BACKSPACE}");
+                handled = true;
+            }
+            else if (args.KeyData == (Keys.Alt | Keys.Back))
+            {
+                if (SearchBar.Text == string.Empty)
                 {
-                    
+                    PopMenu();
                 }
+                else
+                {
+                    ClearSearchBar();
+                }
+                handled = true;
             }
 
             if (handled)
@@ -120,10 +148,15 @@ namespace Ahk
 
         private bool OnEnterKeyPressed()
         {
+            if (_textChangedTimer.Enabled)
+            {
+                _textChangedTimer.Stop();
+                OnFilterChanged();
+            }
+
             if (IsExecutableMenu && ExecutableItems.Count > 0)
             {
                 ExecuteItem(ExecutableItems[0]);
-
             }
             else if (!IsExecutableMenu && Items.Count > 0)
             {
@@ -136,11 +169,19 @@ namespace Ahk
         {
             var menu = (ExecutableMenu)_stack.Peek();
             menu.Execute(executableItem);
+            CloseMenuEngine();
+        }
+
+        private void CloseMenuEngine()
+        {
+            ResetMenuEngine();
+            Form.Visible = false;
+        }
+
+        private void ResetMenuEngine()
+        {
             _stack.Clear();
             ClearSearchBar();
-            ReloadStackLabel();
-            LoadItems();
-            Form.Visible = false;
         }
 
         private bool OnSpaceKeyPressed()
@@ -155,6 +196,12 @@ namespace Ahk
 
         private bool ProcessSelectedItemIfAny()
         {
+            if (_textChangedTimer.Enabled)
+            {
+                _textChangedTimer.Stop();
+                OnFilterChanged();
+            }
+
             if (Items.Count == 0)
             {
                 return true;
@@ -187,21 +234,30 @@ namespace Ahk
 
         private void PushExecutableMenu(ExecutableMenu menu)
         {
-            _textChangedTimer.Stop();
             _stack.Push(menu);
+            _textChangedTimer.Stop();
             ClearSearchBar();
-            ReloadStackLabel();
-            LoadExecutableItems();
+            _textChangedTimer.Start();
+        }
+
+        private void PopMenu()
+        {
+            if (_stack.Count == 0)
+            {
+                return;
+            }
+
+            _stack.Pop();
+            _textChangedTimer.Stop();
+            ClearSearchBar();
             _textChangedTimer.Start();
         }
 
         private void PushMenu(Menu menu)
         {
-            _textChangedTimer.Stop();
             _stack.Push(menu);
+            _textChangedTimer.Stop();
             ClearSearchBar();
-            ReloadStackLabel();
-            LoadItems();
             _textChangedTimer.Start();
         }
 
@@ -210,6 +266,20 @@ namespace Ahk
             Filter = string.Empty;
             SearchBar.Clear();
             _lastSearchText = SearchBar.Text;
+            ReloadStackLabel();
+            LoadProperItems();
+        }
+
+        private void SelectItem(int itemIndex)
+        {
+            if (itemIndex < 0)
+            {
+                return;
+            }
+            if (Items.Count > itemIndex || ExecutableItems.Count > itemIndex)
+            {
+                ListBox.SelectedIndex = itemIndex;
+            }
         }
 
         private void ReloadStackLabel()
@@ -258,6 +328,11 @@ namespace Ahk
         private void OnFilterChanged()
         {
             Filter = SearchBar.Text.Trim();
+            LoadProperItems();
+        }
+
+        private void LoadProperItems()
+        {
             if (IsExecutableMenu)
             {
                 LoadExecutableItems();
@@ -266,6 +341,8 @@ namespace Ahk
             {
                 LoadItems();
             }
+
+            SelectItem(0);
         }
     }
 }
