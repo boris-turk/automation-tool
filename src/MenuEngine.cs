@@ -1,36 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using AutoHotkey.Interop;
 using Timer = System.Timers.Timer;
 
 namespace Ahk
 {
     public class MenuEngine
     {
-        private readonly MenuCollection _menuCollection;
-        private readonly Stack<Menu> _stack;
         private readonly Timer _textChangedTimer;
+
         private string _lastSearchText;
+        private readonly AutoHotkeyEngine _ahk;
 
-        public MenuEngine(MainForm form, MenuCollection menuCollection)
+        public MenuEngine(MainForm form, Menu rootMenu, AutoHotkeyEngine ahk)
         {
-            Form = form;
-            _menuCollection = menuCollection;
+            _ahk = ahk;
 
-            _stack = new Stack<Menu>();
+            Form = form;
+            State = new MenuState(rootMenu);
 
             _textChangedTimer = new Timer();
             _textChangedTimer.Elapsed += (s, e) =>  OnTextChangedTimerElapsed();
-            _textChangedTimer.Interval = 500;
+            _textChangedTimer.Interval = 100;
 
             SearchBar.TextChanged += (s, e) => OnTextBoxTextChanged();
-            SearchBar.KeyDown += OnTextBoxOnKeyDown;
+            SearchBar.KeyDown += OnTextBoxKeyDown;
 
             ClearSearchBar();
         }
 
-        private string Filter { get; set; }
+        private MenuState State { get; set; }
 
         private MainForm Form { get; }
 
@@ -40,56 +42,7 @@ namespace Ahk
 
         private Label StackLabel => Form.StackLabel;
 
-        private List<Menu> Items
-        {
-            get
-            {
-                List<Menu> items;
-
-                if (_stack.Count == 0)
-                {
-                    items = _menuCollection.Menus;
-                }
-                else
-                {
-                    items = _stack.Peek().SubItems;
-                }
-
-                return items
-                    .Where(x => MatchesFilter(x.Name))
-                    .OrderBy(x => x, new MenuItemComparator())
-                    .ToList();
-            }
-        }
-
-        private bool MatchesFilter(string text)
-        {
-            string[] words = Filter.ToLower().Split(' ');
-            return words.All(x => text.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) >= 0);
-        }
-
-        private List<ExecutableItem> ExecutableItems
-        {
-            get
-            {
-                if (_stack.Count == 0)
-                {
-                    return new List<ExecutableItem>();
-                }
-
-                var actionMenu = _stack.Peek() as ExecutableMenu;
-                if (actionMenu == null)
-                {
-                    return new List<ExecutableItem>();
-                }
-
-                return actionMenu.ExecutableItems
-                    .Where(x => MatchesFilter(x.Name))
-                    .ToList();
-            }
-        }
-
-        private void OnTextBoxOnKeyDown(object sender, KeyEventArgs args)
+        private void OnTextBoxKeyDown(object sender, KeyEventArgs args)
         {
             bool handled = false;
 
@@ -154,22 +107,79 @@ namespace Ahk
                 OnFilterChanged();
             }
 
-            if (IsExecutableMenu && ExecutableItems.Count > 0)
+            if (State.IsExecutableItemSelected)
             {
-                ExecuteItem(ExecutableItems[0]);
+                ExecuteSelectedItem();
             }
-            else if (!IsExecutableMenu && Items.Count > 0)
+            else if (State.IsSubmenuSelected)
             {
-                PushMenu(Items[0]);
+                State.PushSelectedSubmenu();
+                ClearSearchBar();
             }
             return true;
         }
 
-        private void ExecuteItem(ExecutableItem executableItem)
+        private void ExecuteSelectedItem()
         {
-            var menu = (ExecutableMenu)_stack.Peek();
-            menu.Execute(executableItem);
+            ExecutableItem executableItem = State.GetExecutableItem();
+            if (executableItem == null)
+            {
+                return;
+            }
+
+            Menu actingMenu = State.ActingMenu;
+            if (actingMenu == null)
+            {
+                return;
+            }
+
             CloseMenuEngine();
+
+            string[] arguments = executableItem.Arguments.Select(GetFunctionArgument).ToArray();
+            ExecuteFunction(actingMenu.ExecutingMethodName, arguments);
+        }
+
+        private void ExecuteFunction(string evaluateResultMethod, string[] arguments)
+        {
+            if (arguments.Length == 0)
+            {
+                _ahk.ExecFunction(evaluateResultMethod);
+            }
+            else if (arguments.Length == 1)
+            {
+                _ahk.ExecFunction(evaluateResultMethod, arguments[0]);
+            }
+            else if (arguments.Length == 2)
+            {
+                _ahk.ExecFunction(evaluateResultMethod, arguments[0], arguments[1]);
+            }
+            else if (arguments.Length == 3)
+            {
+                _ahk.ExecFunction(evaluateResultMethod, arguments[0], arguments[1], arguments[2]);
+            }
+            else if (arguments.Length == 4)
+            {
+                _ahk.ExecFunction(evaluateResultMethod, arguments[0], arguments[1], arguments[2], arguments[3]);
+            }
+            else if (arguments.Length == 5)
+            {
+                _ahk.ExecFunction(evaluateResultMethod, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);
+            }
+            else
+            {
+                throw new NotSupportedException("At most 5 parameters.");
+            }
+        }
+
+        private string GetFunctionArgument(ExecutableItemArgument argument)
+        {
+            if (argument.Type == ArgumentType.String)
+            {
+                return argument.Value;
+            }
+
+            string evaluated = _ahk.Eval(argument.Value);
+            return evaluated;
         }
 
         private void CloseMenuEngine()
@@ -180,94 +190,47 @@ namespace Ahk
 
         private void ResetMenuEngine()
         {
-            _stack.Clear();
+            State.Clear();
             ClearSearchBar();
         }
 
         private bool OnSpaceKeyPressed()
         {
-            if (IsExecutableMenu)
+            if (State.IsSelectionMenu)
             {
                 return false;
             }
 
-            return ProcessSelectedItemIfAny();
-        }
-
-        private bool ProcessSelectedItemIfAny()
-        {
             if (_textChangedTimer.Enabled)
             {
                 _textChangedTimer.Stop();
                 OnFilterChanged();
             }
 
-            if (Items.Count == 0)
+            if (State.IsSubmenuSelected)
             {
-                return true;
-            }
-
-            var executableMenu = Items[0] as ExecutableMenu;
-            if (executableMenu != null)
-            {
-                PushExecutableMenu(executableMenu);
-            }
-            else
-            {
-                PushMenu(Items[0]);
+                State.PushSelectedSubmenu();
+                ClearSearchBar();
             }
 
             return true;
         }
 
-        public bool IsExecutableMenu
-        {
-            get
-            {
-                if (_stack.Count == 0)
-                {
-                    return false;
-                }
-                return _stack.Peek() is ExecutableMenu;
-            }
-        }
-
-        private void PushExecutableMenu(ExecutableMenu menu)
-        {
-            _stack.Push(menu);
-            _textChangedTimer.Stop();
-            ClearSearchBar();
-            _textChangedTimer.Start();
-        }
-
         private void PopMenu()
         {
-            if (_stack.Count == 0)
-            {
-                return;
-            }
-
-            _stack.Pop();
-            _textChangedTimer.Stop();
+            State.PopMenu();
             ClearSearchBar();
-            _textChangedTimer.Start();
-        }
-
-        private void PushMenu(Menu menu)
-        {
-            _stack.Push(menu);
-            _textChangedTimer.Stop();
-            ClearSearchBar();
-            _textChangedTimer.Start();
         }
 
         private void ClearSearchBar()
         {
-            Filter = string.Empty;
+            _textChangedTimer.Stop();
+            State.Filter = string.Empty;
             SearchBar.Clear();
             _lastSearchText = SearchBar.Text;
             ReloadStackLabel();
             LoadProperItems();
+            _textChangedTimer.Start();
         }
 
         private void SelectItem(int itemIndex)
@@ -276,15 +239,17 @@ namespace Ahk
             {
                 return;
             }
-            if (Items.Count > itemIndex || ExecutableItems.Count > itemIndex)
+
+            if (State.ItemsCount > itemIndex)
             {
                 ListBox.SelectedIndex = itemIndex;
+                State.SelectedIndex = itemIndex;
             }
         }
 
         private void ReloadStackLabel()
         {
-            StackLabel.Text = "> " + string.Join(" > ", _stack.Reverse().Select(x => x.Name));
+            StackLabel.Text = State.StackText;
         }
 
         private void OnTextBoxTextChanged()
@@ -296,7 +261,7 @@ namespace Ahk
         private void LoadItems()
         {
             ListBox.Items.Clear();
-            foreach (string name in Items.Select(x => x.Name))
+            foreach (string name in State.MatchingSubmenus.Select(x => x.Name))
             {
                 ListBox.Items.Add(name);
             }
@@ -305,7 +270,7 @@ namespace Ahk
         private void LoadExecutableItems()
         {
             ListBox.Items.Clear();
-            foreach (string name in ExecutableItems.Select(x => x.Name))
+            foreach (string name in State.MatchingExecutableItems.Select(x => x.Name))
             {
                 ListBox.Items.Add(name);
             }
@@ -315,25 +280,23 @@ namespace Ahk
         {
             _textChangedTimer.Stop();
 
-            if (_lastSearchText == SearchBar.Text)
+            string currentValue = SearchBar.InvokeQuery(() => SearchBar.Text);
+            if (_lastSearchText !=  currentValue)
             {
-                return;
+                SearchBar.InvokeCommand(OnFilterChanged);
             }
-
-            _lastSearchText = SearchBar.Text;
-
-            SearchBar.InvokeCommand(OnFilterChanged);
         }
 
         private void OnFilterChanged()
         {
-            Filter = SearchBar.Text.Trim();
+            _lastSearchText = SearchBar.Text;
+            State.Filter = SearchBar.Text.Trim();
             LoadProperItems();
         }
 
         private void LoadProperItems()
         {
-            if (IsExecutableMenu)
+            if (State.IsSelectionMenu)
             {
                 LoadExecutableItems();
             }

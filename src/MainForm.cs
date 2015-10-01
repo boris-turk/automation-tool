@@ -1,19 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Ahk.Messages;
+using AutoHotkey.Interop;
 
 namespace Ahk
 {
     public partial class MainForm : Form
     {
-        private MenuEngine _menuEngine;
+        private readonly AutoHotkeyEngine _ahk;
 
         public MainForm()
         {
             InitializeComponent();
             TopMost = true;
             StartPosition = FormStartPosition.CenterScreen;
+            _ahk = new AutoHotkeyEngine();
         }
 
         public Label StackLabel => _stackLabel;
@@ -32,7 +37,14 @@ namespace Ahk
 
         private void InitializeMenuEngine()
         {
-            _menuEngine = new MenuEngine(this, new MenuCollection());
+            var menuStorage = new MenuStorage(Configuration.MenusFileName);
+            var rootMenu = new Menu
+            {
+                Id = "root"
+            };
+            List<Menu> menus = menuStorage.LoadMenus().ToList();
+            rootMenu.Submenus.AddRange(menus);
+            new MenuEngine(this, rootMenu, _ahk);
         }
 
         private void InstallMainShortcut()
@@ -55,8 +67,9 @@ namespace Ahk
             definition.AppendLine("SetTitleMatchMode %Prev_TitleMatchMode%");
             definition.AppendLine("return");
 
-            var ahk = new AutoHotkey.Interop.AutoHotkeyEngine();
-            ahk.ExecRaw(definition.ToString());
+            _ahk.ExecRaw(definition.ToString());
+            _ahk.Load(Path.Combine(Configuration.RootDirectory, Configuration.AhkScriptFileName));
+            _ahk.ExecFunction("DefineVariables");
         }
 
         protected override void WndProc(ref Message m)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -9,9 +10,9 @@ namespace Ahk
     {
         private readonly string _path;
 
-        public MenuStorage(string path)
+        public MenuStorage(string fileName)
         {
-            _path = path;
+            _path = Path.Combine(Configuration.RootDirectory, fileName);
         }
 
         private IEnumerable<T> LoadItems<T>(Mappings<T> mappings) where T : class, new()
@@ -47,14 +48,57 @@ namespace Ahk
         {
             var mappings = new Mappings<ExecutableItem>();
             mappings.Items.Add("name", (x, y) => x.Name = y);
-            mappings.Items.Add("value", (x, y) => x.Value = y);
+            mappings.Items.Add("value", (x, y) => SetArgumentValue(x, y));
+            mappings.Items.Add("ahk_value", (x, y) => SetAhkArgumentValue(x, y));
             return LoadItems(mappings);
+        }
+
+        private void SetArgumentValue(ExecutableItem item, string value)
+        {
+            var argument = new ExecutableItemArgument
+            {
+                Value = value,
+                Type = ArgumentType.String
+            };
+            item.Arguments.Add(argument);
+        }
+
+        private void SetAhkArgumentValue(ExecutableItem item, string value)
+        {
+            var argument = new ExecutableItemArgument
+            {
+                Value = value,
+                Type = ArgumentType.AutoHotkey
+            };
+            item.Arguments.Add(argument);
         }
 
         public IEnumerable<Menu> LoadMenus()
         {
             var mappings = new Mappings<Menu>();
-            return LoadItems<Menu>(mappings);
+            mappings.Items.Add("id", (x, y) => x.Id = y);
+            mappings.Items.Add("name", (x, y) => x.Name = y);
+            mappings.Items.Add("file", (x, y) => x.ContentsFileName = y);
+            mappings.Items.Add("execute", (x, y) => x.ExecutingMethodName = y);
+            mappings.Items.Add("access", (x, y) => x.LastAccess = GetLastAccessTimeStamp(y));
+            mappings.Items.Add("submenus", (x, y) => x.SubmenusIdentifiers.AddRange(GetSubmenus(y)));
+            return LoadItems(mappings);
+        }
+
+        private IEnumerable<string> GetSubmenus(string text)
+        {
+            return text.Split(',').Select(menuId => menuId.Trim());
+        }
+
+        private DateTime GetLastAccessTimeStamp(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return DateTime.MinValue;
+            }
+            DateTime dateTime;
+            DateTime.TryParse(text, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime);
+            return dateTime;
         }
 
         private void SetProperty<T>(T entity, string line, Mappings<T> mapping)
@@ -77,7 +121,7 @@ namespace Ahk
 
         private class Mappings<T>
         {
-            public Dictionary<string, Action<T, string>> Items { get; private set; }
+            public Dictionary<string, Action<T, string>> Items { get; }
 
             public Mappings()
             {
@@ -91,10 +135,7 @@ namespace Ahk
                     Select(x => x.Value).
                     FirstOrDefault();
 
-                if (action != null)
-                {
-                    action(entity, value);
-                }
+                action?.Invoke(entity, value);
             }
 
             private bool IsEqual(string text1, string text2)

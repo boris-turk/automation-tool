@@ -50,9 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExecutableMenu.cs" />
+    <Compile Include="ArgumentType.cs" />
     <Compile Include="ExecutableItem.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="ExecutableItemArgument.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -61,9 +62,8 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Menu.cs" />
-    <Compile Include="MenuCollection.cs" />
     <Compile Include="MenuEngine.cs" />
-    <Compile Include="MenuItemComparator.cs" />
+    <Compile Include="MenuState.cs" />
     <Compile Include="MenuStorage.cs" />
     <Compile Include="Messages\CopyDataStruct.cs" />
     <Compile Include="Messages\WindowMessages.cs" />
