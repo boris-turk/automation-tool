@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="ArgumentType.cs" />
     <Compile Include="AhkInterop.cs" />
+    <Compile Include="Cloner.cs" />
     <Compile Include="CopyData.cs" />
     <Compile Include="ExecutableItem.cs" />
     <Compile Include="Configuration.cs" />

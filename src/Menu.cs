@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
+    [Serializable]
     public class Menu
     {
         private string _name;
@@ -12,6 +13,7 @@ namespace AutomationEngine
 
         public Menu()
         {
+            Aliases = new List<string>();
             Submenus = new List<Menu>();
             SubmenuIdentifiers = new List<string>();
         }
@@ -29,6 +31,14 @@ namespace AutomationEngine
                 return _name;
             }
             set { _name = value; }
+        }
+
+        [XmlArray("Aliases"), XmlArrayItem("Alias")]
+        public List<string> Aliases { get; }
+
+        public bool AliasesSpecified
+        {
+            get { return Aliases.Count > 0; }
         }
 
         public bool NameSpecified
@@ -81,6 +91,11 @@ namespace AutomationEngine
             {
                 _executableItems = new MenuStorage(ContentsFileName).LoadExecutableItems().ToList();
             }
+        }
+
+        public Menu Clone()
+        {
+            return Cloner.Clone(this);
         }
     }
 }
