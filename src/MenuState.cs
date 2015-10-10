@@ -16,24 +16,64 @@ namespace Ahk
 
         public List<Menu> MatchingSubmenus
         {
-            get { return Submenus.Where(x => MatchesFilter(x.Name)).ToList(); }
+            get
+            {
+                List<Menu> result = Submenus.Where(x => MatchesFilter(x.Name)).ToList();
+                result.Sort(new MenuComparer(this));
+                return result;
+            }
         }
 
         public string Filter { get; set; }
 
         public bool IsSelectionMenu
         {
-            get { return ExecutableItems.Count > 0; }
+            get
+            {
+                if (Submenus.Count > 0)
+                {
+                    return false;
+                }
+                return ExecutableItems.Count > 0;
+            }
         }
 
         private List<ExecutableItem> ExecutableItems
         {
-            get { return _menusStack.Peek().ExecutableItems; }
+            get { return ExecutableMenu.ExecutableItems; }
+        }
+
+        private Menu ExecutableMenu
+        {
+            get
+            {
+                Menu menu = _menusStack.Peek();
+
+                Menu candidate = _menusStack.Skip(1).FirstOrDefault(
+                    x => menu.Submenus.Any(y => y.Id == x.Id));
+
+                if (candidate != null)
+                {
+                    return candidate;
+                }
+
+                if (menu.Submenus.Count(x => x.ExecutableItems.Count > 0) == 1)
+                {
+                    return menu.Submenus.First();
+                }
+
+                return menu;
+            }
         }
 
         public List<ExecutableItem> MatchingExecutableItems
         {
-            get { return ExecutableItems.Where(x => MatchesFilter(x.Name)).ToList(); }
+            get
+            {
+                List<ExecutableItem> result = ExecutableItems.Where(x => MatchesFilter(x.Name)).ToList();
+                result.Sort(new ExecutableItemComparer());
+                return result;
+            }
         }
 
         public bool IsExecutableItemSelected
@@ -55,7 +95,19 @@ namespace Ahk
 
         private List<Menu> Submenus
         {
-            get { return _menusStack.Peek().Submenus; }
+            get
+            {
+                Menu menu = _menusStack.Peek();
+                if (_menusStack.Count > 1 && _menusStack.Peek().Submenus.Count(x => x.ExecutableItems.Count > 0) == 1)
+                {
+                    return new List<Menu>();
+                }
+                if (_menusStack.Skip(1).Any(x => menu.Submenus.Any(y => y.Id == x.Id)))
+                {
+                    return new List<Menu>();
+                }
+                return menu.Submenus;
+            }
         }
 
         public int ItemsCount
@@ -80,6 +132,13 @@ namespace Ahk
                 {
                     return null;
                 }
+
+                Menu menu = _menusStack.Peek();
+                if (_menusStack.Skip(1).Any(x => menu.Submenus.Any(y => y.Id == x.Id)))
+                {
+                    return menu;
+                }
+
                 return _menusStack.ToArray()[_menusStack.Count - 2];
             }
         }
@@ -120,6 +179,30 @@ namespace Ahk
             {
                 _menusStack.Pop();
             }
+        }
+
+        public void PersistExecutionTimeStamps()
+        {
+            DateTime now = DateTime.Now;
+
+            foreach (Menu menu in _menusStack)
+            {
+                menu.LastAccess = now;
+            }
+
+            ExecutableItem executableItem = GetExecutableItem();
+            if (executableItem != null)
+            {
+                executableItem.LastAccess = now;
+            }
+
+            var storage = new MenuStorage(Configuration.MenusFileName);
+            Menu rootMenu = _menusStack.Reverse().First();
+
+            storage.SaveMenus(rootMenu.Submenus);
+
+            storage = new MenuStorage(ExecutableMenu.ContentsFileName);
+            storage.SaveExecutableItems(ExecutableItems);
         }
     }
 }

@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using AutoHotkey.Interop;
 using Timer = System.Timers.Timer;
 
 namespace Ahk
 {
     public class MenuEngine
     {
+        private static MenuEngine _engine;
+
         private readonly Timer _textChangedTimer;
 
         private string _lastSearchText;
-        private readonly AutoHotkeyEngine _ahk;
 
-        public MenuEngine(MainForm form, Menu rootMenu, AutoHotkeyEngine ahk)
+        public MenuEngine(MainForm form, Menu rootMenu)
         {
-            _ahk = ahk;
-
             Form = form;
             State = new MenuState(rootMenu);
 
@@ -133,53 +130,24 @@ namespace Ahk
                 return;
             }
 
+            State.PersistExecutionTimeStamps();
+
             CloseMenuEngine();
 
-            string[] arguments = executableItem.Arguments.Select(GetFunctionArgument).ToArray();
-            ExecuteFunction(actingMenu.ExecutingMethodName, arguments);
+            ExecuteFunction(actingMenu.ExecutingMethodName, executableItem.Arguments);
         }
 
-        private void ExecuteFunction(string evaluateResultMethod, string[] arguments)
+        private void ExecuteFunction(string evaluateResultMethod, List<ExecutableItemArgument> arguments)
         {
-            if (arguments.Length == 0)
+            string[] values = arguments.Select(x =>
             {
-                _ahk.ExecFunction(evaluateResultMethod);
-            }
-            else if (arguments.Length == 1)
-            {
-                _ahk.ExecFunction(evaluateResultMethod, arguments[0]);
-            }
-            else if (arguments.Length == 2)
-            {
-                _ahk.ExecFunction(evaluateResultMethod, arguments[0], arguments[1]);
-            }
-            else if (arguments.Length == 3)
-            {
-                _ahk.ExecFunction(evaluateResultMethod, arguments[0], arguments[1], arguments[2]);
-            }
-            else if (arguments.Length == 4)
-            {
-                _ahk.ExecFunction(evaluateResultMethod, arguments[0], arguments[1], arguments[2], arguments[3]);
-            }
-            else if (arguments.Length == 5)
-            {
-                _ahk.ExecFunction(evaluateResultMethod, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);
-            }
-            else
-            {
-                throw new NotSupportedException("At most 5 parameters.");
-            }
-        }
-
-        private string GetFunctionArgument(ExecutableItemArgument argument)
-        {
-            if (argument.Type == ArgumentType.String)
-            {
-                return argument.Value;
-            }
-
-            string evaluated = _ahk.Eval(argument.Value);
-            return evaluated;
+                if (x.Type == ArgumentType.String)
+                {
+                    return "\"" + x.Value + "\"";
+                }
+                return x.Value;
+            }).ToArray();
+            AhkInterop.ExecFunction(evaluateResultMethod, values);
         }
 
         private void CloseMenuEngine()
@@ -306,6 +274,17 @@ namespace Ahk
             }
 
             SelectItem(0);
+        }
+
+        public static void Start(MainForm mainForm, Menu rootMenu)
+        {
+            if (_engine == null)
+            {
+                _engine = new MenuEngine(mainForm, rootMenu);
+            }
+
+            _engine.State = new MenuState(rootMenu);
+            _engine.ClearSearchBar();
         }
     }
 }

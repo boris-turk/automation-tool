@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace Ahk
 {
@@ -12,8 +13,14 @@ namespace Ahk
 
         public string Name { get; set; }
 
+        [XmlElement("Argument")]
         public List<ExecutableItemArgument> Arguments { get; set; }
 
         public DateTime LastAccess { get; set; }
+
+        public bool LastAccessSpecified
+        {
+            get { return LastAccess != DateTime.MinValue; }
+        }
     }
 }

@@ -35,9 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoHotkey.Interop">
-      <HintPath>..\lib\AutoHotkey.Interop.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,9 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentType.cs" />
+    <Compile Include="AhkInterop.cs" />
+    <Compile Include="CopyData.cs" />
     <Compile Include="ExecutableItem.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ExecutableItemArgument.cs" />
+    <Compile Include="ExecutableItemComparer.cs" />
+    <Compile Include="ExecutableItemsCollection.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -62,6 +63,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Menu.cs" />
+    <Compile Include="MenuComparer.cs" />
     <Compile Include="MenuEngine.cs" />
     <Compile Include="MenuState.cs" />
     <Compile Include="MenuStorage.cs" />
@@ -69,6 +71,9 @@
     <Compile Include="Messages\WindowMessages.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReloadGuard.cs" />
+    <Compile Include="RootMenuCollection.cs" />
+    <Compile Include="XmlStorage.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
