@@ -187,9 +187,10 @@ namespace AutomationEngine
 
             DateTime now = DateTime.Now;
 
-            foreach (Menu menu in _menusStack)
+            foreach (Menu menu in _menusStack.Reverse().Skip(1).Reverse())
             {
                 menu.LastAccess = now;
+                now = now.AddTicks(1);
             }
 
             ExecutableItem executableItem = GetExecutableItem();

@@ -14,6 +14,7 @@ namespace AutomationEngine
             InitializeComponent();
             TopMost = true;
             StartPosition = FormStartPosition.CenterScreen;
+            Visible = false;
         }
 
         public Label StackLabel => _stackLabel;

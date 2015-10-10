@@ -18,6 +18,10 @@ namespace AutomationEngine
         public IEnumerable<ExecutableItem> LoadExecutableItems()
         {
             var executableItems = XmlStorage.Load<ExecutableItemsCollection>(_rootMenuPath);
+            if (executableItems == null)
+            {
+                return new ExecutableItem[] { };
+            }
             return executableItems.Items;
         }
 
