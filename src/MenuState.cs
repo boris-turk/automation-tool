@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Ahk
+namespace AutomationEngine
 {
     public class MenuState
     {
@@ -183,6 +183,8 @@ namespace Ahk
 
         public void PersistExecutionTimeStamps()
         {
+            ReloadGuard.Enabled = false;
+
             DateTime now = DateTime.Now;
 
             foreach (Menu menu in _menusStack)
@@ -203,6 +205,8 @@ namespace Ahk
 
             storage = new MenuStorage(ExecutableMenu.ContentsFileName);
             storage.SaveExecutableItems(ExecutableItems);
+
+            ReloadGuard.Enabled = true;
         }
     }
 }

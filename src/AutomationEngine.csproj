@@ -8,8 +8,8 @@
     <ProjectGuid>{01F28497-1551-4B7F-B3C7-1F62553349D9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ahk</RootNamespace>
-    <AssemblyName>Ahk</AssemblyName>
+    <RootNamespace>AutomationEngine</RootNamespace>
+    <AssemblyName>AutomationEngine</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>

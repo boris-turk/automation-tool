@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Ahk
+namespace AutomationEngine
 {
     partial class MainForm
     {

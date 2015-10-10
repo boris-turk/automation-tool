@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Ahk
+namespace AutomationEngine
 {
     public static class Configuration
     {

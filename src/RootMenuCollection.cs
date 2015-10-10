@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Ahk
+namespace AutomationEngine
 {
     [XmlRoot("Menus")]
     public class RootMenuCollection

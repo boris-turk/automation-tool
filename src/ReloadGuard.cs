@@ -1,13 +1,21 @@
+using System;
 using System.IO;
 using System.Threading;
 
-namespace Ahk
+namespace AutomationEngine
 {
     public class ReloadGuard
     {
         private static ReloadGuard _guard;
 
         private readonly MainForm _mainForm;
+        private bool _enabled;
+
+        public static bool Enabled
+        {
+            get { return _guard._enabled; }
+            set { _guard._enabled = value; }
+        }
 
         public static void Start(MainForm mainForm)
         {
@@ -19,6 +27,7 @@ namespace Ahk
 
         public ReloadGuard(MainForm mainForm)
         {
+            _enabled = true;
             _mainForm = mainForm;
 
             var watcher = new FileSystemWatcher
@@ -37,8 +46,19 @@ namespace Ahk
 
         private void OnFileSystemChange()
         {
-            Thread.Sleep(1000);
+            if (!_enabled)
+            {
+                return;
+            }
+            _enabled = false;
+            ThreadPool.QueueUserWorkItem(x => ReloadMenuEngine());
+        }
+
+        private void ReloadMenuEngine()
+        {
+            Thread.Sleep(500);
             _mainForm.InvokeCommand(() => _mainForm.LoadMenuEngine());
+            _enabled = true;
         }
     }
 }

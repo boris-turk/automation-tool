@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Timer = System.Timers.Timer;
 
-namespace Ahk
+namespace AutomationEngine
 {
     public class MenuEngine
     {
@@ -152,8 +152,8 @@ namespace Ahk
 
         private void CloseMenuEngine()
         {
-            ResetMenuEngine();
             Form.Visible = false;
+            ResetMenuEngine();
         }
 
         private void ResetMenuEngine()

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Ahk
+namespace AutomationEngine
 {
     public class ExecutableItemComparer : IComparer<ExecutableItem>
     {

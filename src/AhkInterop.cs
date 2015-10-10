@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace Ahk
+namespace AutomationEngine
 {
     public static class AhkInterop
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Ahk
+namespace AutomationEngine
 {
     public static class Extensions
     {

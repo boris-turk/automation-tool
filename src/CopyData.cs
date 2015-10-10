@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Ahk.Messages;
+using AutomationEngine.Messages;
 
-namespace Ahk
+namespace AutomationEngine
 {
     public static class MessageHelper
     {

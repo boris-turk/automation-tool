@@ -2,7 +2,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Ahk
+namespace AutomationEngine
 {
     public static class XmlStorage
     {

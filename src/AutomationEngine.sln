@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ahk", "Ahk.csproj", "{01F28497-1551-4B7F-B3C7-1F62553349D9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationEngine", "AutomationEngine.csproj", "{01F28497-1551-4B7F-B3C7-1F62553349D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

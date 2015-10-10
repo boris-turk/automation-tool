@@ -1,4 +1,4 @@
-﻿namespace Ahk
+﻿namespace AutomationEngine
 {
     public enum ArgumentType
     {

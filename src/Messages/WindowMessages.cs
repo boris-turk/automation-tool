@@ -1,4 +1,4 @@
-﻿namespace Ahk.Messages
+﻿namespace AutomationEngine.Messages
 {
     public static class WindowMessages
     {

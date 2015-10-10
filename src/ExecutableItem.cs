@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Ahk
+namespace AutomationEngine
 {
     public class ExecutableItem
     {

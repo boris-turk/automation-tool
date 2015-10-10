@@ -4,7 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 
-namespace Ahk
+namespace AutomationEngine
 {
     public class MenuStorage
     {

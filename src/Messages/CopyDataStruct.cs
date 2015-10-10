@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Ahk.Messages
+namespace AutomationEngine.Messages
 {
     public struct CopyDataStruct
     {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Ahk.Messages;
+using AutomationEngine.Messages;
 
-namespace Ahk
+namespace AutomationEngine
 {
     public partial class MainForm : Form
     {
