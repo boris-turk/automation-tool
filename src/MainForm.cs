@@ -15,13 +15,27 @@ namespace AutomationEngine
             TopMost = true;
             StartPosition = FormStartPosition.CenterScreen;
             Visible = false;
+            Closing += (sender, args) =>
+            {
+                args.Cancel = true;
+                Visible = false;
+            };
         }
 
-        public Label StackLabel => _stackLabel;
+        public Label StackLabel
+        {
+            get { return _stackLabel; }
+        }
 
-        public TextBox TextBox => _textBox;
+        public TextBox TextBox
+        {
+            get { return _textBox; }
+        }
 
-        public ListBox ListBox => _listBox;
+        public ListBox ListBox
+        {
+            get { return _listBox; }
+        }
 
         protected override void OnLoad(EventArgs e)
         {
@@ -67,7 +81,20 @@ namespace AutomationEngine
 
 				return;
 			}
-			
+            if (m.Msg == WindowMessages.WmSyscommand)
+            {
+                if (m.WParam.ToInt32() == WindowMessages.ScMinimize)
+                {
+                    m.Result = IntPtr.Zero;
+                    Visible = false;
+                    return;
+                }
+                else if (m.WParam.ToInt32() == WindowMessages.ScMaximize)
+                {
+                    Visible = true;
+                    return;
+                }
+            }
 			base.WndProc(ref m);
 		}
 

@@ -31,13 +31,22 @@ namespace AutomationEngine
 
         private MenuState State { get; set; }
 
-        private MainForm Form { get; }
+        private MainForm Form { get; set; }
 
-        private ListBox ListBox => Form.ListBox;
+        private ListBox ListBox
+        {
+            get { return Form.ListBox; }
+        }
 
-        private TextBox SearchBar => Form.TextBox;
+        private TextBox SearchBar
+        {
+            get { return Form.TextBox; }
+        }
 
-        private Label StackLabel => Form.StackLabel;
+        private Label StackLabel
+        {
+            get { return Form.StackLabel; }
+        }
 
         private void OnTextBoxKeyDown(object sender, KeyEventArgs args)
         {

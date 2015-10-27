@@ -34,7 +34,7 @@ namespace AutomationEngine
         }
 
         [XmlArray("Aliases"), XmlArrayItem("Alias")]
-        public List<string> Aliases { get; }
+        public List<string> Aliases { get; set; }
 
         public bool AliasesSpecified
         {
@@ -51,7 +51,7 @@ namespace AutomationEngine
         public string ExecutingMethodName { get; set; }
 
         [XmlArray("Submenus"), XmlArrayItem("Id")]
-        public List<string> SubmenuIdentifiers { get; }
+        public List<string> SubmenuIdentifiers { get; set; }
 
         public bool SubmenuIdentifiersSpecified
         {
@@ -59,7 +59,7 @@ namespace AutomationEngine
         }
 
         [XmlIgnore]
-        public List<Menu> Submenus { get; }
+        public List<Menu> Submenus { get; set; }
 
         public DateTime LastAccess { get; set; }
 
