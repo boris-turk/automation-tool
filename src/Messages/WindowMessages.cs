@@ -7,6 +7,7 @@
         public const int ScMaximize = 0xf030;
 
         public const int WmCopydata = 0x004A;
-        public const string ToggleVisibility = "T";
+        public const string ToggleGLobalMenuVisibility = "T";
+        public const string ToggleContextMenuVisibility = "C";
     }
 }

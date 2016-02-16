@@ -81,6 +81,8 @@ namespace AutomationEngine
             }
         }
 
+        public string Context { get; set; }
+
         private void LoadExecutingItems()
         {
             if (string.IsNullOrWhiteSpace(ContentsFileName))

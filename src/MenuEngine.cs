@@ -10,6 +10,11 @@ namespace AutomationEngine
     {
         private static MenuEngine _engine;
 
+        public static MenuEngine Instance
+        {
+            get { return _engine; }
+        }
+
         private readonly Timer _textChangedTimer;
 
         private string _lastSearchText;
@@ -46,6 +51,12 @@ namespace AutomationEngine
         private Label StackLabel
         {
             get { return Form.StackLabel; }
+        }
+
+        public string Context
+        {
+            get { return State.Context; }
+            set { State.Context = value; }
         }
 
         private void OnTextBoxKeyDown(object sender, KeyEventArgs args)
@@ -199,7 +210,7 @@ namespace AutomationEngine
             ClearSearchBar();
         }
 
-        private void ClearSearchBar()
+        public void ClearSearchBar()
         {
             _textChangedTimer.Stop();
             State.Filter = string.Empty;

@@ -89,7 +89,7 @@ namespace AutomationEngine
                     Visible = false;
                     return;
                 }
-                else if (m.WParam.ToInt32() == WindowMessages.ScMaximize)
+                if (m.WParam.ToInt32() == WindowMessages.ScMaximize)
                 {
                     Visible = true;
                     return;
@@ -104,17 +104,24 @@ namespace AutomationEngine
             Type mytype = mystr.GetType();
             mystr = (CopyDataStruct)message.GetLParam(mytype);
 
-            if (mystr.LpData == WindowMessages.ToggleVisibility)
+            if (mystr.LpData == WindowMessages.ToggleGLobalMenuVisibility)
             {
-                ToggleVisibility();
+                MenuEngine.Instance.Context = null;
+                ToggleGlobalAutomationEngineVisibility();
+            }
+            else if (mystr.LpData == WindowMessages.ToggleContextMenuVisibility)
+            {
+                MenuEngine.Instance.Context = AhkInterop.GetMessageFileContents().FirstOrDefault();
+                ToggleGlobalAutomationEngineVisibility();
             }
         }
 
-        private void ToggleVisibility()
+        private void ToggleGlobalAutomationEngineVisibility()
         {
             Visible = !Visible;
             if (Visible)
             {
+                MenuEngine.Instance.ClearSearchBar();
                 TopMost = true;
                 Activate();
             }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AutomationEngine
 {
@@ -106,8 +107,22 @@ namespace AutomationEngine
                 {
                     return new List<Menu>();
                 }
-                return menu.Submenus;
+
+                return GetMenusForCurrentContext(menu.Submenus);
             }
+        }
+
+        private List<Menu> GetMenusForCurrentContext(List<Menu> menus)
+        {
+            if (string.IsNullOrWhiteSpace(Context))
+            {
+                return menus.Where(x => x.Context == null).ToList();
+            }
+
+            return menus
+                .Where(x => x.Context != null)
+                .Where(x => Regex.IsMatch(Context, x.Context))
+                .ToList();
         }
 
         public int ItemsCount
@@ -142,6 +157,8 @@ namespace AutomationEngine
                 return _menusStack.ToArray()[_menusStack.Count - 2];
             }
         }
+
+        public string Context { get; set; }
 
         public void PushSelectedSubmenu()
         {

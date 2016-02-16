@@ -7,7 +7,7 @@ namespace AutomationEngine
 {
     public static class AhkInterop
     {
-        public static string MessageFile
+        private static string MessageFile
         {
             get
             {
@@ -30,6 +30,11 @@ namespace AutomationEngine
             List<string> lines = arguments.ToList();
             lines.Insert(0, name);
             File.WriteAllLines(MessageFile, lines);
+        }
+
+        public static List<string> GetMessageFileContents()
+        {
+            return File.ReadAllLines(MessageFile).ToList();
         }
     }
 }
