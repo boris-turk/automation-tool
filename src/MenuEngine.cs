@@ -124,14 +124,14 @@ namespace AutomationEngine
                 OnFilterChanged();
             }
 
-            if (State.IsExecutableItemSelected)
-            {
-                ExecuteSelectedItem();
-            }
-            else if (State.IsSubmenuSelected)
+            if (State.IsSubmenuSelected)
             {
                 State.PushSelectedSubmenu();
                 ClearSearchBar();
+            }
+            else if (State.IsExecutableItemSelected)
+            {
+                ExecuteSelectedItem();
             }
             return true;
         }
