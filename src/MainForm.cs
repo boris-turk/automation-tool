@@ -136,7 +136,6 @@ namespace AutomationEngine
             }
             else if (mystr.LpData == WindowMessages.AhkFunctionResultReported)
             {
-                MenuEngine.Instance.Context = AhkInterop.GetMessageFileContents().FirstOrDefault();
                 if (AhkFunctionResultReported != null)
                 {
                     AhkFunctionResultReported();
