@@ -12,7 +12,7 @@ namespace AutomationEngine
                 return CompareByLastAccessTime(x, y);
             }
 
-            return string.Compare(y.Name, x.Name, StringComparison.Ordinal);
+            return string.Compare(x.Name, y.Name, StringComparison.CurrentCulture);
         }
 
         private int CompareByLastAccessTime(ExecutableItem x, ExecutableItem y)

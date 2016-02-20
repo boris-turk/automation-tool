@@ -13,22 +13,33 @@ namespace AutomationEngine
         {
             get
             {
-                string tempDir = System.Environment.GetEnvironmentVariable("TEMP");
+                string tempDir = Environment.GetEnvironmentVariable("TEMP");
                 return Path.Combine(tempDir, @"_ahk_message_file.txt");
             }
         }
 
         public static IEnumerable<ExecutableItem> LoadRawFileContents(RawFileContentsSource source)
         {
-            string[] arguments = new[]
+            ExecutableItemArgument[] arguments = new[]
             {
-                source.Path,
-                source.NameRegex.SearchRegex,
-                source.NameRegex.Replacement,
-                source.ReturnValueRegex.SearchRegex,
-                source.ReturnValueRegex.Replacement,
+                new ExecutableItemArgument { Type = ArgumentType.String, Value = source.Path },
+                new ExecutableItemArgument { Type = ArgumentType.String, Value = source.NameRegex.SearchRegex },
+                new ExecutableItemArgument { Type = ArgumentType.String, Value = source.NameRegex.Replacement },
+                new ExecutableItemArgument { Type = ArgumentType.String, Value = source.ReturnValueRegex.SearchRegex },
+                new ExecutableItemArgument { Type = ArgumentType.String, Value = source.ReturnValueRegex.Replacement },
             };
 
+            return ExecuteFunction("LoadRawFileContents", arguments);
+        }
+
+        public static IEnumerable<ExecutableItem> ExecuteFunction(AhkFunctionContentsSource contentSource)
+        {
+            return ExecuteFunction(contentSource.Function, contentSource.Arguments.ToArray());
+        }
+
+        private static IEnumerable<ExecutableItem> ExecuteFunction(
+            string function, params ExecutableItemArgument[] arguments)
+        {
             using (var waitHandle = new ManualResetEvent(false))
             {
                 // ReSharper disable once AccessToDisposedClosure
@@ -37,7 +48,7 @@ namespace AutomationEngine
                 try
                 {
                     MainForm.AhkFunctionResultReported += action;
-                    ExecMethod("LoadRawFileContents", arguments.ToArray());
+                    ExecuteMethod(function, arguments.ToArray());
                     waitHandle.WaitOne();
                 }
                 finally
@@ -68,11 +79,20 @@ namespace AutomationEngine
             }
         }
 
-        public static void ExecMethod(string name, params string[] arguments)
+        public static void ExecuteMethod(string name, params ExecutableItemArgument[] arguments)
         {
+            string[] properArguments = arguments.Select(x =>
+            {
+                if (x.Type == ArgumentType.String)
+                {
+                    return "\"" + x.Value + "\"";
+                }
+                return x.Value;
+            }).ToArray();
+
             using (Process process = Process.GetProcessesByName("AutoHotKey").Single())
             {
-                SerializeMethodInfo(name, arguments);
+                SerializeMethodInfo(name, properArguments);
                 MessageHelper.SendMessage(process, "func");
             }
         }

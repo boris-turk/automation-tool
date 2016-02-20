@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AhkFunctionItemsLoader.cs" />
+    <Compile Include="AhkFunctionContentsSource.cs" />
     <Compile Include="ArgumentType.cs" />
     <Compile Include="AhkInterop.cs" />
     <Compile Include="Cloner.cs" />

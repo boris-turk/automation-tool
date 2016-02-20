@@ -17,6 +17,11 @@ namespace AutomationEngine
             {
                 return new RawFileItemsLoader(rawFileContentSource);
             }
+            var ahkFunctionContentSource = contentSource as AhkFunctionContentsSource;
+            if (ahkFunctionContentSource != null)
+            {
+                return new AhkFunctionItemsLoader(ahkFunctionContentSource);
+            }
             throw new Exception("Unknown menu content loader");
         }
     }

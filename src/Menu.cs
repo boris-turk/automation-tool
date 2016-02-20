@@ -51,6 +51,7 @@ namespace AutomationEngine
 
         [XmlElement("RawFileSource", typeof(RawFileContentsSource))]
         [XmlElement("FileSource", typeof(FileDescriptorContentSource))]
+        [XmlElement("AhkFunctionSource", typeof(AhkFunctionContentsSource))]
         public object ContentSource { get; set; }
 
         public string ExecutingMethodName { get; set; }

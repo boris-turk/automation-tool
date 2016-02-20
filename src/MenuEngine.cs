@@ -159,20 +159,12 @@ namespace AutomationEngine
 
             CloseMenuEngine();
 
-            ExecuteFunction(actingMenu.ExecutingMethodName, executableItem.Arguments);
+            ExecuteMethod(actingMenu.ExecutingMethodName, executableItem.Arguments);
         }
 
-        private void ExecuteFunction(string evaluateResultMethod, List<ExecutableItemArgument> arguments)
+        private void ExecuteMethod(string evaluateResultMethod, List<ExecutableItemArgument> arguments)
         {
-            string[] values = arguments.Select(x =>
-            {
-                if (x.Type == ArgumentType.String)
-                {
-                    return "\"" + x.Value + "\"";
-                }
-                return x.Value;
-            }).ToArray();
-            AhkInterop.ExecMethod(evaluateResultMethod, values);
+            AhkInterop.ExecuteMethod(evaluateResultMethod, arguments.ToArray());
         }
 
         private void CloseMenuEngine()
