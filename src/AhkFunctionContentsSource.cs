@@ -9,13 +9,13 @@ namespace AutomationEngine
     {
         public AhkFunctionContentsSource()
         {
-            Arguments = new List<object>();
+            Arguments = new List<AbstractValue>();
         }
 
         public string Function { get; set; }
 
         [XmlElement("Argument", typeof(StringValue))]
         [XmlElement("AhkArgument", typeof(AhkVariable))]
-        public List<object> Arguments { get; set; }
+        public List<AbstractValue> Arguments { get; set; }
     }
 }

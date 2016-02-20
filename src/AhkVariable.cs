@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
     [Serializable]
-    public class AhkVariable
+    public class AhkVariable : AbstractValue
     {
-        [XmlText]
-        public string Value { get; set; }
+        public override string InteropValue
+        {
+            get { return Value; }
+        }
     }
 }

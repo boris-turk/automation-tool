@@ -20,7 +20,7 @@ namespace AutomationEngine
 
         public static IEnumerable<ExecutableItem> LoadRawFileContents(RawFileContentsSource source)
         {
-            object[] arguments = new object[]
+            AbstractValue[] arguments = new AbstractValue[]
             {
                 new StringValue { Value = source.Path },
                 new StringValue { Value = source.NameRegex.SearchRegex },
@@ -38,7 +38,7 @@ namespace AutomationEngine
         }
 
         private static IEnumerable<ExecutableItem> ExecuteFunction(
-            string function, params object[] arguments)
+            string function, params AbstractValue[] arguments)
         {
             using (var waitHandle = new ManualResetEvent(false))
             {
@@ -78,22 +78,9 @@ namespace AutomationEngine
             }
         }
 
-        public static void ExecuteMethod(string name, params object[] arguments)
+        public static void ExecuteMethod(string name, params AbstractValue[] arguments)
         {
-            string[] properArguments = arguments.Select(x =>
-            {
-                var stringValue = x as StringValue;
-                if (stringValue != null)
-                {
-                    return "\"" + stringValue.Value + "\"";
-                }
-                var ahkVariable = x as AhkVariable;
-                if (ahkVariable != null)
-                {
-                    return ahkVariable.Value;
-                }
-                throw new Exception("Unknown argument type");
-            }).ToArray();
+            string[] properArguments = arguments.Select(x => x.InteropValue).ToArray();
 
             using (Process process = Process.GetProcessesByName("AutoHotKey").Single())
             {

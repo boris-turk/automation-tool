@@ -9,14 +9,14 @@ namespace AutomationEngine
     {
         public ExecutableItem()
         {
-            Arguments = new List<object>();
+            Arguments = new List<AbstractValue>();
         }
 
         public string Name { get; set; }
 
         [XmlElement("Argument", typeof(StringValue))]
         [XmlElement("AhkArgument", typeof(AhkVariable))]
-        public List<object> Arguments { get; set; }
+        public List<AbstractValue> Arguments { get; set; }
 
         public DateTime LastAccess { get; set; }
 
