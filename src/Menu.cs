@@ -10,9 +10,12 @@ namespace AutomationEngine
     {
         private string _name;
         private List<ExecutableItem> _executableItems;
+        private readonly ExecutableItemsLoaderFactory _executableItemsLoaderFactory;
 
         public Menu()
         {
+            _executableItems = new List<ExecutableItem>();
+            _executableItemsLoaderFactory = new ExecutableItemsLoaderFactory();
             Aliases = new List<string>();
             Submenus = new List<Menu>();
             SubmenuIdentifiers = new List<string>();
@@ -46,7 +49,9 @@ namespace AutomationEngine
             get { return _name != null; }
         }
 
-        public string ContentsFileName { get; set; }
+        [XmlElement("RawFileSource", typeof(RawFileContentsSource))]
+        [XmlElement("FileSource", typeof(FileDescriptorContentSource))]
+        public object ContentSource { get; set; }
 
         public string ExecutingMethodName { get; set; }
 
@@ -71,28 +76,35 @@ namespace AutomationEngine
         [XmlIgnore]
         public List<ExecutableItem> ExecutableItems
         {
-            get
-            {
-                if (_executableItems == null)
-                {
-                    LoadExecutingItems();
-                }
-                return _executableItems;
-            }
+            get { return _executableItems; }
         }
 
         public string Context { get; set; }
 
-        private void LoadExecutingItems()
+        public bool IsExecutableMenu
         {
-            if (string.IsNullOrWhiteSpace(ContentsFileName))
+            get { return ContentSource != null; }
+        }
+
+        public bool ContainsSingleSubmenuWithExecutableItems
+        {
+            get { return Submenus.Count(x => x.IsExecutableMenu) == 1; }
+        }
+
+        public Menu SingleSubmenuWithExecutableItems
+        {
+            get { return Submenus.Single(x => x.IsExecutableMenu); }
+        }
+
+        public void LoadExecutingItems()
+        {
+            if (ContentSource == null)
             {
-                _executableItems = new List<ExecutableItem>();
+                return;
             }
-            else
-            {
-                _executableItems = new MenuStorage(ContentsFileName).LoadExecutableItems().ToList();
-            }
+
+            IExecutableItemsLoader loader = _executableItemsLoaderFactory.GetInstance(ContentSource);
+            _executableItems = loader.Load();
         }
 
         public Menu Clone()

@@ -8,6 +8,8 @@ namespace AutomationEngine
 {
     public partial class MainForm : Form
     {
+        public static event Action AhkFunctionResultReported;
+
         public MainForm()
         {
             Text = "Automation engine";
@@ -35,6 +37,24 @@ namespace AutomationEngine
         public ListBox ListBox
         {
             get { return _listBox; }
+        }
+
+        public bool WorkInProgressVisible
+        {
+            get { return _workInProgressPictureBox.Visible; }
+            set
+            {
+                _workInProgressPictureBox.Visible = value;
+                if (value)
+                {
+                    _workInProgressPictureBox.BringToFront();
+                }
+                else
+                {
+                    
+                    _workInProgressPictureBox.SendToBack();
+                }
+            }
         }
 
         protected override void OnLoad(EventArgs e)
@@ -113,6 +133,14 @@ namespace AutomationEngine
             {
                 MenuEngine.Instance.Context = AhkInterop.GetMessageFileContents().FirstOrDefault();
                 ToggleGlobalAutomationEngineVisibility();
+            }
+            else if (mystr.LpData == WindowMessages.AhkFunctionResultReported)
+            {
+                MenuEngine.Instance.Context = AhkInterop.GetMessageFileContents().FirstOrDefault();
+                if (AhkFunctionResultReported != null)
+                {
+                    AhkFunctionResultReported();
+                }
             }
         }
 

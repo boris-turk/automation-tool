@@ -58,9 +58,9 @@ namespace AutomationEngine
                     return candidate;
                 }
 
-                if (menu.Submenus.Count(x => x.ExecutableItems.Count > 0) == 1)
+                if (menu.ContainsSingleSubmenuWithExecutableItems)
                 {
-                    return menu.Submenus.First();
+                    return menu.SingleSubmenuWithExecutableItems;
                 }
 
                 return menu;
@@ -164,6 +164,7 @@ namespace AutomationEngine
         {
             Menu menu = MatchingSubmenus[SelectedIndex];
             _menusStack.Push(menu);
+            ExecutableMenu.LoadExecutingItems();
         }
 
         public void Clear()
@@ -221,8 +222,12 @@ namespace AutomationEngine
 
             storage.SaveMenus(rootMenu.Submenus);
 
-            storage = new MenuStorage(ExecutableMenu.ContentsFileName);
-            storage.SaveExecutableItems(ExecutableItems);
+            var descriptorContentSource = ExecutableMenu.ContentSource as FileDescriptorContentSource;
+            if (descriptorContentSource != null)
+            {
+                storage = new MenuStorage(descriptorContentSource.Path);
+                storage.SaveExecutableItems(ExecutableItems);
+            }
 
             ReloadGuard.Enabled = true;
         }

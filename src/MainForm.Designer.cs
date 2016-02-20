@@ -34,6 +34,8 @@ namespace AutomationEngine
             this._textBox = new System.Windows.Forms.TextBox();
             this._listBox = new System.Windows.Forms.ListBox();
             this._stackLabel = new System.Windows.Forms.Label();
+            this._workInProgressPictureBox = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this._workInProgressPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // _textBox
@@ -69,6 +71,18 @@ namespace AutomationEngine
             this._stackLabel.TabIndex = 2;
             this._stackLabel.Text = ">";
             // 
+            // _workInProgressPictureBox
+            // 
+            this._workInProgressPictureBox.BackColor = System.Drawing.Color.White;
+            this._workInProgressPictureBox.Image = global::AutomationEngine.Properties.Resources.loader;
+            this._workInProgressPictureBox.Location = new System.Drawing.Point(12, 77);
+            this._workInProgressPictureBox.Name = "_workInProgressPictureBox";
+            this._workInProgressPictureBox.Size = new System.Drawing.Size(599, 364);
+            this._workInProgressPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this._workInProgressPictureBox.TabIndex = 3;
+            this._workInProgressPictureBox.TabStop = false;
+            this._workInProgressPictureBox.Visible = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -77,7 +91,9 @@ namespace AutomationEngine
             this.Controls.Add(this._stackLabel);
             this.Controls.Add(this._listBox);
             this.Controls.Add(this._textBox);
+            this.Controls.Add(this._workInProgressPictureBox);
             this.Name = "MainForm";
+            ((System.ComponentModel.ISupportInitialize)(this._workInProgressPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -88,6 +104,7 @@ namespace AutomationEngine
         private System.Windows.Forms.TextBox _textBox;
         private System.Windows.Forms.ListBox _listBox;
         private System.Windows.Forms.Label _stackLabel;
+        private System.Windows.Forms.PictureBox _workInProgressPictureBox;
     }
 }
 

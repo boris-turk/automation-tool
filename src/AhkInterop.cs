@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace AutomationEngine
 {
@@ -16,7 +18,57 @@ namespace AutomationEngine
             }
         }
 
-        public static void ExecFunction(string name, params string[] arguments)
+        public static IEnumerable<ExecutableItem> LoadRawFileContents(RawFileContentsSource source)
+        {
+            string[] arguments = new[]
+            {
+                source.Path,
+                source.NameRegex.SearchRegex,
+                source.NameRegex.Replacement,
+                source.ReturnValueRegex.SearchRegex,
+                source.ReturnValueRegex.Replacement,
+            };
+
+            using (var waitHandle = new ManualResetEvent(false))
+            {
+                // ReSharper disable once AccessToDisposedClosure
+                Action action = () => waitHandle.Set();
+
+                try
+                {
+                    MainForm.AhkFunctionResultReported += action;
+                    ExecMethod("LoadRawFileContents", arguments.ToArray());
+                    waitHandle.WaitOne();
+                }
+                finally
+                {
+                    MainForm.AhkFunctionResultReported -= action;
+                }
+            }
+
+            List<string> result = GetMessageFileContents();
+
+            for (int i = 0; i < result.Count; i += 2)
+            {
+                if (i >= result.Count - 1)
+                {
+                    break;
+                }
+
+                var executableItem = new ExecutableItem
+                {
+                    Name = result[i]
+                };
+                executableItem.Arguments.Add(new ExecutableItemArgument
+                {
+                    Type = ArgumentType.String,
+                    Value = result[i + 1]
+                });
+                yield return executableItem;
+            }
+        }
+
+        public static void ExecMethod(string name, params string[] arguments)
         {
             using (Process process = Process.GetProcessesByName("AutoHotKey").Single())
             {

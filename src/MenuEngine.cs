@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using Timer = System.Timers.Timer;
@@ -37,6 +37,12 @@ namespace AutomationEngine
         private MenuState State { get; set; }
 
         private MainForm Form { get; set; }
+
+        public bool WorkInProgressVisible
+        {
+            get { return Form.InvokeQuery(() => Form.WorkInProgressVisible); }
+            set { Form.InvokeCommand(() => Form.WorkInProgressVisible = value); }
+        }
 
         private ListBox ListBox
         {
@@ -126,8 +132,7 @@ namespace AutomationEngine
 
             if (State.IsSubmenuSelected)
             {
-                State.PushSelectedSubmenu();
-                ClearSearchBar();
+                PushSelectedSubmenu();
             }
             else if (State.IsExecutableItemSelected)
             {
@@ -167,7 +172,7 @@ namespace AutomationEngine
                 }
                 return x.Value;
             }).ToArray();
-            AhkInterop.ExecFunction(evaluateResultMethod, values);
+            AhkInterop.ExecMethod(evaluateResultMethod, values);
         }
 
         private void CloseMenuEngine()
@@ -197,11 +202,29 @@ namespace AutomationEngine
 
             if (State.IsSubmenuSelected)
             {
-                State.PushSelectedSubmenu();
-                ClearSearchBar();
+                PushSelectedSubmenu();
             }
 
             return true;
+        }
+
+        private void PushSelectedSubmenu()
+        {
+            WorkInProgressVisible = true;
+
+            using (var backgroundWorker = new BackgroundWorker())
+            {
+                backgroundWorker.DoWork += (sender, args) =>
+                {
+                    State.PushSelectedSubmenu();
+                    ClearSearchBar();
+                };
+                backgroundWorker.RunWorkerCompleted += (sender, args) =>
+                {
+                    WorkInProgressVisible = false;
+                };
+                backgroundWorker.RunWorkerAsync();
+            }
         }
 
         private void PopMenu()
@@ -213,11 +236,14 @@ namespace AutomationEngine
         public void ClearSearchBar()
         {
             _textChangedTimer.Stop();
-            State.Filter = string.Empty;
-            SearchBar.Clear();
-            _lastSearchText = SearchBar.Text;
-            ReloadStackLabel();
-            LoadProperItems();
+            Form.InvokeCommand(() =>
+            {
+                State.Filter = string.Empty;
+                SearchBar.Clear();
+                _lastSearchText = SearchBar.Text;
+                ReloadStackLabel();
+                LoadProperItems();
+            });
             _textChangedTimer.Start();
         }
 

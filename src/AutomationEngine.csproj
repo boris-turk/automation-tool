@@ -50,13 +50,17 @@
     <Compile Include="ArgumentType.cs" />
     <Compile Include="AhkInterop.cs" />
     <Compile Include="Cloner.cs" />
+    <Compile Include="FileDescriptorContentSource.cs" />
     <Compile Include="CopyData.cs" />
     <Compile Include="ExecutableItem.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ExecutableItemArgument.cs" />
     <Compile Include="ExecutableItemComparer.cs" />
     <Compile Include="ExecutableItemsCollection.cs" />
+    <Compile Include="ExecutableItemsLoaderFactory.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="FileDescriptorItemsLoader.cs" />
+    <Compile Include="IExecutableItemsLoader.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +76,9 @@
     <Compile Include="Messages\WindowMessages.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RawFileContentsSource.cs" />
+    <Compile Include="RawFileItemsLoader.cs" />
+    <Compile Include="RegexReplacement.cs" />
     <Compile Include="ReloadGuard.cs" />
     <Compile Include="RootMenuCollection.cs" />
     <Compile Include="XmlStorage.cs" />
@@ -98,6 +105,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\loader.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

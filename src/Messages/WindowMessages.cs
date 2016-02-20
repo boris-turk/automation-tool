@@ -9,5 +9,6 @@
         public const int WmCopydata = 0x004A;
         public const string ToggleGLobalMenuVisibility = "T";
         public const string ToggleContextMenuVisibility = "C";
+        public const string AhkFunctionResultReported = "R";
     }
 }

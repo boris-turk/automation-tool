@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
+    [Serializable]
     public class ExecutableItem
     {
         public ExecutableItem()
