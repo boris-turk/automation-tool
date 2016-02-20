@@ -20,13 +20,13 @@ namespace AutomationEngine
 
         public static IEnumerable<ExecutableItem> LoadRawFileContents(RawFileContentsSource source)
         {
-            ExecutableItemArgument[] arguments = new[]
+            object[] arguments = new object[]
             {
-                new ExecutableItemArgument { Type = ArgumentType.String, Value = source.Path },
-                new ExecutableItemArgument { Type = ArgumentType.String, Value = source.NameRegex.SearchRegex },
-                new ExecutableItemArgument { Type = ArgumentType.String, Value = source.NameRegex.Replacement },
-                new ExecutableItemArgument { Type = ArgumentType.String, Value = source.ReturnValueRegex.SearchRegex },
-                new ExecutableItemArgument { Type = ArgumentType.String, Value = source.ReturnValueRegex.Replacement },
+                new StringValue { Value = source.Path },
+                new StringValue { Value = source.NameRegex.SearchRegex },
+                new StringValue { Value = source.NameRegex.Replacement },
+                new StringValue { Value = source.ReturnValueRegex.SearchRegex },
+                new StringValue { Value = source.ReturnValueRegex.Replacement },
             };
 
             return ExecuteFunction("LoadRawFileContents", arguments);
@@ -38,7 +38,7 @@ namespace AutomationEngine
         }
 
         private static IEnumerable<ExecutableItem> ExecuteFunction(
-            string function, params ExecutableItemArgument[] arguments)
+            string function, params object[] arguments)
         {
             using (var waitHandle = new ManualResetEvent(false))
             {
@@ -70,24 +70,29 @@ namespace AutomationEngine
                 {
                     Name = result[i]
                 };
-                executableItem.Arguments.Add(new ExecutableItemArgument
+                executableItem.Arguments.Add(new StringValue
                 {
-                    Type = ArgumentType.String,
                     Value = result[i + 1]
                 });
                 yield return executableItem;
             }
         }
 
-        public static void ExecuteMethod(string name, params ExecutableItemArgument[] arguments)
+        public static void ExecuteMethod(string name, params object[] arguments)
         {
             string[] properArguments = arguments.Select(x =>
             {
-                if (x.Type == ArgumentType.String)
+                var stringValue = x as StringValue;
+                if (stringValue != null)
                 {
-                    return "\"" + x.Value + "\"";
+                    return "\"" + stringValue.Value + "\"";
                 }
-                return x.Value;
+                var ahkVariable = x as AhkVariable;
+                if (ahkVariable != null)
+                {
+                    return ahkVariable.Value;
+                }
+                throw new Exception("Unknown argument type");
             }).ToArray();
 
             using (Process process = Process.GetProcessesByName("AutoHotKey").Single())

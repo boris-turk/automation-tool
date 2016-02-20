@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="AhkFunctionItemsLoader.cs" />
     <Compile Include="AhkFunctionContentsSource.cs" />
+    <Compile Include="AhkVariable.cs" />
     <Compile Include="ArgumentType.cs" />
     <Compile Include="AhkInterop.cs" />
     <Compile Include="Cloner.cs" />
@@ -56,7 +57,7 @@
     <Compile Include="CopyData.cs" />
     <Compile Include="ExecutableItem.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="ExecutableItemArgument.cs" />
+    <Compile Include="StringVariable.cs" />
     <Compile Include="ExecutableItemComparer.cs" />
     <Compile Include="ExecutableItemsCollection.cs" />
     <Compile Include="ExecutableItemsLoaderFactory.cs" />

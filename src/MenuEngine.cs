@@ -162,7 +162,7 @@ namespace AutomationEngine
             ExecuteMethod(actingMenu.ExecutingMethodName, executableItem.Arguments);
         }
 
-        private void ExecuteMethod(string evaluateResultMethod, List<ExecutableItemArgument> arguments)
+        private void ExecuteMethod(string evaluateResultMethod, List<object> arguments)
         {
             AhkInterop.ExecuteMethod(evaluateResultMethod, arguments.ToArray());
         }

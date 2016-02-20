@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
     [Serializable]
-    public class ExecutableItemArgument
+    public class StringValue
     {
-        public ArgumentType Type { get; set; }
+        [XmlText]
         public string Value { get; set; }
     }
 }
