@@ -17,5 +17,9 @@ namespace AutomationEngine
         [XmlElement("Argument", typeof(StringValue))]
         [XmlElement("AhkArgument", typeof(AhkVariable))]
         public List<AbstractValue> Arguments { get; set; }
+
+        public RegexReplacement NameRegex { get; set; }
+
+        public RegexReplacement ReturnValueRegex { get; set; }
     }
 }

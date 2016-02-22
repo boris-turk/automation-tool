@@ -9,6 +9,10 @@ namespace AutomationEngine
 {
     public static class AhkInterop
     {
+        private const string VoidReturnType = "Void";
+        private const string ResultFromFunction = "ResultFromFunction";
+        private const string ResultFromRawFile = "ResultFromRawFile";
+
         private static string MessageFile
         {
             get
@@ -29,16 +33,26 @@ namespace AutomationEngine
                 new StringValue { Value = source.ReturnValueRegex.Replacement },
             };
 
-            return ExecuteFunction("LoadRawFileContents", arguments);
+            return ExecuteFunction(ResultFromRawFile, "", arguments);
         }
 
-        public static IEnumerable<ExecutableItem> ExecuteFunction(AhkFunctionContentsSource contentSource)
+        public static IEnumerable<ExecutableItem> ExecuteFunction(AhkFunctionContentsSource source)
         {
-            return ExecuteFunction(contentSource.Function, contentSource.Arguments.ToArray());
+            List<AbstractValue> arguments = new List<AbstractValue>
+            {
+                new StringValue { Value = source.NameRegex.SearchRegex },
+                new StringValue { Value = source.NameRegex.Replacement },
+                new StringValue { Value = source.ReturnValueRegex.SearchRegex },
+                new StringValue { Value = source.ReturnValueRegex.Replacement },
+            };
+
+            arguments.AddRange(source.Arguments);
+
+            return ExecuteFunction(ResultFromFunction, source.Function, arguments.ToArray());
         }
 
         private static IEnumerable<ExecutableItem> ExecuteFunction(
-            string function, params AbstractValue[] arguments)
+            string returnType, string function, params AbstractValue[] arguments)
         {
             using (var waitHandle = new ManualResetEvent(false))
             {
@@ -48,7 +62,7 @@ namespace AutomationEngine
                 try
                 {
                     MainForm.AhkFunctionResultReported += action;
-                    ExecuteMethod(function, arguments.ToArray());
+                    ExecuteMethod(returnType, function, arguments.ToArray());
                     waitHandle.WaitOne();
                 }
                 finally
@@ -80,19 +94,25 @@ namespace AutomationEngine
 
         public static void ExecuteMethod(string name, params AbstractValue[] arguments)
         {
+            ExecuteMethod(VoidReturnType, name, arguments);
+        }
+
+        private static void ExecuteMethod(string returnType, string name, params AbstractValue[] arguments)
+        {
             string[] properArguments = arguments.Select(x => x.InteropValue).ToArray();
 
             using (Process process = Process.GetProcessesByName("AutoHotKey").Single())
             {
-                SerializeMethodInfo(name, properArguments);
+                SerializeMethodInfo(returnType, name, properArguments);
                 MessageHelper.SendMessage(process, "func");
             }
         }
 
-        private static void SerializeMethodInfo(string name, string[] arguments)
+        private static void SerializeMethodInfo(string returnType, string name, string[] arguments)
         {
             List<string> lines = arguments.ToList();
-            lines.Insert(0, name);
+            lines.Insert(0, returnType);
+            lines.Insert(1, name);
             File.WriteAllLines(MessageFile, lines);
         }
 
