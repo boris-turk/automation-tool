@@ -53,6 +53,7 @@
     <Compile Include="ArgumentType.cs" />
     <Compile Include="AhkInterop.cs" />
     <Compile Include="Cloner.cs" />
+    <Compile Include="ContentSource.cs" />
     <Compile Include="FileDescriptorContentSource.cs" />
     <Compile Include="CopyData.cs" />
     <Compile Include="ExecutableItem.cs" />

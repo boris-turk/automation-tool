@@ -3,10 +3,8 @@ using System;
 namespace AutomationEngine
 {
     [Serializable]
-    public class RawFileContentsSource
+    public class RawFileContentsSource : ContentSource
     {
         public string Path { get; set; }
-        public RegexReplacement NameRegex { get; set; }
-        public RegexReplacement ReturnValueRegex { get; set; }
     }
 }
