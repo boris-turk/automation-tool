@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using AutomationEngine.Messages;
@@ -8,6 +9,7 @@ namespace AutomationEngine
 {
     public partial class MainForm : Form
     {
+        private const int OutOfScreenOffset = -20000;
         public static event Action AhkFunctionResultReported;
 
         public MainForm()
@@ -15,8 +17,8 @@ namespace AutomationEngine
             Text = "Automation engine";
             InitializeComponent();
             TopMost = true;
-            StartPosition = FormStartPosition.CenterScreen;
-            Visible = false;
+            StartPosition = FormStartPosition.Manual;
+            Location = new Point(OutOfScreenOffset, OutOfScreenOffset);
             Closing += (sender, args) =>
             {
                 args.Cancel = true;
@@ -148,6 +150,10 @@ namespace AutomationEngine
             Visible = !Visible;
             if (Visible)
             {
+                if (Location.X == OutOfScreenOffset)
+                {
+                    CenterToScreen();
+                }
                 MenuEngine.Instance.ClearSearchBar();
                 TopMost = true;
                 Activate();
