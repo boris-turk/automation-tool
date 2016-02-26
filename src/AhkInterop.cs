@@ -73,6 +73,7 @@ namespace AutomationEngine
 
             List<string> result = GetMessageFileContents();
 
+            DateTime timeStamp = DateTime.MaxValue;
             for (int i = 0; i < result.Count; i += 2)
             {
                 if (i >= result.Count - 1)
@@ -80,9 +81,11 @@ namespace AutomationEngine
                     break;
                 }
 
+                timeStamp = timeStamp.AddTicks(-1);
                 var executableItem = new ExecutableItem
                 {
-                    Name = result[i]
+                    Name = result[i],
+                    LastAccess = timeStamp
                 };
                 executableItem.Arguments.Add(new StringValue
                 {
