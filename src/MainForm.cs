@@ -17,6 +17,7 @@ namespace AutomationEngine
             Text = "Automation engine";
             InitializeComponent();
             TopMost = true;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.Manual;
             Location = new Point(OutOfScreenOffset, OutOfScreenOffset);
             Closing += (sender, args) =>
@@ -57,6 +58,12 @@ namespace AutomationEngine
                     _workInProgressPictureBox.SendToBack();
                 }
             }
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            Visible = false;
+            base.OnShown(e);
         }
 
         protected override void OnLoad(EventArgs e)
