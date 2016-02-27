@@ -22,7 +22,25 @@ namespace AutomationEngine
             {
                 return new ExecutableItem[] { };
             }
+            PrependRootDirectoryToFileItems(executableItems);
             return executableItems.Items;
+        }
+
+        private void PrependRootDirectoryToFileItems(ExecutableItemsCollection executableItems)
+        {
+            if (executableItems.Group == null)
+            {
+                return;
+            }
+            foreach (FileItem fileItem in executableItems.Items.OfType<FileItem>())
+            {
+                if (fileItem.Arguments.Count == 0)
+                {
+                    continue;
+                }
+                string path = Path.Combine(executableItems.Group, fileItem.FilePath);
+                fileItem.Arguments[0] = new StringValue { Value = path };
+            }
         }
 
         public IEnumerable<Menu> LoadMenus()

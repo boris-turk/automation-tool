@@ -5,17 +5,20 @@ using System.Xml.Serialization;
 namespace AutomationEngine
 {
     [Serializable]
-    public class AhkFunctionContentsSource : ContentSource
+    public class AhkFunctionContentsSource : AhkContentSource
     {
         public AhkFunctionContentsSource()
         {
             Arguments = new List<AbstractValue>();
         }
 
-        public string Function { get; set; }
-
-        [XmlElement("Argument", typeof (StringValue))]
-        [XmlElement("AhkArgument", typeof (AhkVariable))]
+        [XmlElement("Argument", typeof(StringValue))]
+        [XmlElement("AhkArgument", typeof(AhkVariable))]
         public List<AbstractValue> Arguments { get; set; }
+
+        public override string ReturnType
+        {
+            get { return "ResultFromFunction"; }
+        }
     }
 }

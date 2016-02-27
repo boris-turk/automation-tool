@@ -6,8 +6,16 @@ namespace AutomationEngine
     [XmlRoot("ExecutableItems")]
     public class ExecutableItemsCollection
     {
-        [XmlElement("Item")]
+        [XmlElement("Item", typeof(ExecutableItem))]
+        [XmlElement("FileItem", typeof(FileItem))]
         public List<ExecutableItem> Items { get; set; }
+
+        public string Group { get; set; }
+
+        public bool GroupSpecified
+        {
+            get { return !string.IsNullOrWhiteSpace(Group); }
+        }
 
         public ExecutableItemsCollection()
         {

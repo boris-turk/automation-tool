@@ -10,8 +10,6 @@ namespace AutomationEngine
     public static class AhkInterop
     {
         private const string VoidReturnType = "Void";
-        private const string ResultFromFunction = "ResultFromFunction";
-        private const string ResultFromRawFile = "ResultFromRawFile";
 
         private static string MessageFile
         {
@@ -22,37 +20,7 @@ namespace AutomationEngine
             }
         }
 
-        public static IEnumerable<ExecutableItem> LoadRawFileContents(RawFileContentsSource source)
-        {
-            AbstractValue[] arguments = new AbstractValue[]
-            {
-                new StringValue { Value = source.Path },
-                new StringValue { Value = source.NameRegex.SearchRegex },
-                new StringValue { Value = source.NameRegex.Replacement },
-                new StringValue { Value = source.ReturnValueRegex.SearchRegex },
-                new StringValue { Value = source.ReturnValueRegex.Replacement },
-            };
-
-            return ExecuteFunction(ResultFromRawFile, "", arguments);
-        }
-
-        public static IEnumerable<ExecutableItem> ExecuteFunction(AhkFunctionContentsSource source)
-        {
-            List<AbstractValue> arguments = new List<AbstractValue>
-            {
-                new StringValue { Value = source.NameRegex.SearchRegex },
-                new StringValue { Value = source.NameRegex.Replacement },
-                new StringValue { Value = source.ReturnValueRegex.SearchRegex },
-                new StringValue { Value = source.ReturnValueRegex.Replacement },
-            };
-
-            arguments.AddRange(source.Arguments);
-
-            return ExecuteFunction(ResultFromFunction, source.Function, arguments.ToArray());
-        }
-
-        private static IEnumerable<ExecutableItem> ExecuteFunction(
-            string returnType, string function, params AbstractValue[] arguments)
+        public static IEnumerable<ExecutableItem> ExecuteFunction(AhkContentSource source)
         {
             using (var waitHandle = new ManualResetEvent(false))
             {
@@ -62,7 +30,7 @@ namespace AutomationEngine
                 try
                 {
                     MainForm.AhkFunctionResultReported += action;
-                    ExecuteMethod(returnType, function, arguments.ToArray());
+                    ExecuteMethod(source.ReturnType, source.Function, source.InteropArguments.ToArray());
                     waitHandle.WaitOne();
                 }
                 finally
@@ -82,11 +50,20 @@ namespace AutomationEngine
                 }
 
                 timeStamp = timeStamp.AddTicks(-1);
-                var executableItem = new ExecutableItem
+
+                ExecutableItem executableItem;
+                if (source.ReturnsFilePaths)
                 {
-                    Name = result[i],
-                    LastAccess = timeStamp
-                };
+                    executableItem = new FileItem();
+                }
+                else
+                {
+                    executableItem = new ExecutableItem();
+                }
+
+                executableItem.Name = result[i];
+                executableItem.LastAccess = timeStamp;
+
                 executableItem.Arguments.Add(new StringValue
                 {
                     Value = result[i + 1]

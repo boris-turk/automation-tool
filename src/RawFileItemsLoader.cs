@@ -14,7 +14,7 @@ namespace AutomationEngine
 
         public List<ExecutableItem> Load()
         {
-            return AhkInterop.LoadRawFileContents(_contentSource).ToList();
+            return AhkInterop.ExecuteFunction(_contentSource).ToList();
         }
     }
 }

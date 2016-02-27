@@ -53,11 +53,12 @@
     <Compile Include="ArgumentType.cs" />
     <Compile Include="AhkInterop.cs" />
     <Compile Include="Cloner.cs" />
-    <Compile Include="ContentSource.cs" />
+    <Compile Include="AhkContentSource.cs" />
     <Compile Include="FileDescriptorContentSource.cs" />
     <Compile Include="CopyData.cs" />
     <Compile Include="ExecutableItem.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="FileItem.cs" />
     <Compile Include="StringVariable.cs" />
     <Compile Include="ExecutableItemComparer.cs" />
     <Compile Include="ExecutableItemsCollection.cs" />
