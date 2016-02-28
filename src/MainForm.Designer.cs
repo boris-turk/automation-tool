@@ -60,6 +60,7 @@ namespace AutomationEngine
             this._listBox.Name = "_listBox";
             this._listBox.Size = new System.Drawing.Size(599, 364);
             this._listBox.TabIndex = 1;
+            this._listBox.TabStop = false;
             // 
             // _stackLabel
             // 

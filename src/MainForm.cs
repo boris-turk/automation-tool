@@ -7,14 +7,14 @@ using AutomationEngine.Messages;
 
 namespace AutomationEngine
 {
-    public partial class MainForm : Form
+    public partial class MainForm : AutomationEngineForm
     {
         private const int OutOfScreenOffset = -20000;
         public static event Action AhkFunctionResultReported;
+        public event Action Execute;
 
         public MainForm()
         {
-            Text = "Automation engine";
             InitializeComponent();
             TopMost = true;
             ShowInTaskbar = false;
@@ -25,6 +25,34 @@ namespace AutomationEngine
                 args.Cancel = true;
                 Visible = false;
             };
+            _listBox.SelectedIndexChanged += (o, a) => MoveFocusToTextBox();
+        }
+
+        private void MoveFocusToTextBox()
+        {
+            if (!_textBox.Focused)
+            {
+                _textBox.Focus();
+            }
+        }
+
+        protected override void OnExecute()
+        {
+            if (Execute != null)
+            {
+                Execute();
+            }
+        }
+
+        private AutomationEngineForm VisibleChildForm
+        {
+            get
+            {
+                return Application.OpenForms.
+                    OfType<AutomationEngineForm>().
+                    Where(x => x.Visible).
+                    FirstOrDefault(x => x != this);
+            }
         }
 
         public Label StackLabel
@@ -154,6 +182,12 @@ namespace AutomationEngine
 
         private void ToggleGlobalAutomationEngineVisibility()
         {
+            if (VisibleChildForm != null)
+            {
+                VisibleChildForm.Visible = false;
+                return;
+            }
+
             Visible = !Visible;
             if (Visible)
             {

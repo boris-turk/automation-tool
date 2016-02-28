@@ -8,6 +8,8 @@ namespace AutomationEngine
 {
     public class MenuEngine
     {
+        private const string Executeautomationenginemethod = "ExecuteAutomationEngineMethod";
+
         private static MenuEngine _engine;
 
         public static MenuEngine Instance
@@ -19,9 +21,12 @@ namespace AutomationEngine
 
         private string _lastSearchText;
 
+        private bool _selectedIndexChangedEventDeactivated;
+
         public MenuEngine(MainForm form, Menu rootMenu)
         {
             Form = form;
+            Form.Execute += OnExecute;
             State = new MenuState(rootMenu);
 
             _textChangedTimer = new Timer();
@@ -30,6 +35,7 @@ namespace AutomationEngine
 
             SearchBar.TextChanged += (s, e) => OnTextBoxTextChanged();
             SearchBar.KeyDown += OnTextBoxKeyDown;
+            ListBox.SelectedIndexChanged += (s, a) => OnSelectedIndexChanged();
 
             ClearSearchBar();
         }
@@ -65,6 +71,14 @@ namespace AutomationEngine
             set { State.Context = value; }
         }
 
+        private void OnSelectedIndexChanged()
+        {
+            if (!_selectedIndexChangedEventDeactivated)
+            {
+                SelectItem(ListBox.SelectedIndex);
+            }
+        }
+
         private void OnTextBoxKeyDown(object sender, KeyEventArgs args)
         {
             bool handled = false;
@@ -72,11 +86,6 @@ namespace AutomationEngine
             if (args.KeyCode == Keys.Space)
             {
                 handled = OnSpaceKeyPressed();
-            }
-
-            if (args.KeyCode == Keys.Enter)
-            {
-                handled = OnEnterKeyPressed();
             }
 
             if (args.KeyCode == Keys.Down)
@@ -122,7 +131,7 @@ namespace AutomationEngine
             }
         }
 
-        private bool OnEnterKeyPressed()
+        private void OnExecute()
         {
             if (_textChangedTimer.Enabled)
             {
@@ -138,7 +147,6 @@ namespace AutomationEngine
             {
                 ExecuteSelectedItem();
             }
-            return true;
         }
 
         private void ExecuteSelectedItem()
@@ -159,10 +167,23 @@ namespace AutomationEngine
 
             CloseMenuEngine();
 
-            ExecuteMethod(actingMenu.ExecutingMethodName, executableItem.Arguments);
+            if (actingMenu.ExecutingMethodName == Executeautomationenginemethod)
+            {
+                ExecuteAutomationEngineMethod(executableItem.Arguments);
+            }
+            else
+            {
+                ExecuteAhkMethod(actingMenu.ExecutingMethodName, executableItem.Arguments);
+            }
         }
 
-        private void ExecuteMethod(string evaluateResultMethod, List<AbstractValue> arguments)
+        private void ExecuteAutomationEngineMethod(List<AbstractValue> arguments)
+        {
+            var executor = new MenuEngineMethodExecutor(Form, arguments.Select(x => x.Value));
+            executor.Execute();
+        }
+
+        private void ExecuteAhkMethod(string evaluateResultMethod, List<AbstractValue> arguments)
         {
             AhkInterop.ExecuteMethod(evaluateResultMethod, arguments.ToArray());
         }
@@ -248,7 +269,9 @@ namespace AutomationEngine
 
             if (State.ItemsCount > itemIndex)
             {
+                _selectedIndexChangedEventDeactivated = true;
                 ListBox.SelectedIndex = itemIndex;
+                _selectedIndexChangedEventDeactivated = false;
                 State.SelectedIndex = itemIndex;
             }
         }

@@ -47,11 +47,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddFileItemForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddFileItemForm.Designer.cs">
+      <DependentUpon>AddFileItemForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="AhkFunctionItemsLoader.cs" />
     <Compile Include="AhkFunctionContentsSource.cs" />
     <Compile Include="AhkVariable.cs" />
     <Compile Include="ArgumentType.cs" />
     <Compile Include="AhkInterop.cs" />
+    <Compile Include="AutomationEngineForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Cloner.cs" />
     <Compile Include="AhkContentSource.cs" />
     <Compile Include="FileDescriptorContentSource.cs" />
@@ -59,6 +68,7 @@
     <Compile Include="ExecutableItem.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="FileItem.cs" />
+    <Compile Include="MenuEngineMethodExecutor.cs" />
     <Compile Include="StringVariable.cs" />
     <Compile Include="ExecutableItemComparer.cs" />
     <Compile Include="ExecutableItemsCollection.cs" />
@@ -88,6 +98,9 @@
     <Compile Include="RootMenuCollection.cs" />
     <Compile Include="AbstractValue.cs" />
     <Compile Include="XmlStorage.cs" />
+    <EmbeddedResource Include="AddFileItemForm.resx">
+      <DependentUpon>AddFileItemForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
