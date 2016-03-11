@@ -15,7 +15,7 @@ namespace AutomationEngine
             {
                 if (Directory != null)
                 {
-                    return Path.Combine(Directory, FilePath);
+                    return Path.Combine(Directory, Arguments[0].Value);
                 }
                 if (Arguments.Count == 0)
                 {

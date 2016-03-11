@@ -26,5 +26,18 @@ namespace AutomationEngine
                 m();
             }
         }
+
+        public static void AutoFillFrom(this Control target, Control source)
+        {
+            EventHandler action = (sender, args) =>
+            {
+                if (target.Text.Trim().Length == 0)
+                {
+                    target.Text = source.Text;
+                }
+            };
+            target.GotFocus -= action;
+            target.GotFocus += action;
+        }
     }
 }

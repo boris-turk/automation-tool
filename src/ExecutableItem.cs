@@ -14,6 +14,13 @@ namespace AutomationEngine
 
         public string Name { get; set; }
 
+        public string Context { get; set; }
+
+        public bool ContextSpecified
+        {
+            get { return !string.IsNullOrWhiteSpace(Context); }
+        }
+
         [XmlElement("Argument", typeof(StringValue))]
         [XmlElement("AhkArgument", typeof(AhkVariable))]
         public List<AbstractValue> Arguments { get; set; }

@@ -10,7 +10,7 @@ namespace AutomationEngine
     public partial class MainForm : AutomationEngineForm
     {
         private const int OutOfScreenOffset = -20000;
-        public static event Action AhkFunctionResultReported;
+        public event Action AhkFunctionResultReported;
         public event Action Execute;
 
         public MainForm()
@@ -41,17 +41,6 @@ namespace AutomationEngine
             if (Execute != null)
             {
                 Execute();
-            }
-        }
-
-        private AutomationEngineForm VisibleChildForm
-        {
-            get
-            {
-                return Application.OpenForms.
-                    OfType<AutomationEngineForm>().
-                    Where(x => x.Visible).
-                    FirstOrDefault(x => x != this);
             }
         }
 
@@ -130,64 +119,8 @@ namespace AutomationEngine
             return rootMenu;
         }
 
-        protected override void WndProc(ref Message m)
-		{
-		    if (m.Msg == WindowMessages.WmCopydata)
-		    {
-		        OnWmCopyData(m);
-
-				return;
-			}
-            if (m.Msg == WindowMessages.WmSyscommand)
-            {
-                if (m.WParam.ToInt32() == WindowMessages.ScMinimize)
-                {
-                    m.Result = IntPtr.Zero;
-                    Visible = false;
-                    return;
-                }
-                if (m.WParam.ToInt32() == WindowMessages.ScMaximize)
-                {
-                    Visible = true;
-                    return;
-                }
-            }
-			base.WndProc(ref m);
-		}
-
-        private void OnWmCopyData(Message message)
+        public void ToggleVisibility()
         {
-            var mystr = new CopyDataStruct();
-            Type mytype = mystr.GetType();
-            mystr = (CopyDataStruct)message.GetLParam(mytype);
-
-            if (mystr.LpData == WindowMessages.ToggleGLobalMenuVisibility)
-            {
-                MenuEngine.Instance.Context = null;
-                ToggleGlobalAutomationEngineVisibility();
-            }
-            else if (mystr.LpData == WindowMessages.ToggleContextMenuVisibility)
-            {
-                MenuEngine.Instance.Context = AhkInterop.GetMessageFileContents().FirstOrDefault();
-                ToggleGlobalAutomationEngineVisibility();
-            }
-            else if (mystr.LpData == WindowMessages.AhkFunctionResultReported)
-            {
-                if (AhkFunctionResultReported != null)
-                {
-                    AhkFunctionResultReported();
-                }
-            }
-        }
-
-        private void ToggleGlobalAutomationEngineVisibility()
-        {
-            if (VisibleChildForm != null)
-            {
-                VisibleChildForm.Visible = false;
-                return;
-            }
-
             Visible = !Visible;
             if (Visible)
             {
@@ -198,6 +131,14 @@ namespace AutomationEngine
                 MenuEngine.Instance.ClearSearchBar();
                 TopMost = true;
                 Activate();
+            }
+        }
+
+        public void RaiseAhkFunctionResultReportedEvent()
+        {
+            if (AhkFunctionResultReported != null)
+            {
+                AhkFunctionResultReported();
             }
         }
     }

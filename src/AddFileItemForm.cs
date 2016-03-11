@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Windows.Forms;
+﻿using System;
+using System.IO;
 
 namespace AutomationEngine
 {
@@ -15,8 +15,148 @@ namespace AutomationEngine
             get { return "add file item"; }
         }
 
+        private AddFileGroupForm AddFileGroupForm
+        {
+            get { return FormFactory.Instance<AddFileGroupForm>(); }
+        }
+
+        private FileGroup Group
+        {
+            get { return FileGroupCollection.Instance.GetGroupById(GroupId); }
+        }
+
+        private string ContentsFileName { get; set; }
+
+        private string ContentsFilePath
+        {
+            get { return Path.Combine(Group.Directory, ContentsFileName); }
+        }
+
+        private string GroupId
+        {
+            get { return _group.Text; }
+        }
+
+        private string ItemName
+        {
+            get { return _name.Text; }
+        }
+
+        private string Context
+        {
+            get { return _context.Text; }
+        }
+
+        private string Value
+        {
+            get { return _value.Text; }
+        }
+
+        private FileItem FileItem
+        {
+            get
+            {
+                var fileItem = new FileItem
+                {
+                    Name = ItemName,
+                    Context = Context,
+                };
+
+                fileItem.Arguments.Add(new StringValue { Value = ContentsFileName });
+
+                return fileItem;
+            }
+        }
+
+        protected override string ValidateInput()
+        {
+            if (string.IsNullOrWhiteSpace(GroupId))
+            {
+                return "Group not specified";
+            }
+            if (string.IsNullOrWhiteSpace(ItemName))
+            {
+                return "Name not specified";
+            }
+            if (string.IsNullOrWhiteSpace(Value))
+            {
+                return "Value not specified";
+            }
+            return null;
+        }
+
         protected override void OnExecute()
         {
+            base.OnExecute();
+
+            AddFileGroupIfNecessary();
+            AddContextIfNecessary();
+
+            if (ExecutionCanceled)
+            {
+                return;
+            }
+
+            SaveFileItem();
+            SaveContentsFile();
+        }
+
+        private void AddContextIfNecessary()
+        {
+            string context = Context.ToLower();
+
+            if (!Contexts.Instance.Entries.Contains(context))
+            {
+                Contexts.Instance.Entries.Add(context);
+                Contexts.Instance.Save();
+            }
+        }
+
+        private void SaveFileItem()
+        {
+            string menuFileName = Group.MenuFileName;
+            if (!menuFileName.ToLower().EndsWith(".xml"))
+            {
+                menuFileName += ".xml";
+            }
+
+            ExecutableItemsCollection collection = ExecutableItemsCollection.LoadFromFile(menuFileName);
+            collection.GroupId = GroupId;
+            collection.Items.Add(FileItem);
+            collection.SaveToFile(menuFileName);
+        }
+
+        private void SaveContentsFile()
+        {
+            if (!Directory.Exists(Group.Directory))
+            {
+                Directory.CreateDirectory(Group.Directory);
+            }
+            File.WriteAllText(ContentsFilePath, Value);
+        }
+
+        private void AddFileGroupIfNecessary()
+        {
+            if (Group == null)
+            {
+                AddFileGroup();
+            }
+        }
+
+        private void AddFileGroup()
+        {
+            AddFileGroupForm.Id = GroupId;
+            AddFileGroupForm.ShowDialog(this);
+            if (!AddFileGroupForm.Executed)
+            {
+                ExecutionCanceled = true;
+            }
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            ContentsFileName = Guid.NewGuid().ToString().ToLower() + ".txt";
+            base.OnShown(e);
         }
     }
 }

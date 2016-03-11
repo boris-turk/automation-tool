@@ -27,15 +27,17 @@ namespace AutomationEngine
                 // ReSharper disable once AccessToDisposedClosure
                 Action action = () => waitHandle.Set();
 
+                var mainForm = FormFactory.Instance<MainForm>();
+
                 try
                 {
-                    MainForm.AhkFunctionResultReported += action;
+                    mainForm.AhkFunctionResultReported += action;
                     ExecuteMethod(source.ReturnType, source.Function, source.InteropArguments.ToArray());
                     waitHandle.WaitOne();
                 }
                 finally
                 {
-                    MainForm.AhkFunctionResultReported -= action;
+                    mainForm.AhkFunctionResultReported -= action;
                 }
             }
 

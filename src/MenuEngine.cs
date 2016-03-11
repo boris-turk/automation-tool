@@ -8,7 +8,7 @@ namespace AutomationEngine
 {
     public class MenuEngine
     {
-        private const string Executeautomationenginemethod = "ExecuteAutomationEngineMethod";
+        private const string ExecuteAutomationEngineMethodIdentifier = "ExecuteAutomationEngineMethod";
 
         private static MenuEngine _engine;
 
@@ -167,14 +167,27 @@ namespace AutomationEngine
 
             CloseMenuEngine();
 
-            if (actingMenu.ExecutingMethodName == Executeautomationenginemethod)
+            List<AbstractValue> arguments = GetExecutableItemArguments(executableItem);
+            if (actingMenu.ExecutingMethodName == ExecuteAutomationEngineMethodIdentifier)
             {
-                ExecuteAutomationEngineMethod(executableItem.Arguments);
+                ExecuteAutomationEngineMethod(arguments);
             }
             else
             {
-                ExecuteAhkMethod(actingMenu.ExecutingMethodName, executableItem.Arguments);
+                ExecuteAhkMethod(actingMenu.ExecutingMethodName, arguments);
             }
+        }
+
+        private List<AbstractValue> GetExecutableItemArguments(ExecutableItem executableItem)
+        {
+            if (executableItem is FileItem)
+            {
+                return new List<AbstractValue>
+                {
+                    new StringValue { Value = ((FileItem)executableItem).FilePath }
+                };
+            }
+            return executableItem.Arguments;
         }
 
         private void ExecuteAutomationEngineMethod(List<AbstractValue> arguments)

@@ -31,7 +31,7 @@ namespace AutomationEngine
 
         private void ExecuteAddFileItem()
         {
-            new AddFileItemForm().Show();
+            FormFactory.Instance<AddFileItemForm>().Show();
         }
     }
 }

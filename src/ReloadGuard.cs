@@ -32,7 +32,7 @@ namespace AutomationEngine
 
             var watcher = new FileSystemWatcher
             {
-                Path = Configuration.RootDirectory,
+                Path = ".",
                 NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName
             };
 
