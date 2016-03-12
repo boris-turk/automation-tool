@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace AutomationEngine
+﻿namespace AutomationEngine
 {
     public class AhkFunctionItemsLoader : IExecutableItemsLoader
     {
@@ -12,9 +9,9 @@ namespace AutomationEngine
             _contentSource = contentSource;
         }
 
-        public List<ExecutableItem> Load()
+        public ExecutableItemsCollection Load()
         {
-            return AhkInterop.ExecuteFunction(_contentSource).ToList();
+            return AhkInterop.ExecuteFunction(_contentSource);
         }
     }
 }

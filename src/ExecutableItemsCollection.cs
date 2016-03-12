@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
+    [Serializable]
     [XmlRoot("ExecutableItems")]
     public class ExecutableItemsCollection
     {

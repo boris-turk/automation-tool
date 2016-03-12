@@ -4,6 +4,6 @@ namespace AutomationEngine
 {
     public interface IExecutableItemsLoader
     {
-        List<ExecutableItem> Load();
+        ExecutableItemsCollection Load();
     }
 }

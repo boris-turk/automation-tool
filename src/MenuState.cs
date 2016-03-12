@@ -41,7 +41,7 @@ namespace AutomationEngine
 
         private List<ExecutableItem> ExecutableItems
         {
-            get { return ExecutableMenu.ExecutableItems; }
+            get { return ExecutableMenu.ExecutableItemsCollection.Items; }
         }
 
         private Menu ExecutableMenu
@@ -99,7 +99,7 @@ namespace AutomationEngine
             get
             {
                 Menu menu = _menusStack.Peek();
-                if (_menusStack.Count > 1 && _menusStack.Peek().Submenus.Count(x => x.ExecutableItems.Count > 0) == 1)
+                if (_menusStack.Count > 1 && _menusStack.Peek().Submenus.Count(x => x.ExecutableItemsCollection.Items.Count > 0) == 1)
                 {
                     return new List<Menu>();
                 }
@@ -225,8 +225,7 @@ namespace AutomationEngine
             var descriptorContentSource = ExecutableMenu.ContentSource as FileDescriptorContentSource;
             if (descriptorContentSource != null)
             {
-                storage = new MenuStorage(descriptorContentSource.Path);
-                storage.SaveExecutableItems(ExecutableItems);
+                XmlStorage.Save(descriptorContentSource.Path, ExecutableMenu.ExecutableItemsCollection);
             }
 
             ReloadGuard.Enabled = true;

@@ -9,12 +9,12 @@ namespace AutomationEngine
     public class Menu
     {
         private string _name;
-        private List<ExecutableItem> _executableItems;
+        private ExecutableItemsCollection _executableItemsCollection;
         private readonly ExecutableItemsLoaderFactory _executableItemsLoaderFactory;
 
         public Menu()
         {
-            _executableItems = new List<ExecutableItem>();
+            _executableItemsCollection = new ExecutableItemsCollection();
             _executableItemsLoaderFactory = new ExecutableItemsLoaderFactory();
             Aliases = new List<string>();
             Submenus = new List<Menu>();
@@ -75,9 +75,9 @@ namespace AutomationEngine
         }
 
         [XmlIgnore]
-        public List<ExecutableItem> ExecutableItems
+        public ExecutableItemsCollection ExecutableItemsCollection
         {
-            get { return _executableItems; }
+            get { return _executableItemsCollection; }
         }
 
         public string Context { get; set; }
@@ -105,7 +105,7 @@ namespace AutomationEngine
             }
 
             IExecutableItemsLoader loader = _executableItemsLoaderFactory.GetInstance(ContentSource);
-            _executableItems = loader.Load();
+            _executableItemsCollection = loader.Load();
         }
 
         public Menu Clone()

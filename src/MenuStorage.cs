@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace AutomationEngine
@@ -13,11 +10,6 @@ namespace AutomationEngine
         public MenuStorage(string fileName)
         {
             _fileName = fileName;
-        }
-
-        public IEnumerable<ExecutableItem> LoadExecutableItems()
-        {
-            return ExecutableItemsCollection.LoadFromFile(_fileName).Items;
         }
 
         public IEnumerable<Menu> LoadMenus()
@@ -52,15 +44,6 @@ namespace AutomationEngine
             RootMenuCollection menuCollection = new RootMenuCollection
             {
                 Menus = menusWithoutDuplicates
-            };
-            XmlStorage.Save(_fileName, menuCollection);
-        }
-
-        public void SaveExecutableItems(List<ExecutableItem> items)
-        {
-            ExecutableItemsCollection menuCollection = new ExecutableItemsCollection
-            {
-                Items = items
             };
             XmlStorage.Save(_fileName, menuCollection);
         }

@@ -20,28 +20,13 @@ namespace AutomationEngine
             }
         }
 
-        public static IEnumerable<ExecutableItem> ExecuteFunction(AhkContentSource source)
+        public static ExecutableItemsCollection ExecuteFunction(AhkContentSource source)
         {
-            using (var waitHandle = new ManualResetEvent(false))
-            {
-                // ReSharper disable once AccessToDisposedClosure
-                Action action = () => waitHandle.Set();
-
-                var mainForm = FormFactory.Instance<MainForm>();
-
-                try
-                {
-                    mainForm.AhkFunctionResultReported += action;
-                    ExecuteMethod(source.ReturnType, source.Function, source.InteropArguments.ToArray());
-                    waitHandle.WaitOne();
-                }
-                finally
-                {
-                    mainForm.AhkFunctionResultReported -= action;
-                }
-            }
+            ExecuteFunctionAndWaitForResult(source);
 
             List<string> result = GetMessageFileContents();
+
+            var executableItemsCollection = new ExecutableItemsCollection();
 
             DateTime timeStamp = DateTime.MaxValue;
             for (int i = 0; i < result.Count; i += 2)
@@ -70,7 +55,31 @@ namespace AutomationEngine
                 {
                     Value = result[i + 1]
                 });
-                yield return executableItem;
+                executableItemsCollection.Items.Add(executableItem);
+            }
+
+            return executableItemsCollection;
+        }
+
+        private static void ExecuteFunctionAndWaitForResult(AhkContentSource source)
+        {
+            using (var waitHandle = new ManualResetEvent(false))
+            {
+                // ReSharper disable once AccessToDisposedClosure
+                Action action = () => waitHandle.Set();
+
+                var mainForm = FormFactory.Instance<MainForm>();
+
+                try
+                {
+                    mainForm.AhkFunctionResultReported += action;
+                    ExecuteMethod(source.ReturnType, source.Function, source.InteropArguments.ToArray());
+                    waitHandle.WaitOne();
+                }
+                finally
+                {
+                    mainForm.AhkFunctionResultReported -= action;
+                }
             }
         }
 

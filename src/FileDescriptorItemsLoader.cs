@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace AutomationEngine
+﻿namespace AutomationEngine
 {
     public class FileDescriptorItemsLoader : IExecutableItemsLoader
     {
@@ -12,9 +9,9 @@ namespace AutomationEngine
             _path = path;
         }
 
-        public List<ExecutableItem> Load()
+        public ExecutableItemsCollection Load()
         {
-            return new MenuStorage(_path).LoadExecutableItems().ToList();
+            return ExecutableItemsCollection.LoadFromFile(_path);
         }
     }
 }
