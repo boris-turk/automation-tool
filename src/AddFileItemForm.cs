@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Forms;
 
 namespace AutomationEngine
 {
@@ -8,6 +9,10 @@ namespace AutomationEngine
         public AddFileItemForm()
         {
             InitializeComponent();
+            VisibleChanged += (sender, args) =>
+            {
+                if (Visible) OnMadeVisible();
+            };
         }
 
         protected override string WindowName
@@ -153,10 +158,11 @@ namespace AutomationEngine
             }
         }
 
-        protected override void OnShown(EventArgs e)
+        private void OnMadeVisible()
         {
             ContentsFileName = Guid.NewGuid().ToString().ToLower() + ".txt";
-            base.OnShown(e);
+            FileGroupCollection.Instance.FileGroups.ForEach(x => _group.Items.Add(x.Id));
+            Contexts.Instance.Entries.ForEach(x => _context.Items.Add(x));
         }
     }
 }

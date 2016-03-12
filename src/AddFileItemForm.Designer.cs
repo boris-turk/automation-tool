@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this._context = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this._name = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this._value = new System.Windows.Forms.TextBox();
-            this._group = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this._group = new System.Windows.Forms.ComboBox();
+            this._context = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
@@ -46,13 +46,6 @@
             this.label1.Size = new System.Drawing.Size(43, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Context";
-            // 
-            // _context
-            // 
-            this._context.Location = new System.Drawing.Point(65, 31);
-            this._context.Name = "_context";
-            this._context.Size = new System.Drawing.Size(183, 20);
-            this._context.TabIndex = 1;
             // 
             // label2
             // 
@@ -87,13 +80,6 @@
             this._value.Size = new System.Drawing.Size(541, 305);
             this._value.TabIndex = 3;
             // 
-            // _group
-            // 
-            this._group.Location = new System.Drawing.Point(65, 7);
-            this._group.Name = "_group";
-            this._group.Size = new System.Drawing.Size(183, 20);
-            this._group.TabIndex = 0;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -103,15 +89,35 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "Group";
             // 
+            // _group
+            // 
+            this._group.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this._group.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this._group.FormattingEnabled = true;
+            this._group.Location = new System.Drawing.Point(65, 8);
+            this._group.Name = "_group";
+            this._group.Size = new System.Drawing.Size(183, 21);
+            this._group.TabIndex = 0;
+            // 
+            // _context
+            // 
+            this._context.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this._context.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this._context.FormattingEnabled = true;
+            this._context.Location = new System.Drawing.Point(65, 31);
+            this._context.Name = "_context";
+            this._context.Size = new System.Drawing.Size(183, 21);
+            this._context.TabIndex = 1;
+            // 
             // AddFileItemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(625, 416);
+            this.Controls.Add(this._context);
             this.Controls.Add(this._group);
             this.Controls.Add(this._value);
             this.Controls.Add(this._name);
-            this.Controls.Add(this._context);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label4);
@@ -126,12 +132,12 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox _context;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox _name;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox _value;
-        private System.Windows.Forms.TextBox _group;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox _group;
+        private System.Windows.Forms.ComboBox _context;
     }
 }
