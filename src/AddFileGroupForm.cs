@@ -32,7 +32,22 @@ namespace AutomationEngine
 
         private string MenuFileName
         {
-            get { return _menuFileName.Text; }
+            get
+            {
+                string fileName = _menuFileName.Text;
+
+                if (string.IsNullOrWhiteSpace(fileName))
+                {
+                    return fileName;
+                }
+
+                if (!fileName.ToLower().EndsWith(".xml"))
+                {
+                    fileName += ".xml";
+                }
+
+                return fileName;
+            }
         }
 
         protected override void OnExecute()

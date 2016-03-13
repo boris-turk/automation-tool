@@ -7,33 +7,39 @@ namespace AutomationEngine
     {
         private readonly string _fileName;
 
-        public MenuStorage(string fileName)
+        public MenuStorage()
         {
-            _fileName = fileName;
+            _fileName = Configuration.MenusFileName;
         }
 
-        public IEnumerable<Menu> LoadMenus()
+        public Menu LoadMenuStructure()
         {
             var menuCollection = XmlStorage.Load<RootMenuCollection>(_fileName);
 
-            foreach (Menu menu in menuCollection.Menus.ToList())
+            var rootMenu = new Menu
             {
-                foreach (string alias in menu.Aliases)
-                {
-                    Menu aliasMenu = menu.Clone();
-                    aliasMenu.Name = alias;
-                    menuCollection.Menus.Add(aliasMenu);
-                }
+                Id = "root"
+            };
+            rootMenu.Submenus.AddRange(menuCollection.Menus);
+
+            foreach (Menu menu in menuCollection.Menus)
+            {
+                List<Menu> subMenus = menu.SubmenuIdentifiers
+                    .Select(x => menuCollection.Menus.FirstOrDefault(y => y.Id == x))
+                    .Where(x => x != null)
+                    .ToList();
+
+                menu.Submenus.AddRange(subMenus);
             }
 
-            return menuCollection.Menus;
+            return rootMenu;
         }
 
-        public void SaveMenus(List<Menu> menus)
+        public void SaveMenuStructure(Menu rootMenu)
         {
             var menusWithoutDuplicates = new List<Menu>();
 
-            foreach (Menu menu in menus)
+            foreach (Menu menu in rootMenu.Submenus)
             {
                 if (menusWithoutDuplicates.All(x => x.Id != menu.Id))
                 {

@@ -80,6 +80,9 @@
     <Compile Include="FileItem.cs" />
     <Compile Include="FormFactory.cs" />
     <Compile Include="MenuEngineMethodExecutor.cs" />
+    <Compile Include="MenuEntryDeletion.cs" />
+    <Compile Include="MessageWindow.cs" />
+    <Compile Include="ShortcutEventDispatcher.cs" />
     <Compile Include="StringVariable.cs" />
     <Compile Include="ExecutableItemComparer.cs" />
     <Compile Include="ExecutableItemsCollection.cs" />

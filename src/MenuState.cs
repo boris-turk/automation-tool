@@ -15,6 +15,11 @@ namespace AutomationEngine
             _menusStack.Push(rootMenu);
         }
 
+        public Menu RootMenu
+        {
+            get { return _menusStack.Reverse().First(); }
+        }
+
         public List<Menu> MatchingSubmenus
         {
             get
@@ -37,6 +42,11 @@ namespace AutomationEngine
                 }
                 return ExecutableItems.Count > 0;
             }
+        }
+
+        public ExecutableItemsCollection ExecutableItemsCollection
+        {
+            get { return ExecutableMenu.ExecutableItemsCollection; }
         }
 
         private List<ExecutableItem> ExecutableItems
@@ -217,10 +227,7 @@ namespace AutomationEngine
                 executableItem.LastAccess = now;
             }
 
-            var storage = new MenuStorage(Configuration.MenusFileName);
-            Menu rootMenu = _menusStack.Reverse().First();
-
-            storage.SaveMenus(rootMenu.Submenus);
+            new MenuStorage().SaveMenuStructure(RootMenu);
 
             var descriptorContentSource = ExecutableMenu.ContentSource as FileDescriptorContentSource;
             if (descriptorContentSource != null)

@@ -10,6 +10,8 @@ namespace AutomationEngine
     {
         private const string AutomationEngineWindowTitle = "Automation engine";
 
+        public event Action<KeyEventArgs> ChildControlKeyDown;
+
         public AutomationEngineForm()
         {
             TopMost = true;
@@ -98,10 +100,14 @@ namespace AutomationEngine
                 OnCloseRequested();
                 keyEventArgs.SuppressKeyPress = true;
             }
-            if (keyEventArgs.KeyCode == Keys.Enter)
+            else if (keyEventArgs.KeyCode == Keys.Enter)
             {
                 OnEnterKeyPressed();
                 keyEventArgs.SuppressKeyPress = true;
+            }
+            else if (ChildControlKeyDown != null)
+            {
+                ChildControlKeyDown(keyEventArgs);
             }
         }
 

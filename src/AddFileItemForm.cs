@@ -120,15 +120,10 @@ namespace AutomationEngine
         private void SaveFileItem()
         {
             string menuFileName = Group.MenuFileName;
-            if (!menuFileName.ToLower().EndsWith(".xml"))
-            {
-                menuFileName += ".xml";
-            }
-
             ExecutableItemsCollection collection = ExecutableItemsCollection.LoadFromFile(menuFileName);
             collection.GroupId = GroupId;
             collection.Items.Add(FileItem);
-            collection.SaveToFile(menuFileName);
+            collection.SaveToFile();
         }
 
         private void SaveContentsFile()

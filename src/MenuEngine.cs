@@ -27,6 +27,7 @@ namespace AutomationEngine
         {
             Form = form;
             Form.Execute += OnExecute;
+            Form.ChildControlKeyDown += OnKeyDown;
             State = new MenuState(rootMenu);
 
             _textChangedTimer = new Timer();
@@ -147,6 +148,12 @@ namespace AutomationEngine
             {
                 ExecuteSelectedItem();
             }
+        }
+
+        private void OnKeyDown(KeyEventArgs eventArgs)
+        {
+            var shortcutEventDispatcher = new ShortcutEventDispatcher(State, eventArgs);
+            shortcutEventDispatcher.Dispatch();
         }
 
         private void ExecuteSelectedItem()

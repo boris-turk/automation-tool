@@ -98,25 +98,7 @@ namespace AutomationEngine
 
         private Menu BuildMenuStructure()
         {
-            var menuStorage = new MenuStorage(Configuration.MenusFileName);
-            var rootMenu = new Menu
-            {
-                Id = "root"
-            };
-            List<Menu> allMenus = menuStorage.LoadMenus().ToList();
-            rootMenu.Submenus.AddRange(allMenus);
-
-            foreach (Menu menu in allMenus)
-            {
-                List<Menu> subMenus = menu.SubmenuIdentifiers
-                    .Select(x => allMenus.FirstOrDefault(y => y.Id == x))
-                    .Where(x => x != null)
-                    .ToList();
-
-                menu.Submenus.AddRange(subMenus);
-            }
-
-            return rootMenu;
+            return new MenuStorage().LoadMenuStructure();
         }
 
         public void ToggleVisibility()

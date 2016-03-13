@@ -16,7 +16,6 @@ namespace AutomationEngine
         {
             _executableItemsCollection = new ExecutableItemsCollection();
             _executableItemsLoaderFactory = new ExecutableItemsLoaderFactory();
-            Aliases = new List<string>();
             Submenus = new List<Menu>();
             SubmenuIdentifiers = new List<string>();
         }
@@ -34,14 +33,6 @@ namespace AutomationEngine
                 return _name;
             }
             set { _name = value; }
-        }
-
-        [XmlArray("Aliases"), XmlArrayItem("Alias")]
-        public List<string> Aliases { get; set; }
-
-        public bool AliasesSpecified
-        {
-            get { return Aliases.Count > 0; }
         }
 
         public bool NameSpecified
@@ -106,6 +97,12 @@ namespace AutomationEngine
 
             IExecutableItemsLoader loader = _executableItemsLoaderFactory.GetInstance(ContentSource);
             _executableItemsCollection = loader.Load();
+        }
+
+        public void RemoveSubmenu(Menu selectedMenu)
+        {
+            Submenus.RemoveAll(x => x.Id == selectedMenu.Id);
+            SubmenuIdentifiers.RemoveAll(x => x == selectedMenu.Id);
         }
 
         public Menu Clone()

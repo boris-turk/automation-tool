@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -10,6 +9,8 @@ namespace AutomationEngine
     [XmlRoot("ExecutableItems")]
     public class ExecutableItemsCollection
     {
+        private string _fileName;
+
         [XmlElement("Item", typeof(ExecutableItem))]
         [XmlElement("FileItem", typeof(FileItem))]
         public List<ExecutableItem> Items { get; set; }
@@ -31,18 +32,23 @@ namespace AutomationEngine
             Items = new List<ExecutableItem>();
         }
 
-        public void SaveToFile(string filePath)
+        public void SaveToFile()
         {
-            XmlStorage.Save(filePath, this);
+            if (_fileName == null)
+            {
+                throw new InvalidOperationException("File name not specified.");
+            }
+            XmlStorage.Save(_fileName, this);
         }
 
-        public static ExecutableItemsCollection LoadFromFile(string filePath)
+        public static ExecutableItemsCollection LoadFromFile(string fileName)
         {
-            var executableItems = XmlStorage.Load<ExecutableItemsCollection>(filePath);
+            var executableItems = XmlStorage.Load<ExecutableItemsCollection>(fileName);
             if (executableItems == null)
             {
-                return new ExecutableItemsCollection();
+                executableItems = new ExecutableItemsCollection();
             }
+            executableItems._fileName = fileName;
             PrependRootDirectoryToFileItems(executableItems);
             return executableItems;
         }
