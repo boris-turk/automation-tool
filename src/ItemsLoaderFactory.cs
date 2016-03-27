@@ -3,9 +3,9 @@
 namespace AutomationEngine
 {
     [Serializable]
-    public class ExecutableItemsLoaderFactory
+    public class ItemsLoaderFactory
     {
-        public IExecutableItemsLoader GetInstance(object contentSource)
+        public IItemsLoader GetInstance(object contentSource)
         {
             var fileDescriptorContentSource = contentSource as FileDescriptorContentSource;
             if (fileDescriptorContentSource != null)

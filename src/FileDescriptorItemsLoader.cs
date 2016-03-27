@@ -1,6 +1,8 @@
-﻿namespace AutomationEngine
+﻿using System.Collections.Generic;
+
+namespace AutomationEngine
 {
-    public class FileDescriptorItemsLoader : IExecutableItemsLoader
+    public class FileDescriptorItemsLoader : IItemsLoader
     {
         private readonly string _path;
 
@@ -9,9 +11,9 @@
             _path = path;
         }
 
-        public ExecutableItemsCollection Load()
+        public List<BaseItem> Load()
         {
-            return ExecutableItemsCollection.LoadFromFile(_path);
+            return Menu.LoadFromFile(_path).Items;
         }
     }
 }

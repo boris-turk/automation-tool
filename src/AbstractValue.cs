@@ -1,7 +1,9 @@
+using System;
 using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
+    [Serializable]
     public abstract class AbstractValue
     {
         [XmlText]

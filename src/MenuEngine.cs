@@ -140,7 +140,7 @@ namespace AutomationEngine
                 OnFilterChanged();
             }
 
-            if (State.IsSubmenuSelected)
+            if (State.IsMenuSelected)
             {
                 PushSelectedSubmenu();
             }
@@ -158,7 +158,7 @@ namespace AutomationEngine
 
         private void ExecuteSelectedItem()
         {
-            ExecutableItem executableItem = State.GetExecutableItem();
+            ExecutableItem executableItem = State.SelectedExecutableItem;
             if (executableItem == null)
             {
                 return;
@@ -222,18 +222,13 @@ namespace AutomationEngine
 
         private bool OnSpaceKeyPressed()
         {
-            if (State.IsSelectionMenu)
-            {
-                return false;
-            }
-
             if (_textChangedTimer.Enabled)
             {
                 _textChangedTimer.Stop();
                 OnFilterChanged();
             }
 
-            if (State.IsSubmenuSelected)
+            if (State.IsMenuSelected)
             {
                 PushSelectedSubmenu();
             }
@@ -310,16 +305,7 @@ namespace AutomationEngine
         private void LoadItems()
         {
             ListBox.Items.Clear();
-            foreach (string name in State.MatchingSubmenus.Select(x => x.Name))
-            {
-                ListBox.Items.Add(name);
-            }
-        }
-
-        private void LoadExecutableItems()
-        {
-            ListBox.Items.Clear();
-            foreach (string name in State.MatchingExecutableItems.Select(x => x.Name))
+            foreach (string name in State.MatchingItems.Select(x => x.Name))
             {
                 ListBox.Items.Add(name);
             }
@@ -345,15 +331,7 @@ namespace AutomationEngine
 
         private void LoadProperItems()
         {
-            if (State.IsSelectionMenu)
-            {
-                LoadExecutableItems();
-            }
-            else
-            {
-                LoadItems();
-            }
-
+            LoadItems();
             SelectItem(0);
         }
 

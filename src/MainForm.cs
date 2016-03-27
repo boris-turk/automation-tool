@@ -92,13 +92,8 @@ namespace AutomationEngine
 
         public void LoadMenuEngine()
         {
-            Menu rootMenu = BuildMenuStructure();
+            Menu rootMenu = AutomationEngine.Menu.LoadFromFile(Configuration.MenusFileName);
             MenuEngine.Start(this, rootMenu);
-        }
-
-        private Menu BuildMenuStructure()
-        {
-            return new MenuStorage().LoadMenuStructure();
         }
 
         public void ToggleVisibility()

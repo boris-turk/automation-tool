@@ -5,20 +5,11 @@ using System.Xml.Serialization;
 namespace AutomationEngine
 {
     [Serializable]
-    public class ExecutableItem
+    public class ExecutableItem : BaseItem
     {
         public ExecutableItem()
         {
             Arguments = new List<AbstractValue>();
-        }
-
-        public string Name { get; set; }
-
-        public string Context { get; set; }
-
-        public bool ContextSpecified
-        {
-            get { return !string.IsNullOrWhiteSpace(Context); }
         }
 
         [XmlElement("Argument", typeof(StringValue))]
@@ -30,6 +21,11 @@ namespace AutomationEngine
         public bool LastAccessSpecified
         {
             get { return LastAccess != DateTime.MinValue; }
+        }
+
+        public ExecutableItem Clone()
+        {
+            return Cloner.Clone(this);
         }
     }
 }

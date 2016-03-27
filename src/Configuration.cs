@@ -5,5 +5,7 @@ namespace AutomationEngine
     public static class Configuration
     {
         public static string MenusFileName = "menus.xml";
+
+        public static string ContextPlaceholder = "$context$";
     }
 }

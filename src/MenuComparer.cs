@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AutomationEngine
 {
-    public class MenuComparer : IComparer<Menu>
+    public class MenuComparer : IComparer<BaseItem>
     {
         private readonly MenuState _state;
 
@@ -12,11 +12,11 @@ namespace AutomationEngine
             _state = state;
         }
 
-        public int Compare(Menu x, Menu y)
+        public int Compare(BaseItem x, BaseItem y)
         {
             if (_state.Filter.Length == 0)
             {
-                return CompareByLastAccessTime(x, y);
+                return string.Compare(x.Name, y.Name, StringComparison.Ordinal);
             }
             if (FilterMatchesAtStart(x) && !FilterMatchesAtStart(y))
             {
@@ -26,15 +26,10 @@ namespace AutomationEngine
             {
                 return 1;
             }
-            return CompareByLastAccessTime(x, y);
+            return string.Compare(x.Name, y.Name, StringComparison.Ordinal);
         }
 
-        private int CompareByLastAccessTime(Menu x, Menu y)
-        {
-            return y.LastAccess.CompareTo(x.LastAccess);
-        }
-
-        private bool FilterMatchesAtStart(Menu menu)
+        private bool FilterMatchesAtStart(BaseItem menu)
         {
             int index = menu.Name.IndexOf(_state.Filter, StringComparison.OrdinalIgnoreCase);
             return index == 0;

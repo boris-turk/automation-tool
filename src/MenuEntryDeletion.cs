@@ -28,7 +28,7 @@ namespace AutomationEngine
                 return;
             }
 
-            if (_state.ExecutableItemsCollection.Items.Count == 0)
+            if (_state.IsMenuSelected)
             {
                 DeleteMenu();
             }
@@ -40,14 +40,14 @@ namespace AutomationEngine
 
         private void DeleteExecutableItem()
         {
-            ExecutableItem executableItem = _state.GetExecutableItem();
+            ExecutableItem executableItem = _state.SelectedExecutableItem;
             if (executableItem == null)
             {
                 return;
             }
 
-            _state.ExecutableItemsCollection.Items.Remove(executableItem);
-            _state.ExecutableItemsCollection.SaveToFile();
+            _state.SelectedMenu.Items.Remove(executableItem);
+            _state.SelectedMenu.SaveToFile();
 
             var fileItem = executableItem as FileItem;
             if (fileItem != null)
@@ -58,9 +58,9 @@ namespace AutomationEngine
 
         private void DeleteMenu()
         {
-            Menu selectedMenu = _state.MatchingSubmenus[_state.SelectedIndex];
-            _state.RootMenu.RemoveSubmenu(selectedMenu);
-            new MenuStorage().SaveMenuStructure(_state.RootMenu);
+            Menu selectedMenu = _state.SelectedMenu;
+            _state.RootMenu.RemoveItem(selectedMenu);
+            _state.RootMenu.SaveToFile();
 
             var contentSource = selectedMenu.ContentSource as FileDescriptorContentSource;
             if (contentSource != null)

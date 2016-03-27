@@ -1,6 +1,8 @@
-﻿namespace AutomationEngine
+﻿using System.Collections.Generic;
+
+namespace AutomationEngine
 {
-    public class AhkFunctionItemsLoader : IExecutableItemsLoader
+    public class AhkFunctionItemsLoader : IItemsLoader
     {
         private readonly AhkFunctionContentsSource _contentSource;
 
@@ -9,7 +11,7 @@
             _contentSource = contentSource;
         }
 
-        public ExecutableItemsCollection Load()
+        public List<BaseItem> Load()
         {
             return AhkInterop.ExecuteFunction(_contentSource);
         }

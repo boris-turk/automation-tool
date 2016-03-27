@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
-    public class Contexts: FileStorage<Contexts>
+    public class Contexts : FileStorage<Contexts>
     {
         public Contexts()
         {

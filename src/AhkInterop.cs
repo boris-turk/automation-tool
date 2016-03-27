@@ -20,13 +20,13 @@ namespace AutomationEngine
             }
         }
 
-        public static ExecutableItemsCollection ExecuteFunction(AhkContentSource source)
+        public static List<BaseItem> ExecuteFunction(AhkContentSource source)
         {
             ExecuteFunctionAndWaitForResult(source);
 
             List<string> result = GetMessageFileContents();
 
-            var executableItemsCollection = new ExecutableItemsCollection();
+            var items = new List<BaseItem>();
 
             DateTime timeStamp = DateTime.MaxValue;
             for (int i = 0; i < result.Count; i += 2)
@@ -55,10 +55,10 @@ namespace AutomationEngine
                 {
                     Value = result[i + 1]
                 });
-                executableItemsCollection.Items.Add(executableItem);
+                items.Add(executableItem);
             }
 
-            return executableItemsCollection;
+            return items;
         }
 
         private static void ExecuteFunctionAndWaitForResult(AhkContentSource source)

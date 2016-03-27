@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Forms;
 
 namespace AutomationEngine
 {
@@ -120,10 +119,10 @@ namespace AutomationEngine
         private void SaveFileItem()
         {
             string menuFileName = Group.MenuFileName;
-            ExecutableItemsCollection collection = ExecutableItemsCollection.LoadFromFile(menuFileName);
-            collection.GroupId = GroupId;
-            collection.Items.Add(FileItem);
-            collection.SaveToFile();
+            Menu menu = AutomationEngine.Menu.LoadFromFile(menuFileName);
+            menu.GroupId = GroupId;
+            menu.Items.Add(FileItem);
+            menu.SaveToFile();
         }
 
         private void SaveContentsFile()

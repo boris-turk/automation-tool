@@ -67,8 +67,11 @@
     <Compile Include="AutomationEngineForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="BaseItem.cs" />
     <Compile Include="Cloner.cs" />
     <Compile Include="AhkContentSource.cs" />
+    <Compile Include="ContextGroup.cs" />
+    <Compile Include="ContextGroupCollection.cs" />
     <Compile Include="Contexts.cs" />
     <Compile Include="FileStorage.cs" />
     <Compile Include="FileDescriptorContentSource.cs" />
@@ -85,11 +88,10 @@
     <Compile Include="ShortcutEventDispatcher.cs" />
     <Compile Include="StringVariable.cs" />
     <Compile Include="ExecutableItemComparer.cs" />
-    <Compile Include="ExecutableItemsCollection.cs" />
-    <Compile Include="ExecutableItemsLoaderFactory.cs" />
+    <Compile Include="ItemsLoaderFactory.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileDescriptorItemsLoader.cs" />
-    <Compile Include="IExecutableItemsLoader.cs" />
+    <Compile Include="IItemsLoader.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,7 +102,6 @@
     <Compile Include="MenuComparer.cs" />
     <Compile Include="MenuEngine.cs" />
     <Compile Include="MenuState.cs" />
-    <Compile Include="MenuStorage.cs" />
     <Compile Include="Messages\CopyDataStruct.cs" />
     <Compile Include="Messages\WindowMessages.cs" />
     <Compile Include="Program.cs" />
@@ -109,7 +110,6 @@
     <Compile Include="RawFileItemsLoader.cs" />
     <Compile Include="RegexReplacement.cs" />
     <Compile Include="ReloadGuard.cs" />
-    <Compile Include="RootMenuCollection.cs" />
     <Compile Include="AbstractValue.cs" />
     <Compile Include="XmlStorage.cs" />
     <EmbeddedResource Include="AddFileGroupForm.resx">

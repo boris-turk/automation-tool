@@ -6,23 +6,18 @@ using System.Xml.Serialization;
 namespace AutomationEngine
 {
     [Serializable]
-    public class Menu
+    public class Menu : BaseItem
     {
         private string _name;
-        private ExecutableItemsCollection _executableItemsCollection;
-        private readonly ExecutableItemsLoaderFactory _executableItemsLoaderFactory;
+        private readonly ItemsLoaderFactory _itemsLoaderFactory;
+        private string _fileName;
 
         public Menu()
         {
-            _executableItemsCollection = new ExecutableItemsCollection();
-            _executableItemsLoaderFactory = new ExecutableItemsLoaderFactory();
-            Submenus = new List<Menu>();
-            SubmenuIdentifiers = new List<string>();
+            _itemsLoaderFactory = new ItemsLoaderFactory();
         }
 
-        public string Id { get; set; }
-
-        public string Name
+        public override string Name
         {
             get
             {
@@ -40,23 +35,29 @@ namespace AutomationEngine
             get { return _name != null; }
         }
 
+        public string GroupId { get; set; }
+
+        public FileGroup Group
+        {
+            get { return FileGroupCollection.Instance.GetGroupById(GroupId); }
+        }
+
+        public bool GroupSpecified
+        {
+            get { return !string.IsNullOrWhiteSpace(GroupId); }
+        }
+
         [XmlElement("RawFileSource", typeof(RawFileContentsSource))]
         [XmlElement("FileSource", typeof(FileDescriptorContentSource))]
         [XmlElement("AhkFunctionSource", typeof(AhkFunctionContentsSource))]
         public object ContentSource { get; set; }
 
-        public string ExecutingMethodName { get; set; }
-
-        [XmlArray("Submenus"), XmlArrayItem("Id")]
-        public List<string> SubmenuIdentifiers { get; set; }
-
-        public bool SubmenuIdentifiersSpecified
+        public bool ContentSourceSpecified
         {
-            get { return SubmenuIdentifiers.Count > 0; }
+            get { return ContentSource != null; }
         }
 
-        [XmlIgnore]
-        public List<Menu> Submenus { get; set; }
+        public string ExecutingMethodName { get; set; }
 
         public DateTime LastAccess { get; set; }
 
@@ -65,49 +66,126 @@ namespace AutomationEngine
             get { return LastAccess != DateTime.MinValue; }
         }
 
-        [XmlIgnore]
-        public ExecutableItemsCollection ExecutableItemsCollection
+        [XmlElement("ExecutableItem", typeof(ExecutableItem))]
+        [XmlElement("FileItem", typeof(FileItem))]
+        [XmlElement("Menu", typeof(Menu))]
+        public List<BaseItem> Items { get; set; }
+
+        public bool ItemsSpecified
         {
-            get { return _executableItemsCollection; }
+            get { return !ContentSourceSpecified; }
         }
 
-        public string Context { get; set; }
-
-        public bool IsExecutableMenu
-        {
-            get { return ContentSource != null; }
-        }
-
-        public bool ContainsSingleSubmenuWithExecutableItems
-        {
-            get { return Submenus.Count(x => x.IsExecutableMenu) == 1; }
-        }
-
-        public Menu SingleSubmenuWithExecutableItems
-        {
-            get { return Submenus.Single(x => x.IsExecutableMenu); }
-        }
-
-        public void LoadExecutingItems()
+        public void LoadItems()
         {
             if (ContentSource == null)
             {
                 return;
             }
 
-            IExecutableItemsLoader loader = _executableItemsLoaderFactory.GetInstance(ContentSource);
-            _executableItemsCollection = loader.Load();
+            IItemsLoader loader = _itemsLoaderFactory.GetInstance(ContentSource);
+            Items = loader.Load();
         }
 
-        public void RemoveSubmenu(Menu selectedMenu)
+        public void RemoveItem(BaseItem item)
         {
-            Submenus.RemoveAll(x => x.Id == selectedMenu.Id);
-            SubmenuIdentifiers.RemoveAll(x => x == selectedMenu.Id);
+            Items.RemoveAll(x => x.Id == item.Id);
         }
 
         public Menu Clone()
         {
             return Cloner.Clone(this);
+        }
+
+        public void SaveToFile()
+        {
+            if (_fileName == null)
+            {
+                throw new InvalidOperationException("File name not specified.");
+            }
+
+            var noDuplicates = new List<BaseItem>();
+
+            foreach (BaseItem item in Items)
+            {
+                if (noDuplicates.All(x => x.Id != item.Id))
+                {
+                    noDuplicates.Add(item);
+                }
+            }
+
+            Menu rootMenuCollection = new Menu
+            {
+                Items = noDuplicates
+            };
+            XmlStorage.Save(_fileName, rootMenuCollection);
+
+            XmlStorage.Save(_fileName, this);
+        }
+
+        public static Menu LoadFromFile(string fileName)
+        {
+            var menu = XmlStorage.Load<Menu>(fileName);
+            if (menu == null)
+            {
+                menu = new Menu();
+            }
+            menu._fileName = fileName;
+            PrependRootDirectoryToFileItems(menu);
+            ExpandContextGroups(menu);
+            return menu;
+        }
+
+        private static void PrependRootDirectoryToFileItems(Menu executableItems)
+        {
+            if (executableItems.GroupId == null)
+            {
+                return;
+            }
+            foreach (FileItem fileItem in executableItems.Items.OfType<FileItem>())
+            {
+                fileItem.Directory = executableItems.Group.Directory;
+            }
+        }
+
+        private static void ExpandContextGroups(Menu executableItems)
+        {
+            List<ExecutableItem> itemsWithContextGroup = executableItems.Items
+                .Where(x => x.ContextGroupIdSpecified)
+                .OfType<ExecutableItem>()
+                .ToList();
+
+            executableItems.Items.RemoveAll(x => itemsWithContextGroup.Contains(x));
+
+            List<BaseItem> replacements = new List<BaseItem>();
+
+            foreach (ExecutableItem item in itemsWithContextGroup)
+            {
+                List<BaseItem> expandedItems = GetExpandContextGroupItem(item).ToList();
+                foreach (BaseItem expandedItem in expandedItems)
+                {
+                    expandedItem.Name = ReplacePlaceholders(expandedItem);
+                }
+                replacements.AddRange(expandedItems);
+            }
+
+            executableItems.Items.AddRange(replacements);
+        }
+
+        private static string ReplacePlaceholders(BaseItem expandedItem)
+        {
+            return expandedItem.Name.Replace(Configuration.ContextPlaceholder, expandedItem.Context);
+        }
+
+        private static IEnumerable<BaseItem> GetExpandContextGroupItem(ExecutableItem item)
+        {
+            foreach (string context in item.ContextGroup.Contexts)
+            {
+                BaseItem additionalItem = item.Clone();
+                additionalItem.ContextGroupId = null;
+                additionalItem.Context = context;
+                yield return additionalItem;
+            }
         }
     }
 }
