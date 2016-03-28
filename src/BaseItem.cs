@@ -11,6 +11,13 @@ namespace AutomationEngine
             Id = Guid.NewGuid().ToString();
         }
 
+        public DateTime LastAccess { get; set; }
+
+        public bool LastAccessSpecified
+        {
+            get { return LastAccess != DateTime.MinValue; }
+        }
+
         public string Id { get; set; }
 
         public virtual string Name { get; set; }

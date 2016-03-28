@@ -18,7 +18,14 @@ namespace AutomationEngine
             using (XmlReader reader = XmlReader.Create(fs, readerSettings))
             {
                 var serializer = new XmlSerializer(typeof(T));
-                return (T)serializer.Deserialize(reader);
+                T entity = (T)serializer.Deserialize(reader);
+
+                if (entity is ISerializationFinalizer)
+                {
+                    ((ISerializationFinalizer)entity).FinalizeSerialization(file);
+                }
+
+                return entity;
             }
         }
 

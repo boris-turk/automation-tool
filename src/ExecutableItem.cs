@@ -16,16 +16,11 @@ namespace AutomationEngine
         [XmlElement("AhkArgument", typeof(AhkVariable))]
         public List<AbstractValue> Arguments { get; set; }
 
-        public DateTime LastAccess { get; set; }
-
-        public bool LastAccessSpecified
-        {
-            get { return LastAccess != DateTime.MinValue; }
-        }
-
         public ExecutableItem Clone()
         {
             return Cloner.Clone(this);
         }
+
+        public string ExecutingMethodName { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace AutomationEngine
         {
             if (_state.Filter.Length == 0)
             {
-                return string.Compare(x.Name, y.Name, StringComparison.Ordinal);
+                return CompareByLastAccessTime(x, y);
             }
             if (FilterMatchesAtStart(x) && !FilterMatchesAtStart(y))
             {
@@ -26,12 +26,17 @@ namespace AutomationEngine
             {
                 return 1;
             }
-            return string.Compare(x.Name, y.Name, StringComparison.Ordinal);
+            return CompareByLastAccessTime(x, y);
         }
 
-        private bool FilterMatchesAtStart(BaseItem menu)
+        private int CompareByLastAccessTime(BaseItem x, BaseItem y)
         {
-            int index = menu.Name.IndexOf(_state.Filter, StringComparison.OrdinalIgnoreCase);
+            return y.LastAccess.CompareTo(x.LastAccess);
+        }
+
+        private bool FilterMatchesAtStart(BaseItem item)
+        {
+            int index = item.Name.IndexOf(_state.Filter, StringComparison.OrdinalIgnoreCase);
             return index == 0;
         }
     }

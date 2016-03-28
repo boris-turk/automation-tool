@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace AutomationEngine
 {
     [Serializable]
-    public class Menu : BaseItem
+    public class Menu : BaseItem, ISerializationFinalizer
     {
         private string _name;
         private readonly ItemsLoaderFactory _itemsLoaderFactory;
@@ -58,13 +58,6 @@ namespace AutomationEngine
         }
 
         public string ExecutingMethodName { get; set; }
-
-        public DateTime LastAccess { get; set; }
-
-        public bool LastAccessSpecified
-        {
-            get { return LastAccess != DateTime.MinValue; }
-        }
 
         [XmlElement("ExecutableItem", typeof(ExecutableItem))]
         [XmlElement("FileItem", typeof(FileItem))]
@@ -130,32 +123,29 @@ namespace AutomationEngine
             {
                 menu = new Menu();
             }
-            menu._fileName = fileName;
-            PrependRootDirectoryToFileItems(menu);
-            ExpandContextGroups(menu);
             return menu;
         }
 
-        private static void PrependRootDirectoryToFileItems(Menu executableItems)
+        private void PrependRootDirectoryToFileItems()
         {
-            if (executableItems.GroupId == null)
+            if (GroupId == null)
             {
                 return;
             }
-            foreach (FileItem fileItem in executableItems.Items.OfType<FileItem>())
+            foreach (FileItem fileItem in Items.OfType<FileItem>())
             {
-                fileItem.Directory = executableItems.Group.Directory;
+                fileItem.Directory = Group.Directory;
             }
         }
 
-        private static void ExpandContextGroups(Menu executableItems)
+        private void ExpandContextGroups()
         {
-            List<ExecutableItem> itemsWithContextGroup = executableItems.Items
+            List<ExecutableItem> itemsWithContextGroup = Items
                 .Where(x => x.ContextGroupIdSpecified)
                 .OfType<ExecutableItem>()
                 .ToList();
 
-            executableItems.Items.RemoveAll(x => itemsWithContextGroup.Contains(x));
+            Items.RemoveAll(x => itemsWithContextGroup.Contains(x));
 
             List<BaseItem> replacements = new List<BaseItem>();
 
@@ -169,15 +159,15 @@ namespace AutomationEngine
                 replacements.AddRange(expandedItems);
             }
 
-            executableItems.Items.AddRange(replacements);
+            Items.AddRange(replacements);
         }
 
-        private static string ReplacePlaceholders(BaseItem expandedItem)
+        private string ReplacePlaceholders(BaseItem expandedItem)
         {
             return expandedItem.Name.Replace(Configuration.ContextPlaceholder, expandedItem.Context);
         }
 
-        private static IEnumerable<BaseItem> GetExpandContextGroupItem(ExecutableItem item)
+        private IEnumerable<BaseItem> GetExpandContextGroupItem(ExecutableItem item)
         {
             foreach (string context in item.ContextGroup.Contexts)
             {
@@ -185,6 +175,30 @@ namespace AutomationEngine
                 additionalItem.ContextGroupId = null;
                 additionalItem.Context = context;
                 yield return additionalItem;
+            }
+        }
+
+        public void FinalizeSerialization(string file)
+        {
+            _fileName = file;
+            PrependRootDirectoryToFileItems();
+            ExpandContextGroups();
+            LoadExecutionTimeStamps();
+        }
+
+        private void LoadExecutionTimeStamps()
+        {
+            Items.ForEach(SetExecutionTimeStamp);
+        }
+
+        private void SetExecutionTimeStamp(BaseItem item)
+        {
+            item.LastAccess = ExecutionTimeStamps.Instance.GetTimeStamp(item.Id);
+
+            var menu = item as Menu;
+            if (menu != null)
+            {
+                menu.LoadExecutionTimeStamps();
             }
         }
     }

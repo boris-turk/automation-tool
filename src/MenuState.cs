@@ -1,30 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace AutomationEngine
 {
     public class MenuState
     {
-        private readonly Stack<Menu> _itemStack;
+        private readonly Stack<Menu> _menuStack;
 
         public MenuState(Menu rootMenu)
         {
-            _itemStack = new Stack<Menu>();
-            _itemStack.Push(rootMenu);
+            _menuStack = new Stack<Menu>();
+            _menuStack.Push(rootMenu);
         }
 
         public Menu RootMenu
         {
-            get { return _itemStack.Reverse().First(); }
+            get { return _menuStack.Reverse().First(); }
         }
 
         public List<BaseItem> MatchingItems
         {
             get
             {
-                List<BaseItem> result = _itemStack.Peek().Items.Where(x => MatchesFilter(x.Name)).ToList();
+                List<BaseItem> result = _menuStack.Peek().Items.Where(x => MatchesFilter(x.Name)).ToList();
                 result.Sort(new MenuComparer(this));
                 return result;
             }
@@ -68,7 +67,7 @@ namespace AutomationEngine
 
         public Menu Menu
         {
-            get { return _itemStack.Peek(); }
+            get { return _menuStack.Peek(); }
         }
 
         public int ItemsCount
@@ -80,7 +79,7 @@ namespace AutomationEngine
         {
             get
             {
-                List<Menu> items = _itemStack.Reverse().Skip(1).ToList();
+                List<Menu> items = _menuStack.Reverse().Skip(1).ToList();
                 return "> " + string.Join(" > ", items.Select(x => x.Name));
             }
         }
@@ -89,12 +88,12 @@ namespace AutomationEngine
         {
             get
             {
-                if (_itemStack.Count < 2)
+                if (_menuStack.Count < 2)
                 {
                     return null;
                 }
 
-                return _itemStack.Peek();
+                return _menuStack.Peek();
             }
         }
 
@@ -103,15 +102,15 @@ namespace AutomationEngine
         public void PushSelectedSubmenu()
         {
             Menu menu = SelectedMenu;
-            _itemStack.Push(menu);
+            _menuStack.Push(menu);
             menu.LoadItems();
         }
 
         public void Clear()
         {
-            while (_itemStack.Count > 1)
+            while (_menuStack.Count > 1)
             {
-                _itemStack.Pop();
+                _menuStack.Pop();
             }
         }
 
@@ -123,14 +122,33 @@ namespace AutomationEngine
 
         public void PopMenu()
         {
-            if (_itemStack.Count > 1)
+            if (_menuStack.Count > 1)
             {
-                _itemStack.Pop();
+                _menuStack.Pop();
             }
         }
 
         public void PersistExecutionTimeStamps()
         {
+            ReloadGuard.Enabled = false;
+
+            DateTime now = DateTime.Now;
+
+            foreach (Menu menu in _menuStack.Reverse().Skip(1).Reverse())
+            {
+                ExecutionTimeStamps.Instance.SetTimeStamp(menu.Id, now);
+                now = now.AddTicks(1);
+            }
+
+            ExecutableItem executableItem = SelectedExecutableItem;
+            if (executableItem != null)
+            {
+                ExecutionTimeStamps.Instance.SetTimeStamp(executableItem.Id, now);
+            }
+
+            ExecutionTimeStamps.Instance.Save();
+
+            ReloadGuard.Enabled = true;
         }
     }
 }

@@ -73,6 +73,8 @@
     <Compile Include="ContextGroup.cs" />
     <Compile Include="ContextGroupCollection.cs" />
     <Compile Include="Contexts.cs" />
+    <Compile Include="TimeStamp.cs" />
+    <Compile Include="ExecutionTimeStamps.cs" />
     <Compile Include="FileStorage.cs" />
     <Compile Include="FileDescriptorContentSource.cs" />
     <Compile Include="CopyData.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="FileGroupCollection.cs" />
     <Compile Include="FileItem.cs" />
     <Compile Include="FormFactory.cs" />
+    <Compile Include="ISerializationFinalizer.cs" />
     <Compile Include="MenuEngineMethodExecutor.cs" />
     <Compile Include="MenuEntryDeletion.cs" />
     <Compile Include="MessageWindow.cs" />
