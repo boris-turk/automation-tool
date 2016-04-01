@@ -7,11 +7,14 @@ namespace AutomationEngine
     public class MenuState
     {
         private readonly Stack<Menu> _menuStack;
+        private string _filter;
+        private List<BaseItem> _matchingItems;
 
         public MenuState(Menu rootMenu)
         {
             _menuStack = new Stack<Menu>();
             _menuStack.Push(rootMenu);
+            _matchingItems = new List<BaseItem>();
         }
 
         public Menu RootMenu
@@ -21,16 +24,18 @@ namespace AutomationEngine
 
         public List<BaseItem> MatchingItems
         {
-            get
-            {
-                IEnumerable<BaseItem> selectableItems = ActiveMenu.GetSelectableItems();
-                List<BaseItem> result = selectableItems.Where(x => MatchesFilter(x.Name)).ToList();
-                result.Sort(new MenuComparer(this));
-                return result;
-            }
+            get { return _matchingItems; }
         }
 
-        public string Filter { get; set; }
+        public string Filter
+        {
+            get { return _filter; }
+            set
+            {
+                _filter = value;
+                DetermineMatchingItems();
+            }
+        }
 
         public bool IsMenuSelected
         {
@@ -79,6 +84,13 @@ namespace AutomationEngine
         }
 
         public string Context { get; set; }
+
+        private void DetermineMatchingItems()
+        {
+            IEnumerable<BaseItem> selectableItems = ActiveMenu.GetSelectableItems();
+            _matchingItems = selectableItems.Where(x => MatchesFilter(x.Name)).ToList();
+            _matchingItems.Sort(new MenuComparer(this));
+        }
 
         public void PushSelectedSubmenu()
         {
