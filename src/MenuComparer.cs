@@ -14,6 +14,14 @@ namespace AutomationEngine
 
         public int Compare(BaseItem x, BaseItem y)
         {
+            if (x.Context == Contexts.Instance.Current && x.Context != y.Context)
+            {
+                return -1;
+            }
+            if (y.Context == Contexts.Instance.Current && x.Context != y.Context)
+            {
+                return 1;
+            }
             if (_state.Filter.Length == 0)
             {
                 return CompareByLastAccessTime(x, y);
