@@ -23,7 +23,8 @@ namespace AutomationEngine
         {
             get
             {
-                List<BaseItem> result = _menuStack.Peek().Items.Where(x => MatchesFilter(x.Name)).ToList();
+                IEnumerable<BaseItem> selectableItems = ActiveMenu.GetSelectableItems();
+                List<BaseItem> result = selectableItems.Where(x => MatchesFilter(x.Name)).ToList();
                 result.Sort(new MenuComparer(this));
                 return result;
             }
@@ -48,14 +49,7 @@ namespace AutomationEngine
 
         private BaseItem SelectedItem
         {
-            get
-            {
-                if (SelectedIndex >= MatchingItems.Count)
-                {
-                    return null;
-                }
-                return MatchingItems[SelectedIndex];
-            }
+            get { return MatchingItems.ElementAtOrDefault(SelectedIndex); }
         }
 
         public bool IsExecutableItemSelected
@@ -64,11 +58,6 @@ namespace AutomationEngine
         }
 
         public int SelectedIndex { get; set; }
-
-        public Menu Menu
-        {
-            get { return _menuStack.Peek(); }
-        }
 
         public int ItemsCount
         {
@@ -84,17 +73,9 @@ namespace AutomationEngine
             }
         }
 
-        public Menu ActingMenu
+        public Menu ActiveMenu
         {
-            get
-            {
-                if (_menuStack.Count < 2)
-                {
-                    return null;
-                }
-
-                return _menuStack.Peek();
-            }
+            get { return _menuStack.Peek(); }
         }
 
         public string Context { get; set; }
@@ -132,23 +113,71 @@ namespace AutomationEngine
         {
             ReloadGuard.Enabled = false;
 
-            DateTime now = DateTime.Now;
-
-            foreach (Menu menu in _menuStack.Reverse().Skip(1).Reverse())
-            {
-                ExecutionTimeStamps.Instance.SetTimeStamp(menu.Id, now);
-                now = now.AddTicks(1);
-            }
-
-            ExecutableItem executableItem = SelectedExecutableItem;
-            if (executableItem != null)
-            {
-                ExecutionTimeStamps.Instance.SetTimeStamp(executableItem.Id, now);
-            }
-
+            UpdateMenuExecutionTimeStamps();
+            UpdateItemExecutionTimeStamp();
             ExecutionTimeStamps.Instance.Save();
 
             ReloadGuard.Enabled = true;
+        }
+
+        private void UpdateItemExecutionTimeStamp()
+        {
+            ExecutableItem executableItem = SelectedExecutableItem;
+
+            if (executableItem == null)
+            {
+                return;
+            }
+
+            DateTime now = DateTime.Now;
+
+            executableItem.LastAccess = now;
+            if (executableItem.ReplacedItemId == null)
+            {
+                ExecutionTimeStamps.Instance.SetTimeStamp(executableItem.Id, now);
+                return;
+            }
+
+            ExecutableItem replacedExecutableItem = ActiveMenu.Items
+                .OfType<ExecutableItem>()
+                .First(x => x.Id == executableItem.ReplacedItemId);
+
+            replacedExecutableItem.LastAccess = now;
+            ExecutionTimeStamps.Instance.SetTimeStamp(replacedExecutableItem.Id, now);
+        }
+
+        private void UpdateMenuExecutionTimeStamps()
+        {
+            DateTime now = DateTime.Now;
+            foreach (Menu menu in _menuStack.Reverse().Skip(1).Reverse())
+            {
+                menu.LastAccess = now;
+                ExecutionTimeStamps.Instance.SetTimeStamp(menu.Id, now);
+                now = now.AddTicks(1);
+            }
+        }
+
+        public void SetCurrentContext()
+        {
+            ExecutableItem executableItem = SelectedExecutableItem;
+
+            string newContext = null;
+            if (executableItem != null && executableItem.Context != null)
+            {
+                newContext = executableItem.Context;
+            }
+            else
+            {
+                newContext = _menuStack
+                    .Where(x => x.ContextSpecified)
+                    .Select(x => x.Context)
+                    .LastOrDefault();
+            }
+
+            if (newContext != null)
+            {
+                Contexts.Instance.Current = newContext;
+            }
         }
     }
 }

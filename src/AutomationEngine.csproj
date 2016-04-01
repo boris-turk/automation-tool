@@ -73,6 +73,8 @@
     <Compile Include="ContextGroup.cs" />
     <Compile Include="ContextGroupCollection.cs" />
     <Compile Include="Contexts.cs" />
+    <Compile Include="ContextVariableMapping.cs" />
+    <Compile Include="ContextVariableMappingsCollection.cs" />
     <Compile Include="TimeStamp.cs" />
     <Compile Include="ExecutionTimeStamps.cs" />
     <Compile Include="FileStorage.cs" />

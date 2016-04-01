@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
@@ -11,6 +12,7 @@ namespace AutomationEngine
             Id = Guid.NewGuid().ToString();
         }
 
+        [XmlIgnore]
         public DateTime LastAccess { get; set; }
 
         public bool LastAccessSpecified

@@ -86,7 +86,7 @@ namespace AutomationEngine
 
             if (args.KeyCode == Keys.Space)
             {
-                handled = OnSpaceKeyPressed();
+                //handled = OnSpaceKeyPressed();
             }
 
             if (args.KeyCode == Keys.Down)
@@ -164,24 +164,35 @@ namespace AutomationEngine
                 return;
             }
 
-            Menu actingMenu = State.ActingMenu;
-            if (actingMenu == null)
+            string executingMethodName = null;
+            if (executableItem.ExecutingMethodName != null)
+            {
+                executingMethodName = executableItem.ExecutingMethodName;
+            }
+            else if (State.ActiveMenu != null)
+            {
+                executingMethodName = State.ActiveMenu.ExecutingMethodName;
+            }
+
+            if (executingMethodName == null)
             {
                 return;
             }
 
             State.PersistExecutionTimeStamps();
 
+            State.SetCurrentContext();
+
             CloseMenuEngine();
 
             List<AbstractValue> arguments = GetExecutableItemArguments(executableItem);
-            if (actingMenu.ExecutingMethodName == ExecuteAutomationEngineMethodIdentifier)
+            if (executingMethodName == ExecuteAutomationEngineMethodIdentifier)
             {
                 ExecuteAutomationEngineMethod(arguments);
             }
             else
             {
-                ExecuteAhkMethod(actingMenu.ExecutingMethodName, arguments);
+                ExecuteAhkMethod(executingMethodName, arguments);
             }
         }
 
@@ -270,7 +281,7 @@ namespace AutomationEngine
                 SearchBar.Clear();
                 _lastSearchText = SearchBar.Text;
                 ReloadStackLabel();
-                LoadProperItems();
+                LoadItems();
             });
             _textChangedTimer.Start();
         }
@@ -302,15 +313,6 @@ namespace AutomationEngine
             _textChangedTimer.Start();
         }
 
-        private void LoadItems()
-        {
-            ListBox.Items.Clear();
-            foreach (string name in State.MatchingItems.Select(x => x.Name))
-            {
-                ListBox.Items.Add(name);
-            }
-        }
-
         private void OnTextChangedTimerElapsed()
         {
             _textChangedTimer.Stop();
@@ -326,12 +328,16 @@ namespace AutomationEngine
         {
             _lastSearchText = SearchBar.Text;
             State.Filter = SearchBar.Text.Trim();
-            LoadProperItems();
+            LoadItems();
         }
 
-        private void LoadProperItems()
+        private void LoadItems()
         {
-            LoadItems();
+            ListBox.Items.Clear();
+            foreach (string name in State.MatchingItems.Select(x => x.Name))
+            {
+                ListBox.Items.Add(name);
+            }
             SelectItem(0);
         }
 

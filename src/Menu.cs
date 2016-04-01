@@ -11,6 +11,8 @@ namespace AutomationEngine
         private string _name;
         private readonly ItemsLoaderFactory _itemsLoaderFactory;
         private string _fileName;
+        private List<ExecutableItem> _replacedItems;
+        private List<BaseItem> _replacementItems;
 
         public Menu()
         {
@@ -69,6 +71,25 @@ namespace AutomationEngine
             get { return !ContentSourceSpecified; }
         }
 
+        public IEnumerable<BaseItem> GetSelectableItems()
+        {
+            foreach (BaseItem item in Items)
+            {
+                if (_replacedItems == null || !_replacedItems.Contains(item))
+                {
+                    yield return item;
+                }
+            }
+            if (_replacementItems == null)
+            {
+                yield break;
+            }
+            foreach (ExecutableItem executableItem in _replacementItems)
+            {
+                yield return executableItem;
+            }
+        }
+
         public void LoadItems()
         {
             if (ContentSource == null)
@@ -78,6 +99,7 @@ namespace AutomationEngine
 
             IItemsLoader loader = _itemsLoaderFactory.GetInstance(ContentSource);
             Items = loader.Load();
+            PrepareLoadedItems();
         }
 
         public void RemoveItem(BaseItem item)
@@ -138,42 +160,40 @@ namespace AutomationEngine
             }
         }
 
-        private void ExpandContextGroups()
+        private void ReplaceContextGroups()
         {
-            List<ExecutableItem> itemsWithContextGroup = Items
+            _replacedItems = Items
                 .Where(x => x.ContextGroupIdSpecified)
                 .OfType<ExecutableItem>()
                 .ToList();
 
-            Items.RemoveAll(x => itemsWithContextGroup.Contains(x));
+            _replacementItems = new List<BaseItem>();
 
-            List<BaseItem> replacements = new List<BaseItem>();
-
-            foreach (ExecutableItem item in itemsWithContextGroup)
+            foreach (ExecutableItem item in _replacedItems)
             {
-                List<BaseItem> expandedItems = GetExpandContextGroupItem(item).ToList();
-                foreach (BaseItem expandedItem in expandedItems)
+                List<BaseItem> replacements = CreateReplacementItems(item).ToList();
+                foreach (BaseItem replacement in replacements)
                 {
-                    expandedItem.Name = ReplacePlaceholders(expandedItem);
+                    replacement.Name = ReplacePlaceholders(replacement);
                 }
-                replacements.AddRange(expandedItems);
+                _replacementItems.AddRange(replacements);
             }
-
-            Items.AddRange(replacements);
         }
 
-        private string ReplacePlaceholders(BaseItem expandedItem)
+        private string ReplacePlaceholders(BaseItem replacement)
         {
-            return expandedItem.Name.Replace(Configuration.ContextPlaceholder, expandedItem.Context);
+            return replacement.Name.Replace(Configuration.ContextPlaceholder, replacement.Context);
         }
 
-        private IEnumerable<BaseItem> GetExpandContextGroupItem(ExecutableItem item)
+        private IEnumerable<BaseItem> CreateReplacementItems(ExecutableItem item)
         {
             foreach (string context in item.ContextGroup.Contexts)
             {
-                BaseItem additionalItem = item.Clone();
-                additionalItem.ContextGroupId = null;
+                ExecutableItem additionalItem = item.Clone();
+                additionalItem.Id = Guid.NewGuid().ToString();
+                additionalItem.ReplacedItemId = item.Id;
                 additionalItem.Context = context;
+                additionalItem.LastAccess = item.LastAccess;
                 yield return additionalItem;
             }
         }
@@ -181,9 +201,14 @@ namespace AutomationEngine
         public void FinalizeSerialization(string file)
         {
             _fileName = file;
-            PrependRootDirectoryToFileItems();
-            ExpandContextGroups();
+            PrepareLoadedItems();
+        }
+
+        private void PrepareLoadedItems()
+        {
             LoadExecutionTimeStamps();
+            PrependRootDirectoryToFileItems();
+            ReplaceContextGroups();
         }
 
         private void LoadExecutionTimeStamps()

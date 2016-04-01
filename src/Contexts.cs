@@ -17,5 +17,8 @@ namespace AutomationEngine
 
         [XmlElement("Context")]
         public List<string> Entries { get; set; }
+
+        [XmlIgnore]
+        public string Current { get; set; }
     }
 }

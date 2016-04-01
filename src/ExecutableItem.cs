@@ -22,5 +22,8 @@ namespace AutomationEngine
         }
 
         public string ExecutingMethodName { get; set; }
+
+        [XmlIgnore]
+        public string ReplacedItemId { get; set; }
     }
 }
