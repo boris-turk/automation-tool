@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace AutomationEngine
 {
@@ -109,10 +110,10 @@ namespace AutomationEngine
         {
             string context = Context.ToLower();
 
-            if (!Contexts.Instance.Entries.Contains(context))
+            if (ContextCollection.Instance.Entries.All(x => x.Value != context))
             {
-                Contexts.Instance.Entries.Add(context);
-                Contexts.Instance.Save();
+                ContextCollection.Instance.Entries.Add(new Context { Value = context });
+                ContextCollection.Instance.Save();
             }
         }
 
@@ -156,7 +157,7 @@ namespace AutomationEngine
         {
             ContentsFileName = Guid.NewGuid().ToString().ToLower() + ".txt";
             FileGroupCollection.Instance.FileGroups.ForEach(x => _group.Items.Add(x.Id));
-            Contexts.Instance.Entries.ForEach(x => _context.Items.Add(x));
+            ContextCollection.Instance.Entries.ForEach(x => _context.Items.Add(x));
         }
     }
 }

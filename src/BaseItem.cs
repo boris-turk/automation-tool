@@ -52,5 +52,12 @@ namespace AutomationEngine
                 return ContextGroupCollection.Instance.Groups.First(x => x.Id == ContextGroupId);
             }
         }
+
+        public string Pattern { get; set; }
+
+        public bool PatternSpecified
+        {
+            get { return !string.IsNullOrWhiteSpace(Pattern); }
+        }
     }
 }

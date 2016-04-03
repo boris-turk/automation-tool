@@ -7,10 +7,15 @@ namespace AutomationEngine
     [Serializable]
     public class ContextGroup
     {
+        public ContextGroup()
+        {
+            Contexts = new List<Context>();
+        }
+
         [XmlAttribute]
         public string Id { get; set; }
 
         [XmlElement("Context")]
-        public List<string> Contexts { get; set; }
+        public List<Context> Contexts { get; set; }
     }
 }

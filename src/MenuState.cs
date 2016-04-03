@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AutomationEngine
 {
@@ -88,7 +89,7 @@ namespace AutomationEngine
         private void DetermineMatchingItems()
         {
             IEnumerable<BaseItem> selectableItems = ActiveMenu.GetSelectableItems();
-            _matchingItems = selectableItems.Where(x => MatchesFilter(x.Name)).ToList();
+            _matchingItems = selectableItems.Where(MatchesFilter).ToList();
             _matchingItems.Sort(new MenuComparer(this));
         }
 
@@ -107,10 +108,21 @@ namespace AutomationEngine
             }
         }
 
-        private bool MatchesFilter(string text)
+        private bool MatchesFilter(BaseItem item)
         {
-            string[] words = Filter.ToLower().Split(' ');
-            return words.All(x => text.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) >= 0);
+            if (item.PatternSpecified && Filter.Trim().Length > 0)
+            {
+                return MatchesPattern(item);
+            }
+
+            string[] itemWords = item.Name.ToLower().Split(' ');
+            string[] searchWords = Filter.ToLower().Split(' ');
+            return searchWords.All(x => itemWords.Any(y => y.StartsWith(x, StringComparison.InvariantCultureIgnoreCase)));
+        }
+
+        private bool MatchesPattern(BaseItem item)
+        {
+            return Regex.IsMatch(Filter, item.Pattern);
         }
 
         public void PopMenu()
@@ -188,7 +200,7 @@ namespace AutomationEngine
 
             if (newContext != null)
             {
-                Contexts.Instance.Current = newContext;
+                ContextCollection.Instance.Current = newContext;
             }
         }
     }

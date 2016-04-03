@@ -187,12 +187,12 @@ namespace AutomationEngine
 
         private IEnumerable<BaseItem> CreateReplacementItems(ExecutableItem item)
         {
-            foreach (string context in item.ContextGroup.Contexts)
+            foreach (Context context in item.ContextGroup.Contexts)
             {
                 ExecutableItem additionalItem = item.Clone();
                 additionalItem.Id = Guid.NewGuid().ToString();
                 additionalItem.ReplacedItemId = item.Id;
-                additionalItem.Context = context;
+                additionalItem.Context = context.Value;
                 additionalItem.LastAccess = item.LastAccess;
                 yield return additionalItem;
             }

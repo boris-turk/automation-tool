@@ -14,11 +14,11 @@ namespace AutomationEngine
 
         public int Compare(BaseItem x, BaseItem y)
         {
-            if (x.Context == Contexts.Instance.Current && x.Context != y.Context)
+            if (x.Context == ContextCollection.Instance.Current && x.Context != y.Context)
             {
                 return -1;
             }
-            if (y.Context == Contexts.Instance.Current && x.Context != y.Context)
+            if (y.Context == ContextCollection.Instance.Current && x.Context != y.Context)
             {
                 return 1;
             }

@@ -3,11 +3,12 @@ using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
-    public class Contexts : FileStorage<Contexts>
+    [XmlRoot("Contexts")]
+    public class ContextCollection : FileStorage<ContextCollection>
     {
-        public Contexts()
+        public ContextCollection()
         {
-            Entries = new List<string>();
+            Entries = new List<Context>();
         }
 
         public override string StorageFileName
@@ -16,7 +17,7 @@ namespace AutomationEngine
         }
 
         [XmlElement("Context")]
-        public List<string> Entries { get; set; }
+        public List<Context> Entries { get; set; }
 
         [XmlIgnore]
         public string Current { get; set; }
