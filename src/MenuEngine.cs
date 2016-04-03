@@ -334,9 +334,9 @@ namespace AutomationEngine
         private void LoadItems()
         {
             ListBox.Items.Clear();
-            foreach (string name in State.MatchingItems.Select(x => x.Name))
+            foreach (BaseItem item in State.MatchingItems)
             {
-                ListBox.Items.Add(name);
+                ListBox.Items.Add(item.GetProperName());
             }
             SelectItem(0);
         }

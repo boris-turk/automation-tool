@@ -1,8 +1,10 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
-    public class ValueItem
+    [Serializable]
+    public abstract class PatternPart
     {
         [XmlAttribute]
         public string Value { get; set; }
@@ -11,5 +13,9 @@ namespace AutomationEngine
         {
             get { return !string.IsNullOrWhiteSpace(Value); }
         }
+
+        public abstract string DisplayValue { get; }
+
+        public abstract bool IsMatch(string text);
     }
 }

@@ -44,7 +44,7 @@ namespace AutomationEngine
 
         private bool FilterMatchesAtStart(BaseItem item)
         {
-            int index = item.Name.IndexOf(_state.Filter, StringComparison.OrdinalIgnoreCase);
+            int index = item.GetProperName().IndexOf(_state.Filter, StringComparison.OrdinalIgnoreCase);
             return index == 0;
         }
     }

@@ -1,18 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
+    [Serializable]
     public class PatternCollection
     {
         public PatternCollection()
         {
-            Values = new List<ValueItem>();
+            Values = new List<PatternPart>();
         }
 
         [XmlElement(typeof(Word))]
         [XmlElement(typeof(Context))]
         [XmlElement(typeof(RegularExpression))]
-        public List<ValueItem> Values { get; set; }
+        public List<PatternPart> Values { get; set; }
     }
 }

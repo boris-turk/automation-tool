@@ -8,7 +8,6 @@ namespace AutomationEngine
     [Serializable]
     public class Menu : BaseItem, ISerializationFinalizer
     {
-        private string _name;
         private readonly ItemsLoaderFactory _itemsLoaderFactory;
         private string _fileName;
         private List<ExecutableItem> _replacedItems;
@@ -19,22 +18,9 @@ namespace AutomationEngine
             _itemsLoaderFactory = new ItemsLoaderFactory();
         }
 
-        public override string Name
-        {
-            get
-            {
-                if (_name == null)
-                {
-                    return Id;
-                }
-                return _name;
-            }
-            set { _name = value; }
-        }
-
         public bool NameSpecified
         {
-            get { return _name != null; }
+            get { return Name != null; }
         }
 
         public string GroupId { get; set; }
@@ -174,15 +160,28 @@ namespace AutomationEngine
                 List<BaseItem> replacements = CreateReplacementItems(item).ToList();
                 foreach (BaseItem replacement in replacements)
                 {
-                    replacement.Name = ReplacePlaceholders(replacement);
+                    ReplacePlaceholders(replacement);
                 }
                 _replacementItems.AddRange(replacements);
             }
         }
 
-        private string ReplacePlaceholders(BaseItem replacement)
+        private void ReplacePlaceholders(BaseItem replacement)
         {
-            return replacement.Name.Replace(Configuration.ContextPlaceholder, replacement.Context);
+            if (replacement.Name != null)
+            {
+                replacement.Name = replacement.Name.Replace(Configuration.ContextPlaceholder, replacement.Context);
+            }
+            if (replacement.PatternSpecified)
+            {
+                foreach (Context context in replacement.Pattern.Values.OfType<Context>())
+                {
+                    if (context.Value == null)
+                    {
+                        context.ReplacedValue = replacement.Context;
+                    }
+                }
+            }
         }
 
         private IEnumerable<BaseItem> CreateReplacementItems(ExecutableItem item)

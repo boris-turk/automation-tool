@@ -1,6 +1,23 @@
-﻿namespace AutomationEngine
+﻿using System;
+
+namespace AutomationEngine
 {
-    public class Word : ValueItem
+    [Serializable]
+    public class Word : PatternPart
     {
+        public override string DisplayValue
+        {
+            get { return Value; }
+        }
+
+        public override bool IsMatch(string text)
+        {
+            if (string.IsNullOrWhiteSpace(Value))
+            {
+                return false;
+            }
+
+            return Value.StartsWith(text, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

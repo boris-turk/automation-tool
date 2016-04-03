@@ -22,7 +22,19 @@ namespace AutomationEngine
 
         public string Id { get; set; }
 
-        public virtual string Name { get; set; }
+        public string Name { get; set; }
+
+        public bool NameSpecified
+        {
+            get { return !string.IsNullOrWhiteSpace(Name); }
+        }
+
+        public PatternCollection Pattern { get; set; }
+
+        public bool PatternSpecified
+        {
+            get { return Pattern != null && Pattern.Values.Any(); }
+        }
 
         public string Context { get; set; }
 
@@ -53,11 +65,14 @@ namespace AutomationEngine
             }
         }
 
-        public string Pattern { get; set; }
-
-        public bool PatternSpecified
+        public string GetProperName()
         {
-            get { return !string.IsNullOrWhiteSpace(Pattern); }
+            if (NameSpecified)
+            {
+                return Name;
+            }
+
+            return string.Join(" ", Pattern.Values.Select(x => x.DisplayValue));
         }
     }
 }

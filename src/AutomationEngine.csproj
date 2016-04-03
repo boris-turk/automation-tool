@@ -119,7 +119,7 @@
     <Compile Include="RegexReplacement.cs" />
     <Compile Include="ReloadGuard.cs" />
     <Compile Include="AbstractValue.cs" />
-    <Compile Include="ValueItem.cs" />
+    <Compile Include="PatternPart.cs" />
     <Compile Include="Word.cs" />
     <Compile Include="XmlStorage.cs" />
     <EmbeddedResource Include="AddFileGroupForm.resx">

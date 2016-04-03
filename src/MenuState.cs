@@ -34,9 +34,12 @@ namespace AutomationEngine
             set
             {
                 _filter = value;
+                FilterWords = Filter.ToLower().Split(' ');
                 DetermineMatchingItems();
             }
         }
+
+        private string[] FilterWords { get;set; }
 
         public bool IsMenuSelected
         {
@@ -110,19 +113,49 @@ namespace AutomationEngine
 
         private bool MatchesFilter(BaseItem item)
         {
-            if (item.PatternSpecified && Filter.Trim().Length > 0)
+            if (Filter.Trim().Length == 0)
+            {
+                return true;
+            }
+
+            if (item.PatternSpecified)
             {
                 return MatchesPattern(item);
             }
 
             string[] itemWords = item.Name.ToLower().Split(' ');
-            string[] searchWords = Filter.ToLower().Split(' ');
-            return searchWords.All(x => itemWords.Any(y => y.StartsWith(x, StringComparison.InvariantCultureIgnoreCase)));
+            return FilterWords.All(x => itemWords.Any(y => y.StartsWith(x, StringComparison.InvariantCultureIgnoreCase)));
         }
 
         private bool MatchesPattern(BaseItem item)
         {
-            return Regex.IsMatch(Filter, item.Pattern);
+            List<PatternPart> patternParts = item.Pattern.Values;
+
+            for (int i = 0; i < patternParts.Count; i++)
+            {
+                if (i >= FilterWords.Length)
+                {
+                    return true;
+                }
+                PatternPart patternItem = patternParts[i];
+                if (!patternItem.IsMatch(FilterWords[i]))
+                {
+                    return false;
+                }
+            }
+
+            if (FilterWords.Length > patternParts.Count)
+            {
+                if (!(patternParts.Last() is RegularExpression))
+                {
+                    return false;
+                }
+
+                string rest = string.Join(" ", FilterWords.Skip(patternParts.Count));
+                return patternParts.Last().IsMatch(rest);
+            }
+
+            return true;
         }
 
         public void PopMenu()
