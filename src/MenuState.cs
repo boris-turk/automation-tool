@@ -129,7 +129,7 @@ namespace AutomationEngine
 
         private bool MatchesPattern(BaseItem item)
         {
-            List<PatternPart> patternParts = item.Pattern.Values;
+            List<PatternPart> patternParts = item.Pattern.LeadingParts;
 
             for (int i = 0; i < patternParts.Count; i++)
             {

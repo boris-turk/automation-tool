@@ -174,13 +174,7 @@ namespace AutomationEngine
             }
             if (replacement.PatternSpecified)
             {
-                foreach (Context context in replacement.Pattern.Values.OfType<Context>())
-                {
-                    if (context.Value == null)
-                    {
-                        context.ReplacedValue = replacement.Context;
-                    }
-                }
+                replacement.Pattern.SetContextReplacement(replacement.Context);
             }
         }
 

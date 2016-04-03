@@ -33,7 +33,7 @@ namespace AutomationEngine
 
         public bool PatternSpecified
         {
-            get { return Pattern != null && Pattern.Values.Any(); }
+            get { return Pattern != null && Pattern.LeadingParts.Any(); }
         }
 
         public string Context { get; set; }
@@ -72,7 +72,7 @@ namespace AutomationEngine
                 return Name;
             }
 
-            return string.Join(" ", Pattern.Values.Select(x => x.DisplayValue));
+            return string.Join(" ", Pattern.LeadingParts.Select(x => x.DisplayValue));
         }
     }
 }

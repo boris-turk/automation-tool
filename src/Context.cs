@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
     [Serializable]
     public class Context : PatternPart
     {
-        public string ReplacedValue { get; set; }
+        [XmlIgnore]
+        public string Replacement { get; set; }
 
         public override string DisplayValue
         {
@@ -16,7 +18,7 @@ namespace AutomationEngine
                 {
                     return Value;
                 }
-                return ReplacedValue;
+                return Replacement;
             }
         }
 
@@ -35,7 +37,7 @@ namespace AutomationEngine
             }
             else
             {
-                context = ReplacedValue;
+                context = Replacement;
             }
 
             if (string.IsNullOrEmpty(context))
