@@ -5,6 +5,32 @@ namespace AutomationEngine
 {
     public static class Extensions
     {
+        public static bool StartsPartiallyWith(this string testedText, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            int j = 0;
+            for (int i = 0; i < testedText.Length; i++)
+            {
+                if (j >= value.Length)
+                {
+                    break;
+                }
+                if (char.ToUpperInvariant(value[j]) == char.ToUpperInvariant(testedText[i]))
+                {
+                    j++;
+                }
+                else if (j == 0)
+                {
+                    return false;
+                }
+            }
+
+            return j == value.Length;
+        }
         public static T InvokeQuery<T>(this Control c, Func<T> m)
         {
             if (c.InvokeRequired)

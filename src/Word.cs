@@ -17,7 +17,7 @@ namespace AutomationEngine
                 return false;
             }
 
-            return Value.StartsWith(text, StringComparison.OrdinalIgnoreCase);
+            return Value.StartsPartiallyWith(text);
         }
     }
 }

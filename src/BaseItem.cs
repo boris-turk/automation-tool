@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
     [Serializable]
-    public class BaseItem
+    public abstract class BaseItem
     {
-        public BaseItem()
+        protected BaseItem()
         {
             Id = Guid.NewGuid().ToString();
         }

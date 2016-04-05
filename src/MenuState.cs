@@ -129,33 +129,9 @@ namespace AutomationEngine
 
         private bool MatchesPattern(BaseItem item)
         {
-            List<PatternPart> patternParts = item.Pattern.LeadingParts;
-
-            for (int i = 0; i < patternParts.Count; i++)
-            {
-                if (i >= FilterWords.Length)
-                {
-                    return true;
-                }
-                PatternPart patternItem = patternParts[i];
-                if (!patternItem.IsMatch(FilterWords[i]))
-                {
-                    return false;
-                }
-            }
-
-            if (FilterWords.Length > patternParts.Count)
-            {
-                if (!(patternParts.Last() is RegularExpression))
-                {
-                    return false;
-                }
-
-                string rest = string.Join(" ", FilterWords.Skip(patternParts.Count));
-                return patternParts.Last().IsMatch(rest);
-            }
-
-            return true;
+            var matchEvaluator = new FilterMatchEvaluator(item, FilterWords);
+            matchEvaluator.Evaluate();
+            return matchEvaluator.MatchesFilter;
         }
 
         public void PopMenu()

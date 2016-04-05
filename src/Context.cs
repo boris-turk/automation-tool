@@ -40,25 +40,7 @@ namespace AutomationEngine
                 context = Replacement;
             }
 
-            if (string.IsNullOrEmpty(context))
-            {
-                return false;
-            }
-
-            int j = 0;
-            for (int i = 0; i < context.Length; i++)
-            {
-                if (j >= text.Length)
-                {
-                    break;
-                }
-                if (context[i] == text[j])
-                {
-                    j++;
-                }
-            }
-
-            return j == text.Length;
+            return text.StartsPartiallyWith(context);
         }
     }
 }
