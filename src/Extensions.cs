@@ -5,7 +5,17 @@ namespace AutomationEngine
 {
     public static class Extensions
     {
+        public static bool PartiallyContains(this string testedText, string value)
+        {
+            return PartiallyContains(testedText, value, false);
+        }
+
         public static bool StartsPartiallyWith(this string testedText, string value)
+        {
+            return PartiallyContains(testedText, value, true);
+        }
+
+        private static bool PartiallyContains(string testedText, string value, bool mustMatchAtStart)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -23,7 +33,7 @@ namespace AutomationEngine
                 {
                     j++;
                 }
-                else if (j == 0)
+                else if (j == 0 && mustMatchAtStart)
                 {
                     return false;
                 }

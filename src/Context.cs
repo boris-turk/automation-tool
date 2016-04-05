@@ -40,7 +40,7 @@ namespace AutomationEngine
                 context = Replacement;
             }
 
-            return text.StartsPartiallyWith(context);
+            return context.PartiallyContains(text);
         }
     }
 }
