@@ -148,6 +148,11 @@ namespace AutomationEngine
 
         private void ReplaceContextGroups()
         {
+            foreach (BaseItem item in Items.Where(x => !x.ContextGroupIdSpecified))
+            {
+                ReplaceContextPlaceholders(item);
+            }
+
             _replacedItems = Items
                 .Where(x => x.ContextGroupIdSpecified)
                 .OfType<ExecutableItem>()
@@ -160,17 +165,17 @@ namespace AutomationEngine
                 List<BaseItem> replacements = CreateReplacementItems(item).ToList();
                 foreach (BaseItem replacement in replacements)
                 {
-                    ReplacePlaceholders(replacement);
+                    ReplaceContextPlaceholders(replacement);
                 }
                 _replacementItems.AddRange(replacements);
             }
         }
 
-        private void ReplacePlaceholders(BaseItem replacement)
+        private void ReplaceContextPlaceholders(BaseItem item)
         {
-            if (replacement.Name != null)
+            if (item.Name != null && item.Context != null)
             {
-                replacement.Name = replacement.Name.Replace(Configuration.ContextPlaceholder, replacement.Context);
+                item.Name = item.Name.Replace(Configuration.ContextPlaceholder, item.Context);
             }
         }
 
