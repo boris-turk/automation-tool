@@ -48,11 +48,11 @@ namespace AutomationEngine
         }
 
         [XmlIgnore]
-        public List<PatternPart> NamePatterns { get; set; }
+        public List<Word> NameWords { get; set; }
 
-        public bool NamePatternsSpecified
+        public bool NameWordsSpecified
         {
-            get { return NamePatterns != null && NamePatterns.Any(); }
+            get { return NameWords != null && NameWords.Any(); }
         }
 
         public string Context { get; set; }
@@ -89,36 +89,51 @@ namespace AutomationEngine
 
         public string GetProperName()
         {
-            return string.Join(" ", NamePatterns.Select(x => x.DisplayValue));
+            return string.Join(" ", NameWords.Select(x => x.DisplayValue));
         }
 
         private void InitializePattern()
         {
             if (string.IsNullOrEmpty(Name))
             {
-                NamePatterns = null;
+                NameWords = null;
                 return;
             }
 
-            NamePatterns = new List<PatternPart>();
+            NameWords = new List<Word>();
             foreach (string word in Name.Split(' '))
             {
-                if (string.Equals(word, Context, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    NamePatterns.Add(new Word
-                    {
-                        Value = Context,
-                        IsContext = true
-                    });
-                }
-                else
-                {
-                    NamePatterns.Add(new Word
-                    {
-                        Value = word
-                    });
-                }
+                AddWord(word);
             }
+        }
+
+        private void AddWord(string word)
+        {
+            if (string.Equals(word, Context, StringComparison.InvariantCultureIgnoreCase))
+            {
+                AddContextWord();
+            }
+            else
+            {
+                AddNormalWord(word);
+            }
+        }
+
+        private void AddNormalWord(string word)
+        {
+            NameWords.Add(new Word
+            {
+                Value = word
+            });
+        }
+
+        private void AddContextWord()
+        {
+            NameWords.Add(new Word
+            {
+                Value = Context,
+                IsContext = true
+            });
         }
     }
 }
