@@ -172,20 +172,16 @@ namespace AutomationEngine
             {
                 replacement.Name = replacement.Name.Replace(Configuration.ContextPlaceholder, replacement.Context);
             }
-            if (replacement.PatternSpecified)
-            {
-                replacement.Pattern.SetContextReplacement(replacement.Context);
-            }
         }
 
         private IEnumerable<BaseItem> CreateReplacementItems(ExecutableItem item)
         {
-            foreach (Context context in item.ContextGroup.Contexts)
+            foreach (string context in item.ContextGroup.Contexts)
             {
                 ExecutableItem additionalItem = item.Clone();
                 additionalItem.Id = Guid.NewGuid().ToString();
                 additionalItem.ReplacedItemId = item.Id;
-                additionalItem.Context = context.Value;
+                additionalItem.Context = context;
                 additionalItem.LastAccess = item.LastAccess;
                 yield return additionalItem;
             }

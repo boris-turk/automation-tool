@@ -8,7 +8,7 @@ namespace AutomationEngine
     {
         public ContextCollection()
         {
-            Entries = new List<Context>();
+            Contexts = new List<string>();
         }
 
         public override string StorageFileName
@@ -17,7 +17,7 @@ namespace AutomationEngine
         }
 
         [XmlElement("Context")]
-        public List<Context> Entries { get; set; }
+        public List<string> Contexts { get; set; }
 
         [XmlIgnore]
         public string Current { get; set; }

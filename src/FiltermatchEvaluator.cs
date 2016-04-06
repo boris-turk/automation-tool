@@ -14,9 +14,9 @@ namespace AutomationEngine
             _filterWords = filterWords;
         }
 
-        public PatternCollection Pattern
+        public List<PatternPart> NamePatterns
         {
-            get { return _item.Pattern; }
+            get { return _item.NamePatterns; }
         }
 
         public bool CheckForPerfectMatch { get; set; }
@@ -33,7 +33,7 @@ namespace AutomationEngine
                 return;
             }
 
-            if (!Pattern.LeadingParts.Any())
+            if (!NamePatterns.Any())
             {
                 MatchesFilter = true;
                 return;
@@ -53,7 +53,7 @@ namespace AutomationEngine
         {
             string[] filterWords;
 
-            if (Pattern.LeadingParts.First().IsMatch(_filterWords.First()))
+            if (NamePatterns.First().IsMatch(_filterWords.First()))
             {
                 _item.IsPerfectMatch = true;
                 filterWords = _filterWords.Skip(1).ToArray();
@@ -64,12 +64,12 @@ namespace AutomationEngine
                 filterWords = _filterWords.ToArray();
             }
 
-            MatchesFilter = filterWords.All(x => Pattern.LeadingParts.Any(y => y.IsMatch(x)));
+            MatchesFilter = filterWords.All(x => NamePatterns.Any(y => y.IsMatch(x)));
         }
 
         private void TestForNormalMatch()
         {
-            MatchesFilter = _filterWords.All(x => Pattern.LeadingParts.Any(y => y.IsMatch(x)));
+            MatchesFilter = _filterWords.All(x => NamePatterns.Any(y => y.IsMatch(x)));
         }
     }
 }

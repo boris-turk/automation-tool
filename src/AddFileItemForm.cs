@@ -110,9 +110,9 @@ namespace AutomationEngine
         {
             string context = Context.ToLower();
 
-            if (ContextCollection.Instance.Entries.All(x => x.Value != context))
+            if (ContextCollection.Instance.Contexts.All(x => x != context))
             {
-                ContextCollection.Instance.Entries.Add(new Context { Value = context });
+                ContextCollection.Instance.Contexts.Add(context);
                 ContextCollection.Instance.Save();
             }
         }
@@ -157,7 +157,7 @@ namespace AutomationEngine
         {
             ContentsFileName = Guid.NewGuid().ToString().ToLower() + ".txt";
             FileGroupCollection.Instance.FileGroups.ForEach(x => _group.Items.Add(x.Id));
-            ContextCollection.Instance.Entries.ForEach(x => _context.Items.Add(x));
+            ContextCollection.Instance.Contexts.ForEach(x => _context.Items.Add(x));
         }
     }
 }

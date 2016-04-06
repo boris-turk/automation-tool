@@ -10,6 +10,8 @@ namespace AutomationEngine
             get { return Value; }
         }
 
+        public bool IsContext { get; set; }
+
         public override bool IsMatch(string text)
         {
             if (string.IsNullOrWhiteSpace(Value))
@@ -17,7 +19,14 @@ namespace AutomationEngine
                 return false;
             }
 
-            return Value.StartsPartiallyWith(text);
+            if (IsContext)
+            {
+                return Value.PartiallyContains(text);
+            }
+            else
+            {
+                return Value.StartsPartiallyWith(text);
+            }
         }
     }
 }

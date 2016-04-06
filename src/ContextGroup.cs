@@ -9,13 +9,13 @@ namespace AutomationEngine
     {
         public ContextGroup()
         {
-            Contexts = new List<Context>();
+            Contexts = new List<string>();
         }
 
         [XmlAttribute]
         public string Id { get; set; }
 
         [XmlElement("Context")]
-        public List<Context> Contexts { get; set; }
+        public List<string> Contexts { get; set; }
     }
 }

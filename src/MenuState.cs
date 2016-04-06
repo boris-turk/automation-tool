@@ -140,7 +140,7 @@ namespace AutomationEngine
                 return true;
             }
 
-            if (item.PatternSpecified)
+            if (item.NamePatternsSpecified)
             {
                 return MatchesPattern(item);
             }

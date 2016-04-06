@@ -70,14 +70,12 @@
     <Compile Include="BaseItem.cs" />
     <Compile Include="Cloner.cs" />
     <Compile Include="AhkContentSource.cs" />
-    <Compile Include="Context.cs" />
     <Compile Include="ContextGroup.cs" />
     <Compile Include="ContextGroupCollection.cs" />
     <Compile Include="ContextCollection.cs" />
     <Compile Include="ContextVariableMapping.cs" />
     <Compile Include="ContextVariableMappingsCollection.cs" />
     <Compile Include="FilterMatchEvaluator.cs" />
-    <Compile Include="PatternCollection.cs" />
     <Compile Include="RegularExpression.cs" />
     <Compile Include="TimeStamp.cs" />
     <Compile Include="ExecutionTimeStamps.cs" />

@@ -8,6 +8,8 @@ namespace AutomationEngine
     [Serializable]
     public abstract class BaseItem
     {
+        private string _name;
+
         protected BaseItem()
         {
             Id = Guid.NewGuid().ToString();
@@ -23,18 +25,34 @@ namespace AutomationEngine
 
         public string Id { get; set; }
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                InitializePattern();
+            }
+        }
+
+        public RegularExpression ArgumentsRegex { get; set; }
+
+        public bool ArgumentsRegexSpecified
+        {
+            get { return ArgumentsRegex != null; }
+        }
 
         public bool NameSpecified
         {
             get { return !string.IsNullOrWhiteSpace(Name); }
         }
 
-        public PatternCollection Pattern { get; set; }
+        [XmlIgnore]
+        public List<PatternPart> NamePatterns { get; set; }
 
-        public bool PatternSpecified
+        public bool NamePatternsSpecified
         {
-            get { return Pattern != null && Pattern.LeadingParts.Any(); }
+            get { return NamePatterns != null && NamePatterns.Any(); }
         }
 
         public string Context { get; set; }
@@ -71,12 +89,36 @@ namespace AutomationEngine
 
         public string GetProperName()
         {
-            if (NameSpecified)
+            return string.Join(" ", NamePatterns.Select(x => x.DisplayValue));
+        }
+
+        private void InitializePattern()
+        {
+            if (string.IsNullOrEmpty(Name))
             {
-                return Name;
+                NamePatterns = null;
+                return;
             }
 
-            return string.Join(" ", Pattern.LeadingParts.Select(x => x.DisplayValue));
+            NamePatterns = new List<PatternPart>();
+            foreach (string word in Name.Split(' '))
+            {
+                if (string.Equals(word, Context, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    NamePatterns.Add(new Word
+                    {
+                        Value = Context,
+                        IsContext = true
+                    });
+                }
+                else
+                {
+                    NamePatterns.Add(new Word
+                    {
+                        Value = word
+                    });
+                }
+            }
         }
     }
 }
