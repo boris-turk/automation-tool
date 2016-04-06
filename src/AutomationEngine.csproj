@@ -76,8 +76,7 @@
     <Compile Include="ContextCollection.cs" />
     <Compile Include="ContextVariableMapping.cs" />
     <Compile Include="ContextVariableMappingsCollection.cs" />
-    <Compile Include="FilterMatch.cs" />
-    <Compile Include="FiltermatchEvaluator.cs" />
+    <Compile Include="FilterMatchEvaluator.cs" />
     <Compile Include="PatternCollection.cs" />
     <Compile Include="RegularExpression.cs" />
     <Compile Include="TimeStamp.cs" />

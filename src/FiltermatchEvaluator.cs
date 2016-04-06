@@ -5,8 +5,6 @@ namespace AutomationEngine
 {
     public class FilterMatchEvaluator
     {
-        private FilterMatch _filterMatch;
-
         private readonly BaseItem _item;
         private readonly string[] _filterWords;
 
@@ -21,46 +19,57 @@ namespace AutomationEngine
             get { return _item.Pattern; }
         }
 
-        public bool MatchesFilter
-        {
-            get { return _filterMatch != null; }
-        }
+        public bool CheckForPerfectMatch { get; set; }
+
+        public bool MatchesFilter { get; private set; }
 
         public void Evaluate()
         {
-            List<PatternPart> patternParts = Pattern.LeadingParts;
+            MatchesFilter = false;
+            _item.IsPerfectMatch = false;
 
-            _filterMatch = null;
-            for (int i = 0; i < patternParts.Count; i++)
+            if (!_filterWords.Any())
             {
-                if (i >= _filterWords.Length)
-                {
-                    _filterMatch = new FilterMatch();
-                    return;
-                }
-                PatternPart patternItem = patternParts[i];
-                if (!patternItem.IsMatch(_filterWords[i]))
-                {
-                    return;
-                }
-            }
-
-            if (_filterWords.Length > patternParts.Count)
-            {
-                if (!(patternParts.Last() is RegularExpression))
-                {
-                    return;
-                }
-
-                string rest = string.Join(" ", _filterWords.Skip(patternParts.Count));
-                if (patternParts.Last().IsMatch(rest))
-                {
-                    _filterMatch = new FilterMatch();
-                }
                 return;
             }
 
-            _filterMatch = new FilterMatch();
+            if (!Pattern.LeadingParts.Any())
+            {
+                MatchesFilter = true;
+                return;
+            }
+
+            if (CheckForPerfectMatch)
+            {
+                TestForPerfectMatch();
+            }
+            else
+            {
+                TestForNormalMatch();
+            }
+        }
+
+        private void TestForPerfectMatch()
+        {
+            string[] filterWords;
+
+            if (Pattern.LeadingParts.First().IsMatch(_filterWords.First()))
+            {
+                _item.IsPerfectMatch = true;
+                filterWords = _filterWords.Skip(1).ToArray();
+            }
+            else
+            {
+                _item.IsPerfectMatch = false;
+                filterWords = _filterWords.ToArray();
+            }
+
+            MatchesFilter = filterWords.All(x => Pattern.LeadingParts.Any(y => y.IsMatch(x)));
+        }
+
+        private void TestForNormalMatch()
+        {
+            MatchesFilter = _filterWords.All(x => Pattern.LeadingParts.Any(y => y.IsMatch(x)));
         }
     }
 }

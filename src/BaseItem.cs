@@ -66,6 +66,9 @@ namespace AutomationEngine
             }
         }
 
+        [XmlIgnore]
+        public bool IsPerfectMatch { get; set; }
+
         public string GetProperName()
         {
             if (NameSpecified)

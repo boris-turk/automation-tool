@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace AutomationEngine
 {
@@ -21,6 +22,11 @@ namespace AutomationEngine
         public Menu RootMenu
         {
             get { return _menuStack.Reverse().First(); }
+        }
+
+        public bool IsRootMenuActive
+        {
+            get { return ActiveMenu == RootMenu; }
         }
 
         public List<BaseItem> MatchingItems
@@ -78,7 +84,7 @@ namespace AutomationEngine
             get
             {
                 List<Menu> items = _menuStack.Reverse().Skip(1).ToList();
-                return "> " + string.Join(" > ", items.Select(x => x.Name));
+                return "> " + string.Join(" > ", items.Select(x => x.GetProperName()));
             }
         }
 
@@ -88,6 +94,22 @@ namespace AutomationEngine
         }
 
         public string Context { get; set; }
+
+        public bool SinglePushMenu
+        {
+            get
+            {
+                if (!IsMenuSelected)
+                {
+                    return false;
+                }
+                if (string.IsNullOrWhiteSpace(Filter))
+                {
+                    return false;
+                }
+                return MatchingItems.Count(x => x is Menu && x.IsPerfectMatch) == 1;
+            }
+        }
 
         private void DetermineMatchingItems()
         {
@@ -129,7 +151,10 @@ namespace AutomationEngine
 
         private bool MatchesPattern(BaseItem item)
         {
-            var matchEvaluator = new FilterMatchEvaluator(item, FilterWords);
+            var matchEvaluator = new FilterMatchEvaluator(item, FilterWords)
+            {
+                CheckForPerfectMatch = _menuStack.Count == 1
+            };
             matchEvaluator.Evaluate();
             return matchEvaluator.MatchesFilter;
         }

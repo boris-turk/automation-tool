@@ -105,6 +105,7 @@ namespace AutomationEngine
                 {
                     CenterToScreen();
                 }
+                MenuEngine.Instance.ResetMenuEngine();
                 MenuEngine.Instance.ClearSearchBar();
                 TopMost = true;
                 Activate();

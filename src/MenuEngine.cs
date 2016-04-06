@@ -86,7 +86,7 @@ namespace AutomationEngine
 
             if (args.KeyCode == Keys.Space)
             {
-                //handled = OnSpaceKeyPressed();
+                handled = OnSpaceKeyPressed();
             }
 
             if (args.KeyCode == Keys.Down)
@@ -222,28 +222,31 @@ namespace AutomationEngine
         private void CloseMenuEngine()
         {
             Form.Visible = false;
-            ResetMenuEngine();
         }
 
-        private void ResetMenuEngine()
+        public void ResetMenuEngine()
         {
-            State.Clear();
-            ClearSearchBar();
+            if (!State.IsRootMenuActive || SearchBar.Text.Length > 0)
+            {
+                State.Clear();
+                ClearSearchBar();
+            }
         }
 
         private bool OnSpaceKeyPressed()
         {
+            if (!State.SinglePushMenu)
+            {
+                return false;
+            }
+
             if (_textChangedTimer.Enabled)
             {
                 _textChangedTimer.Stop();
                 OnFilterChanged();
             }
 
-            if (State.IsMenuSelected)
-            {
-                PushSelectedSubmenu();
-            }
-
+            PushSelectedSubmenu();
             return true;
         }
 

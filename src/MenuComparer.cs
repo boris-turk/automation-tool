@@ -14,6 +14,10 @@ namespace AutomationEngine
 
         public int Compare(BaseItem x, BaseItem y)
         {
+            if (x.IsPerfectMatch != y.IsPerfectMatch)
+            {
+                return y.IsPerfectMatch.CompareTo(x.IsPerfectMatch);
+            }
             if (x.Context == ContextCollection.Instance.Current && x.Context != y.Context)
             {
                 return -1;
