@@ -40,7 +40,7 @@ namespace AutomationEngine
             set
             {
                 _filter = value;
-                FilterWords = Filter.ToLower().Split(' ');
+                FilterWords = Filter.ToLower().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 DetermineMatchingItems();
             }
         }
