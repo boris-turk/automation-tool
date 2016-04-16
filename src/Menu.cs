@@ -18,11 +18,6 @@ namespace AutomationEngine
             _itemsLoaderFactory = new ItemsLoaderFactory();
         }
 
-        public bool NameSpecified
-        {
-            get { return Name != null; }
-        }
-
         public string GroupId { get; set; }
 
         public FileGroup Group
@@ -70,7 +65,7 @@ namespace AutomationEngine
             {
                 yield break;
             }
-            foreach (ExecutableItem executableItem in _replacementItems)
+            foreach (BaseItem executableItem in _replacementItems)
             {
                 yield return executableItem;
             }
@@ -126,12 +121,7 @@ namespace AutomationEngine
 
         public static Menu LoadFromFile(string fileName)
         {
-            var menu = XmlStorage.Load<Menu>(fileName);
-            if (menu == null)
-            {
-                menu = new Menu();
-            }
-            return menu;
+            return XmlStorage.Load<Menu>(fileName) ?? new Menu();
         }
 
         private void PrependRootDirectoryToFileItems()
