@@ -60,7 +60,7 @@ namespace AutomationEngine
                     .OrderByDescending(x => x.matchScore)
                     .First();
 
-                if (i == 0)
+                if (element.index == 0)
                 {
                     // first word match is more important, multiply its score by 5
                     _item.MatchScore += element.matchScore * 5;

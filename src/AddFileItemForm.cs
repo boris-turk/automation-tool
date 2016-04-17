@@ -156,7 +156,11 @@ namespace AutomationEngine
         private void OnMadeVisible()
         {
             ContentsFileName = Guid.NewGuid().ToString().ToLower() + ".txt";
+
+            _group.Items.Clear();
             FileGroupCollection.Instance.FileGroups.ForEach(x => _group.Items.Add(x.Id));
+
+            _context.Items.Clear();
             ContextCollection.Instance.Contexts.ForEach(x => _context.Items.Add(x));
         }
     }
