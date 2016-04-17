@@ -16,6 +16,7 @@ namespace AutomationEngine
         public Menu()
         {
             _itemsLoaderFactory = new ItemsLoaderFactory();
+            Items = new List<BaseItem>();
         }
 
         public string GroupId { get; set; }

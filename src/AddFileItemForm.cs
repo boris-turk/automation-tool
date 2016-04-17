@@ -108,11 +108,9 @@ namespace AutomationEngine
 
         private void AddContextIfNecessary()
         {
-            string context = Context.ToLower();
-
-            if (ContextCollection.Instance.Contexts.All(x => x != context))
+            if (ContextCollection.Instance.Contexts.All(x => x.ToLower() != Context.ToLower()))
             {
-                ContextCollection.Instance.Contexts.Add(context);
+                ContextCollection.Instance.Contexts.Add(Context);
                 ContextCollection.Instance.Save();
             }
         }
