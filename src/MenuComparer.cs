@@ -14,17 +14,22 @@ namespace AutomationEngine
 
         public int Compare(BaseItem x, BaseItem y)
         {
-            if (x.IsPerfectMatch != y.IsPerfectMatch)
+            if (x.Context != null && y.Context != null)
             {
-                return y.IsPerfectMatch.CompareTo(x.IsPerfectMatch);
+                string activeContext = ContextCollection.Instance.Current;
+
+                if (x.Context == activeContext && x.Context != y.Context)
+                {
+                    return -1;
+                }
+                if (y.Context == activeContext && x.Context != y.Context)
+                {
+                    return 1;
+                }
             }
-            if (x.Context == ContextCollection.Instance.Current && x.Context != y.Context)
+            if (x.MatchScore != y.MatchScore)
             {
-                return -1;
-            }
-            if (y.Context == ContextCollection.Instance.Current && x.Context != y.Context)
-            {
-                return 1;
+                return y.MatchScore.CompareTo(x.MatchScore);
             }
             if (_state.Filter.Length == 0)
             {

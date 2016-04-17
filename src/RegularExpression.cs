@@ -11,7 +11,7 @@ namespace AutomationEngine
             get { return string.Empty; }
         }
 
-        public override bool IsMatch(string text)
+        public bool IsMatch(string text)
         {
             if (string.IsNullOrWhiteSpace(Value))
             {

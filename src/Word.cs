@@ -12,21 +12,21 @@ namespace AutomationEngine
 
         public bool IsContext { get; set; }
 
-        public override bool IsMatch(string text)
+        public int MatchScore(string text)
         {
-            if (string.IsNullOrWhiteSpace(Value))
+            if (Value.StartsWith(text, StringComparison.InvariantCultureIgnoreCase))
             {
-                return false;
+                return 1000;
             }
-
-            if (IsContext)
+            if (Value.StartsPartiallyWith(text))
             {
-                return Value.PartiallyContains(text);
+                return 100;
             }
-            else
+            if (Value.ContainsPartially(text))
             {
-                return Value.StartsPartiallyWith(text);
+                return 1;
             }
+            return 0;
         }
     }
 }

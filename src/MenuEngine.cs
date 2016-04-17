@@ -84,11 +84,6 @@ namespace AutomationEngine
         {
             bool handled = false;
 
-            if (args.KeyCode == Keys.Space)
-            {
-                handled = OnSpaceKeyPressed();
-            }
-
             if (args.KeyCode == Keys.Down)
             {
                 SelectItem(ListBox.SelectedIndex + 1);
@@ -231,23 +226,6 @@ namespace AutomationEngine
                 State.Clear();
                 ClearSearchBar();
             }
-        }
-
-        private bool OnSpaceKeyPressed()
-        {
-            if (!State.SinglePushMenu)
-            {
-                return false;
-            }
-
-            if (_textChangedTimer.Enabled)
-            {
-                _textChangedTimer.Stop();
-                OnFilterChanged();
-            }
-
-            PushSelectedSubmenu();
-            return true;
         }
 
         private void PushSelectedSubmenu()

@@ -5,17 +5,17 @@ namespace AutomationEngine
 {
     public static class Extensions
     {
-        public static bool PartiallyContains(this string testedText, string value)
+        public static bool ContainsPartially(this string testedText, string value)
         {
-            return PartiallyContains(testedText, value, false);
+            return ContainsPartially(testedText, value, false);
         }
 
         public static bool StartsPartiallyWith(this string testedText, string value)
         {
-            return PartiallyContains(testedText, value, true);
+            return ContainsPartially(testedText, value, true);
         }
 
-        private static bool PartiallyContains(string testedText, string value, bool mustMatchAtStart)
+        private static bool ContainsPartially(string testedText, string value, bool mustMatchAtStart)
         {
             if (string.IsNullOrEmpty(value))
             {

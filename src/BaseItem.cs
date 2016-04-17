@@ -85,7 +85,7 @@ namespace AutomationEngine
         }
 
         [XmlIgnore]
-        public bool IsPerfectMatch { get; set; }
+        public int MatchScore { get; set; }
 
         public string GetProperName()
         {

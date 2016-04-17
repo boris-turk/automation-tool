@@ -95,22 +95,6 @@ namespace AutomationEngine
 
         public string Context { get; set; }
 
-        public bool SinglePushMenu
-        {
-            get
-            {
-                if (!IsMenuSelected)
-                {
-                    return false;
-                }
-                if (string.IsNullOrWhiteSpace(Filter))
-                {
-                    return false;
-                }
-                return MatchingItems.Count(x => x is Menu && x.IsPerfectMatch) == 1;
-            }
-        }
-
         private void DetermineMatchingItems()
         {
             IEnumerable<BaseItem> selectableItems = ActiveMenu.GetSelectableItems();
@@ -135,28 +119,19 @@ namespace AutomationEngine
 
         private bool MatchesFilter(BaseItem item)
         {
-            if (Filter.Trim().Length == 0)
+            if (!item.NameWordsSpecified)
             {
-                return true;
+                return false;
             }
 
-            if (item.NameWordsSpecified)
-            {
-                return MatchesPattern(item);
-            }
-
-            string[] itemWords = item.Name.ToLower().Split(' ');
-            return FilterWords.All(x => itemWords.Any(y => y.StartsWith(x, StringComparison.InvariantCultureIgnoreCase)));
+            return MatchesPattern(item);
         }
 
         private bool MatchesPattern(BaseItem item)
         {
-            var matchEvaluator = new FilterMatchEvaluator(item, FilterWords)
-            {
-                CheckForPerfectMatch = _menuStack.Count == 1
-            };
+            var matchEvaluator = new FilterMatchEvaluator(item, FilterWords);
             matchEvaluator.Evaluate();
-            return matchEvaluator.MatchesFilter;
+            return item.MatchScore > 0;
         }
 
         public void PopMenu()

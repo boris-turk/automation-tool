@@ -15,7 +15,5 @@ namespace AutomationEngine
         }
 
         public abstract string DisplayValue { get; }
-
-        public abstract bool IsMatch(string text);
     }
 }

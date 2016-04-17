@@ -19,57 +19,67 @@ namespace AutomationEngine
             get { return _item.NameWords; }
         }
 
-        public bool CheckForPerfectMatch { get; set; }
-
-        public bool MatchesFilter { get; private set; }
-
         public void Evaluate()
         {
-            MatchesFilter = false;
-            _item.IsPerfectMatch = false;
-
             if (!_filterWords.Any())
             {
+                // no filter specified => all items match with same score
+                _item.MatchScore = 1;
                 return;
             }
+
+            _item.MatchScore = 0;
 
             if (!NameWords.Any())
             {
-                MatchesFilter = true;
+                // name not specified => item is not properly defined, filter it out
+                _item.MatchScore = 0;
                 return;
             }
 
-            if (CheckForPerfectMatch)
+            List<Word> nameWords = NameWords.ToList();
+            for (int i = 0; i < _filterWords.Length; i++)
             {
-                TestForPerfectMatch();
-            }
-            else
-            {
-                TestForNormalMatch();
-            }
-        }
+                if (nameWords.Count == 0)
+                {
+                    if (i >= _filterWords.Length - 1)
+                    {
+                        // not all filter words were consumed => item does not match
+                        _item.MatchScore = 0;
+                    }
+                    return;
+                }
 
-        private void TestForPerfectMatch()
-        {
-            string[] filterWords;
+                // get name word with highest match score for the current filter word
+                var element = nameWords
+                    .Select((value, index) => new
+                    {
+                        index,
+                        matchScore = value.MatchScore(_filterWords[i])
+                    })
+                    .OrderByDescending(x => x.matchScore)
+                    .First();
 
-            if (NameWords.First().IsMatch(_filterWords.First()))
-            {
-                _item.IsPerfectMatch = true;
-                filterWords = _filterWords.Skip(1).ToArray();
+                if (i == 0)
+                {
+                    // first word match is more important, multiply its score by 5
+                    _item.MatchScore += element.matchScore * 5;
+                }
+                else
+                {
+                    _item.MatchScore += element.matchScore;
+                }
+
+                if (element.matchScore == 0)
+                {
+                    // one of the name words did not match => whole item does not match
+                    _item.MatchScore = 0;
+                    return;
+                }
+
+                // the best matched word is no longer included in match evaluation
+                nameWords.RemoveAt(element.index);
             }
-            else
-            {
-                _item.IsPerfectMatch = false;
-                filterWords = _filterWords.ToArray();
-            }
-
-            MatchesFilter = filterWords.All(x => NameWords.Any(y => y.IsMatch(x)));
-        }
-
-        private void TestForNormalMatch()
-        {
-            MatchesFilter = _filterWords.All(x => NameWords.Any(y => y.IsMatch(x)));
         }
     }
 }
