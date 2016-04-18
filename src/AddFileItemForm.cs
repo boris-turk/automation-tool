@@ -118,6 +118,10 @@ namespace AutomationEngine
         private void SaveFileItem()
         {
             string menuFileName = Group.MenuFileName;
+            if (!menuFileName.ToLower().EndsWith(".xml"))
+            {
+                menuFileName += ".xml";
+            }
             Menu menu = AutomationEngine.Menu.LoadFromFile(menuFileName);
             menu.GroupId = GroupId;
             menu.Items.Add(FileItem);

@@ -122,7 +122,13 @@ namespace AutomationEngine
 
         public static Menu LoadFromFile(string fileName)
         {
-            return XmlStorage.Load<Menu>(fileName) ?? new Menu();
+            Menu menu = XmlStorage.Load<Menu>(fileName);
+            if (menu == null)
+            {
+                menu = new Menu();
+                menu._fileName = fileName;
+            }
+            return menu;
         }
 
         private void PrependRootDirectoryToFileItems()
