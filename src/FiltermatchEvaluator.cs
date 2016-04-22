@@ -42,7 +42,7 @@ namespace AutomationEngine
             {
                 if (nameWords.Count == 0)
                 {
-                    if (i >= _filterWords.Length - 1)
+                    if (i < _filterWords.Length - 1)
                     {
                         // not all filter words were consumed => item does not match
                         _item.MatchScore = 0;
