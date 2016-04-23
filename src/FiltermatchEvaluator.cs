@@ -42,11 +42,7 @@ namespace AutomationEngine
             {
                 if (nameWords.Count == 0)
                 {
-                    if (i < _filterWords.Length - 1)
-                    {
-                        // not all filter words were consumed => item does not match
-                        _item.MatchScore = 0;
-                    }
+                    _item.MatchScore = 0;
                     return;
                 }
 
@@ -60,7 +56,7 @@ namespace AutomationEngine
                     .OrderByDescending(x => x.matchScore)
                     .First();
 
-                if (element.index == 0)
+                if (element.index == 0 && i == 0)
                 {
                     // first word match is more important, multiply its score by 5
                     _item.MatchScore += element.matchScore * 5;

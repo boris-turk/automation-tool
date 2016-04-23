@@ -14,10 +14,10 @@ namespace AutomationEngine
 
         public int Compare(BaseItem x, BaseItem y)
         {
+            string activeContext = ContextCollection.Instance.Current;
+
             if (x.Context != null && y.Context != null)
             {
-                string activeContext = ContextCollection.Instance.Current;
-
                 if (x.Context == activeContext && x.Context != y.Context)
                 {
                     return -1;
@@ -27,9 +27,22 @@ namespace AutomationEngine
                     return 1;
                 }
             }
-            if (x.MatchScore != y.MatchScore)
+
+            int xScore = x.MatchScore;
+            if (x.Context == activeContext)
             {
-                return y.MatchScore.CompareTo(x.MatchScore);
+                xScore += 1;
+            }
+
+            int yScore = y.MatchScore;
+            if (y.Context == activeContext)
+            {
+                yScore += 1;
+            }
+
+            if (xScore != yScore)
+            {
+                return yScore.CompareTo(xScore);
             }
             if (_state.Filter.Length == 0)
             {

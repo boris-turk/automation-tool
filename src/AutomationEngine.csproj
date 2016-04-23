@@ -47,12 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddFileGroupForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AddFileGroupForm.Designer.cs">
-      <DependentUpon>AddFileGroupForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="AddFileItemForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,8 +78,6 @@
     <Compile Include="CopyData.cs" />
     <Compile Include="ExecutableItem.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="FileGroup.cs" />
-    <Compile Include="FileGroupCollection.cs" />
     <Compile Include="FileItem.cs" />
     <Compile Include="FormFactory.cs" />
     <Compile Include="ISerializationFinalizer.cs" />
@@ -121,9 +113,6 @@
     <Compile Include="PatternPart.cs" />
     <Compile Include="Word.cs" />
     <Compile Include="XmlStorage.cs" />
-    <EmbeddedResource Include="AddFileGroupForm.resx">
-      <DependentUpon>AddFileGroupForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="AddFileItemForm.resx">
       <DependentUpon>AddFileItemForm.cs</DependentUpon>
     </EmbeddedResource>

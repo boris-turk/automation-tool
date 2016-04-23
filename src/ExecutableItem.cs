@@ -12,6 +12,9 @@ namespace AutomationEngine
             Arguments = new List<AbstractValue>();
         }
 
+        [XmlIgnore]
+        public bool ExecutingMethodNameAssignedAtRuntime { get; set; }
+
         [XmlElement("Argument", typeof(StringValue))]
         [XmlElement("AhkArgument", typeof(AhkVariable))]
         public List<AbstractValue> Arguments { get; set; }

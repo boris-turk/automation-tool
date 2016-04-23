@@ -20,27 +20,12 @@ namespace AutomationEngine
             get { return "add file item"; }
         }
 
-        private AddFileGroupForm AddFileGroupForm
-        {
-            get { return FormFactory.Instance<AddFileGroupForm>(); }
-        }
-
-        private FileGroup Group
-        {
-            get { return FileGroupCollection.Instance.GetGroupById(GroupId); }
-        }
-
         private string ContentsFileName { get; set; }
 
-        private string ContentsFilePath
-        {
-            get { return Path.Combine(Group.Directory, ContentsFileName); }
-        }
-
-        private string GroupId
-        {
-            get { return _group.Text; }
-        }
+        //private string ContentsFilePath
+        //{
+        //    get { return Path.Combine(Group.Directory, ContentsFileName); }
+        //}
 
         private string ItemName
         {
@@ -75,10 +60,6 @@ namespace AutomationEngine
 
         protected override string ValidateInput()
         {
-            if (string.IsNullOrWhiteSpace(GroupId))
-            {
-                return "Group not specified";
-            }
             if (string.IsNullOrWhiteSpace(ItemName))
             {
                 return "Name not specified";
@@ -94,7 +75,6 @@ namespace AutomationEngine
         {
             base.OnExecute();
 
-            AddFileGroupIfNecessary();
             AddContextIfNecessary();
 
             if (ExecutionCanceled)
@@ -117,53 +97,35 @@ namespace AutomationEngine
 
         private void SaveFileItem()
         {
-            string menuFileName = Group.MenuFileName;
-            if (!menuFileName.ToLower().EndsWith(".xml"))
-            {
-                menuFileName += ".xml";
-            }
-            Menu menu = AutomationEngine.Menu.LoadFromFile(menuFileName);
-            menu.GroupId = GroupId;
-            menu.Items.Add(FileItem);
-            menu.SaveToFile();
+            //string menuFileName = Group.MenuFileName;
+            //if (!menuFileName.ToLower().EndsWith(".xml"))
+            //{
+            //    menuFileName += ".xml";
+            //}
+            //Menu menu = AutomationEngine.Menu.LoadFromFile(menuFileName);
+            //menu.GroupId = GroupId;
+            //menu.Items.Add(FileItem);
+            //menu.SaveToFile();
         }
 
         private void SaveContentsFile()
         {
-            if (!Directory.Exists(Group.Directory))
-            {
-                Directory.CreateDirectory(Group.Directory);
-            }
-            File.WriteAllText(ContentsFilePath, Value);
-        }
-
-        private void AddFileGroupIfNecessary()
-        {
-            if (Group == null)
-            {
-                AddFileGroup();
-            }
-        }
-
-        private void AddFileGroup()
-        {
-            AddFileGroupForm.Id = GroupId;
-            AddFileGroupForm.ShowDialog(this);
-            if (!AddFileGroupForm.Executed)
-            {
-                ExecutionCanceled = true;
-            }
+            //if (!Directory.Exists(Group.Directory))
+            //{
+            //    Directory.CreateDirectory(Group.Directory);
+            //}
+            //File.WriteAllText(ContentsFilePath, Value);
         }
 
         private void OnMadeVisible()
         {
-            ContentsFileName = Guid.NewGuid().ToString().ToLower() + ".txt";
+            //ContentsFileName = Guid.NewGuid().ToString().ToLower() + ".txt";
 
-            _group.Items.Clear();
-            FileGroupCollection.Instance.FileGroups.ForEach(x => _group.Items.Add(x.Id));
+            //_group.Items.Clear();
+            //FileGroupCollection.Instance.FileGroups.ForEach(x => _group.Items.Add(x.Id));
 
-            _context.Items.Clear();
-            ContextCollection.Instance.Contexts.ForEach(x => _context.Items.Add(x));
+            //_context.Items.Clear();
+            //ContextCollection.Instance.Contexts.ForEach(x => _context.Items.Add(x));
         }
     }
 }

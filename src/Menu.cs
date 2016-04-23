@@ -8,33 +8,32 @@ namespace AutomationEngine
     [Serializable]
     public class Menu : BaseItem, ISerializationFinalizer
     {
-        private readonly ItemsLoaderFactory _itemsLoaderFactory;
         private string _fileName;
         private List<ExecutableItem> _replacedItems;
         private List<BaseItem> _replacementItems;
 
         public Menu()
         {
-            _itemsLoaderFactory = new ItemsLoaderFactory();
             Items = new List<BaseItem>();
-        }
-
-        public string GroupId { get; set; }
-
-        public FileGroup Group
-        {
-            get { return FileGroupCollection.Instance.GetGroupById(GroupId); }
-        }
-
-        public bool GroupSpecified
-        {
-            get { return !string.IsNullOrWhiteSpace(GroupId); }
         }
 
         [XmlElement("RawFileSource", typeof(RawFileContentsSource))]
         [XmlElement("FileSource", typeof(FileDescriptorContentSource))]
         [XmlElement("AhkFunctionSource", typeof(AhkFunctionContentsSource))]
         public object ContentSource { get; set; }
+
+        [XmlIgnore]
+        public string MenuFileName
+        {
+            get { return _fileName; }
+        }
+
+        public string ChildrenDirectory { get; set; }
+
+        public bool ChildrenDirectorySpecified
+        {
+            get { return !string.IsNullOrWhiteSpace(ChildrenDirectory); }
+        }
 
         public bool ContentSourceSpecified
         {
@@ -53,10 +52,37 @@ namespace AutomationEngine
             get { return !ContentSourceSpecified; }
         }
 
+        public IEnumerable<BaseItem> GetAllItems()
+        {
+            foreach (BaseItem item in Items.Union(_replacementItems).Union(_replacedItems))
+            {
+                var menu = item as Menu;
+                if (menu != null && menu.MenuFileName != null)
+                {
+                    foreach (BaseItem childItem in menu.GetAllItems())
+                    {
+                        yield return childItem;
+                    }
+                }
+                yield return item;
+            }
+        }
+
         public IEnumerable<BaseItem> GetSelectableItems()
         {
             foreach (BaseItem item in Items)
             {
+                var menu = item as Menu;
+
+                if (menu != null && menu.MenuFileName != null)
+                {
+                    foreach (BaseItem childMenuItem in menu.GetSelectableItems())
+                    {
+                        yield return childMenuItem;
+                    }
+                    continue;
+                }
+
                 if (_replacedItems == null || !_replacedItems.Contains(item))
                 {
                     yield return item;
@@ -70,18 +96,6 @@ namespace AutomationEngine
             {
                 yield return executableItem;
             }
-        }
-
-        public void LoadItems()
-        {
-            if (ContentSource == null)
-            {
-                return;
-            }
-
-            IItemsLoader loader = _itemsLoaderFactory.GetInstance(ContentSource);
-            Items = loader.Load();
-            PrepareLoadedItems();
         }
 
         public void RemoveItem(BaseItem item)
@@ -111,6 +125,19 @@ namespace AutomationEngine
                 }
             }
 
+            foreach (ExecutableItem item in GetAllItems().OfType<ExecutableItem>())
+            {
+                if (item.ExecutingMethodNameAssignedAtRuntime)
+                {
+                    item.ExecutingMethodName = null;
+                }
+            }
+
+            if (NameSpecified)
+            {
+                RemovePrependedMenuNameFromItems();
+            }
+
             Menu rootMenuCollection = new Menu
             {
                 Items = noDuplicates
@@ -118,6 +145,18 @@ namespace AutomationEngine
             XmlStorage.Save(_fileName, rootMenuCollection);
 
             XmlStorage.Save(_fileName, this);
+        }
+
+        private void RemovePrependedMenuNameFromItems()
+        {
+            foreach (BaseItem item in GetAllItems())
+            {
+                int index = item.Name.IndexOf(Name + " ", StringComparison.Ordinal);
+                if (index >= 0)
+                {
+                    item.Name = item.Name.Substring(Name.Length + 1);
+                }
+            }
         }
 
         public static Menu LoadFromFile(string fileName)
@@ -133,13 +172,9 @@ namespace AutomationEngine
 
         private void PrependRootDirectoryToFileItems()
         {
-            if (GroupId == null)
-            {
-                return;
-            }
             foreach (FileItem fileItem in Items.OfType<FileItem>())
             {
-                fileItem.Directory = Group.Directory;
+                fileItem.Directory = ChildrenDirectory;
             }
         }
 
@@ -193,6 +228,7 @@ namespace AutomationEngine
         {
             _fileName = file;
             PrepareLoadedItems();
+            LoadChildMenus();
         }
 
         private void PrepareLoadedItems()
@@ -200,6 +236,46 @@ namespace AutomationEngine
             LoadExecutionTimeStamps();
             PrependRootDirectoryToFileItems();
             ReplaceContextGroups();
+            PrependMenuNameToItems();
+            AssignExecutingMethod();
+        }
+
+        private void AssignExecutingMethod()
+        {
+            foreach (ExecutableItem item in GetAllItems().OfType<ExecutableItem>())
+            {
+                if (item.ExecutingMethodName == null)
+                {
+                    item.ExecutingMethodNameAssignedAtRuntime = true;
+                    item.ExecutingMethodName = ExecutingMethodName;
+                }
+            }
+        }
+
+        private void LoadChildMenus()
+        {
+            Items.OfType<Menu>().ToList().ForEach(menu =>
+            {
+                var contentSource = menu.ContentSource as FileDescriptorContentSource;
+                if (contentSource != null)
+                {
+                    Menu properMenu = LoadFromFile(contentSource.Path);
+                    Items.Remove(menu);
+                    Items.Add(properMenu);
+                }
+            });
+        }
+
+        private void PrependMenuNameToItems()
+        {
+            if (!NameSpecified)
+            {
+                return;
+            }
+            foreach (BaseItem item in GetAllItems())
+            {
+                item.Name = Name + " " + item.Name;   
+            }
         }
 
         private void LoadExecutionTimeStamps()

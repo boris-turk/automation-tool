@@ -104,9 +104,7 @@ namespace AutomationEngine
 
         public void PushSelectedSubmenu()
         {
-            Menu menu = SelectedMenu;
-            _menuStack.Push(menu);
-            menu.LoadItems();
+            _menuStack.Push(SelectedMenu);
         }
 
         public void Clear()
@@ -171,7 +169,8 @@ namespace AutomationEngine
                 return;
             }
 
-            ExecutableItem replacedExecutableItem = ActiveMenu.Items
+            ExecutableItem replacedExecutableItem = ActiveMenu
+                .GetAllItems()
                 .OfType<ExecutableItem>()
                 .First(x => x.Id == executableItem.ReplacedItemId);
 
