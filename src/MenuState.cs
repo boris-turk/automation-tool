@@ -104,6 +104,7 @@ namespace AutomationEngine
 
         public void PushSelectedSubmenu()
         {
+            SelectedMenu.LoadItemsIfNecessary();
             _menuStack.Push(SelectedMenu);
         }
 

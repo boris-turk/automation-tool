@@ -8,6 +8,7 @@ namespace AutomationEngine
     [Serializable]
     public class Menu : BaseItem, ISerializationFinalizer
     {
+        private readonly ItemsLoaderFactory _itemsLoaderFactory;
         private string _fileName;
         private List<ExecutableItem> _replacedItems;
         private List<BaseItem> _replacementItems;
@@ -15,6 +16,7 @@ namespace AutomationEngine
         public Menu()
         {
             Items = new List<BaseItem>();
+            _itemsLoaderFactory = new ItemsLoaderFactory();
         }
 
         [XmlElement("RawFileSource", typeof(RawFileContentsSource))]
@@ -96,6 +98,20 @@ namespace AutomationEngine
             {
                 yield return executableItem;
             }
+        }
+
+        public void LoadItemsIfNecessary()
+        {
+            if (ContentSource == null || ContentSource is FileDescriptorContentSource)
+            {
+                return;
+            }
+
+            IItemsLoader loader = _itemsLoaderFactory.GetInstance(ContentSource);
+            Items = loader.Load();
+
+            ReplaceContextGroups();
+            AssignExecutingMethod();
         }
 
         public void RemoveItem(BaseItem item)
