@@ -14,6 +14,11 @@ namespace AutomationEngine
             _filterWords = filterWords;
         }
 
+        private string CurrentContext
+        {
+            get { return ContextCollection.Instance.Current; }
+        }
+
         public List<Word> NameWords
         {
             get { return _item.NameWords; }
@@ -56,15 +61,18 @@ namespace AutomationEngine
                     .OrderByDescending(x => x.matchScore)
                     .First();
 
+                int multiplier = 1;
+                if (WordEqualsCurrentContext(nameWords[element.index]))
+                {
+                    multiplier *= 2;
+                }
                 if (element.index == 0 && i == 0)
                 {
                     // first word match is more important, multiply its score by 5
-                    _item.MatchScore += element.matchScore * 5;
+                    multiplier *= 5;
                 }
-                else
-                {
-                    _item.MatchScore += element.matchScore;
-                }
+
+                _item.MatchScore += element.matchScore * multiplier;
 
                 if (element.matchScore == 0)
                 {
@@ -76,6 +84,16 @@ namespace AutomationEngine
                 // the best matched word is no longer included in match evaluation
                 nameWords.RemoveAt(element.index);
             }
+
+            if (_item.MatchScore > 0 && CurrentContext != null && _item.Context == CurrentContext)
+            {
+                _item.MatchScore += 1;
+            }
+        }
+
+        private bool WordEqualsCurrentContext(Word word)
+        {
+            return string.CompareOrdinal(word.DisplayValue, CurrentContext) == 0;
         }
     }
 }

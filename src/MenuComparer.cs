@@ -27,22 +27,9 @@ namespace AutomationEngine
                     return 1;
                 }
             }
-
-            int xScore = x.MatchScore;
-            if (x.Context == activeContext)
+            if (x.MatchScore != y.MatchScore)
             {
-                xScore += 1;
-            }
-
-            int yScore = y.MatchScore;
-            if (y.Context == activeContext)
-            {
-                yScore += 1;
-            }
-
-            if (xScore != yScore)
-            {
-                return yScore.CompareTo(xScore);
+                return y.MatchScore.CompareTo(x.MatchScore);
             }
             if (_state.Filter.Length == 0)
             {
