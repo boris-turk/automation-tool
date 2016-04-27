@@ -68,7 +68,6 @@
     <Compile Include="AhkContentSource.cs" />
     <Compile Include="ContextGroup.cs" />
     <Compile Include="ContextGroupCollection.cs" />
-    <Compile Include="ContextCollection.cs" />
     <Compile Include="ContextVariableMapping.cs" />
     <Compile Include="ContextVariableMappingsCollection.cs" />
     <Compile Include="FilterMatchEvaluator.cs" />

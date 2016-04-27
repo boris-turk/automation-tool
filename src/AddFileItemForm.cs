@@ -88,11 +88,11 @@ namespace AutomationEngine
 
         private void AddContextIfNecessary()
         {
-            if (ContextCollection.Instance.Contexts.All(x => x.ToLower() != Context.ToLower()))
-            {
-                ContextCollection.Instance.Contexts.Add(Context);
-                ContextCollection.Instance.Save();
-            }
+            //if (ContextCollection.Instance.Contexts.All(x => x.ToLower() != Context.ToLower()))
+            //{
+            //    ContextCollection.Instance.Contexts.Add(Context);
+            //    ContextCollection.Instance.Save();
+            //}
         }
 
         private void SaveFileItem()
