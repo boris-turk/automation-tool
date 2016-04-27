@@ -16,7 +16,7 @@ namespace AutomationEngine
 
         private string CurrentContext
         {
-            get { return ContextCollection.Instance.Current; }
+            get { return Configuration.Instance.CurrentContext; }
         }
 
         public List<Word> NameWords

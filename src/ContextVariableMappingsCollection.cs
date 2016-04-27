@@ -22,7 +22,7 @@ namespace AutomationEngine
 
         public string GetMappedValue(string originalValue)
         {
-            string context = ContextCollection.Instance.Current;
+            string context = Configuration.Instance.CurrentContext;
 
             ContextVariableMapping mapping = Mappings.FirstOrDefault(x =>
                 x.SourceAhkVariable.Value == originalValue &&

@@ -14,7 +14,7 @@ namespace AutomationEngine
 
         public int Compare(BaseItem x, BaseItem y)
         {
-            string activeContext = ContextCollection.Instance.Current;
+            string activeContext = Configuration.Instance.CurrentContext;
 
             if (x.Context != null && y.Context != null)
             {

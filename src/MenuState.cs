@@ -226,7 +226,8 @@ namespace AutomationEngine
 
             if (newContext != null)
             {
-                ContextCollection.Instance.Current = newContext;
+                Configuration.Instance.CurrentContext = newContext;
+                Configuration.Instance.Save();
             }
         }
     }
