@@ -10,13 +10,55 @@ namespace AutomationEngine
     {
         private const string AutomationEngineWindowTitle = "Automation engine";
 
-        public event Action<KeyEventArgs> ChildControlKeyDown;
+        public event Action<ActionType> ShortcutPressed;
 
         public AutomationEngineForm()
         {
+            KeyPreview = true;
             TopMost = true;
             StartPosition = FormStartPosition.CenterScreen;
             Load += (sender, args) => Initialize();
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                OnCloseRequested();
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+            }
+            else if (e.KeyCode == Keys.Enter)
+            {
+                OnEnterKeyPressed();
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+            }
+            else
+            {
+                List<AutomationAction> actions = Configuration.Instance.Actions;
+
+                AutomationAction shortcut = actions.FirstOrDefault(x =>
+                    x.Shortcut.Alt == e.Alt &&
+                    x.Shortcut.Control == e.Control &&
+                    (x.Shortcut.KeyData == e.KeyData || x.Shortcut.Key == e.KeyCode.ToCharacter()));
+
+                if (shortcut != null)
+                {
+                    OnShortcutPressed(shortcut);
+                    e.Handled = true;
+                }
+            }
+
+            base.OnKeyDown(e);
+        }
+
+        private void OnShortcutPressed(AutomationAction action)
+        {
+            if (ShortcutPressed != null)
+            {
+                ShortcutPressed(action.ActionType);
+            }
         }
 
         public bool Executed { get; private set; }
@@ -69,7 +111,6 @@ namespace AutomationEngine
         {
             ApplySelectAllTextOnFocusPolicy();
             SetWindowTitle();
-            ChildControls.ForEach(x => x.KeyDown += (s, a) => OnChildControlKeyDown(a));
         }
 
         private void ApplySelectAllTextOnFocusPolicy()
@@ -90,24 +131,6 @@ namespace AutomationEngine
             else
             {
                 Text = AutomationEngineWindowTitle + " - " + WindowName;
-            }
-        }
-
-        private void OnChildControlKeyDown(KeyEventArgs keyEventArgs)
-        {
-            if (keyEventArgs.KeyCode == Keys.Escape)
-            {
-                OnCloseRequested();
-                keyEventArgs.SuppressKeyPress = true;
-            }
-            else if (keyEventArgs.KeyCode == Keys.Enter)
-            {
-                OnEnterKeyPressed();
-                keyEventArgs.SuppressKeyPress = true;
-            }
-            else if (ChildControlKeyDown != null)
-            {
-                ChildControlKeyDown(keyEventArgs);
             }
         }
 

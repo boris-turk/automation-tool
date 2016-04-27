@@ -11,6 +11,7 @@ namespace AutomationEngine
         private readonly Stack<Menu> _menuStack;
         private string _filter;
         private List<BaseItem> _matchingItems;
+        private bool _includeArchivedItems;
 
         public MenuState(Menu rootMenu)
         {
@@ -95,9 +96,25 @@ namespace AutomationEngine
 
         public string Context { get; set; }
 
+        public bool IncludeArchivedItems
+        {
+            get { return _includeArchivedItems; }
+            set
+            {
+                _includeArchivedItems = value;
+                DetermineMatchingItems();
+            }
+        }
+
         private void DetermineMatchingItems()
         {
             IEnumerable<BaseItem> selectableItems = ActiveMenu.GetSelectableItems();
+            if (!IncludeArchivedItems)
+            {
+                int days = Configuration.Instance.ArchiveDayCountThreshold;
+                DateTime dateTime = DateTime.Now.Date.AddDays(-days);
+                selectableItems = selectableItems.Where(x => x.LastAccess >= dateTime);
+            }
             _matchingItems = selectableItems.Where(MatchesFilter).ToList();
             _matchingItems.Sort(new MenuComparer(this));
         }

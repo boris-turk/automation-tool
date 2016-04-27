@@ -27,7 +27,7 @@ namespace AutomationEngine
         {
             Form = form;
             Form.Execute += OnExecute;
-            Form.ChildControlKeyDown += OnKeyDown;
+            Form.ShortcutPressed += OnShortcutPressed;
             State = new MenuState(rootMenu);
 
             _textChangedTimer = new Timer();
@@ -145,10 +145,44 @@ namespace AutomationEngine
             }
         }
 
-        private void OnKeyDown(KeyEventArgs eventArgs)
+        private void OnShortcutPressed(ActionType actionType)
         {
-            var shortcutEventDispatcher = new ShortcutEventDispatcher(State, eventArgs);
-            shortcutEventDispatcher.Dispatch();
+            if (actionType == ActionType.ToggleArchiveSearch)
+            {
+                State.IncludeArchivedItems = !State.IncludeArchivedItems;
+                UpdateStateLabel();
+                OnFilterChanged();
+            }
+            if (actionType == ActionType.DeleteMenuEntry)
+            {
+                new MenuEntryDeletion(State).Delete();
+            }
+        }
+
+        private void UpdateStateLabel()
+        {
+            const string archiveText = "ARCHIVE";
+            string stateText = Form.StateLabel.Text;
+
+            stateText = stateText.Replace(archiveText, string.Empty);
+            stateText = stateText.TrimStart(',');
+            if (stateText.Length > 0)
+            {
+                stateText = "," + stateText;
+            }
+
+            if (State.IncludeArchivedItems)
+            {
+                stateText = archiveText + stateText;
+            }
+
+            if (stateText.Length == 1)
+            {
+                stateText = string.Empty;
+            }
+
+            Form.StateLabel.Text = stateText;
+            Form.StateLabel.Visible = Form.StateLabel.Text.Length > 0;
         }
 
         private void ExecuteSelectedItem()
@@ -221,6 +255,9 @@ namespace AutomationEngine
 
         public void ResetMenuEngine()
         {
+            State.IncludeArchivedItems = false;
+            UpdateStateLabel();
+
             if (!State.IsRootMenuActive || SearchBar.Text.Length > 0)
             {
                 State.Clear();

@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionType.cs" />
     <Compile Include="AddFileItemForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,6 +59,7 @@
     <Compile Include="AhkVariable.cs" />
     <Compile Include="ArgumentType.cs" />
     <Compile Include="AhkInterop.cs" />
+    <Compile Include="AutomationAction.cs" />
     <Compile Include="AutomationEngineForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,6 +73,7 @@
     <Compile Include="ContextVariableMappingsCollection.cs" />
     <Compile Include="FilterMatchEvaluator.cs" />
     <Compile Include="RegularExpression.cs" />
+    <Compile Include="Shortcut.cs" />
     <Compile Include="TimeStamp.cs" />
     <Compile Include="ExecutionTimeStamps.cs" />
     <Compile Include="FileStorage.cs" />
@@ -84,7 +87,6 @@
     <Compile Include="MenuEngineMethodExecutor.cs" />
     <Compile Include="MenuEntryDeletion.cs" />
     <Compile Include="MessageWindow.cs" />
-    <Compile Include="ShortcutEventDispatcher.cs" />
     <Compile Include="StringVariable.cs" />
     <Compile Include="ExecutableItemComparer.cs" />
     <Compile Include="ItemsLoaderFactory.cs" />

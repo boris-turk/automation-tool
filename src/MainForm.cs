@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
-using AutomationEngine.Messages;
 
 namespace AutomationEngine
 {
@@ -47,6 +44,11 @@ namespace AutomationEngine
         public Label StackLabel
         {
             get { return _stackLabel; }
+        }
+
+        public Label StateLabel
+        {
+            get { return _stateLabel; }
         }
 
         public TextBox TextBox
