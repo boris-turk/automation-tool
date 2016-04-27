@@ -41,7 +41,7 @@ namespace AutomationEngine
                 AutomationAction shortcut = actions.FirstOrDefault(x =>
                     x.Shortcut.Alt == e.Alt &&
                     x.Shortcut.Control == e.Control &&
-                    (x.Shortcut.KeyData == e.KeyData || x.Shortcut.Key == e.KeyCode.ToCharacter()));
+                    (x.Shortcut.Key == e.KeyCode || x.Shortcut.Character == e.KeyCode.ToCharacter()));
 
                 if (shortcut != null)
                 {

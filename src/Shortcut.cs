@@ -1,90 +1,60 @@
-﻿using System;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
     public class Shortcut
     {
-        private const string ControlIdentifier = "Control+";
-        private const string AltIdentifier = "Alt+";
+        private char _character;
 
-        private char _key;
-
-        [XmlIgnore]
+        [XmlAttribute]
         public bool Control { get; set; }
 
-        [XmlIgnore]
-        public bool Alt { get; set; }
-
-        [XmlIgnore]
-        public char Key
+        public bool ControlSpecified
         {
-            get { return _key; }
-            set { _key = char.ToUpperInvariant(value); }
+            get { return Control; }
         }
 
-        [XmlText]
+        [XmlAttribute]
+        public bool Alt { get; set; }
+
+        public bool AltSpecified
+        {
+            get { return Alt; }
+        }
+
+        [XmlIgnore]
+        public char Character
+        {
+            get { return _character; }
+            set { _character = char.ToUpperInvariant(value); }
+        }
+
+        [XmlElement("Character")]
         public string SerializationText
         {
-            get
-            {
-                StringBuilder value = new StringBuilder();
-                if (Control)
-                {
-                    value.Append(ControlIdentifier);
-                }
-                if (Alt)
-                {
-                    value.Append(AltIdentifier);
-                }
-                value.Append(Key);
-                return value.ToString();
-            }
+            get { return Character.ToString(); }
             set
             {
-                ParseValue(value);
+                char[] charArray = value.ToCharArray();
+                if (charArray.Length == 1)
+                {
+                    Character = charArray[0];
+                }
             }
         }
 
         public bool SerializationTextSpecified
         {
-            get { return Key > 0; }
+            get { return Character != 0; }
         }
 
-        public Keys KeyData { get; set; }
+        [XmlElement("Key")]
+        public Keys Key { get; set; }
 
-        public bool KeyDataSpecified
+        public bool KeySpecified
         {
-            get { return KeyData != Keys.None; }
-        }
-
-        private void ParseValue(string value)
-        {
-            Alt = false;
-            Control = false;
-            Key = (char)0;
-
-            int index = value.IndexOf(ControlIdentifier, StringComparison.Ordinal);
-            if (index >= 0)
-            {
-                Control = true;
-                value = value.Remove(index, ControlIdentifier.Length);
-            }
-
-            index = value.IndexOf(AltIdentifier, StringComparison.Ordinal);
-            if (index >= 0)
-            {
-                Alt = true;
-                value = value.Remove(index, AltIdentifier.Length);
-            }
-
-            char[] charArray = value.ToCharArray();
-            if (charArray.Length == 1)
-            {
-                Key = charArray[0];
-            }
+            get { return Key != Keys.None; }
         }
     }
 }

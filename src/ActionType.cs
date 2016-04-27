@@ -4,6 +4,7 @@ namespace AutomationEngine
     {
         None,
         ToggleArchiveSearch,
-        DeleteMenuEntry
+        DeleteMenuEntry,
+        OpenContextMenu
     }
 }

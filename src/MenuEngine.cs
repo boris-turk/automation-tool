@@ -153,6 +153,9 @@ namespace AutomationEngine
                 UpdateStateLabel();
                 OnFilterChanged();
             }
+            if (actionType == ActionType.OpenContextMenu)
+            {
+            }
             if (actionType == ActionType.DeleteMenuEntry)
             {
                 new MenuEntryDeletion(State).Delete();
