@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Timer = System.Timers.Timer;
 
@@ -8,8 +9,6 @@ namespace AutomationEngine
 {
     public class MenuEngine
     {
-        private const string ExecuteAutomationEngineMethodIdentifier = "ExecuteAutomationEngineMethod";
-
         private static MenuEngine _engine;
 
         public static MenuEngine Instance
@@ -66,10 +65,10 @@ namespace AutomationEngine
             get { return Form.StackLabel; }
         }
 
-        public string Context
+        public string ApplicationContext
         {
-            get { return State.Context; }
-            set { State.Context = value; }
+            get { return State.ApplicationContext; }
+            set { State.ApplicationContext = value; }
         }
 
         private void OnSelectedIndexChanged()
@@ -147,13 +146,13 @@ namespace AutomationEngine
 
         private void OnShortcutPressed(ActionType actionType)
         {
-            if (actionType == ActionType.ToggleArchiveSearch)
+            if (actionType == ActionType.ToggleArchiveSearch && ApplicationContext == null)
             {
                 State.IncludeArchivedItems = !State.IncludeArchivedItems;
                 UpdateStateLabel();
                 OnFilterChanged();
             }
-            if (actionType == ActionType.OpenContextMenu)
+            if (actionType == ActionType.OpenContextMenuForSelectedItem)
             {
             }
             if (actionType == ActionType.DeleteMenuEntry)
@@ -164,27 +163,18 @@ namespace AutomationEngine
 
         private void UpdateStateLabel()
         {
-            const string archiveText = "ARCHIVE";
-            string stateText = Form.StateLabel.Text;
+            var text = new StringBuilder();
 
-            stateText = stateText.Replace(archiveText, string.Empty);
-            stateText = stateText.TrimStart(',');
-            if (stateText.Length > 0)
+            if (State.ApplicationContext == null)
             {
-                stateText = "," + stateText;
+                text.Append(State.IncludeArchivedItems ? "ARCHIVE," : string.Empty);
+            }
+            else
+            {
+                text.Append("APPLICATION MENU");
             }
 
-            if (State.IncludeArchivedItems)
-            {
-                stateText = archiveText + stateText;
-            }
-
-            if (stateText.Length == 1)
-            {
-                stateText = string.Empty;
-            }
-
-            Form.StateLabel.Text = stateText;
+            Form.StateLabel.Text = text.ToString().TrimEnd(',');
             Form.StateLabel.Visible = Form.StateLabel.Text.Length > 0;
         }
 
@@ -206,7 +196,7 @@ namespace AutomationEngine
                 executingMethodName = State.ActiveMenu.ExecutingMethodName;
             }
 
-            if (executingMethodName == null)
+            if (!executableItem.ActionTypeSpecified && executingMethodName == null)
             {
                 return;
             }
@@ -217,14 +207,30 @@ namespace AutomationEngine
 
             CloseMenuEngine();
 
-            List<AbstractValue> arguments = GetExecutableItemArguments(executableItem);
-            if (executingMethodName == ExecuteAutomationEngineMethodIdentifier)
+            if (executableItem.ActionTypeSpecified)
             {
-                ExecuteAutomationEngineMethod(arguments);
+                OnExecutingManagedAction(executableItem);
             }
             else
             {
+                List<AbstractValue> arguments = GetExecutableItemArguments(executableItem);
                 ExecuteAhkMethod(executingMethodName, arguments);
+            }
+        }
+
+        private void OnExecutingManagedAction(ExecutableItem executableItem)
+        {
+            ActionType actionType = executableItem.ActionType;
+
+            if (actionType == ActionType.AddNewMenuEntry)
+            {
+                FormFactory.Instance<AddFileItemForm>().Show();
+            }
+            if (actionType == ActionType.CreateApplicationMenu)
+            {
+                var createApplicationMenuForm = FormFactory.Instance<CreateApplicationMenuForm>();
+                createApplicationMenuForm.ContextRegex = ApplicationContext;
+                createApplicationMenuForm.Show();
             }
         }
 
@@ -240,12 +246,6 @@ namespace AutomationEngine
             return executableItem.Arguments;
         }
 
-        private void ExecuteAutomationEngineMethod(List<AbstractValue> arguments)
-        {
-            var executor = new MenuEngineMethodExecutor(Form, arguments.Select(x => x.Value));
-            executor.Execute();
-        }
-
         private void ExecuteAhkMethod(string evaluateResultMethod, List<AbstractValue> arguments)
         {
             AhkInterop.ExecuteMethod(evaluateResultMethod, arguments.ToArray());
@@ -258,7 +258,7 @@ namespace AutomationEngine
 
         public void ResetMenuEngine()
         {
-            State.IncludeArchivedItems = false;
+            State.IncludeArchivedItems = ApplicationContext != null;
             UpdateStateLabel();
 
             if (!State.IsRootMenuActive || SearchBar.Text.Length > 0)

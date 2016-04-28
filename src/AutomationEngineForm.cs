@@ -221,12 +221,12 @@ namespace AutomationEngine
 
             if (mystr.LpData == WindowMessages.ToggleGLobalMenuVisibility)
             {
-                MenuEngine.Instance.Context = null;
+                MenuEngine.Instance.ApplicationContext = null;
                 ToggleAutomationEngineVisibility();
             }
             else if (mystr.LpData == WindowMessages.ToggleContextMenuVisibility)
             {
-                MenuEngine.Instance.Context = AhkInterop.GetMessageFileContents().FirstOrDefault();
+                MenuEngine.Instance.ApplicationContext = AhkInterop.GetMessageFileContents().FirstOrDefault();
                 ToggleAutomationEngineVisibility();
             }
             else if (mystr.LpData == WindowMessages.AhkFunctionResultReported)

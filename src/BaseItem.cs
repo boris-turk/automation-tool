@@ -10,11 +10,6 @@ namespace AutomationEngine
     {
         private string _name;
 
-        protected BaseItem()
-        {
-            Id = Guid.NewGuid().ToString();
-        }
-
         [XmlIgnore]
         public DateTime LastAccess { get; set; }
 
@@ -24,6 +19,8 @@ namespace AutomationEngine
         }
 
         public string Id { get; set; }
+
+        public string ExecutingMethodName { get; set; }
 
         public string Name
         {

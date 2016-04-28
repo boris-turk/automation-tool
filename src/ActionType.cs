@@ -5,6 +5,8 @@ namespace AutomationEngine
         None,
         ToggleArchiveSearch,
         DeleteMenuEntry,
-        OpenContextMenu
+        OpenContextMenuForSelectedItem,
+        AddNewMenuEntry,
+        CreateApplicationMenu
     }
 }

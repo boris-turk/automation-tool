@@ -42,8 +42,6 @@ namespace AutomationEngine
             get { return ContentSource != null; }
         }
 
-        public string ExecutingMethodName { get; set; }
-
         [XmlElement("ExecutableItem", typeof(ExecutableItem))]
         [XmlElement("FileItem", typeof(FileItem))]
         [XmlElement("Menu", typeof(Menu))]
@@ -56,7 +54,13 @@ namespace AutomationEngine
 
         public IEnumerable<BaseItem> GetAllItems()
         {
-            foreach (BaseItem item in Items.Union(_replacementItems).Union(_replacedItems))
+            IEnumerable<BaseItem> allItems = Items;
+            if (_replacementItems != null)
+            {
+                allItems = Items.Union(_replacementItems).Union(_replacedItems);
+            }
+
+            foreach (BaseItem item in allItems)
             {
                 var menu = item as Menu;
                 if (menu != null && menu.MenuFileName != null)
@@ -70,7 +74,7 @@ namespace AutomationEngine
             }
         }
 
-        public IEnumerable<BaseItem> GetSelectableItems()
+        public virtual IEnumerable<BaseItem> GetSelectableItems()
         {
             foreach (BaseItem item in Items)
             {
@@ -124,7 +128,7 @@ namespace AutomationEngine
             return Cloner.Clone(this);
         }
 
-        public void SaveToFile()
+        public virtual void SaveToFile()
         {
             if (_fileName == null)
             {
@@ -175,13 +179,15 @@ namespace AutomationEngine
             }
         }
 
-        public static Menu LoadFromFile(string fileName)
+        public static T LoadFromFile<T>(string fileName) where T : Menu, new()
         {
-            Menu menu = XmlStorage.Load<Menu>(fileName);
+            var menu = XmlStorage.Load<T>(fileName);
             if (menu == null)
             {
-                menu = new Menu();
-                menu._fileName = fileName;
+                menu = new T
+                {
+                    _fileName = fileName
+                };
             }
             return menu;
         }
@@ -275,7 +281,7 @@ namespace AutomationEngine
                 var contentSource = menu.ContentSource as FileDescriptorContentSource;
                 if (contentSource != null)
                 {
-                    Menu properMenu = LoadFromFile(contentSource.Path);
+                    var properMenu = LoadFromFile<Menu>(contentSource.Path);
                     Items.Remove(menu);
                     Items.Add(properMenu);
                 }

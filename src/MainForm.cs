@@ -94,7 +94,7 @@ namespace AutomationEngine
 
         public void LoadMenuEngine()
         {
-            Menu rootMenu = AutomationEngine.Menu.LoadFromFile(Configuration.MenusFileName);
+            var rootMenu = AutomationEngine.Menu.LoadFromFile<Menu>(Configuration.MenusFileName);
             MenuEngine.Start(this, rootMenu);
         }
 

@@ -1,22 +1,26 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
 
 namespace AutomationEngine
 {
     public class MenuState
     {
         private readonly Stack<Menu> _menuStack;
+        private readonly Stack<Menu> _applicationMenuStack;
         private string _filter;
         private List<BaseItem> _matchingItems;
         private bool _includeArchivedItems;
+        private string _applicationContext;
 
         public MenuState(Menu rootMenu)
         {
             _menuStack = new Stack<Menu>();
             _menuStack.Push(rootMenu);
+
+            _applicationMenuStack = new Stack<Menu>();
+
             _matchingItems = new List<BaseItem>();
         }
 
@@ -91,10 +95,25 @@ namespace AutomationEngine
 
         public Menu ActiveMenu
         {
-            get { return _menuStack.Peek(); }
+            get
+            {
+                if (_applicationMenuStack.Count > 0)
+                {
+                    return _applicationMenuStack.Peek();
+                }
+                return _menuStack.Peek();
+            }
         }
 
-        public string Context { get; set; }
+        public string ApplicationContext
+        {
+            get { return _applicationContext; }
+            set
+            {
+                _applicationContext = value;
+                PrepareApplicationMenuStack();
+            }
+        }
 
         public bool IncludeArchivedItems
         {
@@ -117,6 +136,45 @@ namespace AutomationEngine
             }
             _matchingItems = selectableItems.Where(MatchesFilter).ToList();
             _matchingItems.Sort(new MenuComparer(this));
+        }
+
+        private void PrepareApplicationMenuStack()
+        {
+            if (ApplicationContext == null)
+            {
+                _applicationMenuStack.Clear();
+                return;
+            }
+
+            ApplicationMenuFileContext applicationMenuFileContext = GetApplicationMenuByContext(ApplicationContext);
+            if (applicationMenuFileContext == null)
+            {
+                _applicationMenuStack.Push(ApplicationMenu.DefaultApplicationMenu);
+                return;
+            }
+
+            string fileName = applicationMenuFileContext.MenuFileName;
+            if (!fileName.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
+            {
+                fileName += ".xml";
+            }
+
+            string directory = Configuration.Instance.ApplicationMenuDirectory;
+            string filePath = Path.Combine(directory, fileName);
+
+            ApplicationMenu menu = Menu.LoadFromFile<ApplicationMenu>(filePath);
+
+            if (!File.Exists(filePath))
+            {
+                menu.SaveToFile();
+            }
+
+            _applicationMenuStack.Push(menu);
+        }
+
+        private ApplicationMenuFileContext GetApplicationMenuByContext(string context)
+        {
+            return ApplicationMenuCollection.Instance.GetMenuByContext(context);
         }
 
         public void PushSelectedSubmenu()
@@ -173,7 +231,7 @@ namespace AutomationEngine
         {
             ExecutableItem executableItem = SelectedExecutableItem;
 
-            if (executableItem == null)
+            if (executableItem == null || string.IsNullOrWhiteSpace(executableItem.Id))
             {
                 return;
             }

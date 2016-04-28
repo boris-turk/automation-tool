@@ -13,7 +13,7 @@ namespace AutomationEngine
 
         public List<BaseItem> Load()
         {
-            return Menu.LoadFromFile(_path).Items;
+            return Menu.LoadFromFile<Menu>(_path).Items;
         }
     }
 }

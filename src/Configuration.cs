@@ -25,5 +25,7 @@ namespace AutomationEngine
         public int ArchiveDayCountThreshold { get; set; }
 
         public string CurrentContext { get; set; }
+
+        public string ApplicationMenuDirectory { get; set; }
     }
 }

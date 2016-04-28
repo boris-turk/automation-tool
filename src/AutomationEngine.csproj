@@ -57,6 +57,9 @@
     <Compile Include="AhkFunctionItemsLoader.cs" />
     <Compile Include="AhkFunctionContentsSource.cs" />
     <Compile Include="AhkVariable.cs" />
+    <Compile Include="ApplicationMenu.cs" />
+    <Compile Include="ApplicationMenuCollection.cs" />
+    <Compile Include="ApplicationMenuFileContext.cs" />
     <Compile Include="ArgumentType.cs" />
     <Compile Include="AhkInterop.cs" />
     <Compile Include="AutomationAction.cs" />
@@ -70,6 +73,12 @@
     <Compile Include="ContextGroupCollection.cs" />
     <Compile Include="ContextVariableMapping.cs" />
     <Compile Include="ContextVariableMappingsCollection.cs" />
+    <Compile Include="CreateApplicationMenuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateApplicationMenuForm.Designer.cs">
+      <DependentUpon>CreateApplicationMenuForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FilterMatchEvaluator.cs" />
     <Compile Include="RegularExpression.cs" />
     <Compile Include="Shortcut.cs" />
@@ -83,7 +92,6 @@
     <Compile Include="FileItem.cs" />
     <Compile Include="FormFactory.cs" />
     <Compile Include="ISerializationFinalizer.cs" />
-    <Compile Include="MenuEngineMethodExecutor.cs" />
     <Compile Include="MenuEntryDeletion.cs" />
     <Compile Include="MessageWindow.cs" />
     <Compile Include="StringVariable.cs" />
@@ -116,6 +124,9 @@
     <Compile Include="XmlStorage.cs" />
     <EmbeddedResource Include="AddFileItemForm.resx">
       <DependentUpon>AddFileItemForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreateApplicationMenuForm.resx">
+      <DependentUpon>CreateApplicationMenuForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

@@ -24,9 +24,14 @@ namespace AutomationEngine
             return Cloner.Clone(this);
         }
 
-        public string ExecutingMethodName { get; set; }
-
         [XmlIgnore]
         public string ReplacedItemId { get; set; }
+
+        public ActionType ActionType { get; set; }
+
+        public bool ActionTypeSpecified
+        {
+            get { return ActionType != ActionType.None; }
+        }
     }
 }
