@@ -22,6 +22,11 @@ namespace AutomationEngine
 
         public string ExecutingMethodName { get; set; }
 
+        public bool ExecutingMethodNameSpecified
+        {
+            get { return !string.IsNullOrWhiteSpace(ExecutingMethodName); }
+        }
+
         public string Name
         {
             get { return _name; }
