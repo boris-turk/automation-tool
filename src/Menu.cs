@@ -174,6 +174,7 @@ namespace AutomationEngine
             {
                 menu = new T
                 {
+                    Id = Guid.NewGuid().ToString(),
                     _fileName = fileName
                 };
             }

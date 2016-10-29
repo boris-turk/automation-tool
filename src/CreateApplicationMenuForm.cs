@@ -39,12 +39,21 @@ namespace AutomationEngine
 
             var applicationMenu = new ApplicationMenuFileContext
             {
-                MenuFileName = _menuFileName.Text,
+                MenuFileName = AddXmlExtensionsIfMissing(_menuFileName.Text),
                 ContextRegex = ContextRegex
             };
 
             ApplicationMenuCollection.Instance.Menus.Add(applicationMenu);
             ApplicationMenuCollection.Instance.Save();
+        }
+
+        private string AddXmlExtensionsIfMissing(string fileName)
+        {
+            if (fileName.ToLower().EndsWith(".xml"))
+            {
+                return fileName;
+            }
+            return fileName + ".xml";
         }
     }
 }
