@@ -103,7 +103,7 @@ namespace AutomationEngine
             }
 
             NameWords = new List<Word>();
-            foreach (string word in Name.Split(' '))
+            foreach (string word in Name.Split(' ', '\t'))
             {
                 AddWord(word);
             }
