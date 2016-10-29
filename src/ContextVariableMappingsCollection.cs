@@ -25,12 +25,7 @@ namespace AutomationEngine
                 x.SourceAhkVariable.Value == originalValue &&
                 x.TargetAhkVariable.Context == context);
 
-            if (mapping != null)
-            {
-                return mapping.TargetAhkVariable.Value;
-            }
-
-            return null;
+            return mapping?.TargetAhkVariable.Value;
         }
     }
 }

@@ -51,7 +51,7 @@ namespace AutomationEngine
             foreach (BaseItem item in allItems)
             {
                 var menu = item as Menu;
-                if (menu != null && menu.MenuFileName != null)
+                if (menu?.MenuFileName != null)
                 {
                     foreach (BaseItem childItem in menu.GetAllItems())
                     {
@@ -68,7 +68,7 @@ namespace AutomationEngine
             {
                 var menu = item as Menu;
 
-                if (menu != null && menu.MenuFileName != null)
+                if (menu?.MenuFileName != null)
                 {
                     foreach (BaseItem childMenuItem in menu.GetSelectableItems())
                     {
@@ -298,10 +298,7 @@ namespace AutomationEngine
             item.LastAccess = ExecutionTimeStamps.Instance.GetTimeStamp(item.Id);
 
             var menu = item as Menu;
-            if (menu != null)
-            {
-                menu.LoadExecutionTimeStamps();
-            }
+            menu?.LoadExecutionTimeStamps();
         }
     }
 }

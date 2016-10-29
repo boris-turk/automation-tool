@@ -243,7 +243,7 @@ namespace AutomationEngine
             ExecutableItem executableItem = SelectedExecutableItem;
 
             string newContext;
-            if (executableItem != null && executableItem.Context != null)
+            if (executableItem?.Context != null)
             {
                 newContext = executableItem.Context;
             }

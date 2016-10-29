@@ -55,10 +55,7 @@ namespace AutomationEngine
 
         private void OnShortcutPressed(AutomationAction action)
         {
-            if (ShortcutPressed != null)
-            {
-                ShortcutPressed(action.ActionType);
-            }
+            ShortcutPressed?.Invoke(action.ActionType);
         }
 
         public bool Executed { get; private set; }

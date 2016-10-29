@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -75,7 +74,7 @@ namespace AutomationEngine
 
         private static void OnApplicationThreadException(object sender, ThreadExceptionEventArgs exception)
         {
-            if (exception == null || exception.Exception == null)
+            if (exception?.Exception == null)
             {
                 MessageBox.Show("Unhandled application thread exception ");
             }

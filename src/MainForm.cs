@@ -35,10 +35,7 @@ namespace AutomationEngine
 
         protected override void OnExecute()
         {
-            if (Execute != null)
-            {
-                Execute();
-            }
+            Execute?.Invoke();
         }
 
         public Label StackLabel => _stackLabel;
@@ -104,10 +101,7 @@ namespace AutomationEngine
 
         public void RaiseAhkFunctionResultReportedEvent()
         {
-            if (AhkFunctionResultReported != null)
-            {
-                AhkFunctionResultReported();
-            }
+            AhkFunctionResultReported?.Invoke();
         }
     }
 }
