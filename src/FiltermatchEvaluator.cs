@@ -14,15 +14,9 @@ namespace AutomationEngine
             _filterWords = filterWords;
         }
 
-        private string CurrentContext
-        {
-            get { return Configuration.Instance.CurrentContext; }
-        }
+        private string CurrentContext => Configuration.Instance.CurrentContext;
 
-        public List<Word> NameWords
-        {
-            get { return _item.NameWords; }
-        }
+        public List<Word> NameWords => _item.NameWords;
 
         public void Evaluate()
         {

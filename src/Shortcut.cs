@@ -10,18 +10,12 @@ namespace AutomationEngine
         [XmlAttribute]
         public bool Control { get; set; }
 
-        public bool ControlSpecified
-        {
-            get { return Control; }
-        }
+        public bool ControlSpecified => Control;
 
         [XmlAttribute]
         public bool Alt { get; set; }
 
-        public bool AltSpecified
-        {
-            get { return Alt; }
-        }
+        public bool AltSpecified => Alt;
 
         [XmlIgnore]
         public char Character
@@ -44,17 +38,11 @@ namespace AutomationEngine
             }
         }
 
-        public bool SerializationTextSpecified
-        {
-            get { return Character != 0; }
-        }
+        public bool SerializationTextSpecified => Character != 0;
 
         [XmlElement("Key")]
         public Keys Key { get; set; }
 
-        public bool KeySpecified
-        {
-            get { return Key != Keys.None; }
-        }
+        public bool KeySpecified => Key != Keys.None;
     }
 }

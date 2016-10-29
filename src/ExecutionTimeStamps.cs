@@ -6,10 +6,7 @@ namespace AutomationEngine
 {
     public class ExecutionTimeStamps : FileStorage<ExecutionTimeStamps>
     {
-        public override string StorageFileName
-        {
-            get { return @"execution_timestamps.xml"; }
-        }
+        public override string StorageFileName => @"execution_timestamps.xml";
 
         public ExecutionTimeStamps()
         {

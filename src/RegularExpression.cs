@@ -6,10 +6,7 @@ namespace AutomationEngine
     [Serializable]
     public class RegularExpression : PatternPart
     {
-        public override string DisplayValue
-        {
-            get { return string.Empty; }
-        }
+        public override string DisplayValue => string.Empty;
 
         public bool IsMatch(string text)
         {

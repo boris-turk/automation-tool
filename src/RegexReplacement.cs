@@ -10,16 +10,10 @@ namespace AutomationEngine
 
         public string SearchRegex { get; set; }
 
-        public bool SearchRegexSpecified
-        {
-            get { return !string.IsNullOrWhiteSpace(SearchRegex);}
-        }
+        public bool SearchRegexSpecified => !string.IsNullOrWhiteSpace(SearchRegex);
 
         public string Replacement { get; set; }
 
-        public bool ReplacementSpecified
-        {
-            get { return !string.IsNullOrWhiteSpace(Replacement);}
-        }
+        public bool ReplacementSpecified => !string.IsNullOrWhiteSpace(Replacement);
     }
 }

@@ -9,15 +9,9 @@ namespace AutomationEngine
     {
         public string Path { get; set; }
 
-        public override string ReturnType
-        {
-            get { return "ResultFromRawFile"; }
-        }
+        public override string ReturnType => "ResultFromRawFile";
 
-        public override string Function
-        {
-            get { return string.Empty; }
-        }
+        public override string Function => string.Empty;
 
         [XmlIgnore]
         public override List<AbstractValue> InteropArguments

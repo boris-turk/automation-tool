@@ -9,10 +9,7 @@ namespace AutomationEngine
         [XmlAttribute]
         public string Value { get; set; }
 
-        public bool ValueSpecified
-        {
-            get { return !string.IsNullOrWhiteSpace(Value); }
-        }
+        public bool ValueSpecified => !string.IsNullOrWhiteSpace(Value);
 
         public abstract string DisplayValue { get; }
     }

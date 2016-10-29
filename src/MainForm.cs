@@ -41,25 +41,13 @@ namespace AutomationEngine
             }
         }
 
-        public Label StackLabel
-        {
-            get { return _stackLabel; }
-        }
+        public Label StackLabel => _stackLabel;
 
-        public Label StateLabel
-        {
-            get { return _stateLabel; }
-        }
+        public Label StateLabel => _stateLabel;
 
-        public TextBox TextBox
-        {
-            get { return _textBox; }
-        }
+        public TextBox TextBox => _textBox;
 
-        public ListBox ListBox
-        {
-            get { return _listBox; }
-        }
+        public ListBox ListBox => _listBox;
 
         public bool WorkInProgressVisible
         {

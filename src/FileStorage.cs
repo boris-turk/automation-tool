@@ -1,5 +1,3 @@
-using System.Data;
-
 namespace AutomationEngine
 {
     public abstract class FileStorage
@@ -11,10 +9,7 @@ namespace AutomationEngine
     {
         private static readonly T TheInstance = LoadFromFile();
 
-        public static T Instance
-        {
-            get { return TheInstance; }
-        }
+        public static T Instance => TheInstance;
 
         private static T LoadFromFile()
         {

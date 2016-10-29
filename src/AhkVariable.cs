@@ -9,15 +9,9 @@ namespace AutomationEngine
         [XmlAttribute]
         public string Context { get; set; }
 
-        public bool ContextSpecified
-        {
-            get { return !string.IsNullOrWhiteSpace(Context); }
-        }
+        public bool ContextSpecified => !string.IsNullOrWhiteSpace(Context);
 
-        private ContextVariableMappingsCollection Mappings
-        {
-            get { return ContextVariableMappingsCollection.Instance; }
-        }
+        private ContextVariableMappingsCollection Mappings => ContextVariableMappingsCollection.Instance;
 
         public override string InteropValue
         {

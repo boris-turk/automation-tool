@@ -7,10 +7,7 @@ namespace AutomationEngine
     [XmlRoot("ContextVariableMappings")]
     public class ContextVariableMappingsCollection : FileStorage<ContextVariableMappingsCollection>
     {
-        public override string StorageFileName
-        {
-            get { return "context_variable_mapping.xml"; }
-        }
+        public override string StorageFileName => "context_variable_mapping.xml";
 
         public ContextVariableMappingsCollection()
         {

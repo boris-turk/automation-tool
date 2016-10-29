@@ -13,10 +13,7 @@ namespace AutomationEngine
             Groups = new List<ContextGroup>();
         }
 
-        public override string StorageFileName
-        {
-            get { return "context_groups.xml"; }
-        }
+        public override string StorageFileName => "context_groups.xml";
 
         [XmlElement("Group")]
         public List<ContextGroup> Groups { get; set; }

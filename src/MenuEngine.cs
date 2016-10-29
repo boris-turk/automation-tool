@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Timer = System.Timers.Timer;
@@ -11,10 +10,7 @@ namespace AutomationEngine
     {
         private static MenuEngine _engine;
 
-        public static MenuEngine Instance
-        {
-            get { return _engine; }
-        }
+        public static MenuEngine Instance => _engine;
 
         private readonly Timer _textChangedTimer;
 
@@ -42,7 +38,7 @@ namespace AutomationEngine
 
         private MenuState State { get; set; }
 
-        private MainForm Form { get; set; }
+        private MainForm Form { get; }
 
         public bool WorkInProgressVisible
         {
@@ -50,20 +46,11 @@ namespace AutomationEngine
             set { Form.InvokeCommand(() => Form.WorkInProgressVisible = value); }
         }
 
-        private ListBox ListBox
-        {
-            get { return Form.ListBox; }
-        }
+        private ListBox ListBox => Form.ListBox;
 
-        private TextBox SearchBar
-        {
-            get { return Form.TextBox; }
-        }
+        private TextBox SearchBar => Form.TextBox;
 
-        private Label StackLabel
-        {
-            get { return Form.StackLabel; }
-        }
+        private Label StackLabel => Form.StackLabel;
 
         public string ApplicationContext
         {

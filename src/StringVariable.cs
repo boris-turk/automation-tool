@@ -5,9 +5,6 @@ namespace AutomationEngine
     [Serializable]
     public class StringValue : AbstractValue
     {
-        public override string InteropValue
-        {
-            get { return "\"" + Value + "\""; }
-        }
+        public override string InteropValue => "\"" + Value + "\"";
     }
 }

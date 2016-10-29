@@ -15,48 +15,29 @@ namespace AutomationEngine
 
         public virtual string Function { get; set; }
 
-        public bool FunctionSpecified
-        {
-            get { return !string.IsNullOrWhiteSpace(Function); }
-        }
+        public bool FunctionSpecified => !string.IsNullOrWhiteSpace(Function);
 
         public RegexReplacement NameRegex { get; set; }
 
         public bool ReturnsFilePaths { get; set; }
 
-        public bool NameRegexSpecified
-        {
-            get
-            {
-                return NameRegex.SearchRegexSpecified ||
-                    NameRegex.ReplacementSpecified;
-            }
-        }
+        public bool NameRegexSpecified =>
+            NameRegex.SearchRegexSpecified ||
+            NameRegex.ReplacementSpecified;
 
         public RegexReplacement ReturnValueRegex { get; set; }
 
-        public bool ReturnValueRegexSpecified
-        {
-            get
-            {
-                return ReturnValueRegex.SearchRegexSpecified ||
-                    ReturnValueRegex.ReplacementSpecified;
-            }
-        }
+        public bool ReturnValueRegexSpecified =>
+            ReturnValueRegex.SearchRegexSpecified ||
+            ReturnValueRegex.ReplacementSpecified;
 
         [XmlIgnore]
-        public virtual List<AbstractValue> InteropArguments
+        public virtual List<AbstractValue> InteropArguments => new List<AbstractValue>
         {
-            get
-            {
-                return new List<AbstractValue>
-                {
-                    new StringValue { Value = NameRegex.SearchRegex },
-                    new StringValue { Value = NameRegex.Replacement },
-                    new StringValue { Value = ReturnValueRegex.SearchRegex },
-                    new StringValue { Value = ReturnValueRegex.Replacement },
-                };
-            }
-        }
+            new StringValue { Value = NameRegex.SearchRegex },
+            new StringValue { Value = NameRegex.Replacement },
+            new StringValue { Value = ReturnValueRegex.SearchRegex },
+            new StringValue { Value = ReturnValueRegex.Replacement },
+        };
     }
 }

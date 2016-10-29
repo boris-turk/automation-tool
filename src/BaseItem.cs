@@ -13,19 +13,13 @@ namespace AutomationEngine
         [XmlIgnore]
         public DateTime LastAccess { get; set; }
 
-        public bool LastAccessSpecified
-        {
-            get { return LastAccess != DateTime.MinValue; }
-        }
+        public bool LastAccessSpecified => LastAccess != DateTime.MinValue;
 
         public string Id { get; set; }
 
         public string ExecutingMethodName { get; set; }
 
-        public bool ExecutingMethodNameSpecified
-        {
-            get { return !string.IsNullOrWhiteSpace(ExecutingMethodName); }
-        }
+        public bool ExecutingMethodNameSpecified => !string.IsNullOrWhiteSpace(ExecutingMethodName);
 
         public string Name
         {
@@ -39,30 +33,18 @@ namespace AutomationEngine
 
         public RegularExpression ArgumentsRegex { get; set; }
 
-        public bool ArgumentsRegexSpecified
-        {
-            get { return ArgumentsRegex != null; }
-        }
+        public bool ArgumentsRegexSpecified => ArgumentsRegex != null;
 
-        public bool NameSpecified
-        {
-            get { return !string.IsNullOrWhiteSpace(Name); }
-        }
+        public bool NameSpecified => !string.IsNullOrWhiteSpace(Name);
 
         [XmlIgnore]
         public List<Word> NameWords { get; set; }
 
-        public bool NameWordsSpecified
-        {
-            get { return NameWords != null && NameWords.Any(); }
-        }
+        public bool NameWordsSpecified => NameWords != null && NameWords.Any();
 
         public string Context { get; set; }
 
-        public bool ContextSpecified
-        {
-            get { return !string.IsNullOrWhiteSpace(Context); }
-        }
+        public bool ContextSpecified => !string.IsNullOrWhiteSpace(Context);
 
         public string ContextGroupId { get; set; }
 

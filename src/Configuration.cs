@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace AutomationEngine
@@ -17,10 +16,7 @@ namespace AutomationEngine
         [XmlArrayItem("Action")]
         public List<AutomationAction> Actions { get; set; }
 
-        public override string StorageFileName
-        {
-            get { return "automation_configuration.xml"; }
-        }
+        public override string StorageFileName => "automation_configuration.xml";
 
         public int ArchiveDayCountThreshold { get; set; }
 

@@ -25,32 +25,20 @@ namespace AutomationEngine
         public object ContentSource { get; set; }
 
         [XmlIgnore]
-        public string MenuFileName
-        {
-            get { return _fileName; }
-        }
+        public string MenuFileName => _fileName;
 
         public string ChildrenDirectory { get; set; }
 
-        public bool ChildrenDirectorySpecified
-        {
-            get { return !string.IsNullOrWhiteSpace(ChildrenDirectory); }
-        }
+        public bool ChildrenDirectorySpecified => !string.IsNullOrWhiteSpace(ChildrenDirectory);
 
-        public bool ContentSourceSpecified
-        {
-            get { return ContentSource != null; }
-        }
+        public bool ContentSourceSpecified => ContentSource != null;
 
         [XmlElement("ExecutableItem", typeof(ExecutableItem))]
         [XmlElement("FileItem", typeof(FileItem))]
         [XmlElement("Menu", typeof(Menu))]
         public List<BaseItem> Items { get; set; }
 
-        public bool ItemsSpecified
-        {
-            get { return !ContentSourceSpecified; }
-        }
+        public bool ItemsSpecified => !ContentSourceSpecified;
 
         public IEnumerable<BaseItem> GetAllItems()
         {

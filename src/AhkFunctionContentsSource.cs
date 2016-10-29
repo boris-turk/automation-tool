@@ -16,9 +16,6 @@ namespace AutomationEngine
         [XmlElement("AhkArgument", typeof(AhkVariable))]
         public List<AbstractValue> Arguments { get; set; }
 
-        public override string ReturnType
-        {
-            get { return "ResultFromFunction"; }
-        }
+        public override string ReturnType => "ResultFromFunction";
     }
 }

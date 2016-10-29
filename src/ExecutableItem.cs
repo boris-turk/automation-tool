@@ -29,9 +29,6 @@ namespace AutomationEngine
 
         public ActionType ActionType { get; set; }
 
-        public bool ActionTypeSpecified
-        {
-            get { return ActionType != ActionType.None; }
-        }
+        public bool ActionTypeSpecified => ActionType != ActionType.None;
     }
 }

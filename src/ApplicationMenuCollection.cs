@@ -13,10 +13,7 @@ namespace AutomationEngine
 
         public List<ApplicationMenuFileContext> Menus { get; set; }
 
-        public override string StorageFileName
-        {
-            get { return "application_menus.xml"; }
-        }
+        public override string StorageFileName => "application_menus.xml";
 
         public ApplicationMenuFileContext GetMenuByContext(string context)
         {

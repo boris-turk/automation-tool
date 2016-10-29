@@ -5,10 +5,7 @@ namespace AutomationEngine
     [Serializable]
     public class Word : PatternPart
     {
-        public override string DisplayValue
-        {
-            get { return Value; }
-        }
+        public override string DisplayValue => Value;
 
         public bool IsContext { get; set; }
 

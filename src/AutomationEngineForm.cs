@@ -70,15 +70,9 @@ namespace AutomationEngine
             return null;
         }
 
-        protected virtual string WindowName
-        {
-            get { return string.Empty; }
-        }
+        protected virtual string WindowName => string.Empty;
 
-        protected List<Control> ChildControls
-        {
-            get { return Controls.OfType<Control>().ToList(); }
-        }
+        protected List<Control> ChildControls => Controls.OfType<Control>().ToList();
 
         protected List<Control> FocusableControls
         {

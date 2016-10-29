@@ -24,20 +24,11 @@ namespace AutomationEngine
             _matchingItems = new List<BaseItem>();
         }
 
-        public Menu RootMenu
-        {
-            get { return _menuStack.Reverse().First(); }
-        }
+        public Menu RootMenu => _menuStack.Reverse().First();
 
-        public bool IsRootMenuActive
-        {
-            get { return ActiveMenu == RootMenu; }
-        }
+        public bool IsRootMenuActive => ActiveMenu == RootMenu;
 
-        public List<BaseItem> MatchingItems
-        {
-            get { return _matchingItems; }
-        }
+        public List<BaseItem> MatchingItems => _matchingItems;
 
         public string Filter
         {
@@ -52,37 +43,19 @@ namespace AutomationEngine
 
         private string[] FilterWords { get;set; }
 
-        public bool IsMenuSelected
-        {
-            get { return SelectedMenu != null; }
-        }
+        public bool IsMenuSelected => SelectedMenu != null;
 
-        public Menu SelectedMenu
-        {
-            get { return SelectedItem as Menu; }
-        }
+        public Menu SelectedMenu => SelectedItem as Menu;
 
-        public ExecutableItem SelectedExecutableItem
-        {
-            get { return SelectedItem as ExecutableItem; }
-        }
+        public ExecutableItem SelectedExecutableItem => SelectedItem as ExecutableItem;
 
-        private BaseItem SelectedItem
-        {
-            get { return MatchingItems.ElementAtOrDefault(SelectedIndex); }
-        }
+        private BaseItem SelectedItem => MatchingItems.ElementAtOrDefault(SelectedIndex);
 
-        public bool IsExecutableItemSelected
-        {
-            get { return SelectedItem is ExecutableItem; }
-        }
+        public bool IsExecutableItemSelected => SelectedItem is ExecutableItem;
 
         public int SelectedIndex { get; set; }
 
-        public int ItemsCount
-        {
-            get { return MatchingItems.Count; }
-        }
+        public int ItemsCount => MatchingItems.Count;
 
         public string StackText
         {
@@ -231,7 +204,7 @@ namespace AutomationEngine
         {
             ExecutableItem executableItem = SelectedExecutableItem;
 
-            if (executableItem == null || string.IsNullOrWhiteSpace(executableItem.Id))
+            if (string.IsNullOrWhiteSpace(executableItem?.Id))
             {
                 return;
             }
@@ -269,7 +242,7 @@ namespace AutomationEngine
         {
             ExecutableItem executableItem = SelectedExecutableItem;
 
-            string newContext = null;
+            string newContext;
             if (executableItem != null && executableItem.Context != null)
             {
                 newContext = executableItem.Context;

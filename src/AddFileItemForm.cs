@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-
-namespace AutomationEngine
+﻿namespace AutomationEngine
 {
     public partial class AddFileItemForm : AutomationEngineForm
     {
@@ -15,48 +11,11 @@ namespace AutomationEngine
             };
         }
 
-        protected override string WindowName
-        {
-            get { return "add file item"; }
-        }
+        protected override string WindowName => "add file item";
 
-        private string ContentsFileName { get; set; }
+        private string ItemName => _name.Text;
 
-        //private string ContentsFilePath
-        //{
-        //    get { return Path.Combine(Group.Directory, ContentsFileName); }
-        //}
-
-        private string ItemName
-        {
-            get { return _name.Text; }
-        }
-
-        private string Context
-        {
-            get { return _context.Text; }
-        }
-
-        private string Value
-        {
-            get { return _value.Text; }
-        }
-
-        private FileItem FileItem
-        {
-            get
-            {
-                var fileItem = new FileItem
-                {
-                    Name = ItemName,
-                    Context = Context,
-                };
-
-                fileItem.Arguments.Add(new StringValue { Value = ContentsFileName });
-
-                return fileItem;
-            }
-        }
+        private string Value => _value.Text;
 
         protected override string ValidateInput()
         {
