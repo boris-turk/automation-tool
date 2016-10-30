@@ -63,6 +63,7 @@
     <Compile Include="ArgumentType.cs" />
     <Compile Include="AhkInterop.cs" />
     <Compile Include="AutomationAction.cs" />
+    <Compile Include="AutomationArgument.cs" />
     <Compile Include="AutomationEngineForm.cs">
       <SubType>Form</SubType>
     </Compile>

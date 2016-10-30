@@ -17,6 +17,7 @@ namespace AutomationEngine
 
         [XmlElement("Argument", typeof(StringValue))]
         [XmlElement("AhkArgument", typeof(AhkVariable))]
+        [XmlElement("AutomationArgument", typeof(AutomationArgument))]
         public List<AbstractValue> Arguments { get; set; }
 
         public ExecutableItem Clone()
