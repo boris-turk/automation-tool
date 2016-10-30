@@ -17,6 +17,10 @@ namespace AutomationEngine
 
         public string Id { get; set; }
 
+        public string Alias { get; set; }
+
+        public bool AliasSpecified => !string.IsNullOrWhiteSpace(Alias);
+
         public string ExecutingMethodName { get; set; }
 
         public bool ExecutingMethodNameSpecified => !string.IsNullOrWhiteSpace(ExecutingMethodName);
@@ -38,7 +42,13 @@ namespace AutomationEngine
         public bool NameSpecified => !string.IsNullOrWhiteSpace(Name);
 
         [XmlIgnore]
+        public Menu ParentMenu { get; set; }
+
+        [XmlIgnore]
         public List<Word> NameWords { get; set; }
+
+        [XmlElement("ContextMenuAlias")]
+        public List<string> ContextMenuAliases { get; set; }
 
         public bool NameWordsSpecified => NameWords != null && NameWords.Any();
 

@@ -9,10 +9,12 @@ namespace AutomationEngine
     {
         private readonly Stack<Menu> _menuStack;
         private readonly Stack<Menu> _applicationMenuStack;
+        private readonly Stack<Menu> _contextMenuStack;
+
         private string _filter;
         private List<BaseItem> _matchingItems;
-        private bool _includeArchivedItems;
         private string _applicationContext;
+        private BaseItem _itemWithOpenedContextMenu;
 
         public MenuState(Menu rootMenu)
         {
@@ -20,6 +22,7 @@ namespace AutomationEngine
             _menuStack.Push(rootMenu);
 
             _applicationMenuStack = new Stack<Menu>();
+            _contextMenuStack = new Stack<Menu>();
 
             _matchingItems = new List<BaseItem>();
         }
@@ -49,7 +52,7 @@ namespace AutomationEngine
 
         public ExecutableItem SelectedExecutableItem => SelectedItem as ExecutableItem;
 
-        private BaseItem SelectedItem => MatchingItems.ElementAtOrDefault(SelectedIndex);
+        public BaseItem SelectedItem => MatchingItems.ElementAtOrDefault(SelectedIndex);
 
         public bool IsExecutableItemSelected => SelectedItem is ExecutableItem;
 
@@ -70,6 +73,10 @@ namespace AutomationEngine
         {
             get
             {
+                if (_contextMenuStack.Count > 0)
+                {
+                    return _contextMenuStack.Peek();
+                }
                 if (_applicationMenuStack.Count > 0)
                 {
                     return _applicationMenuStack.Peek();
@@ -88,13 +95,15 @@ namespace AutomationEngine
             }
         }
 
-        public bool IncludeArchivedItems
+        public bool IncludeArchivedItems { get; set; }
+
+        public BaseItem ItemWithOpenedContextMenu
         {
-            get { return _includeArchivedItems; }
+            get { return _itemWithOpenedContextMenu; }
             set
             {
-                _includeArchivedItems = value;
-                DetermineMatchingItems();
+                _itemWithOpenedContextMenu = value;
+                PrepareContextMenuStack();
             }
         }
 
@@ -143,6 +152,19 @@ namespace AutomationEngine
             }
 
             _applicationMenuStack.Push(menu);
+        }
+
+        private void PrepareContextMenuStack()
+        {
+            if (ItemWithOpenedContextMenu == null)
+            {
+                _contextMenuStack.Clear();
+                return;
+            }
+
+            Menu menu = ContextMenuCollection.Instance.GetItemContextMenu(ItemWithOpenedContextMenu);
+
+            _contextMenuStack.Push(menu);
         }
 
         private ApplicationMenuFileContext GetApplicationMenuByContext(string context)

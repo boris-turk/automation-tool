@@ -58,6 +58,12 @@ namespace AutomationEngine
             set { State.ApplicationContext = value; }
         }
 
+        public BaseItem ItemWithOpenedContextMenu
+        {
+            get { return State.ItemWithOpenedContextMenu; }
+            set { State.ItemWithOpenedContextMenu = value; }
+        }
+
         private void OnSelectedIndexChanged()
         {
             if (!_selectedIndexChangedEventDeactivated)
@@ -141,6 +147,7 @@ namespace AutomationEngine
             }
             if (actionType == ActionType.OpenContextMenuForSelectedItem)
             {
+                OpenContextMenuForSelectedItem();
             }
             if (actionType == ActionType.DeleteMenuEntry)
             {
@@ -148,11 +155,22 @@ namespace AutomationEngine
             }
         }
 
+        private void OpenContextMenuForSelectedItem()
+        {
+            ItemWithOpenedContextMenu = State.SelectedItem;
+            UpdateStateLabel();
+            ClearSearchBar();
+        }
+
         private void UpdateStateLabel()
         {
             var text = new StringBuilder();
 
-            if (State.ApplicationContext == null)
+            if (ItemWithOpenedContextMenu != null)
+            {
+                text.Append("CONTEXT MENU");
+            }
+            else if (State.ApplicationContext == null)
             {
                 text.Append(State.IncludeArchivedItems ? "ARCHIVE," : string.Empty);
             }
@@ -245,14 +263,16 @@ namespace AutomationEngine
 
         public void ResetMenuEngine()
         {
+            ItemWithOpenedContextMenu = null;
             State.IncludeArchivedItems = ApplicationContext != null;
             UpdateStateLabel();
 
             if (!State.IsRootMenuActive || SearchBar.Text.Length > 0)
             {
                 State.Clear();
-                ClearSearchBar();
             }
+
+            ClearSearchBar();
         }
 
         private void PushSelectedSubmenu()

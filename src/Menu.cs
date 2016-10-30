@@ -169,16 +169,23 @@ namespace AutomationEngine
 
         public static T LoadFromFile<T>(string fileName) where T : Menu, new()
         {
-            var menu = XmlStorage.Load<T>(fileName);
-            if (menu == null)
+            var menu = XmlStorage.Load<T>(fileName) ?? CreateDefaultEmptyMenu<T>(fileName);
+
+            foreach (BaseItem item in menu.Items)
             {
-                menu = new T
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    _fileName = fileName
-                };
+                item.ParentMenu = menu;
             }
+
             return menu;
+        }
+
+        private static T CreateDefaultEmptyMenu<T>(string fileName) where T : Menu, new()
+        {
+            return new T
+            {
+                Id = Guid.NewGuid().ToString(),
+                _fileName = fileName
+            };
         }
 
         private void PrependRootDirectoryToFileItems()
@@ -244,7 +251,7 @@ namespace AutomationEngine
 
         private void PrepareLoadedItems()
         {
-            LoadExecutionTimeStamps();
+            this.LoadExecutionTimeStamps();
             PrependRootDirectoryToFileItems();
             ReplaceContextGroups();
             PrependMenuNameToItems();
@@ -287,19 +294,6 @@ namespace AutomationEngine
             {
                 item.Name = Name + " " + item.Name;   
             }
-        }
-
-        private void LoadExecutionTimeStamps()
-        {
-            Items.ForEach(SetExecutionTimeStamp);
-        }
-
-        private void SetExecutionTimeStamp(BaseItem item)
-        {
-            item.LastAccess = ExecutionTimeStamps.Instance.GetTimeStamp(item.Id);
-
-            var menu = item as Menu;
-            menu?.LoadExecutionTimeStamps();
         }
     }
 }

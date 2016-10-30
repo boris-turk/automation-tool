@@ -71,6 +71,7 @@
     <Compile Include="AhkContentSource.cs" />
     <Compile Include="ContextGroup.cs" />
     <Compile Include="ContextGroupCollection.cs" />
+    <Compile Include="ContextMenuCollection.cs" />
     <Compile Include="ContextVariableMapping.cs" />
     <Compile Include="ContextVariableMappingsCollection.cs" />
     <Compile Include="CreateApplicationMenuForm.cs">
@@ -80,6 +81,7 @@
       <DependentUpon>CreateApplicationMenuForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FilterMatchEvaluator.cs" />
+    <Compile Include="ItemContextMenu.cs" />
     <Compile Include="RegularExpression.cs" />
     <Compile Include="Shortcut.cs" />
     <Compile Include="TimeStamp.cs" />

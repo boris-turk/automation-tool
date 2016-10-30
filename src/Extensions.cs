@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -108,6 +110,39 @@ namespace AutomationEngine
             }
 
             return (char)((int)key);
+        }
+
+        public static IEnumerable<Menu> GetParentMenus(this BaseItem item)
+        {
+            Menu parent = item.ParentMenu;
+            while (parent != null)
+            {
+                yield return parent;
+                parent = parent.ParentMenu;
+            }
+        }
+
+        public static IEnumerable<string> GetContextMenuAliases(this BaseItem item)
+        {
+            foreach (BaseItem i in item.GetParentMenus().Concat(new[] { item }))
+            {
+                foreach (string alias in i.ContextMenuAliases)
+                {
+                    yield return alias;
+                }
+            }
+        }
+
+        public static void LoadExecutionTimeStamps(this Menu menu)
+        {
+            menu.Items.ForEach(SetExecutionTimeStamp);
+        }
+
+        private static void SetExecutionTimeStamp(BaseItem item)
+        {
+            item.LastAccess = ExecutionTimeStamps.Instance.GetTimeStamp(item.Id);
+            var menu = item as Menu;
+            menu?.LoadExecutionTimeStamps();
         }
     }
 }
