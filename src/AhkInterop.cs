@@ -38,23 +38,17 @@ namespace AutomationEngine
 
                 timeStamp = timeStamp.AddTicks(-1);
 
-                ExecutableItem executableItem;
-                if (source.ReturnsFilePaths)
+                var executableItem = new ExecutableItem
                 {
-                    executableItem = new FileItem();
-                }
-                else
-                {
-                    executableItem = new ExecutableItem();
-                }
-
-                executableItem.Name = result[i];
-                executableItem.LastAccess = timeStamp;
+                    Name = result[i],
+                    LastAccess = timeStamp
+                };
 
                 executableItem.Arguments.Add(new StringValue
                 {
                     Value = result[i + 1]
                 });
+
                 items.Add(executableItem);
             }
 
