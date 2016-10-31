@@ -36,6 +36,8 @@ namespace AutomationEngine
             ClearSearchBar();
         }
 
+        public BaseItem SelectedItem => State.SelectedItem;
+
         private MenuState State { get; set; }
 
         private MainForm Form { get; }

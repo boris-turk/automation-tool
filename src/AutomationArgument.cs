@@ -1,22 +1,27 @@
 ﻿using System;
-using System.Xml.Serialization;
+using System.IO;
 
 namespace AutomationEngine
 {
     [Serializable]
     public class AutomationArgument : AbstractValue
     {
+        private static BaseItem ItemWithOpenedContextMenu => MenuEngine.Instance.ItemWithOpenedContextMenu;
+
         public override string InteropValue
         {
             get
             {
                 if (Value == "ActiveItemId")
                 {
-                    return "\"" + "ActiveItemId" + "\"";
+                    string itemId = ItemWithOpenedContextMenu.Id;
+                    return "\"" + itemId + "\"";
                 }
                 if (Value == "ActiveMenuFilePath")
                 {
-                    return "\"" + "ActiveMenuFilePath" + "\"";
+                    string fileName = ItemWithOpenedContextMenu.ParentMenu.MenuFileName;
+                    string filePath = Path.Combine(Environment.CurrentDirectory, fileName);
+                    return "\"" + filePath + "\"";
                 }
                 return Value;
             }

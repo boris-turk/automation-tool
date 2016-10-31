@@ -13,13 +13,13 @@ namespace AutomationEngine
         {
             get
             {
-                if (Directory != null)
-                {
-                    return Path.Combine(Directory, Arguments[0].Value);
-                }
                 if (Arguments.Count == 0)
                 {
                     throw new InvalidOperationException("FileItem: file path not specified");
+                }
+                if (Directory != null)
+                {
+                    return Path.Combine(Directory, Arguments[0].Value);
                 }
                 return Arguments[0].Value;
             }

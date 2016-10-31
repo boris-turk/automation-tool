@@ -260,14 +260,31 @@ namespace AutomationEngine
 
         private void AssignExecutingMethod()
         {
+            string methodName = GetExecutingMethodName();
             foreach (ExecutableItem item in GetAllItems().OfType<ExecutableItem>())
             {
                 if (item.ExecutingMethodName == null)
                 {
                     item.ExecutingMethodNameAssignedAtRuntime = true;
-                    item.ExecutingMethodName = ExecutingMethodName;
+                    item.ExecutingMethodName = methodName;
                 }
             }
+        }
+
+        private string GetExecutingMethodName()
+        {
+            if (!string.IsNullOrWhiteSpace(ExecutingMethodName))
+            {
+                return ExecutingMethodName;
+            }
+            foreach (Menu menu in this.GetParentMenus())
+            {
+                if (menu.ExecutingMethodName != null)
+                {
+                    return menu.ExecutingMethodName;
+                }
+            }
+            return null;
         }
 
         private void LoadChildMenus()

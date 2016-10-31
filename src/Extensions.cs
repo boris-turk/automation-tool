@@ -126,6 +126,10 @@ namespace AutomationEngine
         {
             foreach (BaseItem i in item.GetParentMenus().Concat(new[] { item }))
             {
+                if (i.ContextMenuAliases == null)
+                {
+                    continue;
+                }
                 foreach (string alias in i.ContextMenuAliases)
                 {
                     yield return alias;
