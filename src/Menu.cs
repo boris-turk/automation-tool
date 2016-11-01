@@ -101,6 +101,7 @@ namespace AutomationEngine
 
             IItemsLoader loader = _itemsLoaderFactory.GetInstance(ContentSource);
             Items = loader.Load();
+            Items.ForEach(i => i.ParentMenu = this);
 
             ReplaceContextGroups();
             AssignExecutingMethod();

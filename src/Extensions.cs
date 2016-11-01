@@ -122,6 +122,20 @@ namespace AutomationEngine
             }
         }
 
+        public static ExecutableItemType GetItemType(this BaseItem item)
+        {
+            BaseItem current = item;
+            while (current != null)
+            {
+                if (current.ExecutableItemType != ExecutableItemType.None)
+                {
+                    return current.ExecutableItemType;
+                }
+                current = current.ParentMenu;
+            }
+            return ExecutableItemType.None;
+        }
+
         public static IEnumerable<string> GetContextMenuAliases(this BaseItem item)
         {
             foreach (BaseItem i in item.GetParentMenus().Concat(new[] { item }))

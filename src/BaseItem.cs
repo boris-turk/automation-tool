@@ -17,6 +17,10 @@ namespace AutomationEngine
 
         public string Id { get; set; }
 
+        public ExecutableItemType ExecutableItemType { get; set; }
+
+        public bool ExecutableItemTypeSpecified => ExecutableItemType != ExecutableItemType.None;
+
         public string Alias { get; set; }
 
         public bool AliasSpecified => !string.IsNullOrWhiteSpace(Alias);
