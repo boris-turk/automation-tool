@@ -14,7 +14,7 @@ namespace AutomationEngine
             {
                 if (Value == "ActiveItemId")
                 {
-                    string itemId = ItemWithOpenedContextMenu.Id;
+                    string itemId = GetExecutingItemId();
                     return "\"" + itemId + "\"";
                 }
                 if (Value == "ActiveMenuFilePath")
@@ -25,6 +25,16 @@ namespace AutomationEngine
                 }
                 return Value;
             }
+        }
+
+        private string GetExecutingItemId()
+        {
+            string replacedItemId = (ItemWithOpenedContextMenu as ExecutableItem)?.ReplacedItemId;
+            if (!string.IsNullOrWhiteSpace(replacedItemId))
+            {
+                return replacedItemId;
+            }
+            return ItemWithOpenedContextMenu.Id;
         }
     }
 }

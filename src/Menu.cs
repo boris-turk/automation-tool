@@ -257,6 +257,15 @@ namespace AutomationEngine
             ReplaceContextGroups();
             PrependMenuNameToItems();
             AssignExecutingMethod();
+            AssignParentMenu();
+        }
+
+        private void AssignParentMenu()
+        {
+            foreach (ExecutableItem item in GetAllItems().OfType<ExecutableItem>())
+            {
+                item.ParentMenu = this;
+            }
         }
 
         private void AssignExecutingMethod()
