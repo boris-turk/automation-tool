@@ -83,6 +83,7 @@
       <DependentUpon>CreateApplicationMenuForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FilterMatchEvaluator.cs" />
+    <Compile Include="IPlugin.cs" />
     <Compile Include="ItemContextMenu.cs" />
     <Compile Include="ExecutableItemType.cs" />
     <Compile Include="RegularExpression.cs" />
