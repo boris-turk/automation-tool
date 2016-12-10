@@ -3,6 +3,6 @@
     public interface IPlugin
     {
         string Id { get; }
-        void Execute();
+        void Execute(params string[] arguments);
     }
 }
