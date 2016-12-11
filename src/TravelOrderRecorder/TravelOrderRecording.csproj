@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="TravelOrder.cs" />
     <Compile Include="TravelOrdersCollection.cs" />
+    <Compile Include="TravelOrdersReport.cs" />
     <Compile Include="TravelOrderTimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wlan.cs" />
