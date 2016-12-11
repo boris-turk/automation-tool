@@ -39,6 +39,10 @@ namespace AutomationEngine
             }
         }
 
+        public ActionType ActionType { get; set; }
+
+        public bool ActionTypeSpecified => ActionType != ActionType.None;
+
         public RegularExpression ArgumentsRegex { get; set; }
 
         public bool ArgumentsRegexSpecified => ArgumentsRegex != null;

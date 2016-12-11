@@ -27,9 +27,5 @@ namespace AutomationEngine
 
         [XmlIgnore]
         public string ReplacedItemId { get; set; }
-
-        public ActionType ActionType { get; set; }
-
-        public bool ActionTypeSpecified => ActionType != ActionType.None;
     }
 }

@@ -7,6 +7,7 @@ namespace AutomationEngine
         DeleteMenuEntry,
         OpenContextMenuForSelectedItem,
         AddNewMenuEntry,
-        CreateApplicationMenu
+        CreateApplicationMenu,
+        ExecutePlugin,
     }
 }

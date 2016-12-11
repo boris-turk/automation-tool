@@ -14,14 +14,17 @@ namespace AutomationEngine
             {
                 if (Value == "ActiveItemId")
                 {
-                    string itemId = GetExecutingItemId();
-                    return "\"" + itemId + "\"";
+                    return $"\"{GetExecutingItemId()}\"";
+                }
+                if (Value == "ActiveItemName")
+                {
+                    return $"\"{GetExecutingItemName()}\"";
                 }
                 if (Value == "ActiveMenuFilePath")
                 {
                     string fileName = ItemWithOpenedContextMenu.ParentMenu.MenuFileName;
                     string filePath = Path.Combine(Environment.CurrentDirectory, fileName);
-                    return "\"" + filePath + "\"";
+                    return $"\"{filePath}\"";
                 }
                 return Value;
             }
@@ -35,6 +38,25 @@ namespace AutomationEngine
                 return replacedItemId;
             }
             return ItemWithOpenedContextMenu.Id;
+        }
+
+        private string GetExecutingItemName()
+        {
+            var executableItem = MenuEngine.Instance.SelectedItem as ExecutableItem;
+
+            string name = executableItem?.Name;
+            if (name == null)
+            {
+                return null;
+            }
+
+            string prefix = executableItem?.ParentMenu?.Name;
+            if (prefix != null && name.StartsWith(prefix))
+            {
+                return name.Substring(prefix.Length).TrimStart();
+            }
+
+            return name;
         }
     }
 }

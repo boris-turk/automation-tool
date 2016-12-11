@@ -40,7 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WorkTimeInput.cs" />
+    <Compile Include="WorkingTimeReport.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AutomationEngine\AutomationEngine.csproj">

@@ -193,17 +193,10 @@ namespace AutomationEngine
                 return;
             }
 
-            string executingMethodName = null;
-            if (executableItem.ExecutingMethodName != null)
-            {
-                executingMethodName = executableItem.ExecutingMethodName;
-            }
-            else if (State.ActiveMenu != null)
-            {
-                executingMethodName = State.ActiveMenu.ExecutingMethodName;
-            }
+            string executingMethodName = GetExecutingMethodName(executableItem);
 
-            if (!executableItem.ActionTypeSpecified && executingMethodName == null)
+            ActionType actionType = GetActionType(executableItem);
+            if (actionType == ActionType.None && executingMethodName == null)
             {
                 return;
             }
@@ -214,7 +207,7 @@ namespace AutomationEngine
 
             CloseMenuEngine();
 
-            if (executableItem.ActionTypeSpecified)
+            if (actionType != ActionType.None)
             {
                 OnExecutingManagedAction(executableItem);
             }
@@ -227,9 +220,13 @@ namespace AutomationEngine
 
         private void OnExecutingManagedAction(ExecutableItem executableItem)
         {
-            ActionType actionType = executableItem.ActionType;
+            ActionType actionType = GetActionType(executableItem);
 
-            if (actionType == ActionType.AddNewMenuEntry)
+            if (actionType == ActionType.ExecutePlugin)
+            {
+                PluginsCollection.Instance.Execute(executableItem);
+            }
+            else if (actionType == ActionType.AddNewMenuEntry)
             {
                 FormFactory.Instance<AddFileItemForm>().Show();
             }
@@ -239,6 +236,28 @@ namespace AutomationEngine
                 createApplicationMenuForm.ContextRegex = ApplicationContext;
                 createApplicationMenuForm.Show();
             }
+        }
+
+        private string GetExecutingMethodName(ExecutableItem executableItem)
+        {
+            if (executableItem.ExecutingMethodName != null)
+            {
+                return executableItem.ExecutingMethodName;
+            }
+            return State.ActiveMenu?.ExecutingMethodName;
+        }
+
+        private ActionType GetActionType(ExecutableItem executableItem)
+        {
+            if (executableItem.ActionType != ActionType.None)
+            {
+                return executableItem.ActionType;
+            }
+            if (executableItem.ParentMenu != null)
+            {
+                return executableItem.ParentMenu.ActionType;
+            }
+            return ActionType.None;
         }
 
         private List<AbstractValue> GetExecutableItemArguments(ExecutableItem executableItem)

@@ -2,9 +2,9 @@
 
 namespace WorkTimeRecording
 {
-    public class WorkTimeInput : IPlugin
+    public class WorkingTimeReport : IPlugin
     {
-        public string Id => "WorkTimeInput";
+        public string Id => "report_working_time";
 
         public void Execute(params string[] arguments)
         {
