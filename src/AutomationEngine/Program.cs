@@ -26,6 +26,7 @@ namespace AutomationEngine
             SetCurrentDirectory();
 
             PluginsCollection.Instance.LoadPlugins();
+            TimersCollection.Instance.LoadTimers();
 
             Application.ThreadException += OnApplicationThreadException;
             AppDomain.CurrentDomain.UnhandledException += OnAppDomainUnhandledException;

@@ -9,16 +9,16 @@ namespace AutomationEngine
     internal class PluginsCollection
     {
         private static readonly PluginsCollection TheInstance = new PluginsCollection();
-        private List<IPlugin> _pluginTypes;
+        private List<IPlugin> _plugins;
 
         public static PluginsCollection Instance => TheInstance;
 
         public void LoadPlugins()
         {
-            string pluginDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string directory = AppDomain.CurrentDomain.BaseDirectory;
 
-            _pluginTypes = (
-                from file in new DirectoryInfo(pluginDirectory).GetFiles()
+            _plugins = (
+                from file in new DirectoryInfo(directory).GetFiles()
                 where file.Extension.ToLower() == ".dll"
                 let assembly = Assembly.LoadFile(file.FullName)
                 from type in assembly.GetExportedTypes()
@@ -30,7 +30,7 @@ namespace AutomationEngine
         public void Execute(ExecutableItem item)
         {
             string[] arguments = item.Arguments.Select(x => x.InteropValue?.Trim('"')).ToArray();
-            foreach (IPlugin plugin in _pluginTypes.Where(x => x.Id == item.ExecutingMethodName))
+            foreach (IPlugin plugin in _plugins.Where(x => x.Id == item.ExecutingMethodName))
             {
                 plugin.Execute(arguments);
             }

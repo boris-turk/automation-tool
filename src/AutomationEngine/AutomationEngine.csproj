@@ -86,9 +86,11 @@
     <Compile Include="IPlugin.cs" />
     <Compile Include="ItemContextMenu.cs" />
     <Compile Include="ExecutableItemType.cs" />
+    <Compile Include="ITimer.cs" />
     <Compile Include="PluginsCollection.cs" />
     <Compile Include="RegularExpression.cs" />
     <Compile Include="Shortcut.cs" />
+    <Compile Include="TimersCollection.cs" />
     <Compile Include="TimeStamp.cs" />
     <Compile Include="ExecutionTimeStamps.cs" />
     <Compile Include="FileStorage.cs" />
