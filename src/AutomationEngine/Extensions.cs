@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -161,6 +162,16 @@ namespace AutomationEngine
             item.LastAccess = ExecutionTimeStamps.Instance.GetTimeStamp(item.Id);
             var menu = item as Menu;
             menu?.LoadExecutionTimeStamps();
+        }
+
+        public static TimeSpan FromTimeSpanString(this string value)
+        {
+            return TimeSpan.ParseExact(value, @"h\:mm\:ss", CultureInfo.InvariantCulture);
+        }
+
+        public static string ToTimeSpanString(this TimeSpan timeSpan)
+        {
+            return timeSpan.ToString(@"hh\:mm\:ss");
         }
     }
 }
