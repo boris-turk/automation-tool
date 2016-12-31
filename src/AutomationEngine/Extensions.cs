@@ -166,12 +166,14 @@ namespace AutomationEngine
 
         public static TimeSpan FromTimeSpanString(this string value)
         {
-            return TimeSpan.ParseExact(value, @"h\:mm\:ss", CultureInfo.InvariantCulture);
+            TimeSpan timeSpan;
+            TimeSpan.TryParseExact(value, @"h\:mm", CultureInfo.InvariantCulture, out timeSpan);
+            return timeSpan;
         }
 
         public static string ToTimeSpanString(this TimeSpan timeSpan)
         {
-            return timeSpan.ToString(@"hh\:mm\:ss");
+            return timeSpan.ToString(@"h\:mm");
         }
     }
 }

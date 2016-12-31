@@ -28,7 +28,7 @@ namespace AutomationEngine
                 e.SuppressKeyPress = true;
                 e.Handled = true;
             }
-            else if (!e.Alt && !e.Control && e.KeyCode == Keys.Enter)
+            else if (!e.Alt && !e.Control && !e.Shift && e.KeyCode == Keys.Enter)
             {
                 OnEnterKeyPressed();
                 e.SuppressKeyPress = true;
