@@ -9,7 +9,6 @@ namespace AutomationEngine
     internal class PluginsCollection
     {
         private static readonly PluginsCollection TheInstance = new PluginsCollection();
-        private List<IPlugin> _plugins;
 
         public static PluginsCollection Instance => TheInstance;
 
@@ -17,20 +16,35 @@ namespace AutomationEngine
         {
             string directory = AppDomain.CurrentDomain.BaseDirectory;
 
-            _plugins = (
+            List<Type> types = (
                 from file in new DirectoryInfo(directory).GetFiles()
                 where file.Extension.ToLower() == ".dll"
                 let assembly = Assembly.LoadFile(file.FullName)
                 from type in assembly.GetExportedTypes()
-                where typeof(IPlugin).IsAssignableFrom(type)
-                select (IPlugin)Activator.CreateInstance(type))
+                select type)
+                .ToList();
+
+            PluginLoaders = (
+                from type in types
+                where typeof(IPluginLoader).IsAssignableFrom(type)
+                select (IPluginLoader)Activator.CreateInstance(type))
+                .ToList();
+
+            PluginExecutors = (
+                from type in types
+                where typeof(IPluginExecutor).IsAssignableFrom(type)
+                select (IPluginExecutor)Activator.CreateInstance(type))
                 .ToList();
         }
+
+        public List<IPluginLoader> PluginLoaders { get; private set; }
+
+        public List<IPluginExecutor> PluginExecutors { get; private set; }
 
         public void Execute(ExecutableItem item)
         {
             string[] arguments = item.Arguments.Select(x => x.InteropValue?.Trim('"')).ToArray();
-            foreach (IPlugin plugin in _plugins.Where(x => x.Id == item.ExecutingMethodName))
+            foreach (IPluginExecutor plugin in PluginExecutors.Where(x => x.Id == item.ExecutingMethodName))
             {
                 plugin.Execute(arguments);
             }

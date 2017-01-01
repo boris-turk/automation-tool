@@ -35,7 +35,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this._description = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this._oldDescriptions = new System.Windows.Forms.ListBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this._project = new System.Windows.Forms.Label();
@@ -100,15 +99,6 @@
             this.label4.TabIndex = 2;
             this.label4.Text = "Description:";
             // 
-            // _oldDescriptions
-            // 
-            this._oldDescriptions.FormattingEnabled = true;
-            this._oldDescriptions.Location = new System.Drawing.Point(16, 220);
-            this._oldDescriptions.Name = "_oldDescriptions";
-            this._oldDescriptions.Size = new System.Drawing.Size(408, 199);
-            this._oldDescriptions.TabIndex = 4;
-            this._oldDescriptions.TabStop = false;
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -149,12 +139,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(436, 456);
+            this.ClientSize = new System.Drawing.Size(436, 229);
             this.Controls.Add(this.label6);
             this.Controls.Add(this._task);
             this.Controls.Add(this._project);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this._oldDescriptions);
             this.Controls.Add(this._description);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -178,7 +167,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox _description;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ListBox _oldDescriptions;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label _project;

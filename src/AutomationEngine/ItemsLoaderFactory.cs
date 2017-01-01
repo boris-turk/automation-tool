@@ -22,6 +22,11 @@ namespace AutomationEngine
             {
                 return new AhkFunctionItemsLoader(ahkFunctionContentSource);
             }
+            var pluginContentSource = contentSource as PluginContentSource;
+            if (pluginContentSource != null)
+            {
+                return new PluginItemsLoader(pluginContentSource.SourceId);
+            }
             throw new Exception("Unknown menu content loader");
         }
     }

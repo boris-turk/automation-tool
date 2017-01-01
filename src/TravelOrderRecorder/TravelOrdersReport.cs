@@ -5,7 +5,7 @@ using AutomationEngine;
 
 namespace TravelOrderRecorder
 {
-    public class TravelOrdersReport : IPlugin
+    public class TravelOrdersReport : IPluginExecutor
     {
         public string Id => "travel_orders_report";
 

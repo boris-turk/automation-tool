@@ -36,13 +36,13 @@ namespace AutomationEngine
             ClearSearchBar();
         }
 
-        public BaseItem SelectedItem => State.SelectedItem;
+        internal BaseItem SelectedItem => State.SelectedItem;
 
         private MenuState State { get; set; }
 
         private MainForm Form { get; }
 
-        public bool WorkInProgressVisible
+        private bool WorkInProgressVisible
         {
             get { return Form.InvokeQuery(() => Form.WorkInProgressVisible); }
             set { Form.InvokeCommand(() => Form.WorkInProgressVisible = value); }
@@ -54,13 +54,13 @@ namespace AutomationEngine
 
         private Label StackLabel => Form.StackLabel;
 
-        public string ApplicationContext
+        internal string ApplicationContext
         {
             get { return State.ApplicationContext; }
             set { State.ApplicationContext = value; }
         }
 
-        public BaseItem ItemWithOpenedContextMenu
+        internal BaseItem ItemWithOpenedContextMenu
         {
             get { return State.ItemWithOpenedContextMenu; }
             set { State.ItemWithOpenedContextMenu = value; }
@@ -253,10 +253,15 @@ namespace AutomationEngine
             {
                 return executableItem.ActionType;
             }
-            if (executableItem.ParentMenu != null)
+
+            foreach (Menu parentMenu in executableItem.GetParentMenus())
             {
-                return executableItem.ParentMenu.ActionType;
+                if (parentMenu.ActionType != ActionType.None)
+                {
+                    return parentMenu.ActionType;
+                }
             }
+
             return ActionType.None;
         }
 
@@ -282,7 +287,7 @@ namespace AutomationEngine
             Form.Visible = false;
         }
 
-        public void ResetMenuEngine()
+        internal void ResetMenuEngine()
         {
             ItemWithOpenedContextMenu = null;
             State.IncludeArchivedItems = ApplicationContext != null;
@@ -321,7 +326,7 @@ namespace AutomationEngine
             ClearSearchBar();
         }
 
-        public void ClearSearchBar()
+        private void ClearSearchBar()
         {
             _textChangedTimer.Stop();
             Form.InvokeCommand(() =>
@@ -397,8 +402,34 @@ namespace AutomationEngine
                 _engine = new MenuEngine(mainForm, rootMenu);
             }
 
-            _engine.State = new MenuState(rootMenu);
             _engine.ClearSearchBar();
+        }
+
+        public string GetExecutingItemId()
+        {
+            string replacedItemId = (ItemWithOpenedContextMenu as ExecutableItem)?.ReplacedItemId;
+            if (!string.IsNullOrWhiteSpace(replacedItemId))
+            {
+                return replacedItemId;
+            }
+            return ItemWithOpenedContextMenu.Id;
+        }
+
+        public string GetExecutingItemName()
+        {
+            string name = SelectedItem?.Name;
+            if (name == null)
+            {
+                return null;
+            }
+
+            string prefix = SelectedItem?.ParentMenu?.Name;
+            if (prefix != null && name.StartsWith(prefix))
+            {
+                return name.Substring(prefix.Length).TrimStart();
+            }
+
+            return name;
         }
     }
 }

@@ -22,6 +22,7 @@ namespace AutomationEngine
         [XmlElement("RawFileSource", typeof(RawFileContentsSource))]
         [XmlElement("FileSource", typeof(FileDescriptorContentSource))]
         [XmlElement("AhkFunctionSource", typeof(AhkFunctionContentsSource))]
+        [XmlElement("PluginSource", typeof(PluginContentSource))]
         public object ContentSource { get; set; }
 
         [XmlIgnore]

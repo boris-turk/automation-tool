@@ -59,6 +59,12 @@ namespace WorkTimeRecording
             set { _task.Text = value; }
         }
 
+        public string Description
+        {
+            get { return _description.Text; }
+            set { _description.Text = value; }
+        }
+
         private string DurationText
         {
             get

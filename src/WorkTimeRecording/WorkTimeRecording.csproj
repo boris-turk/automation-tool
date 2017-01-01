@@ -49,6 +49,7 @@
     <Compile Include="WorkingTimeInput.Designer.cs">
       <DependentUpon>WorkingTimeInput.cs</DependentUpon>
     </Compile>
+    <Compile Include="TaskDescriptionSelector.cs" />
     <Compile Include="WorkingTimeReport.cs" />
     <Compile Include="WorkingTimeStorage.cs" />
   </ItemGroup>
