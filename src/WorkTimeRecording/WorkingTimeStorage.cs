@@ -25,7 +25,7 @@ namespace WorkTimeRecording
 
         private static string GetFilePath(DateTime date)
         {
-            return $@"xlab\working_time_{date.Year}_{date.Month}.xml";
+            return $@"xlab\working_time_{date.Year}_{date.Month:00}.xml";
         }
 
         private static WorkingTimeStorage LoadFromFile()
