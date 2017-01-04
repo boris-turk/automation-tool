@@ -91,8 +91,15 @@ namespace WorkTimeRecording
             if (Visible)
             {
                 ActiveControl = _duration;
+                SetDefaultValues();
             }
             base.OnVisibleChanged(e);
+        }
+
+        private void SetDefaultValues()
+        {
+            _date.Value = DateTime.Now.Date;
+            _duration.Text = string.Empty;
         }
 
         protected override void OnExecute()
@@ -130,33 +137,18 @@ namespace WorkTimeRecording
             TimeSpan result;
             return TimeSpan.TryParseExact(DurationText, @"h\:mm", CultureInfo.InvariantCulture, out result);
         }
-    }
 
-    public class TextBoxState
-    {
-        private readonly TextBox _textBox;
-
-        private string _text;
-        private int _selectionStart;
-        private int _selectionLength;
-
-        public TextBoxState(TextBox textBox)
+        protected override string ValidateInput()
         {
-            _textBox = textBox;
-        }
-
-        public void Save()
-        {
-            _text = _textBox.Text;
-            _selectionStart = _textBox.SelectionStart;
-            _selectionLength = _textBox.SelectionLength;
-        }
-
-        public void Restore()
-        {
-            _textBox.Text = _text;
-            _textBox.SelectionStart = _selectionStart;
-            _textBox.SelectionLength = _selectionLength;
+            if (!IsValidDuration() || GetDuration().Ticks <= 0)
+            {
+                return "Invalid duration.";
+            }
+            if (string.IsNullOrWhiteSpace(Description))
+            {
+                return "Description cannot be empty.";
+            }
+            return null;
         }
     }
 }

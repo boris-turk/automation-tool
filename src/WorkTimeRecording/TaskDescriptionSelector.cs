@@ -19,7 +19,7 @@ namespace WorkTimeRecording
         {
             string name = MenuEngine.Instance.GetExecutingItemName();
             string text = (name ?? string.Empty).Trim();
-            return Regex.Replace(text, @"\S+\s+", "");
+            return Regex.Replace(text, @"^\S+\s+", "");
         }
 
         public string Id => "select_working_time_task";

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace AutomationEngine
@@ -7,8 +9,10 @@ namespace AutomationEngine
     public partial class MainForm : AutomationEngineForm
     {
         private const int OutOfScreenOffset = -20000;
+
         public event Action AhkFunctionResultReported;
         public event Action Execute;
+        public event Action<ActionType> ShortcutPressed;
 
         public MainForm()
         {
@@ -62,6 +66,24 @@ namespace AutomationEngine
                     _workInProgressPictureBox.SendToBack();
                 }
             }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            List<AutomationAction> actions = Configuration.Instance.Actions;
+
+            AutomationAction shortcut = actions.FirstOrDefault(x =>
+                x.Shortcut.Alt == e.Alt &&
+                x.Shortcut.Control == e.Control &&
+                (x.Shortcut.Key == e.KeyCode || x.Shortcut.Character == e.KeyCode.ToCharacter()));
+
+            if (shortcut != null)
+            {
+                ShortcutPressed?.Invoke(shortcut.ActionType);
+                e.Handled = true;
+            }
+
+            base.OnKeyDown(e);
         }
 
         protected override void OnShown(EventArgs e)

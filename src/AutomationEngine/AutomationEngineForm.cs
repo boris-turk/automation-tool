@@ -10,8 +10,6 @@ namespace AutomationEngine
     {
         private const string AutomationEngineWindowTitle = "Automation engine";
 
-        public event Action<ActionType> ShortcutPressed;
-
         public AutomationEngineForm()
         {
             KeyPreview = true;
@@ -34,28 +32,8 @@ namespace AutomationEngine
                 e.SuppressKeyPress = true;
                 e.Handled = true;
             }
-            else
-            {
-                List<AutomationAction> actions = Configuration.Instance.Actions;
-
-                AutomationAction shortcut = actions.FirstOrDefault(x =>
-                    x.Shortcut.Alt == e.Alt &&
-                    x.Shortcut.Control == e.Control &&
-                    (x.Shortcut.Key == e.KeyCode || x.Shortcut.Character == e.KeyCode.ToCharacter()));
-
-                if (shortcut != null)
-                {
-                    OnShortcutPressed(shortcut);
-                    e.Handled = true;
-                }
-            }
 
             base.OnKeyDown(e);
-        }
-
-        private void OnShortcutPressed(AutomationAction action)
-        {
-            ShortcutPressed?.Invoke(action.ActionType);
         }
 
         public bool Executed { get; private set; }
