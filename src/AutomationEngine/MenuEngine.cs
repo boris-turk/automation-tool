@@ -401,6 +401,10 @@ namespace AutomationEngine
             {
                 _engine = new MenuEngine(mainForm, rootMenu);
             }
+            else
+            {
+                _engine.State = new MenuState(rootMenu);
+            }
 
             _engine.ClearSearchBar();
         }
