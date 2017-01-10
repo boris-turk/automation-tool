@@ -3,6 +3,7 @@ namespace AutomationEngine
     public enum ActionType
     {
         None,
+        NormalExecution,
         ToggleArchiveSearch,
         DeleteMenuEntry,
         OpenContextMenuForSelectedItem,

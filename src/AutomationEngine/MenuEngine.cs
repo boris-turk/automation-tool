@@ -207,7 +207,7 @@ namespace AutomationEngine
 
             CloseMenuEngine();
 
-            if (actionType != ActionType.None)
+            if (actionType != ActionType.None && actionType != ActionType.NormalExecution)
             {
                 OnExecutingManagedAction(executableItem);
             }
