@@ -25,5 +25,7 @@ namespace AutomationEngine
                 return Value;
             }
         }
+
+        public override bool IsEmpty => string.IsNullOrWhiteSpace(Value);
     }
 }

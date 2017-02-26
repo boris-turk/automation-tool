@@ -162,7 +162,7 @@ namespace AutomationEngine
                 return;
             }
 
-            Menu menu = ContextMenuCollection.Instance.GetItemContextMenu(ItemWithOpenedContextMenu);
+            Menu menu = ContextMenuCollection.Instance.GetItemContextMenu();
 
             _contextMenuStack.Push(menu);
         }

@@ -4,7 +4,7 @@ using System.IO;
 namespace AutomationEngine
 {
     [Serializable]
-    public class AutomationArgument : AbstractValue
+    public class DynamicValue : AbstractValue
     {
         public override string InteropValue
         {
@@ -14,18 +14,20 @@ namespace AutomationEngine
                 {
                     return $"\"{MenuEngine.Instance.GetExecutingItemId()}\"";
                 }
-                if (Value == "ActiveItemName")
-                {
-                    return $"\"{MenuEngine.Instance.GetExecutingItemName()}\"";
-                }
                 if (Value == "ActiveMenuFilePath")
                 {
                     string fileName = MenuEngine.Instance.ItemWithOpenedContextMenu.ParentMenu.MenuFileName;
+                    if (fileName == null)
+                    {
+                        return null;
+                    }
                     string filePath = Path.Combine(Environment.CurrentDirectory, fileName);
                     return $"\"{filePath}\"";
                 }
                 return Value;
             }
         }
+
+        public override bool IsEmpty => string.IsNullOrWhiteSpace(InteropValue);
     }
 }

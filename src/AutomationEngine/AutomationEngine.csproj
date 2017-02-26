@@ -34,6 +34,24 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -60,10 +78,9 @@
     <Compile Include="ApplicationMenu.cs" />
     <Compile Include="ApplicationMenuCollection.cs" />
     <Compile Include="ApplicationMenuFileContext.cs" />
-    <Compile Include="ArgumentType.cs" />
     <Compile Include="AhkInterop.cs" />
     <Compile Include="AutomationAction.cs" />
-    <Compile Include="AutomationArgument.cs" />
+    <Compile Include="DynamicValue.cs" />
     <Compile Include="AutomationEngineForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,7 +89,6 @@
     <Compile Include="AhkContentSource.cs" />
     <Compile Include="ContextGroup.cs" />
     <Compile Include="ContextGroupCollection.cs" />
-    <Compile Include="ContextMenu.cs" />
     <Compile Include="ContextMenuCollection.cs" />
     <Compile Include="ContextVariableMapping.cs" />
     <Compile Include="ContextVariableMappingsCollection.cs" />
@@ -86,11 +102,12 @@
     <Compile Include="IPluginExecutor.cs" />
     <Compile Include="IPluginLoader.cs" />
     <Compile Include="ItemContextMenu.cs" />
-    <Compile Include="ExecutableItemType.cs" />
+    <Compile Include="ValueType.cs" />
     <Compile Include="ITimer.cs" />
     <Compile Include="PluginContentSource.cs" />
     <Compile Include="PluginItemsLoader.cs" />
     <Compile Include="PluginsCollection.cs" />
+    <Compile Include="ReferencedItemArgument.cs" />
     <Compile Include="RegularExpression.cs" />
     <Compile Include="Shortcut.cs" />
     <Compile Include="TimersCollection.cs" />
@@ -106,7 +123,7 @@
     <Compile Include="ISerializationFinalizer.cs" />
     <Compile Include="MenuEntryDeletion.cs" />
     <Compile Include="MessageWindow.cs" />
-    <Compile Include="StringVariable.cs" />
+    <Compile Include="StringValue.cs" />
     <Compile Include="ExecutableItemComparer.cs" />
     <Compile Include="ItemsLoaderFactory.cs" />
     <Compile Include="Extensions.cs" />

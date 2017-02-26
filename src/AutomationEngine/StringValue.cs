@@ -6,5 +6,7 @@ namespace AutomationEngine
     public class StringValue : AbstractValue
     {
         public override string InteropValue => "\"" + Value + "\"";
+
+        public override bool IsEmpty => Value == null;
     }
 }

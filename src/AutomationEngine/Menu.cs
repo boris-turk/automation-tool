@@ -28,10 +28,6 @@ namespace AutomationEngine
         [XmlIgnore]
         public string MenuFileName => _fileName;
 
-        public string ChildrenDirectory { get; set; }
-
-        public bool ChildrenDirectorySpecified => !string.IsNullOrWhiteSpace(ChildrenDirectory);
-
         public bool ContentSourceSpecified => ContentSource != null;
 
         [XmlElement("ExecutableItem", typeof(ExecutableItem))]
@@ -40,6 +36,9 @@ namespace AutomationEngine
         public List<BaseItem> Items { get; set; }
 
         public bool ItemsSpecified => !ContentSourceSpecified;
+
+        [XmlArrayItem("Type")]
+        public List<ValueType> ArgumentTypes { get; set; }
 
         public IEnumerable<BaseItem> GetAllItems()
         {
@@ -190,14 +189,6 @@ namespace AutomationEngine
             };
         }
 
-        private void PrependRootDirectoryToFileItems()
-        {
-            foreach (FileItem fileItem in Items.OfType<FileItem>())
-            {
-                fileItem.Directory = ChildrenDirectory;
-            }
-        }
-
         private void ReplaceContextGroups()
         {
             foreach (BaseItem item in Items.Where(x => !x.ContextGroupIdSpecified))
@@ -254,7 +245,6 @@ namespace AutomationEngine
         private void PrepareLoadedItems()
         {
             this.LoadExecutionTimeStamps();
-            PrependRootDirectoryToFileItems();
             ReplaceContextGroups();
             PrependMenuNameToItems();
             AssignExecutingMethod();

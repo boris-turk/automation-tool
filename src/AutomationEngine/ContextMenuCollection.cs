@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace AutomationEngine
@@ -11,69 +10,42 @@ namespace AutomationEngine
     {
         public ContextMenuCollection()
         {
-            Menus = new List<ContextMenu>();
+            Menus = new List<Menu>();
         }
 
+        private BaseItem ItemWithOpenedContextMenu => MenuEngine.Instance.ItemWithOpenedContextMenu;
+
         [XmlElement("ContextMenu")]
-        public List<ContextMenu> Menus { get; set; }
+        public List<Menu> Menus { get; set; }
 
         public override string StorageFileName => "context_menus.xml";
 
-        public ContextMenu GetItemContextMenu(BaseItem item)
+        public Menu GetItemContextMenu()
         {
-            List<BaseItem> contextMenuItems = GetCommonContextMenusItems().ToList();
-            contextMenuItems.AddRange(GetAliasedContextMenuItems(item));
-            contextMenuItems.AddRange(GetApplicableContextMenuItems(item));
-
-            var menu = new ContextMenu
+            var menu = new Menu
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid().ToString()
             };
 
-            menu.Items.AddRange(contextMenuItems.Distinct());
+            IEnumerable<BaseItem> contextMenuItems = GetContextMenuItems();
+            menu.Items.AddRange(contextMenuItems);
 
             return menu;
         }
 
-        private IEnumerable<BaseItem> GetCommonContextMenusItems()
+        private IEnumerable<BaseItem> GetContextMenuItems()
         {
-            return Menus.Where(x => x.ApplicableToAllItems).SelectMany(x => x.Items);
-        }
-
-        private IEnumerable<BaseItem> GetApplicableContextMenuItems(BaseItem item)
-        {
-            if (item is Menu)
-            {
-                return Enumerable.Empty<BaseItem>();
-            }
-
-            ExecutableItemType itemType = item.GetItemType();
-            return Menus.Where(x => x.ApplicableToItemType == itemType).SelectMany(x => x.Items);
-        }
-
-        private IEnumerable<BaseItem> GetAliasedContextMenuItems(BaseItem item)
-        {
-            if (item is Menu)
-            {
-                return Enumerable.Empty<BaseItem>();
-            }
-
-            return (
-                from alias in item.GetContextMenuAliases()
-                let contextMenu = GetMenuByAlias(alias)
+            return
+                from contextMenu in Menus
                 where contextMenu != null
-                select contextMenu)
-                .SelectMany(x => x.Items);
-        }
-
-        private ContextMenu GetMenuByAlias(string alias)
-        {
-            return Menus.FirstOrDefault(x => x.Alias == alias);
+                from contextMenuItem in contextMenu.Items.OfType<ExecutableItem>()
+                where contextMenuItem.Arguments.All(a => !a.IsEmpty)
+                select contextMenuItem;
         }
 
         public void FinalizeSerialization(string file)
         {
-            foreach (ContextMenu menu in Menus)
+            foreach (Menu menu in Menus)
             {
                 menu.FinalizeSerialization(file);
                 menu.Items.ForEach(i => i.ParentMenu = menu);

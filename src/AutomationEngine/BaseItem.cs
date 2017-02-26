@@ -17,10 +17,6 @@ namespace AutomationEngine
 
         public string Id { get; set; }
 
-        public ExecutableItemType ExecutableItemType { get; set; }
-
-        public bool ExecutableItemTypeSpecified => ExecutableItemType != ExecutableItemType.None;
-
         public string Alias { get; set; }
 
         public bool AliasSpecified => !string.IsNullOrWhiteSpace(Alias);
@@ -43,10 +39,6 @@ namespace AutomationEngine
 
         public bool ActionTypeSpecified => ActionType != ActionType.None;
 
-        public RegularExpression ArgumentsRegex { get; set; }
-
-        public bool ArgumentsRegexSpecified => ArgumentsRegex != null;
-
         public bool NameSpecified => !string.IsNullOrWhiteSpace(Name);
 
         [XmlIgnore]
@@ -54,9 +46,6 @@ namespace AutomationEngine
 
         [XmlIgnore]
         public List<Word> NameWords { get; set; }
-
-        [XmlElement("ContextMenuAlias")]
-        public List<string> ContextMenuAliases { get; set; }
 
         public bool NameWordsSpecified => NameWords != null && NameWords.Any();
 
