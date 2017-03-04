@@ -8,8 +8,6 @@ namespace AutomationEngine
     public class MenuState
     {
         private readonly Stack<Menu> _menuStack;
-        private readonly Stack<Menu> _applicationMenuStack;
-        private readonly Stack<Menu> _contextMenuStack;
 
         private string _filter;
         private List<BaseItem> _matchingItems;
@@ -23,9 +21,6 @@ namespace AutomationEngine
 
             _menuStack = new Stack<Menu>();
             _menuStack.Push(rootMenu);
-
-            _applicationMenuStack = new Stack<Menu>();
-            _contextMenuStack = new Stack<Menu>();
 
             _matchingItems = new List<BaseItem>();
         }
@@ -72,21 +67,7 @@ namespace AutomationEngine
             }
         }
 
-        public Menu ActiveMenu
-        {
-            get
-            {
-                if (_contextMenuStack.Count > 0)
-                {
-                    return _contextMenuStack.Peek();
-                }
-                if (_applicationMenuStack.Count > 0)
-                {
-                    return _applicationMenuStack.Peek();
-                }
-                return _menuStack.Peek();
-            }
-        }
+        public Menu ActiveMenu => _menuStack.Peek();
 
         public string ApplicationContext
         {
@@ -137,14 +118,17 @@ namespace AutomationEngine
         {
             if (ApplicationContext == null)
             {
-                _applicationMenuStack.Clear();
+                if (!IsRootMenuActive)
+                {
+                    SetRootMenu(RootMenu);
+                }
                 return;
             }
 
             ApplicationMenuFileContext applicationMenuFileContext = GetApplicationMenuByContext(ApplicationContext);
             if (applicationMenuFileContext == null)
             {
-                _applicationMenuStack.Push(ApplicationMenu.DefaultApplicationMenu);
+                SetRootMenu(ApplicationMenu.DefaultApplicationMenu);
                 return;
             }
 
@@ -164,7 +148,7 @@ namespace AutomationEngine
                 menu.SaveToFile();
             }
 
-            _applicationMenuStack.Push(menu);
+            SetRootMenu(menu);
         }
 
         private void PrepareAlternateRootMenu()
@@ -183,23 +167,26 @@ namespace AutomationEngine
             }
         }
 
-        private void SetRootMenu(Menu menu)
-        {
-            _menuStack.Clear();
-            _menuStack.Push(menu);
-        }
-
         private void PrepareContextMenuStack()
         {
             if (ItemWithOpenedContextMenu == null)
             {
-                _contextMenuStack.Clear();
-                return;
+                if (!IsRootMenuActive)
+                {
+                    SetRootMenu(RootMenu);
+                }
             }
+            else
+            {
+                Menu menu = ContextMenuCollection.Instance.GetItemContextMenu();
+                SetRootMenu(menu);
+            }
+        }
 
-            Menu menu = ContextMenuCollection.Instance.GetItemContextMenu();
-
-            _contextMenuStack.Push(menu);
+        private void SetRootMenu(Menu menu)
+        {
+            _menuStack.Clear();
+            _menuStack.Push(menu);
         }
 
         private ApplicationMenuFileContext GetApplicationMenuByContext(string context)
