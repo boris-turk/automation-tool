@@ -14,10 +14,13 @@ namespace AutomationEngine
         private string _filter;
         private List<BaseItem> _matchingItems;
         private string _applicationContext;
+        private string _alternateRootMenuAlias;
         private BaseItem _itemWithOpenedContextMenu;
 
         public MenuState(Menu rootMenu)
         {
+            RootMenu = rootMenu;
+
             _menuStack = new Stack<Menu>();
             _menuStack.Push(rootMenu);
 
@@ -27,7 +30,7 @@ namespace AutomationEngine
             _matchingItems = new List<BaseItem>();
         }
 
-        public Menu RootMenu => _menuStack.Reverse().First();
+        public Menu RootMenu { get; }
 
         public bool IsRootMenuActive => ActiveMenu == RootMenu;
 
@@ -95,6 +98,16 @@ namespace AutomationEngine
             }
         }
 
+        public string AlternateRootMenuAlias
+        {
+            get { return _alternateRootMenuAlias; }
+            set
+            {
+                _alternateRootMenuAlias = value;
+                PrepareAlternateRootMenu();
+            }
+        }
+
         public bool IncludeArchivedItems { get; set; }
 
         public BaseItem ItemWithOpenedContextMenu
@@ -152,6 +165,28 @@ namespace AutomationEngine
             }
 
             _applicationMenuStack.Push(menu);
+        }
+
+        private void PrepareAlternateRootMenu()
+        {
+            if (AlternateRootMenuAlias == null)
+            {
+                if (!IsRootMenuActive)
+                {
+                    SetRootMenu(RootMenu);
+                }
+            }
+            else
+            {
+                Menu menu = RootMenu.FindMenuByAlias(AlternateRootMenuAlias);
+                SetRootMenu(menu);
+            }
+        }
+
+        private void SetRootMenu(Menu menu)
+        {
+            _menuStack.Clear();
+            _menuStack.Push(menu);
         }
 
         private void PrepareContextMenuStack()
@@ -213,13 +248,9 @@ namespace AutomationEngine
 
         public void PersistExecutionTimeStamps()
         {
-            ReloadGuard.Enabled = false;
-
             UpdateMenuExecutionTimeStamps();
             UpdateItemExecutionTimeStamp();
             ExecutionTimeStamps.Instance.Save();
-
-            ReloadGuard.Enabled = true;
         }
 
         private void UpdateItemExecutionTimeStamp()

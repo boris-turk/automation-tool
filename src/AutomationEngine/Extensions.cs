@@ -123,6 +123,23 @@ namespace AutomationEngine
             }
         }
 
+        public static Menu FindMenuByAlias(this Menu menu, string alias)
+        {
+            if (menu.Alias == alias)
+            {
+                return menu;
+            }
+            foreach (Menu subMenu in menu.Items.OfType<Menu>())
+            {
+                Menu candidate = subMenu.FindMenuByAlias(alias);
+                if (candidate != null)
+                {
+                    return candidate;
+                }
+            }
+            return null;
+        }
+
         public static void LoadExecutionTimeStamps(this Menu menu)
         {
             menu.Items.ForEach(SetExecutionTimeStamp);

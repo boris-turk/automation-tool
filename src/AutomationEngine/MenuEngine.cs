@@ -66,6 +66,12 @@ namespace AutomationEngine
             set { State.ItemWithOpenedContextMenu = value; }
         }
 
+        internal string AlternateRootMenuAlias
+        {
+            get { return State.AlternateRootMenuAlias; }
+            set { State.AlternateRootMenuAlias = value; }
+        }
+
         private void OnSelectedIndexChanged()
         {
             if (!_selectedIndexChangedEventDeactivated)

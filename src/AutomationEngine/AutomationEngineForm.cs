@@ -190,11 +190,13 @@ namespace AutomationEngine
 
             if (mystr.LpData == WindowMessages.ToggleGLobalMenuVisibility)
             {
+                MenuEngine.Instance.AlternateRootMenuAlias = AhkInterop.GetMessageFileContents().FirstOrDefault();
                 MenuEngine.Instance.ApplicationContext = null;
                 ToggleAutomationEngineVisibility();
             }
             else if (mystr.LpData == WindowMessages.ToggleContextMenuVisibility)
             {
+                MenuEngine.Instance.AlternateRootMenuAlias = null;
                 MenuEngine.Instance.ApplicationContext = AhkInterop.GetMessageFileContents().FirstOrDefault();
                 ToggleAutomationEngineVisibility();
             }

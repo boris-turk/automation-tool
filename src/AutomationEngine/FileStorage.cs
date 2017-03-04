@@ -1,3 +1,5 @@
+using System.Threading;
+
 namespace AutomationEngine
 {
     public abstract class FileStorage
@@ -19,7 +21,13 @@ namespace AutomationEngine
 
         public void Save()
         {
+            ReloadGuard.Enabled = false;
             XmlStorage.Save(StorageFileName, this);
+            ThreadPool.QueueUserWorkItem(o =>
+            {
+                Thread.Sleep(300);
+                ReloadGuard.Enabled = true;
+            });
         }
     }
 }

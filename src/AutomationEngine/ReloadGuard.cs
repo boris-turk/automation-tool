@@ -9,11 +9,18 @@ namespace AutomationEngine
 
         private readonly MainForm _mainForm;
         private bool _enabled;
+        private static readonly object LockObject = new object();
 
         public static bool Enabled
         {
             get { return _guard._enabled; }
-            set { _guard._enabled = value; }
+            set
+            {
+                lock (LockObject)
+                {
+                    _guard._enabled = value;
+                }
+            }
         }
 
         public static void Start(MainForm mainForm)
@@ -45,12 +52,15 @@ namespace AutomationEngine
 
         private void OnFileSystemChange()
         {
-            if (!_enabled)
+            lock (LockObject)
             {
-                return;
+                if (!_enabled)
+                {
+                    return;
+                }
+                _enabled = false;
+                ThreadPool.QueueUserWorkItem(x => ReloadMenuEngine());
             }
-            _enabled = false;
-            ThreadPool.QueueUserWorkItem(x => ReloadMenuEngine());
         }
 
         private void ReloadMenuEngine()
