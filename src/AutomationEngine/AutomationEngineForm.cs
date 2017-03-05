@@ -188,6 +188,15 @@ namespace AutomationEngine
             Type mytype = mystr.GetType();
             mystr = (CopyDataStruct)message.GetLParam(mytype);
 
+            if (mystr.LpData == WindowMessages.AhkProcessId)
+            {
+                int pid;
+                string text = AhkInterop.GetMessageFileContents().FirstOrDefault();
+                if (int.TryParse(text, out pid))
+                {
+                    AhkInterop.AhkProcessId = pid;
+                }
+            }
             if (mystr.LpData == WindowMessages.ToggleGLobalMenuVisibility)
             {
                 MenuEngine.Instance.AlternateRootMenuAlias = AhkInterop.GetMessageFileContents().FirstOrDefault();

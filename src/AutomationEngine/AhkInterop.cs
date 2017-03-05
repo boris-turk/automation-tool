@@ -9,6 +9,8 @@ namespace AutomationEngine
 {
     public static class AhkInterop
     {
+        public static int AhkProcessId;
+
         private const string VoidReturnType = "Void";
 
         private static string MessageFile
@@ -86,11 +88,20 @@ namespace AutomationEngine
         {
             string[] properArguments = arguments.Select(x => x.InteropValue).ToArray();
 
-            using (Process process = Process.GetProcessesByName("AutoHotKey").Single())
+            using (Process process = GetAhkProcess())
             {
                 SerializeMethodInfo(returnType, name, properArguments);
                 MessageHelper.SendMessage(process, "func");
             }
+        }
+
+        private static Process GetAhkProcess()
+        {
+            if (AhkProcessId > 0)
+            {
+                return Process.GetProcessById(AhkProcessId);
+            }
+            return Process.GetProcessesByName("AutoHotKey").Single();
         }
 
         private static void SerializeMethodInfo(string returnType, string name, string[] arguments)

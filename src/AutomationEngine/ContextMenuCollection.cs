@@ -13,8 +13,6 @@ namespace AutomationEngine
             Menus = new List<Menu>();
         }
 
-        private BaseItem ItemWithOpenedContextMenu => MenuEngine.Instance.ItemWithOpenedContextMenu;
-
         [XmlElement("ContextMenu")]
         public List<Menu> Menus { get; set; }
 
