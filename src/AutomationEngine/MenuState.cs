@@ -118,10 +118,7 @@ namespace AutomationEngine
         {
             if (ApplicationContext == null)
             {
-                if (!IsRootMenuActive)
-                {
-                    SetRootMenu(RootMenu);
-                }
+                LoadDefaultRootMenuIfNecessary();
                 return;
             }
 
@@ -155,10 +152,7 @@ namespace AutomationEngine
         {
             if (AlternateRootMenuAlias == null)
             {
-                if (!IsRootMenuActive)
-                {
-                    SetRootMenu(RootMenu);
-                }
+                LoadDefaultRootMenuIfNecessary();
             }
             else
             {
@@ -171,15 +165,25 @@ namespace AutomationEngine
         {
             if (ItemWithOpenedContextMenu == null)
             {
-                if (!IsRootMenuActive)
-                {
-                    SetRootMenu(RootMenu);
-                }
+                LoadDefaultRootMenuIfNecessary();
             }
             else
             {
                 Menu menu = ContextMenuCollection.Instance.GetItemContextMenu();
                 SetRootMenu(menu);
+            }
+        }
+
+        private void LoadDefaultRootMenuIfNecessary()
+        {
+            if (ItemWithOpenedContextMenu == null &&
+                AlternateRootMenuAlias == null &&
+                ApplicationContext == null)
+            {
+                if (!IsRootMenuActive)
+                {
+                    SetRootMenu(RootMenu);
+                }
             }
         }
 
