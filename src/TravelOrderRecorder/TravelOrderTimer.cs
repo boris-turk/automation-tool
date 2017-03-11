@@ -23,9 +23,14 @@ namespace TravelOrderRecorder
             string title = "Potni nalog";
             string message = "Zabelezim potni nalog?";
 
-            DialogResult answer = MessageBox.Show(
-                message, title, MessageBoxButtons.YesNo, MessageBoxIcon.None,
-                MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
+            DialogResult answer;
+            using (var form = new Form())
+            {
+                answer = MessageBox.Show(
+                    form, message, title, MessageBoxButtons.YesNo,
+                    MessageBoxIcon.None, MessageBoxDefaultButton.Button1,
+                    (MessageBoxOptions) 0x40000);
+            }
 
             bool isTravelOrder = answer == DialogResult.Yes;
 
