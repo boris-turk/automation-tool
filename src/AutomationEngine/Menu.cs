@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace AutomationEngine
@@ -66,6 +67,10 @@ namespace AutomationEngine
         {
             foreach (BaseItem item in Items)
             {
+                if (!IsItemVisible(item))
+                {
+                    continue;
+                }
                 var menu = item as Menu;
 
                 if (menu?.MenuFileName != null)
@@ -90,6 +95,16 @@ namespace AutomationEngine
             {
                 yield return executableItem;
             }
+        }
+
+        private bool IsItemVisible(BaseItem item)
+        {
+            if (item.VisibilityCondition?.Type == VisibilityConditionType.WindowTitleRegex)
+            {
+                string title = MenuEngine.Instance.ApplicationContext;
+                return Regex.IsMatch(title, item.VisibilityCondition.Value);
+            }
+            return true;
         }
 
         public void LoadItemsIfNecessary()

@@ -15,21 +15,23 @@ namespace TravelOrderRecorder
             {
                 return;
             }
-            if (!IsLjubljanaNetwork())
-            {
-                return;
-            }
-
-            string title = "Potni nalog";
-            string message = "Zabelezim potni nalog?";
 
             DialogResult answer;
-            using (var form = new Form())
+            try
             {
-                answer = MessageBox.Show(
-                    form, message, title, MessageBoxButtons.YesNo,
-                    MessageBoxIcon.None, MessageBoxDefaultButton.Button1,
-                    (MessageBoxOptions) 0x40000);
+                if (!IsLjubljanaNetwork())
+                {
+                    return;
+                }
+                answer = RecordTravelOrderMessage();
+            }
+            catch (Exception e)
+            {
+                answer = RecordTravelOrderMessage(e);
+                if (answer == DialogResult.Cancel)
+                {
+                    return;
+                }
             }
 
             bool isTravelOrder = answer == DialogResult.Yes;
@@ -41,6 +43,45 @@ namespace TravelOrderRecorder
             });
 
             TravelOrdersCollection.Instance.Save();
+        }
+
+        private DialogResult RecordTravelOrderMessage(Exception ex = null)
+        {
+            string title = "Potni nalog";
+
+            string message;
+            if (ex == null)
+            {
+                message = "Zabelezim potni nalog?";
+            }
+            else
+            {
+                StringBuilder builder = new StringBuilder();
+                builder.Append("Prislo je do napake pri preverjanju omrezij. ");
+                builder.Append("Vseeno zabelezim potni nalog?");
+                builder.Append(Environment.NewLine);
+                builder.Append(Environment.NewLine);
+                builder.Append(ex);
+                message = builder.ToString();
+            }
+
+            using (var form = new Form())
+            {
+                var buttons = MessageBoxButtons.YesNo;
+                var focusedButton = MessageBoxDefaultButton.Button1;
+
+                if (ex != null)
+                {
+                    buttons = MessageBoxButtons.YesNoCancel;
+                    focusedButton = MessageBoxDefaultButton.Button3;
+                }
+
+                DialogResult answer = MessageBox.Show(
+                    form, message, title, buttons, MessageBoxIcon.None,
+                    focusedButton, (MessageBoxOptions) 0x40000);
+
+                return answer;
+            }
         }
 
         private bool IsLjubljanaNetwork()

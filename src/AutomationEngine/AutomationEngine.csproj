@@ -149,6 +149,8 @@
     <Compile Include="ReloadGuard.cs" />
     <Compile Include="AbstractValue.cs" />
     <Compile Include="PatternPart.cs" />
+    <Compile Include="VisibilityCondition.cs" />
+    <Compile Include="VisibilityConditionType.cs" />
     <Compile Include="Word.cs" />
     <Compile Include="XmlStorage.cs" />
     <EmbeddedResource Include="AddFileItemForm.resx">
