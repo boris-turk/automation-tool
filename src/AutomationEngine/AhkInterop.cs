@@ -114,6 +114,10 @@ namespace AutomationEngine
 
         public static List<string> GetMessageFileContents()
         {
+            if (!File.Exists(MessageFile))
+            {
+                return new List<string>();
+            }
             return File.ReadAllLines(MessageFile).ToList();
         }
     }
