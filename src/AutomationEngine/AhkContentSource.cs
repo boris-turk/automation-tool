@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace AutomationEngine
 {
+    [Serializable]
     public abstract class AhkContentSource
     {
         protected AhkContentSource()

@@ -1,5 +1,8 @@
+using System;
+
 namespace AutomationEngine
 {
+    [Serializable]
     public class RegexReplacement
     {
         public RegexReplacement()

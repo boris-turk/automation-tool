@@ -44,7 +44,7 @@ namespace AutomationEngine
         public void Execute(ExecutableItem item)
         {
             string[] arguments = item.Arguments.Select(x => x.InteropValue?.Trim('"')).ToArray();
-            foreach (IPluginExecutor plugin in PluginExecutors.Where(x => x.Id == item.ExecutingMethodName))
+            foreach (IPluginExecutor plugin in PluginExecutors.Where(x => x.Id == item.GetExecutingMethodName()))
             {
                 plugin.Execute(arguments);
             }

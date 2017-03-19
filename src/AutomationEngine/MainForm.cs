@@ -101,7 +101,7 @@ namespace AutomationEngine
 
         public void LoadMenuEngine()
         {
-            var rootMenu = AutomationEngine.Menu.LoadFromFile<Menu>(Configuration.MenusFileName);
+            Menu rootMenu = MenuCollection.Instance.GetRootMenu();
             MenuEngine.Start(this, rootMenu);
         }
 

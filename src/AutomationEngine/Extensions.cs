@@ -163,5 +163,21 @@ namespace AutomationEngine
         {
             return timeSpan.ToString(@"h\:mm");
         }
+
+        public static string GetExecutingMethodName(this BaseItem item)
+        {
+            if (!string.IsNullOrWhiteSpace(item.ExecutingMethodName))
+            {
+                return item.ExecutingMethodName;
+            }
+            foreach (Menu menu in item.GetParentMenus())
+            {
+                if (menu.ExecutingMethodName != null)
+                {
+                    return menu.ExecutingMethodName;
+                }
+            }
+            return null;
+        }
     }
 }

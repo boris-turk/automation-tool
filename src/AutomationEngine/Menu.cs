@@ -21,7 +21,6 @@ namespace AutomationEngine
         }
 
         [XmlElement("RawFileSource", typeof(RawFileContentsSource))]
-        [XmlElement("FileSource", typeof(FileDescriptorContentSource))]
         [XmlElement("AhkFunctionSource", typeof(AhkFunctionContentsSource))]
         [XmlElement("PluginSource", typeof(PluginContentSource))]
         public object ContentSource { get; set; }
@@ -34,6 +33,7 @@ namespace AutomationEngine
         [XmlElement("ExecutableItem", typeof(ExecutableItem))]
         [XmlElement("FileItem", typeof(FileItem))]
         [XmlElement("Menu", typeof(Menu))]
+        [XmlElement("ReferencedMenu", typeof(ReferencedMenu))]
         public List<BaseItem> Items { get; set; }
 
         public bool ItemsSpecified => !ContentSourceSpecified;
@@ -67,10 +67,11 @@ namespace AutomationEngine
         {
             foreach (BaseItem item in Items)
             {
-                if (!IsItemVisible(item))
+                if (!IsItemVisible(item) || IsMergedIntoParent(item))
                 {
                     continue;
                 }
+
                 var menu = item as Menu;
 
                 if (menu?.MenuFileName != null)
@@ -97,6 +98,11 @@ namespace AutomationEngine
             }
         }
 
+        private bool IsMergedIntoParent(BaseItem item)
+        {
+            return (item as ReferencedMenu)?.MergedIntoParent ?? false;
+        }
+
         private bool IsItemVisible(BaseItem item)
         {
             if (item.VisibilityCondition?.Type == VisibilityConditionType.WindowTitleRegex)
@@ -109,7 +115,7 @@ namespace AutomationEngine
 
         public void LoadItemsIfNecessary()
         {
-            if (ContentSource == null || ContentSource is FileDescriptorContentSource)
+            if (ContentSource == null)
             {
                 return;
             }
@@ -119,7 +125,6 @@ namespace AutomationEngine
             Items.ForEach(i => i.ParentMenu = this);
 
             ReplaceContextGroups();
-            AssignExecutingMethod();
         }
 
         public void RemoveItem(BaseItem item)
@@ -127,81 +132,9 @@ namespace AutomationEngine
             Items.RemoveAll(x => x.Id == item.Id);
         }
 
-        public Menu Clone()
+        public override BaseItem Clone()
         {
             return Cloner.Clone(this);
-        }
-
-        public virtual void SaveToFile()
-        {
-            if (_fileName == null)
-            {
-                throw new InvalidOperationException("File name not specified.");
-            }
-
-            var noDuplicates = new List<BaseItem>();
-
-            foreach (BaseItem item in Items)
-            {
-                if (noDuplicates.All(x => x.Id != item.Id))
-                {
-                    noDuplicates.Add(item);
-                }
-            }
-
-            foreach (ExecutableItem item in GetAllItems().OfType<ExecutableItem>())
-            {
-                if (item.ExecutingMethodNameAssignedAtRuntime)
-                {
-                    item.ExecutingMethodName = null;
-                }
-            }
-
-            if (NameSpecified)
-            {
-                RemovePrependedMenuNameFromItems();
-            }
-
-            Menu rootMenuCollection = new Menu
-            {
-                Items = noDuplicates
-            };
-            XmlStorage.Save(_fileName, rootMenuCollection);
-
-            XmlStorage.Save(_fileName, this);
-        }
-
-        private void RemovePrependedMenuNameFromItems()
-        {
-            foreach (BaseItem item in GetAllItems())
-            {
-                int index = item.Name.IndexOf(Name + " ", StringComparison.Ordinal);
-                if (index >= 0)
-                {
-                    item.Name = item.Name.Substring(Name.Length + 1);
-                }
-            }
-        }
-
-        public static T LoadFromFile<T>(string fileName) where T : Menu, new()
-        {
-            var menu = XmlStorage.Load<T>(fileName) ?? CreateDefaultEmptyMenu<T>(fileName);
-
-            foreach (BaseItem item in menu.Items)
-            {
-                item.ParentMenu = menu;
-            }
-
-            return menu;
-        }
-
-        private static T CreateDefaultEmptyMenu<T>(string fileName) where T : Menu, new()
-        {
-            return new T
-            {
-                Id = Guid.NewGuid().ToString(),
-                _fileName = fileName
-            };
         }
 
         private void ReplaceContextGroups()
@@ -241,7 +174,7 @@ namespace AutomationEngine
         {
             foreach (string context in item.ContextGroup.Contexts)
             {
-                ExecutableItem additionalItem = item.Clone();
+                ExecutableItem additionalItem = (ExecutableItem)item.Clone();
                 additionalItem.Id = Guid.NewGuid().ToString();
                 additionalItem.ReplacedItemId = item.Id;
                 additionalItem.Context = context;
@@ -253,16 +186,9 @@ namespace AutomationEngine
         public void FinalizeSerialization(string file)
         {
             _fileName = file;
-            PrepareLoadedItems();
-            LoadChildMenus();
-        }
-
-        private void PrepareLoadedItems()
-        {
             this.LoadExecutionTimeStamps();
             ReplaceContextGroups();
             PrependMenuNameToItems();
-            AssignExecutingMethod();
             AssignParentMenu();
         }
 
@@ -274,47 +200,31 @@ namespace AutomationEngine
             }
         }
 
-        private void AssignExecutingMethod()
+        internal void LoadChildMenus()
         {
-            string methodName = GetExecutingMethodName();
-            foreach (ExecutableItem item in GetAllItems().OfType<ExecutableItem>())
+            Items.OfType<ReferencedMenu>().ToList().ForEach(LoadReferencedMenu);
+        }
+
+        private void LoadReferencedMenu(ReferencedMenu menu)
+        {
+            if (menu.MergedIntoParent)
             {
-                if (item.ExecutingMethodName == null)
-                {
-                    item.ExecutingMethodNameAssignedAtRuntime = true;
-                    item.ExecutingMethodName = methodName;
-                }
+                Items.AddRange(CloneReferencedMenuItems(menu));
             }
         }
 
-        private string GetExecutingMethodName()
+        private IEnumerable<BaseItem> CloneReferencedMenuItems(ReferencedMenu menu)
         {
-            if (!string.IsNullOrWhiteSpace(ExecutingMethodName))
+            Menu properMenu = MenuCollection.Instance.GetMenuByAlias(menu.Alias);
+            foreach (BaseItem originalItem in properMenu.GetSelectableItems())
             {
-                return ExecutingMethodName;
+                BaseItem clonedItem = originalItem.Clone();
+                clonedItem.Name = menu.GetProperItemName(clonedItem, originalItem);
+                clonedItem.IsCloned = true;
+                clonedItem.ParentMenu = this;
+                clonedItem.ExecutingMethodName = originalItem.GetExecutingMethodName();
+                yield return clonedItem;
             }
-            foreach (Menu menu in this.GetParentMenus())
-            {
-                if (menu.ExecutingMethodName != null)
-                {
-                    return menu.ExecutingMethodName;
-                }
-            }
-            return null;
-        }
-
-        private void LoadChildMenus()
-        {
-            Items.OfType<Menu>().ToList().ForEach(menu =>
-            {
-                var contentSource = menu.ContentSource as FileDescriptorContentSource;
-                if (contentSource != null)
-                {
-                    var properMenu = LoadFromFile<Menu>(contentSource.Path);
-                    Items.Remove(menu);
-                    Items.Add(properMenu);
-                }
-            });
         }
 
         private void PrependMenuNameToItems()

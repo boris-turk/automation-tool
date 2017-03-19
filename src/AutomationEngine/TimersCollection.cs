@@ -12,8 +12,7 @@ namespace AutomationEngine
     {
         private static readonly object LockObject = new object();
 
-        private static readonly TimersCollection TheInstance = new TimersCollection();
-        public static TimersCollection Instance => TheInstance;
+        public static TimersCollection Instance { get; } = new TimersCollection();
 
         // ReSharper disable once NotAccessedField.Local
         private Timer _timer;

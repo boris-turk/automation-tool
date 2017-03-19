@@ -76,8 +76,6 @@
     <Compile Include="AhkFunctionContentsSource.cs" />
     <Compile Include="AhkVariable.cs" />
     <Compile Include="ApplicationMenu.cs" />
-    <Compile Include="ApplicationMenuCollection.cs" />
-    <Compile Include="ApplicationMenuFileContext.cs" />
     <Compile Include="AhkInterop.cs" />
     <Compile Include="AutomationAction.cs" />
     <Compile Include="DynamicValue.cs" />
@@ -102,6 +100,10 @@
     <Compile Include="IPluginExecutor.cs" />
     <Compile Include="IPluginLoader.cs" />
     <Compile Include="ItemContextMenu.cs" />
+    <Compile Include="MenuCollection.cs" />
+    <Compile Include="NamePart.cs" />
+    <Compile Include="NamePartType.cs" />
+    <Compile Include="ReferencedMenu.cs" />
     <Compile Include="ValueType.cs" />
     <Compile Include="ITimer.cs" />
     <Compile Include="PluginContentSource.cs" />
@@ -114,20 +116,17 @@
     <Compile Include="TimeStamp.cs" />
     <Compile Include="ExecutionTimeStamps.cs" />
     <Compile Include="FileStorage.cs" />
-    <Compile Include="FileDescriptorContentSource.cs" />
     <Compile Include="CopyData.cs" />
     <Compile Include="ExecutableItem.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="FileItem.cs" />
     <Compile Include="FormFactory.cs" />
     <Compile Include="ISerializationFinalizer.cs" />
-    <Compile Include="MenuEntryDeletion.cs" />
     <Compile Include="MessageWindow.cs" />
     <Compile Include="StringValue.cs" />
     <Compile Include="ExecutableItemComparer.cs" />
     <Compile Include="ItemsLoaderFactory.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="FileDescriptorItemsLoader.cs" />
     <Compile Include="IItemsLoader.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

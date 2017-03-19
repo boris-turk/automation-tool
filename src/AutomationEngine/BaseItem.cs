@@ -17,6 +17,7 @@ namespace AutomationEngine
 
         public string Id { get; set; }
 
+        [XmlAttribute]
         public string Alias { get; set; }
 
         public bool AliasSpecified => !string.IsNullOrWhiteSpace(Alias);
@@ -80,6 +81,9 @@ namespace AutomationEngine
         [XmlIgnore]
         public int MatchScore { get; set; }
 
+        [XmlIgnore]
+        public bool IsCloned { get; set; }
+
         public string GetProperName()
         {
             return string.Join(" ", NameWords.Select(x => x.DisplayValue));
@@ -128,5 +132,7 @@ namespace AutomationEngine
                 IsContext = true
             });
         }
+
+        public abstract BaseItem Clone();
     }
 }

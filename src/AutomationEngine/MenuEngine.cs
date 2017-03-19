@@ -159,7 +159,7 @@ namespace AutomationEngine
             }
             if (actionType == ActionType.DeleteMenuEntry)
             {
-                new MenuEntryDeletion(State).Delete();
+                //new MenuEntryDeletion(State).Delete();
             }
         }
 
@@ -199,7 +199,7 @@ namespace AutomationEngine
                 return;
             }
 
-            string executingMethodName = GetExecutingMethodName(executableItem);
+            string executingMethodName = executableItem.GetExecutingMethodName();
 
             ActionType actionType = GetActionType(executableItem);
             if (actionType == ActionType.None && executingMethodName == null)
@@ -242,15 +242,6 @@ namespace AutomationEngine
                 createApplicationMenuForm.ContextRegex = ApplicationContext;
                 createApplicationMenuForm.Show();
             }
-        }
-
-        private string GetExecutingMethodName(ExecutableItem executableItem)
-        {
-            if (executableItem.ExecutingMethodName != null)
-            {
-                return executableItem.ExecutingMethodName;
-            }
-            return State.ActiveMenu?.ExecutingMethodName;
         }
 
         private ActionType GetActionType(ExecutableItem executableItem)

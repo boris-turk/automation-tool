@@ -577,8 +577,9 @@ namespace TravelOrderRecorder
 		private readonly IntPtr _clientHandle;
 
 	    private readonly Dictionary<Guid,WlanInterface> _ifaces = new Dictionary<Guid,WlanInterface>();
+	    private Wlan.WlanNotificationCallbackDelegate _wlanNotificationCallback;
 
-		/// <summary>
+	    /// <summary>
 		/// Creates a new instance of a Native Wifi service client.
 		/// </summary>
 		public WlanClient()
@@ -589,9 +590,9 @@ namespace TravelOrderRecorder
 			try
 			{
 				Wlan.WlanNotificationSource prevSrc;
-				var wlanNotificationCallback = new Wlan.WlanNotificationCallbackDelegate(OnWlanNotification);
+				_wlanNotificationCallback = new Wlan.WlanNotificationCallbackDelegate(OnWlanNotification);
 				Wlan.ThrowIfError(
-					Wlan.WlanRegisterNotification(_clientHandle, Wlan.WlanNotificationSource.All, false, wlanNotificationCallback, IntPtr.Zero, IntPtr.Zero, out prevSrc));
+					Wlan.WlanRegisterNotification(_clientHandle, Wlan.WlanNotificationSource.All, false, _wlanNotificationCallback, IntPtr.Zero, IntPtr.Zero, out prevSrc));
 			}
 			catch
 			{

@@ -122,27 +122,11 @@ namespace AutomationEngine
                 return;
             }
 
-            ApplicationMenuFileContext applicationMenuFileContext = GetApplicationMenuByContext(ApplicationContext);
-            if (applicationMenuFileContext == null)
+            Menu menu = MenuCollection.Instance.GetApplicationMenu(ApplicationContext);
+            if (menu == null)
             {
                 SetRootMenu(ApplicationMenu.DefaultApplicationMenu);
                 return;
-            }
-
-            string fileName = applicationMenuFileContext.MenuFileName;
-            if (!fileName.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
-            {
-                fileName += ".xml";
-            }
-
-            string directory = Configuration.Instance.ApplicationMenuDirectory;
-            string filePath = Path.Combine(directory, fileName);
-
-            ApplicationMenu menu = Menu.LoadFromFile<ApplicationMenu>(filePath);
-
-            if (!File.Exists(filePath))
-            {
-                menu.SaveToFile();
             }
 
             SetRootMenu(menu);
@@ -191,11 +175,6 @@ namespace AutomationEngine
         {
             _menuStack.Clear();
             _menuStack.Push(menu);
-        }
-
-        private ApplicationMenuFileContext GetApplicationMenuByContext(string context)
-        {
-            return ApplicationMenuCollection.Instance.GetMenuByContext(context);
         }
 
         public void PushSelectedSubmenu()
@@ -265,10 +244,13 @@ namespace AutomationEngine
             ExecutableItem replacedExecutableItem = ActiveMenu
                 .GetAllItems()
                 .OfType<ExecutableItem>()
-                .First(x => x.Id == executableItem.ReplacedItemId);
+                .FirstOrDefault(x => x.Id == executableItem.ReplacedItemId);
 
-            replacedExecutableItem.LastAccess = now;
-            ExecutionTimeStamps.Instance.SetTimeStamp(replacedExecutableItem.Id, now);
+            if (replacedExecutableItem != null)
+            {
+                replacedExecutableItem.LastAccess = now;
+                ExecutionTimeStamps.Instance.SetTimeStamp(replacedExecutableItem.Id, now);
+            }
         }
 
         private void UpdateMenuExecutionTimeStamps()

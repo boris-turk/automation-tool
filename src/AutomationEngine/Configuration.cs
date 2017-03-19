@@ -5,7 +5,6 @@ namespace AutomationEngine
 {
     public class Configuration : FileStorage<Configuration>
     {
-        public static string MenusFileName = "menus.xml";
         public static string ContextPlaceholder = "$context$";
 
         public Configuration()
@@ -22,6 +21,12 @@ namespace AutomationEngine
 
         public string CurrentContext { get; set; }
 
-        public string ApplicationMenuDirectory { get; set; }
+        public string RootMenuAlias { get; set; }
+
+        [XmlArrayItem("Path")]
+        public List<string> MenuPaths { get; set; }
+
+        [XmlArrayItem("Path")]
+        public List<string> ApplicationMenuPaths { get; set; }
     }
 }

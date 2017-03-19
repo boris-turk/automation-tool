@@ -7,11 +7,6 @@ namespace AutomationEngine
     {
         public IItemsLoader GetInstance(object contentSource)
         {
-            var fileDescriptorContentSource = contentSource as FileDescriptorContentSource;
-            if (fileDescriptorContentSource != null)
-            {
-                return new FileDescriptorItemsLoader(fileDescriptorContentSource.Path);
-            }
             var rawFileContentSource = contentSource as RawFileContentsSource;
             if (rawFileContentSource != null)
             {

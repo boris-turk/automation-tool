@@ -12,16 +12,13 @@ namespace AutomationEngine
             Arguments = new List<AbstractValue>();
         }
 
-        [XmlIgnore]
-        public bool ExecutingMethodNameAssignedAtRuntime { get; set; }
-
         [XmlElement("Argument", typeof(StringValue))]
         [XmlElement("AhkArgument", typeof(AhkVariable))]
         [XmlElement("DynamicArgument", typeof(DynamicValue))]
         [XmlElement("ReferencedItemArgument", typeof(ReferencedItemArgument))]
         public List<AbstractValue> Arguments { get; set; }
 
-        public ExecutableItem Clone()
+        public override BaseItem Clone()
         {
             return Cloner.Clone(this);
         }
