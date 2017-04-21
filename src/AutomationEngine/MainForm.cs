@@ -101,6 +101,8 @@ namespace AutomationEngine
 
         public void LoadMenuEngine()
         {
+            MenuCollection.Instance.LoadMenusFromDisk();
+            MenuCollection.Instance.Initialize();
             Menu rootMenu = MenuCollection.Instance.GetRootMenu();
             MenuEngine.Start(this, rootMenu);
         }

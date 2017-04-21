@@ -140,7 +140,7 @@ namespace AutomationEngine
             }
             else
             {
-                Menu menu = RootMenu.FindMenuByAlias(AlternateRootMenuAlias);
+                Menu menu = MenuCollection.Instance.GetMenuByAlias(AlternateRootMenuAlias);
                 SetRootMenu(menu);
             }
         }
@@ -281,11 +281,8 @@ namespace AutomationEngine
                     .LastOrDefault();
             }
 
-            if (newContext != null)
-            {
-                Configuration.Instance.CurrentContext = newContext;
-                Configuration.Instance.Save();
-            }
+            Configuration.Instance.CurrentContext = newContext;
+            Configuration.Instance.Save();
         }
     }
 }

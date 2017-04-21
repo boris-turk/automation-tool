@@ -647,12 +647,19 @@ namespace TravelOrderRecorder
 					        break;
 						case Wlan.WlanNotificationCodeAcm.ScanFail:
 							{
-								int expectedSize = Marshal.SizeOf(typeof (Wlan.WlanReasonCode));
-								if (notifyData.dataSize >= expectedSize)
-								{
-									Wlan.WlanReasonCode reasonCode = (Wlan.WlanReasonCode) Marshal.ReadInt32(notifyData.dataPtr);
-								    wlanIface?.OnWlanReason(notifyData, reasonCode);
-								}
+							    try
+							    {
+                                    int expectedSize = Marshal.SizeOf(typeof(Wlan.WlanReasonCode));
+                                    if (notifyData.dataSize >= expectedSize)
+                                    {
+                                        Wlan.WlanReasonCode reasonCode = (Wlan.WlanReasonCode)Marshal.ReadInt32(notifyData.dataPtr);
+                                        wlanIface?.OnWlanReason(notifyData, reasonCode);
+                                    }
+                                }
+							    catch (Exception e)
+							    {
+							        Console.WriteLine(e);
+							    }
 							}
 							break;
 					}

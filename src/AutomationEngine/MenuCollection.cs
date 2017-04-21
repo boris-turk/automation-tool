@@ -7,38 +7,18 @@ namespace AutomationEngine
 {
     public class MenuCollection
     {
-        private readonly List<Menu> _menus;
-        private bool _initialized;
+        private List<Menu> _menus;
 
-        private static readonly MenuCollection TheInstance = new MenuCollection();
+        public static MenuCollection Instance { get; } = new MenuCollection();
 
-        public static MenuCollection Instance
-        {
-            get
-            {
-                TheInstance.InitializeIfNecessary();
-                return TheInstance;
-            }
-        }
-
-        public MenuCollection()
+        public void LoadMenusFromDisk()
         {
             _menus = new List<Menu>();
-
             _menus.AddRange(LoadMenus<Menu>(Configuration.Instance.MenuPaths));
             _menus.AddRange(LoadMenus<ApplicationMenu>(Configuration.Instance.ApplicationMenuPaths));
         }
 
-        private void InitializeIfNecessary()
-        {
-            if (!_initialized)
-            {
-                _initialized = true;
-                Initialize();
-            }
-        }
-
-        private void Initialize()
+        public void Initialize()
         {
             _menus.ForEach(m => m.LoadChildMenus());
         }
