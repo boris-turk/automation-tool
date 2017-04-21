@@ -123,6 +123,24 @@ namespace AutomationEngine
             }
         }
 
+        public static ActionType GetProperActionType(this ExecutableItem executableItem)
+        {
+            if (executableItem.ActionType != ActionType.None)
+            {
+                return executableItem.ActionType;
+            }
+
+            foreach (Menu parentMenu in executableItem.GetParentMenus())
+            {
+                if (parentMenu.ActionType != ActionType.None)
+                {
+                    return parentMenu.ActionType;
+                }
+            }
+
+            return ActionType.None;
+        }
+
         public static void LoadExecutionTimeStamps(this Menu menu)
         {
             menu.Items.ForEach(SetExecutionTimeStamp);

@@ -196,6 +196,7 @@ namespace AutomationEngine
         {
             foreach (ExecutableItem item in GetAllItems().OfType<ExecutableItem>())
             {
+                item.PersistenceParentMenu = this;
                 item.ParentMenu = this;
             }
         }
@@ -221,6 +222,7 @@ namespace AutomationEngine
                 BaseItem clonedItem = originalItem.Clone();
                 clonedItem.Name = menu.GetProperItemName(clonedItem, originalItem);
                 clonedItem.IsCloned = true;
+                clonedItem.PersistenceParentMenu = originalItem.PersistenceParentMenu;
                 clonedItem.ParentMenu = this;
                 clonedItem.ExecutingMethodName = originalItem.GetExecutingMethodName();
                 yield return clonedItem;

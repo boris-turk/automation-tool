@@ -45,6 +45,9 @@ namespace AutomationEngine
         public bool NameSpecified => !string.IsNullOrWhiteSpace(Name);
 
         [XmlIgnore]
+        public Menu PersistenceParentMenu { get; set; }
+
+        [XmlIgnore]
         public Menu ParentMenu { get; set; }
 
         [XmlIgnore]

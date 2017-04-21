@@ -46,7 +46,7 @@ namespace AutomationEngine
             foreach (Menu menu in Menus)
             {
                 menu.FinalizeSerialization(file);
-                menu.Items.ForEach(i => i.ParentMenu = menu);
+                menu.Items.ForEach(i => i.PersistenceParentMenu = menu);
                 menu.LoadExecutionTimeStamps();
             }
 

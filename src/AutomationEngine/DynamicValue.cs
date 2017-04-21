@@ -6,6 +6,8 @@ namespace AutomationEngine
     [Serializable]
     public class DynamicValue : AbstractValue
     {
+        private BaseItem ItemWithOpenedContextMenu => MenuEngine.Instance.ItemWithOpenedContextMenu;
+
         public override string InteropValue
         {
             get
@@ -16,7 +18,7 @@ namespace AutomationEngine
                 }
                 if (Value == "ActiveMenuFilePath")
                 {
-                    string fileName = MenuEngine.Instance.ItemWithOpenedContextMenu.ParentMenu.MenuFileName;
+                    string fileName = ItemWithOpenedContextMenu?.PersistenceParentMenu?.MenuFileName;
                     if (fileName == null)
                     {
                         return null;

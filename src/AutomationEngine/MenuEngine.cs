@@ -201,7 +201,7 @@ namespace AutomationEngine
 
             string executingMethodName = executableItem.GetExecutingMethodName();
 
-            ActionType actionType = GetActionType(executableItem);
+            ActionType actionType = executableItem.GetProperActionType();
             if (actionType == ActionType.None && executingMethodName == null)
             {
                 return;
@@ -226,7 +226,7 @@ namespace AutomationEngine
 
         private void OnExecutingManagedAction(ExecutableItem executableItem)
         {
-            ActionType actionType = GetActionType(executableItem);
+            ActionType actionType = executableItem.GetProperActionType();
 
             if (actionType == ActionType.ExecutePlugin)
             {
@@ -242,24 +242,6 @@ namespace AutomationEngine
                 createApplicationMenuForm.ContextRegex = ApplicationContext;
                 createApplicationMenuForm.Show();
             }
-        }
-
-        private ActionType GetActionType(ExecutableItem executableItem)
-        {
-            if (executableItem.ActionType != ActionType.None)
-            {
-                return executableItem.ActionType;
-            }
-
-            foreach (Menu parentMenu in executableItem.GetParentMenus())
-            {
-                if (parentMenu.ActionType != ActionType.None)
-                {
-                    return parentMenu.ActionType;
-                }
-            }
-
-            return ActionType.None;
         }
 
         private List<AbstractValue> GetExecutableItemArguments(ExecutableItem executableItem)
@@ -424,7 +406,7 @@ namespace AutomationEngine
                 return null;
             }
 
-            string prefix = SelectedItem?.ParentMenu?.Name;
+            string prefix = SelectedItem?.PersistenceParentMenu?.Name;
             if (prefix != null && name.StartsWith(prefix))
             {
                 return name.Substring(prefix.Length).TrimStart();
