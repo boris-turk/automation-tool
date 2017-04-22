@@ -221,7 +221,7 @@ namespace AutomationEngine
             {
                 BaseItem clonedItem = originalItem.Clone();
                 clonedItem.Name = menu.GetProperItemName(clonedItem, originalItem);
-                clonedItem.IsCloned = true;
+                clonedItem.ClonedFrom = originalItem;
                 clonedItem.PersistenceParentMenu = originalItem.PersistenceParentMenu;
                 clonedItem.ParentMenu = this;
                 clonedItem.ExecutingMethodName = originalItem.GetExecutingMethodName();

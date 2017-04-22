@@ -241,7 +241,7 @@ namespace AutomationEngine
                 return;
             }
 
-            ExecutableItem replacedExecutableItem = ActiveMenu
+            ExecutableItem replacedExecutableItem = executableItem.PersistenceParentMenu
                 .GetAllItems()
                 .OfType<ExecutableItem>()
                 .FirstOrDefault(x => x.Id == executableItem.ReplacedItemId);

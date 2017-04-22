@@ -85,7 +85,7 @@ namespace AutomationEngine
         public int MatchScore { get; set; }
 
         [XmlIgnore]
-        public bool IsCloned { get; set; }
+        public BaseItem ClonedFrom { get; set; }
 
         public string GetProperName()
         {
