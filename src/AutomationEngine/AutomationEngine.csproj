@@ -124,7 +124,6 @@
     <Compile Include="ISerializationFinalizer.cs" />
     <Compile Include="MessageWindow.cs" />
     <Compile Include="StringValue.cs" />
-    <Compile Include="ExecutableItemComparer.cs" />
     <Compile Include="ItemsLoaderFactory.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IItemsLoader.cs" />
