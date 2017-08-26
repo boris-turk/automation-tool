@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Timer = System.Timers.Timer;
@@ -367,7 +368,7 @@ namespace AutomationEngine
         private void LoadItems()
         {
             ListBox.Items.Clear();
-            foreach (BaseItem item in State.MatchingItems)
+            foreach (BaseItem item in State.MatchingItems.Take(100))
             {
                 ListBox.Items.Add(item.GetProperName());
             }
