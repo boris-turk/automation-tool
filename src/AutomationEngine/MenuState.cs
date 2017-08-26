@@ -141,6 +141,7 @@ namespace AutomationEngine
             else
             {
                 Menu menu = MenuCollection.Instance.GetMenuByAlias(AlternateRootMenuAlias);
+                menu.LoadItemsIfNecessary();
                 SetRootMenu(menu);
             }
         }

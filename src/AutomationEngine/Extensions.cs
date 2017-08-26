@@ -123,6 +123,22 @@ namespace AutomationEngine
             }
         }
 
+        public static IEnumerable<BaseItem> ChildItems(this BaseItem item)
+        {
+            yield return item;
+
+            Menu menu = item as Menu;
+            if (menu == null)
+            {
+                yield break;
+            }
+
+            foreach (BaseItem childItem in menu.Items.SelectMany(x => x.ChildItems()))
+            {
+                yield return childItem;
+            }
+        }
+
         public static ActionType GetProperActionType(this ExecutableItem executableItem)
         {
             if (executableItem.ActionType != ActionType.None)

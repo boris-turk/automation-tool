@@ -12,6 +12,10 @@ namespace AutomationEngine
         {
             get
             {
+                if (Value == "ReferencedItemId")
+                {
+                    return $"\"{ItemWithOpenedContextMenu.Id}\"";
+                }
                 if (Value == "ActiveItemId")
                 {
                     return $"\"{MenuEngine.Instance.GetExecutingItemId()}\"";

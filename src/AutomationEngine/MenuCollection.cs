@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -57,7 +58,35 @@ namespace AutomationEngine
 
         public Menu GetMenuByAlias(string alias)
         {
-            return _menus.Single(m => m.Alias == alias);
+            return GetMenuByAlias(alias, _menus);
+        }
+
+        private Menu GetMenuByAlias(string alias, List<Menu> candidates)
+        {
+            Menu candidate = candidates.SingleOrDefault(m => m.Alias == alias);
+            if (candidate != null)
+            {
+                return candidate;
+            }
+            foreach (Menu menu in candidates)
+            {
+                candidate = GetMenuByAlias(alias, menu.Items.OfType<Menu>().ToList());
+                if (candidate != null)
+                {
+                    return candidate;
+                }
+            }
+            return null;
+        }
+
+        public BaseItem GetItemById(string id)
+        {
+            return (
+                from menu in _menus
+                from item in menu.ChildItems()
+                where item.Id == id && item.ClonedFrom == null
+                select item)
+                .Single();
         }
 
         public Menu GetApplicationMenu(string applicationTitle)

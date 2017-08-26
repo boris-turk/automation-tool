@@ -194,7 +194,7 @@ namespace AutomationEngine
 
         private void AssignParentMenu()
         {
-            foreach (ExecutableItem item in GetAllItems().OfType<ExecutableItem>())
+            foreach (BaseItem item in GetAllItems())
             {
                 item.PersistenceParentMenu = this;
                 item.ParentMenu = this;
