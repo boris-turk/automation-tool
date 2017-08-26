@@ -42,5 +42,13 @@ namespace AutomationEngine
             return name.TrimEnd();
         }
 
+        public string GetProperExecutingMethodName(BaseItem original)
+        {
+            if (!string.IsNullOrWhiteSpace(ExecutingMethodName))
+            {
+                return ExecutingMethodName;
+            }
+            return original.GetExecutingMethodName();
+        }
     }
 }

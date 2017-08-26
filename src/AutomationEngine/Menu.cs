@@ -224,7 +224,7 @@ namespace AutomationEngine
                 clonedItem.ClonedFrom = originalItem;
                 clonedItem.PersistenceParentMenu = originalItem.PersistenceParentMenu;
                 clonedItem.ParentMenu = this;
-                clonedItem.ExecutingMethodName = originalItem.GetExecutingMethodName();
+                clonedItem.ExecutingMethodName = menu.GetProperExecutingMethodName(originalItem);
                 yield return clonedItem;
             }
         }
