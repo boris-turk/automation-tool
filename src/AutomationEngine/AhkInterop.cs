@@ -22,6 +22,15 @@ namespace AutomationEngine
             }
         }
 
+        public static List<string> ExecuteFunction(string functionName)
+        {
+            ExecuteFunctionAndWaitForResult(new AhkFunctionTextResult
+            {
+                Function = functionName
+            });
+            return GetMessageFileContents();
+        }
+
         public static List<BaseItem> ExecuteFunction(AhkContentSource source)
         {
             ExecuteFunctionAndWaitForResult(source);

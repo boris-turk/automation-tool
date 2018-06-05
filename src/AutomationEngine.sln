@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelOrderRecording", "Tra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E3kDatabaseDescriptors", "E3kDatabaseDescriptors\E3kDatabaseDescriptors.csproj", "{D0321D1A-F296-434C-A6D3-A63556D3E883}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationExtensions", "AutomationExtensions\AutomationExtensions.csproj", "{A589747D-3B4B-4B09-A2C3-E0D9FB824C27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,14 @@ Global
 		{D0321D1A-F296-434C-A6D3-A63556D3E883}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0321D1A-F296-434C-A6D3-A63556D3E883}.Release|x86.ActiveCfg = Release|Any CPU
 		{D0321D1A-F296-434C-A6D3-A63556D3E883}.Release|x86.Build.0 = Release|Any CPU
+		{A589747D-3B4B-4B09-A2C3-E0D9FB824C27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A589747D-3B4B-4B09-A2C3-E0D9FB824C27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A589747D-3B4B-4B09-A2C3-E0D9FB824C27}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A589747D-3B4B-4B09-A2C3-E0D9FB824C27}.Debug|x86.Build.0 = Debug|Any CPU
+		{A589747D-3B4B-4B09-A2C3-E0D9FB824C27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A589747D-3B4B-4B09-A2C3-E0D9FB824C27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A589747D-3B4B-4B09-A2C3-E0D9FB824C27}.Release|x86.ActiveCfg = Release|Any CPU
+		{A589747D-3B4B-4B09-A2C3-E0D9FB824C27}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

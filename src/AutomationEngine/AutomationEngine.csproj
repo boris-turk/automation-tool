@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="AhkFunctionItemsLoader.cs" />
     <Compile Include="AhkFunctionContentsSource.cs" />
+    <Compile Include="AhkFunctionTextResult.cs" />
     <Compile Include="AhkVariable.cs" />
     <Compile Include="ApplicationMenu.cs" />
     <Compile Include="AhkInterop.cs" />
