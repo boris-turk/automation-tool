@@ -11,5 +11,6 @@
         public const string ToggleGLobalMenuVisibility = "T";
         public const string ToggleContextMenuVisibility = "C";
         public const string AhkFunctionResultReported = "R";
+        public const string StartPlugin = "L";
     }
 }

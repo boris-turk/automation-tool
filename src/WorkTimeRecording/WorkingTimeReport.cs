@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using AutomationEngine;
+﻿using AutomationEngine;
 
 namespace WorkTimeRecording
 {
@@ -11,15 +9,7 @@ namespace WorkTimeRecording
         public void Execute(params string[] arguments)
         {
             var mainForm = FormFactory.Instance<WorkingTimeInput>();
-            mainForm.Project = arguments[0];
-            mainForm.Task = arguments[1];
-
             mainForm.Description = string.Empty;
-            if (arguments.Length > 2)
-            {
-                mainForm.Description = arguments[2];
-            }
-
             mainForm.Show();
         }
     }

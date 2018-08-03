@@ -213,6 +213,14 @@ namespace AutomationEngine
             {
                 FormFactory.Instance<MainForm>().RaiseAhkFunctionResultReportedEvent();
             }
+            else if (mystr.LpData == WindowMessages.StartPlugin)
+            {
+                var pluginName = AhkInterop.GetMessageFileContents().FirstOrDefault();
+                PluginsCollection.Instance.Execute(new ExecutableItem
+                {
+                    ExecutingMethodName = pluginName
+                });
+            }
         }
 
         private void ToggleAutomationEngineVisibility()

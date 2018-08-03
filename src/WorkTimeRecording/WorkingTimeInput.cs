@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Globalization;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using AutomationEngine;
 
@@ -8,89 +10,28 @@ namespace WorkTimeRecording
 {
     public partial class WorkingTimeInput : AutomationEngineForm
     {
-        private readonly TextBoxState _durationTextBoxState;
-        private bool _ignoreDurationChange;
-
         public WorkingTimeInput()
         {
             InitializeComponent();
 
-            _durationTextBoxState = new TextBoxState(_duration);
-            _durationTextBoxState.Save();
-
-            _duration.TextChanged += (sender, args) => OnDurationChanged();
-            _duration.LostFocus += (sender, args) => OnDurationLostFocus();
-
             StartPosition = FormStartPosition.CenterScreen;
         }
 
-        private void OnDurationLostFocus()
-        {
-            _duration.Text = GetDuration().ToTimeSpanString();
-        }
-
-        private void OnDurationChanged()
-        {
-            if (_ignoreDurationChange)
-            {
-                _ignoreDurationChange = false;
-                return;
-            }
-            if (!IsValidDuration() && _duration.Text.Length > 0)
-            {
-                _ignoreDurationChange = true;
-                _durationTextBoxState.Restore();
-            }
-            else
-            {
-                _durationTextBoxState.Save();
-            }
-        }
-
-        public string Project
-        {
-            get { return _project.Text; }
-            set { _project.Text = value; }
-        }
-
-        public string Task
-        {
-            get { return _task.Text; }
-            set { _task.Text = value; }
-        }
+        private static string FilePath => @"xlab\work.txt";
 
         public string Description
         {
-            get { return _description.Text; }
-            set { _description.Text = value; }
+            get => _description.Text;
+            set => _description.Text = value;
         }
 
-        private string DurationText
-        {
-            get
-            {
-                string text = (_duration.Text ?? string.Empty).Trim();
-                if (!text.Contains(":"))
-                {
-                    text += ":";
-                }
-                if (text.EndsWith(":"))
-                {
-                    text += "00";
-                }
-                if (Regex.IsMatch(text, @":\d$"))
-                {
-                    text += "0";
-                }
-                return text;
-            }
-        }
+        private string DateText => _date.Value.Date.ToString("d.M.yyyy");
 
         protected override void OnVisibleChanged(EventArgs e)
         {
             if (Visible)
             {
-                ActiveControl = _duration;
+                ActiveControl = _description;
                 SetDefaultValues();
             }
             base.OnVisibleChanged(e);
@@ -99,51 +40,60 @@ namespace WorkTimeRecording
         private void SetDefaultValues()
         {
             _date.Value = DateTime.Now.Date;
-            _duration.Text = string.Empty;
         }
 
         protected override void OnExecute()
         {
-            var workingTimeEntry = new WorkingTimeEntry
+            List<string> contents = new List<string>();
+            if (File.Exists(FilePath))
             {
-                Date = _date.Value.Date,
-                Description = _description.Text,
-                Duration = GetDuration(),
-                Project = Project,
-                Task = Task
-            };
+                contents = File.ReadAllLines(FilePath).ToList();
+            }
+            AppendDateEntryIfNecessary(contents);
 
-            WorkingTimeStorage.Instance.Entries.Add(workingTimeEntry);
-            WorkingTimeStorage.Instance.Save();
+            int index = contents.FindIndex(x => x.Trim() == DateText);
 
+            var existingEntriesCount = contents
+                .Skip(index)
+                .TakeWhile(x => x.Trim() != "")
+                .Count();
+
+            contents.Insert(index + existingEntriesCount, _description.Text);
+
+            File.WriteAllLines(FilePath, contents);
             ResetContents();
 
             Hide();
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if ((e.Alt || e.Control) && e.KeyCode == Keys.E)
+            {
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+                Hide();
+                Process.Start(FilePath);
+            }
+
+            base.OnKeyDown(e);
+        }
+
+        private void AppendDateEntryIfNecessary(List<string> contents)
+        {
+            if (contents.All(x => x.Trim() != DateText))
+            {
+                contents.AddRange(new[] {"", DateText});
+            }
+        }
+
         private void ResetContents()
         {
-            _duration.Text = string.Empty;
             _description.Text = string.Empty;
-        }
-
-        private TimeSpan GetDuration()
-        {
-            return DurationText.FromTimeSpanString();
-        }
-
-        private bool IsValidDuration()
-        {
-            TimeSpan result;
-            return TimeSpan.TryParseExact(DurationText, @"h\:mm", CultureInfo.InvariantCulture, out result);
         }
 
         protected override string ValidateInput()
         {
-            if (!IsValidDuration() || GetDuration().Ticks <= 0)
-            {
-                return "Invalid duration.";
-            }
             if (string.IsNullOrWhiteSpace(Description))
             {
                 return "Description cannot be empty.";

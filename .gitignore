@@ -184,3 +184,4 @@ FakesAssemblies/
 /ImageCache
 /database
 /Pos/config/ImageCache
+/src/.vs/*

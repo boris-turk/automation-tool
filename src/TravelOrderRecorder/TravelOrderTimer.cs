@@ -88,7 +88,9 @@ namespace TravelOrderRecorder
         {
             WlanClient client = new WlanClient();
             List<string> networks = GetWirelessNetworks(client);
-            return networks.Any(x => x.ToLower().Contains("mukija"));
+            return networks.Any(x =>
+		        x.ToLower().Contains("mukija") ||
+		        x.ToLower().Contains("sistem8"));
         }
 
         private List<string> GetWirelessNetworks(WlanClient client)
