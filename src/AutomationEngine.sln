@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationEngine", "AutomationEngine\AutomationEngine.csproj", "{01F28497-1551-4B7F-B3C7-1F62553349D9}"
 EndProject
@@ -12,6 +12,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E3kDatabaseDescriptors", "E3kDatabaseDescriptors\E3kDatabaseDescriptors.csproj", "{D0321D1A-F296-434C-A6D3-A63556D3E883}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationExtensions", "AutomationExtensions\AutomationExtensions.csproj", "{A589747D-3B4B-4B09-A2C3-E0D9FB824C27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E3kWorkReports", "E3kWorkReports\E3kWorkReports.csproj", "{603CF351-F549-4CCE-9F3B-D9143C627B4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{3140C55B-250E-4460-9E2F-7B4C37475A2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,8 +63,27 @@ Global
 		{A589747D-3B4B-4B09-A2C3-E0D9FB824C27}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A589747D-3B4B-4B09-A2C3-E0D9FB824C27}.Release|x86.ActiveCfg = Release|Any CPU
 		{A589747D-3B4B-4B09-A2C3-E0D9FB824C27}.Release|x86.Build.0 = Release|Any CPU
+		{603CF351-F549-4CCE-9F3B-D9143C627B4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{603CF351-F549-4CCE-9F3B-D9143C627B4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{603CF351-F549-4CCE-9F3B-D9143C627B4F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{603CF351-F549-4CCE-9F3B-D9143C627B4F}.Debug|x86.Build.0 = Debug|Any CPU
+		{603CF351-F549-4CCE-9F3B-D9143C627B4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{603CF351-F549-4CCE-9F3B-D9143C627B4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{603CF351-F549-4CCE-9F3B-D9143C627B4F}.Release|x86.ActiveCfg = Release|Any CPU
+		{603CF351-F549-4CCE-9F3B-D9143C627B4F}.Release|x86.Build.0 = Release|Any CPU
+		{3140C55B-250E-4460-9E2F-7B4C37475A2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3140C55B-250E-4460-9E2F-7B4C37475A2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3140C55B-250E-4460-9E2F-7B4C37475A2F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3140C55B-250E-4460-9E2F-7B4C37475A2F}.Debug|x86.Build.0 = Debug|Any CPU
+		{3140C55B-250E-4460-9E2F-7B4C37475A2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3140C55B-250E-4460-9E2F-7B4C37475A2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3140C55B-250E-4460-9E2F-7B4C37475A2F}.Release|x86.ActiveCfg = Release|Any CPU
+		{3140C55B-250E-4460-9E2F-7B4C37475A2F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {875F5B14-AC1B-4C50-8531-0D65B348B928}
 	EndGlobalSection
 EndGlobal
