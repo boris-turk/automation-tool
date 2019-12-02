@@ -98,7 +98,7 @@ namespace E3kWorkReports
         private void SetMonthName()
         {
             CultureInfo ci = new CultureInfo("en-US");
-            var month = DateTime.Now.ToString("MMMM", ci);
+            var month = DateTime.Now.AddMonths(-1).ToString("MMMM", ci);
             Cells["A1"].Value = $"{(string) Cells["A1"].Value}, {month}";
         }
 

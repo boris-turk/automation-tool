@@ -1,10 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
-using System.Net;
 using E3kWorkReports;
 
 // ReSharper disable StringLiteralTypo
 // ReSharper disable ArgumentsStyleStringLiteral
+// ReSharper disable ArgumentsStyleNamedExpression
 
 namespace Tests
 {
@@ -12,10 +13,13 @@ namespace Tests
     {
         static void Main()
         {
+            var yearMonth = $"{DateTime.Now.Year:0000}-{DateTime.Now.Month - 1:00}";
+            var directory = $@"C:\Users\boris\Dropbox\Work\Projects\E3k\Work_Reports\{yearMonth}";
+
             var generator = new ReportGenerator(
-                directory: @"C:\Users\boris\Dropbox\Work\Projects\E3k\Work_Reports\2019-10",
-                borisFileName: @"vpisi_oseb_projektno_delo_8-11-2019_8-5.xls",
-                andrejFileName: @"vpisi_oseb_projektno_delo_8-11-2019_8-6.xls",
+                directory: directory,
+                borisFileName: @"boris.xls",
+                andrejFileName: @"andrej.xls",
                 borutFileName: @"borut.txt");
 
             if (File.Exists(generator.OutputFilePath))
