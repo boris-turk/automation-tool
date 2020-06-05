@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using AutomationEngine;
 using E3kWorkReports;
 
 // ReSharper disable StringLiteralTypo
@@ -13,7 +14,8 @@ namespace Tests
     {
         static void Main()
         {
-            var yearMonth = $"{DateTime.Now.Year:0000}-{DateTime.Now.Month - 1:00}";
+            var dateTime = DateTime.Now.GetPreviousMonthStart();
+            var yearMonth = $"{dateTime.Year:0000}-{dateTime.Month:00}";
             var directory = $@"C:\Users\boris\Dropbox\Work\Projects\E3k\Work_Reports\{yearMonth}";
 
             var generator = new ReportGenerator(

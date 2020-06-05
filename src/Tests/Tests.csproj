@@ -50,6 +50,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AutomationEngine\AutomationEngine.csproj">
+      <Project>{01F28497-1551-4B7F-B3C7-1F62553349D9}</Project>
+      <Name>AutomationEngine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\E3kWorkReports\E3kWorkReports.csproj">
       <Project>{603CF351-F549-4CCE-9F3B-D9143C627B4F}</Project>
       <Name>E3kWorkReports</Name>

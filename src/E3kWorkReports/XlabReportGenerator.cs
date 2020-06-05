@@ -46,6 +46,13 @@ namespace E3kWorkReports
         private string GetProjectCode(Cells cells, int rowIndex)
         {
             var text = (string)cells[rowIndex, 3].Value ?? "";
+
+            if (text.Trim().Length == 0)
+            {
+                text = (string)cells[rowIndex, 4].Value ?? "";
+                return text == "Razvoj / Voucher editor" ? "STANDARD" : "";
+            }
+
             text = Regex.Replace(text, @"^[^/]*/\s*", "");
             text = text.Trim();
             return text;

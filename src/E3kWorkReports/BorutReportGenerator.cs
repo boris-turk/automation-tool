@@ -49,10 +49,18 @@ namespace E3kWorkReports
 
         private ReportEntry GetSingleEntry(Match match, DateTime date)
         {
+            var allowedProjectCodes = new List<string>()
+            {
+                "INTERNAL", "STANDARD", "TROUBLESHOOTING", "DEDICATED"
+            };
+
             var projectCode = match.Groups["projectCode"].Value.Trim();
             var description = match.Groups["description"].Value.Trim();
             var hours = GetHours(match.Groups["duration"].Value.Trim());
             var task = "New core";
+
+            if (!allowedProjectCodes.Contains(projectCode.ToUpper()))
+                throw new InvalidOperationException($"Invalid project code {projectCode}");
 
             return new ReportEntry
             {

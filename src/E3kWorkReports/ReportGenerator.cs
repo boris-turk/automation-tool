@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Aspose.Cells;
+using AutomationEngine;
 
 // ReSharper disable LocalizableElement
 // ReSharper disable IdentifierTypo
@@ -29,7 +30,8 @@ namespace E3kWorkReports
         {
             get
             {
-                var fileName = $"work_report_{DateTime.Now.Year}_{DateTime.Now.Month - 1:00}.xlsx";
+                var dateTime = DateTime.Now.GetPreviousMonthStart();
+                var fileName = $"work_report_{dateTime.Year}_{dateTime.Month:00}.xlsx";
                 return Path.Combine(Directory, fileName);
             }
         }

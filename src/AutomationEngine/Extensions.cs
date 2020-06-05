@@ -196,5 +196,11 @@ namespace AutomationEngine
             }
             return null;
         }
+
+        public static DateTime GetPreviousMonthStart(this DateTime dateTime)
+        {
+            var temp = dateTime.AddMonths(-1);
+            return new DateTime(temp.Year, temp.Month, 1);
+        }
     }
 }
