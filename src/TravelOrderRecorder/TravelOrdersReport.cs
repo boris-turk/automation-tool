@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using AutomationEngine;
+// ReSharper disable LocalizableElement
 
 namespace TravelOrderRecorder
 {
@@ -26,7 +27,10 @@ namespace TravelOrderRecorder
 
             string result = string.Join(", ", dates);
 
-            Clipboard.SetText(result);
+            if (result.Trim().Length > 0)
+                Clipboard.SetText(result);
+            else
+                MessageBox.Show("There are no work reports.");
         }
     }
 }
