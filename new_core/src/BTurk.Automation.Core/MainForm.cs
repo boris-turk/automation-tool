@@ -3,7 +3,7 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core
 {
-    public partial class MainForm : Form
+    internal partial class MainForm : Form
     {
         public MainForm()
         {

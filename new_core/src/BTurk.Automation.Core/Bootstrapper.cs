@@ -17,7 +17,7 @@ namespace BTurk.Automation.Core
             if (typeof(T) == typeof(MainForm))
                 instance = GetOrCreateSingleton(CreateMainForm);
 
-            if (typeof(T) == typeof(ISearchHandler))
+            if (typeof(T) == typeof(ISearchHandler) || typeof(T) == typeof(ISearchHandlersCollection))
                 instance = GetOrCreateSingleton<MainSearchHandler>();
 
             if (instance == null)

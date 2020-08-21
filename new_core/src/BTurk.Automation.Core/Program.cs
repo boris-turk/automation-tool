@@ -37,7 +37,7 @@ namespace BTurk.Automation.Core
 			}
 			finally
 			{
-                _startupProcess.Dispose();
+                _startupProcess?.Dispose();
 				AppDomain.CurrentDomain.UnhandledException -= OnAppDomainUnhandledException;
 				ReleaseMutex();
             }
