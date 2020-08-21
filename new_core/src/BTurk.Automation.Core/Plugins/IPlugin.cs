@@ -1,4 +1,4 @@
-﻿namespace BTurk.Automation.Core
+﻿namespace BTurk.Automation.Core.Plugins
 {
     public interface IPlugin
     {

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using BTurk.Automation.Core.AssemblyLoading;
 
 namespace BTurk.Automation.Core
 {

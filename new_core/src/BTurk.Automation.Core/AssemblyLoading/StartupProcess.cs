@@ -4,19 +4,16 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BTurk.Automation.Core
+namespace BTurk.Automation.Core.AssemblyLoading
 {
     public class StartupProcess : IDisposable
     {
-        private readonly object _lockObject = new object();
-
 		internal static readonly string CurrentAssemblyDirectory =
 	        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
+        private readonly object _lockObject = new object();
 		private AssemblyManager _assemblyManager;
-
         private FileSystemWatcher _fileSystemWatcher;
-        private DateTime _lastFileChange;
         private bool _assembliesBeingLoaded;
 
         public void Run()
@@ -41,19 +38,14 @@ namespace BTurk.Automation.Core
         {
             var fileSystemWatcher = new FileSystemWatcher
             {
-                //NotifyFilter = NotifyFilters.LastAccess |
-                //               NotifyFilters.LastWrite |
-                //               NotifyFilters.FileName |
-                //               NotifyFilters.DirectoryName
-                NotifyFilter = NotifyFilters.LastWrite
+                Filter = "*.dll",
+                Path = CurrentAssemblyDirectory
             };
 
             fileSystemWatcher.Changed += FileSystemWatcherChanged;
             fileSystemWatcher.Created += FileSystemWatcherChanged;
             fileSystemWatcher.Deleted += FileSystemWatcherChanged;
 
-            fileSystemWatcher.Path = CurrentAssemblyDirectory;
-            fileSystemWatcher.Filter = "*.dll";
             fileSystemWatcher.EnableRaisingEvents = true;
 
             return fileSystemWatcher;

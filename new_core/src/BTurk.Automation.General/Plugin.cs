@@ -1,4 +1,4 @@
-﻿using BTurk.Automation.Core;
+﻿using BTurk.Automation.Core.Plugins;
 
 namespace BTurk.Automation.General
 {

@@ -4,7 +4,7 @@ using System.IO;
 // ReSharper disable LocalizableElement
 // ReSharper disable AssignNullToNotNullAttribute
 
-namespace BTurk.Automation.Core
+namespace BTurk.Automation.Core.AssemblyLoading
 {
     public class AssemblyManager
     {

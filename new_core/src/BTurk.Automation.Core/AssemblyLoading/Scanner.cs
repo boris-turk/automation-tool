@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Permissions;
+using BTurk.Automation.Core.Plugins;
 
-namespace BTurk.Automation.Core
+namespace BTurk.Automation.Core.AssemblyLoading
 {
     [Serializable]
     internal class Scanner : MarshalByRefObject
