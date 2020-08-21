@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core
 {
@@ -16,5 +9,7 @@ namespace BTurk.Automation.Core
         {
             InitializeComponent();
         }
+
+        public ISearchHandler SearchHandler { get; set; }
     }
 }

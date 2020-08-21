@@ -27,7 +27,7 @@ namespace BTurk.Automation.Core
 
 			try
             {
-                var mainForm = new MainForm();
+                var mainForm = Bootstrapper.GetInstance<MainForm>();
                 mainForm.Load += (_, __) => OnMainFormLoaded();
                 Application.Run(mainForm);
 			}

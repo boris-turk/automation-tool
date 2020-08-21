@@ -1,8 +1,10 @@
-﻿namespace BTurk.Automation.Core.Plugins
+﻿using BTurk.Automation.Core.SearchEngine;
+
+namespace BTurk.Automation.Core.Plugins
 {
     public interface IPlugin
     {
-        void Setup(string executingDirectory);
+        void Setup(ISearchHandlersCollection collection);
         void Teardown();
     }
 }

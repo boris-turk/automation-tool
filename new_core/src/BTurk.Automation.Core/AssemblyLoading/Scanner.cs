@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Permissions;
 using BTurk.Automation.Core.Plugins;
+using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.AssemblyLoading
 {
@@ -42,8 +43,9 @@ namespace BTurk.Automation.Core.AssemblyLoading
 
         public void Setup(string executingDirectory)
         {
+            var searchHandlersCollection = Bootstrapper.GetInstance<ISearchHandlersCollection>();
             LoadAllPlugins(AppDomain.CurrentDomain);
-            _plugins.ForEach(p => p.Setup(executingDirectory));
+            _plugins.ForEach(p => p.Setup(searchHandlersCollection));
         }
 
         public void Teardown()
