@@ -79,9 +79,17 @@
       <Project>{A48DC1B5-1E2B-41C1-AB49-998D95085B48}</Project>
       <Name>BTurk.Automation.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BTurk.Automation.E3k\BTurk.Automation.E3k.csproj">
+      <Project>{FF0E9FF3-7CEC-430D-97A8-FBF79121A727}</Project>
+      <Name>BTurk.Automation.E3k</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BTurk.Automation.Host\BTurk.Automation.Host.csproj">
       <Project>{BB0A2819-0EF2-4BA9-829C-CC0621CD10C0}</Project>
       <Name>BTurk.Automation.Host</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BTurk.Automation.Standard\BTurk.Automation.Standard.csproj">
+      <Project>{B15CAF22-4AF9-44D9-AE9B-9F6338AA9232}</Project>
+      <Name>BTurk.Automation.Standard</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

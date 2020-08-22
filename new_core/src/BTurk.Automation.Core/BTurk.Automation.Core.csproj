@@ -44,7 +44,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchEngine\ActionType.cs" />
     <Compile Include="SearchEngine\ISearchHandler.cs" />
-    <Compile Include="SearchEngine\ISearchHandlersCollection.cs" />
     <Compile Include="SearchEngine\MainSearchHandler.cs" />
     <Compile Include="SearchEngine\SearchItem.cs" />
     <Compile Include="SearchEngine\SearchParameters.cs" />

@@ -4,19 +4,14 @@ using System.Collections.Generic;
 namespace BTurk.Automation.Core.SearchEngine
 {
     [Serializable]
-    public class MainSearchHandler : ISearchHandler, ISearchHandlersCollection
+    public class MainSearchHandler : ISearchHandler
     {
-        private readonly List<ISearchHandler> _handlers = new List<ISearchHandler>();
         private ISearchHandler _activeHandler;
+        private readonly List<ISearchHandler> _searchHandlers;
 
-        public void AddHandler(ISearchHandler handler)
+        public MainSearchHandler(List<ISearchHandler> searchHandlers)
         {
-            _handlers.Add(handler);
-        }
-
-        public void RemoveHandler(ISearchHandler handler)
-        {
-            _handlers.Remove(handler);
+            _searchHandlers = searchHandlers;
         }
 
         public SearchResultsCollection Handle(SearchParameters parameters)
@@ -31,7 +26,7 @@ namespace BTurk.Automation.Core.SearchEngine
 
             var allSearchItems = new List<SearchItem>();
 
-            foreach (var handler in _handlers)
+            foreach (var handler in _searchHandlers)
             {
                 var result = handler.Handle(parameters);
 
