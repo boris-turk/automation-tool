@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using BTurk.Automation.Core.SearchEngine;
+using BTurk.Automation.Host.SearchEngine;
 
-namespace BTurk.Automation.Core
+namespace BTurk.Automation.Host
 {
     internal partial class MainForm : Form
     {

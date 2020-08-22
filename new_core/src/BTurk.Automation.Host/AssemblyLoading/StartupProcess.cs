@@ -3,9 +3,9 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using BTurk.Automation.Core.SearchEngine;
+using BTurk.Automation.Host.SearchEngine;
 
-namespace BTurk.Automation.Core.AssemblyLoading
+namespace BTurk.Automation.Host.AssemblyLoading
 {
     public class StartupProcess : IDisposable, ISearchHandler
     {

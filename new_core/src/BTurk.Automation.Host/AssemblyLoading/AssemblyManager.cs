@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
-using BTurk.Automation.Core.SearchEngine;
+using BTurk.Automation.Host.SearchEngine;
 
 // ReSharper disable LocalizableElement
 // ReSharper disable AssignNullToNotNullAttribute
 
-namespace BTurk.Automation.Core.AssemblyLoading
+namespace BTurk.Automation.Host.AssemblyLoading
 {
     public class AssemblyManager
     {

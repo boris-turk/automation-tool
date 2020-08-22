@@ -46,9 +46,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BTurk.Automation.Core\BTurk.Automation.Core.csproj">
+    <ProjectReference Include="..\BTurk.Automation.Host\BTurk.Automation.Host.csproj">
       <Project>{BB0A2819-0EF2-4BA9-829C-CC0621CD10C0}</Project>
-      <Name>BTurk.Automation.Core</Name>
+      <Name>BTurk.Automation.Host</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

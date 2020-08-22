@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Permissions;
-using BTurk.Automation.Core.Plugins;
-using BTurk.Automation.Core.SearchEngine;
+using BTurk.Automation.Host.Plugins;
+using BTurk.Automation.Host.SearchEngine;
 
-namespace BTurk.Automation.Core.AssemblyLoading
+namespace BTurk.Automation.Host.AssemblyLoading
 {
     [Serializable]
     internal class Scanner : MarshalByRefObject

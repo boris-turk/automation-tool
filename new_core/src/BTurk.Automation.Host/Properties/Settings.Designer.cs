@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BTurk.Automation.Core.Properties
+namespace BTurk.Automation.Host.Properties
 {
 
 

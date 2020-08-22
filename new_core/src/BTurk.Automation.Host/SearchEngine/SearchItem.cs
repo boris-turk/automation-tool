@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BTurk.Automation.Core.SearchEngine
+namespace BTurk.Automation.Host.SearchEngine
 {
     [Serializable]
     public class SearchItem

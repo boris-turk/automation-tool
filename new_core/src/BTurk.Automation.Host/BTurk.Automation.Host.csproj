@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{BB0A2819-0EF2-4BA9-829C-CC0621CD10C0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>BTurk.Automation.Core</RootNamespace>
-    <AssemblyName>BTurk.Automation.Core</AssemblyName>
+    <RootNamespace>BTurk.Automation.Host</RootNamespace>
+    <AssemblyName>BTurk.Automation.Host</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <Reference Include="System.Host" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />

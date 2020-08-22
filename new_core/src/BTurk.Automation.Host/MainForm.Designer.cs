@@ -1,4 +1,4 @@
-﻿namespace BTurk.Automation.Core
+﻿namespace BTurk.Automation.Host
 {
     partial class MainForm
     {
@@ -83,7 +83,7 @@
             // _workInProgressPictureBox
             // 
             this._workInProgressPictureBox.BackColor = System.Drawing.Color.White;
-            this._workInProgressPictureBox.Image = global::BTurk.Automation.Core.Properties.Resources.loader;
+            this._workInProgressPictureBox.Image = global::BTurk.Automation.Host.Properties.Resources.loader;
             this._workInProgressPictureBox.Location = new System.Drawing.Point(12, 77);
             this._workInProgressPictureBox.Name = "_workInProgressPictureBox";
             this._workInProgressPictureBox.Size = new System.Drawing.Size(599, 364);

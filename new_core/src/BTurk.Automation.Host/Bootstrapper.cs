@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using BTurk.Automation.Core.SearchEngine;
+using BTurk.Automation.Host.SearchEngine;
 
-namespace BTurk.Automation.Core
+namespace BTurk.Automation.Host
 {
     public static class Bootstrapper
     {

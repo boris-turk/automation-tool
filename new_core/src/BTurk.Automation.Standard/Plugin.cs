@@ -1,6 +1,6 @@
-﻿using BTurk.Automation.Core;
-using BTurk.Automation.Core.Plugins;
-using BTurk.Automation.Core.SearchEngine;
+﻿using BTurk.Automation.Host;
+using BTurk.Automation.Host.Plugins;
+using BTurk.Automation.Host.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {

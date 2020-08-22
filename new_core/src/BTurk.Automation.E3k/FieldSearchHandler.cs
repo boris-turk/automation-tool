@@ -1,4 +1,4 @@
-﻿using BTurk.Automation.Core.SearchEngine;
+﻿using BTurk.Automation.Host.SearchEngine;
 
 namespace BTurk.Automation.E3k
 {

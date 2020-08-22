@@ -2,9 +2,9 @@
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using BTurk.Automation.Core.AssemblyLoading;
+using BTurk.Automation.Host.AssemblyLoading;
 
-namespace BTurk.Automation.Core
+namespace BTurk.Automation.Host
 {
     public static class Program
     {

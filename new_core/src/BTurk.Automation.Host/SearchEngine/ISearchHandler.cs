@@ -1,4 +1,4 @@
-﻿namespace BTurk.Automation.Core.SearchEngine
+﻿namespace BTurk.Automation.Host.SearchEngine
 {
     public interface ISearchHandler
     {
