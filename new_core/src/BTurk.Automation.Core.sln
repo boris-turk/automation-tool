@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.1062
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTurk.Automation.Core", "BTurk.Automation.Core\BTurk.Automation.Core.csproj", "{BB0A2819-0EF2-4BA9-829C-CC0621CD10C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTurk.Automation.General", "BTurk.Automation.General\BTurk.Automation.General.csproj", "{B15CAF22-4AF9-44D9-AE9B-9F6338AA9232}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTurk.Automation.Standard", "BTurk.Automation.Standard\BTurk.Automation.Standard.csproj", "{B15CAF22-4AF9-44D9-AE9B-9F6338AA9232}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

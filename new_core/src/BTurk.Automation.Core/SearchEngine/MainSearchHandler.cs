@@ -9,10 +9,6 @@ namespace BTurk.Automation.Core.SearchEngine
         private readonly List<ISearchHandler> _handlers = new List<ISearchHandler>();
         private ISearchHandler _activeHandler;
 
-        public MainSearchHandler()
-        {
-        }
-
         public void AddHandler(ISearchHandler handler)
         {
             _handlers.Add(handler);

@@ -1,6 +1,6 @@
 ﻿using BTurk.Automation.Core.SearchEngine;
 
-namespace BTurk.Automation.General
+namespace BTurk.Automation.Standard
 {
     public class CommitSearchHandler : ISearchHandler
     {

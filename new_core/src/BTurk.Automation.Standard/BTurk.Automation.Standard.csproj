@@ -7,8 +7,8 @@
     <ProjectGuid>{B15CAF22-4AF9-44D9-AE9B-9F6338AA9232}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BTurk.Automation.General</RootNamespace>
-    <AssemblyName>BTurk.Automation.General</AssemblyName>
+    <RootNamespace>BTurk.Automation.Standard</RootNamespace>
+    <AssemblyName>BTurk.Automation.Standard</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

@@ -2,7 +2,7 @@
 using BTurk.Automation.Core.Plugins;
 using BTurk.Automation.Core.SearchEngine;
 
-namespace BTurk.Automation.General
+namespace BTurk.Automation.Standard
 {
     public class Plugin : IPlugin
     {
