@@ -23,7 +23,7 @@ namespace BTurk.Automation.DependencyResolution
                 instance = GetOrCreateSingleton(MainSearchHandler);
 
             if (instance == null)
-                throw new InvalidOperationException($"Failed to create instance of type {typeof(T).Name}");
+                throw FailedToCreateInstance<T>();
 
             return (T)instance;
         }
@@ -73,6 +73,11 @@ namespace BTurk.Automation.DependencyResolution
             {
                 if (lockTaken) Monitor.Exit(Singletons);
             }
+        }
+
+        private static InvalidOperationException FailedToCreateInstance<T>()
+        {
+            return new InvalidOperationException($"Failed to create instance of type {typeof(T).Name}");
         }
     }
 }
