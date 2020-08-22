@@ -27,8 +27,14 @@ namespace BTurk.Automation.Core
 
 			try
             {
-                var mainForm = Bootstrapper.GetInstance<MainForm>();
-                mainForm.Load += (_, __) => OnMainFormLoaded();
+                _startupProcess = new StartupProcess();
+                _startupProcess.Run();
+
+                var mainForm = new MainForm
+                {
+                    SearchHandler = _startupProcess
+                };
+
                 Application.Run(mainForm);
 			}
 			catch (Exception e)
@@ -41,12 +47,6 @@ namespace BTurk.Automation.Core
 				AppDomain.CurrentDomain.UnhandledException -= OnAppDomainUnhandledException;
 				ReleaseMutex();
             }
-        }
-
-        private static void OnMainFormLoaded()
-        {
-            _startupProcess = new StartupProcess();
-            _startupProcess.Run();
         }
 
         private static bool CreateMutex()

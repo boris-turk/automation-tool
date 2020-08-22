@@ -6,16 +6,13 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core
 {
-    public class Bootstrapper
+    public static class Bootstrapper
     {
         private static readonly List<object> Singletons = new List<object>();
 
         public static T GetInstance<T>()
         {
             object instance = null;
-
-            if (typeof(T) == typeof(MainForm))
-                instance = GetOrCreateSingleton(CreateMainForm);
 
             if (typeof(T) == typeof(ISearchHandler) || typeof(T) == typeof(ISearchHandlersCollection))
                 instance = GetOrCreateSingleton<MainSearchHandler>();
@@ -53,14 +50,6 @@ namespace BTurk.Automation.Core
             {
                 if (lockTaken) Monitor.Exit(Singletons);
             }
-        }
-
-        private static MainForm CreateMainForm()
-        {
-            return new MainForm
-            {
-                SearchHandler = GetInstance<ISearchHandler>()
-            };
         }
     }
 }

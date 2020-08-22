@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using BTurk.Automation.Core.SearchEngine;
 
 // ReSharper disable LocalizableElement
 // ReSharper disable AssignNullToNotNullAttribute
@@ -26,7 +27,8 @@ namespace BTurk.Automation.Core.AssemblyLoading
                     var name = Path.GetFileNameWithoutExtension(path);
                     _scanner.Load(name);
                 }
-                _scanner.Setup(StartupProcess.CurrentAssemblyDirectory);
+
+                _scanner.Setup();
 			}
 			catch (Exception e)
 	        {
@@ -60,9 +62,14 @@ namespace BTurk.Automation.Core.AssemblyLoading
         }
 
         private void Teardown()
-	    {
+        {
 			_scanner?.Teardown();
 			AppDomain.Unload(_domain);
 		}
+
+        public SearchResultsCollection Handle(string text)
+        {
+            return _scanner.Handle(text);
+        }
     }
 }

@@ -1,10 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BTurk.Automation.Core.SearchEngine
 {
+    [Serializable]
     public class MainSearchHandler : ISearchHandler, ISearchHandlersCollection
     {
         private readonly List<ISearchHandler> _handlers = new List<ISearchHandler>();
+        private ISearchHandler _activeHandler;
+
+        public MainSearchHandler()
+        {
+        }
 
         public void AddHandler(ISearchHandler handler)
         {
@@ -16,20 +23,32 @@ namespace BTurk.Automation.Core.SearchEngine
             _handlers.Remove(handler);
         }
 
-        public SearchResult Handle(string text)
+        public SearchResultsCollection Handle(string text)
         {
-            if (string.IsNullOrWhiteSpace(text))
-                return SearchResult.Empty;
+            if (_activeHandler != null)
+            {
+                var result = _activeHandler.Handle(text);
+
+                if (result.IsActive)
+                    return result;
+            }
+
+            var allSearchItems = new List<SearchItem>();
 
             foreach (var handler in _handlers)
             {
                 var result = handler.Handle(text);
 
-                if (result != SearchResult.Empty)
+                if (result.IsActive)
+                {
+                    _activeHandler = handler;
                     return result;
+                }
+
+                allSearchItems.AddRange(result.Items);
             }
 
-            return SearchResult.Empty;
+            return new SearchResultsCollection(allSearchItems);
         }
     }
 }

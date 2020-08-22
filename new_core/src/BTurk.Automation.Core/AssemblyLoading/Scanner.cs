@@ -39,13 +39,15 @@ namespace BTurk.Automation.Core.AssemblyLoading
 
 			_plugins.Clear();
 			_plugins.AddRange(instances);
+
+            if (!_plugins.Any())
+                throw new InvalidOperationException("No plugin assemblies found");
 		}
 
-        public void Setup(string executingDirectory)
+        public void Setup()
         {
-            var searchHandlersCollection = Bootstrapper.GetInstance<ISearchHandlersCollection>();
             LoadAllPlugins(AppDomain.CurrentDomain);
-            _plugins.ForEach(p => p.Setup(searchHandlersCollection));
+            _plugins.ForEach(p => p.Setup());
         }
 
         public void Teardown()
@@ -56,6 +58,12 @@ namespace BTurk.Automation.Core.AssemblyLoading
         public void Load(string name)
         {
             Assembly.Load(name);
+        }
+
+        public SearchResultsCollection Handle(string text)
+        {
+            var handler = Bootstrapper.GetInstance<ISearchHandler>();
+            return handler.Handle(text);
         }
     }
 }

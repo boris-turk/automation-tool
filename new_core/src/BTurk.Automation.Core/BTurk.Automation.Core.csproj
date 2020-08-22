@@ -62,11 +62,15 @@
     <Compile Include="SearchEngine\ISearchHandler.cs" />
     <Compile Include="SearchEngine\ISearchHandlersCollection.cs" />
     <Compile Include="SearchEngine\MainSearchHandler.cs" />
-    <Compile Include="SearchEngine\SearchResult.cs" />
+    <Compile Include="SearchEngine\SearchItem.cs" />
+    <Compile Include="SearchEngine\SearchResultsCollection.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -86,5 +90,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\loader.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,10 +3,11 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.AssemblyLoading
 {
-    public class StartupProcess : IDisposable
+    public class StartupProcess : IDisposable, ISearchHandler
     {
 		internal static readonly string CurrentAssemblyDirectory =
 	        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -83,5 +84,10 @@ namespace BTurk.Automation.Core.AssemblyLoading
         }
 
         public void Dispose() => _fileSystemWatcher?.Dispose();
+
+        public SearchResultsCollection Handle(string text)
+        {
+            return _assemblyManager.Handle(text);
+        }
     }
 }
