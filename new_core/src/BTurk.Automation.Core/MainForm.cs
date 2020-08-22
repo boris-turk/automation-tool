@@ -17,6 +17,7 @@ namespace BTurk.Automation.Core
         {
             InitializeComponent();
             TopMost = true;
+            KeyPreview = true;
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.Manual;
             Location = new Point(OutOfScreenOffset, OutOfScreenOffset);
@@ -60,6 +61,24 @@ namespace BTurk.Automation.Core
             }
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Hide();
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+            }
+            else if (!e.Alt && !e.Control && !e.Shift && e.KeyCode == Keys.Enter)
+            {
+                TriggerAction(ActionType.Execution);
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+            }
+
+            base.OnKeyDown(e);
+        }
+
         protected override void OnShown(EventArgs e)
         {
             if (Debugger.IsAttached)
@@ -68,7 +87,7 @@ namespace BTurk.Automation.Core
                 Visible = false;
 
             if (string.IsNullOrWhiteSpace(TextBox.Text))
-                ReloadSearchResults();
+                TriggerAction(ActionType.TextChanged);
             else
                 TextBox.Text = "";
 
@@ -77,14 +96,14 @@ namespace BTurk.Automation.Core
 
         protected override void OnLoad(EventArgs e)
         {
-            ReloadSearchResults();
-            TextBox.TextChanged += (_, __) => ReloadSearchResults();
+            TextBox.TextChanged += (_, __) => TriggerAction(ActionType.TextChanged);
             base.OnLoad(e);
         }
 
-        public void ReloadSearchResults()
+        public void TriggerAction(ActionType actionType)
         {
-            var result = SearchHandler.Handle(TextBox.Text);
+            var searchParameters = new SearchParameters(TextBox.Text, actionType);
+            var result = SearchHandler.Handle(searchParameters);
 
             ListBox.Items.Clear();
 

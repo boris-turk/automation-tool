@@ -60,10 +60,10 @@ namespace BTurk.Automation.Core.AssemblyLoading
             Assembly.Load(name);
         }
 
-        public SearchResultsCollection Handle(string text)
+        public SearchResultsCollection Handle(SearchParameters parameters)
         {
             var handler = Bootstrapper.GetInstance<ISearchHandler>();
-            return handler.Handle(text);
+            return handler.Handle(parameters);
         }
     }
 }

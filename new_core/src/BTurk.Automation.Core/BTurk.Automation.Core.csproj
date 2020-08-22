@@ -63,7 +63,9 @@
     <Compile Include="SearchEngine\ISearchHandlersCollection.cs" />
     <Compile Include="SearchEngine\MainSearchHandler.cs" />
     <Compile Include="SearchEngine\SearchItem.cs" />
+    <Compile Include="SearchEngine\SearchParameters.cs" />
     <Compile Include="SearchEngine\SearchResultsCollection.cs" />
+    <Compile Include="SearchEngine\ActionType.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

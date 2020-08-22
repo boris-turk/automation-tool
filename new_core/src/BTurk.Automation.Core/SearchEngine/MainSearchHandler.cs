@@ -19,11 +19,11 @@ namespace BTurk.Automation.Core.SearchEngine
             _handlers.Remove(handler);
         }
 
-        public SearchResultsCollection Handle(string text)
+        public SearchResultsCollection Handle(SearchParameters parameters)
         {
             if (_activeHandler != null)
             {
-                var result = _activeHandler.Handle(text);
+                var result = _activeHandler.Handle(parameters);
 
                 if (result.IsActive)
                     return result;
@@ -33,7 +33,7 @@ namespace BTurk.Automation.Core.SearchEngine
 
             foreach (var handler in _handlers)
             {
-                var result = handler.Handle(text);
+                var result = handler.Handle(parameters);
 
                 if (result.IsActive)
                 {

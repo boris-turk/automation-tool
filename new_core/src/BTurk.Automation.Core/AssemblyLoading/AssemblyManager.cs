@@ -67,9 +67,9 @@ namespace BTurk.Automation.Core.AssemblyLoading
 			AppDomain.Unload(_domain);
 		}
 
-        public SearchResultsCollection Handle(string text)
+        public SearchResultsCollection Handle(SearchParameters parameters)
         {
-            return _scanner.Handle(text);
+            return _scanner.Handle(parameters);
         }
     }
 }

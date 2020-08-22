@@ -2,6 +2,6 @@
 {
     public interface ISearchHandler
     {
-        SearchResultsCollection Handle(string text);
+        SearchResultsCollection Handle(SearchParameters parameters);
     }
 }

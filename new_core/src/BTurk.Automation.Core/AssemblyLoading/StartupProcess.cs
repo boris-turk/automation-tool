@@ -85,9 +85,9 @@ namespace BTurk.Automation.Core.AssemblyLoading
 
         public void Dispose() => _fileSystemWatcher?.Dispose();
 
-        public SearchResultsCollection Handle(string text)
+        public SearchResultsCollection Handle(SearchParameters parameters)
         {
-            return _assemblyManager.Handle(text);
+            return _assemblyManager.Handle(parameters);
         }
     }
 }

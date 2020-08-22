@@ -8,22 +8,23 @@ namespace BTurk.Automation.Core.SearchEngine
     {
         public bool IsActive { get; set; }
 
-        public IEnumerable<SearchItem> Items { get; }
+        public List<SearchItem> Items { get; } = new List<SearchItem>();
 
         private SearchResultsCollection(SearchItem item)
+            : this(new[] {item})
         {
-            Items = new[] {item};
         }
 
         public SearchResultsCollection(IEnumerable<SearchItem> items)
         {
-            Items = items;
+            IsActive = true;
+            Items.AddRange(items);
         }
 
         public static SearchResultsCollection Single(string name)
         {
             var item = new SearchItem { Text = name };
-            return new SearchResultsCollection(item);
+            return new SearchResultsCollection(item) { IsActive = false };
         }
     }
 }
