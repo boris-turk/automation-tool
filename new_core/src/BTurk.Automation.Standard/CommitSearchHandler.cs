@@ -9,10 +9,7 @@ namespace BTurk.Automation.Standard
     {
         public SearchResultsCollection Handle(SearchParameters parameters)
         {
-            var match = Regex.Match(parameters.Text, @"co\s(?<repo>.*)");
-
-            if (parameters.ActionType == ActionType.Execution)
-                Process.Start("mspaint.exe");
+            var match = Regex.Match(parameters.Text, @"commit\s(?<repo>.*)");
 
             if (match.Success)
                 return new SearchResultsCollection(GetRepositories());
