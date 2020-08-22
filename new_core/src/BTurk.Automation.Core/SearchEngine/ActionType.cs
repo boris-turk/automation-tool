@@ -1,4 +1,4 @@
-﻿namespace BTurk.Automation.Host.SearchEngine
+﻿namespace BTurk.Automation.Core.SearchEngine
 {
     public enum ActionType
     {

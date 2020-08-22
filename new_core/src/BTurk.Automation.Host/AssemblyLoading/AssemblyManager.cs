@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using BTurk.Automation.Host.SearchEngine;
 
 // ReSharper disable LocalizableElement
 // ReSharper disable AssignNullToNotNullAttribute
@@ -12,17 +11,21 @@ namespace BTurk.Automation.Host.AssemblyLoading
         private AppDomain _domain;
         private Scanner _scanner;
 
-        public void LoadFrom(string[] paths)
+        private string[] GetAssemblyPaths()
         {
-            if (_domain != null)
-				Teardown();
+            return Directory.GetFiles(StartupProcess.CurrentAssemblyDirectory, "*.dll");
+        }
+
+        public void Load()
+        {
+            Unload();
 
             _domain = CreateAppDomain();
 			_scanner = CreateScanner();
 
             try
             {
-                foreach (var path in paths)
+                foreach (var path in GetAssemblyPaths())
                 {
                     var name = Path.GetFileNameWithoutExtension(path);
                     _scanner.Load(name);
@@ -33,8 +36,20 @@ namespace BTurk.Automation.Host.AssemblyLoading
 			catch (Exception e)
 	        {
 				File.AppendAllText(@"ERROR_REPORT.txt", $"{e.Message}{Environment.NewLine}{e.StackTrace}");
-				Teardown();
+				Unload();
 	        }
+        }
+
+        public void Unload()
+        {
+            if (_domain == null)
+                return;
+
+            _scanner?.Unload();
+            _scanner = null;
+
+            AppDomain.Unload(_domain);
+            _domain = null;
         }
 
         private static AppDomain CreateAppDomain()
@@ -59,17 +74,6 @@ namespace BTurk.Automation.Host.AssemblyLoading
             var typeFullName = type.FullName;
             var instance = _domain.CreateInstanceAndUnwrap(assemblyFullName, typeFullName);
             return (Scanner)instance;
-        }
-
-        private void Teardown()
-        {
-			_scanner?.Teardown();
-			AppDomain.Unload(_domain);
-		}
-
-        public SearchResultsCollection Handle(SearchParameters parameters)
-        {
-            return _scanner.Handle(parameters);
         }
     }
 }

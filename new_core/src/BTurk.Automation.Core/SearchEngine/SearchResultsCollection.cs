@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BTurk.Automation.Host.SearchEngine
+namespace BTurk.Automation.Core.SearchEngine
 {
     [Serializable]
     public class SearchResultsCollection

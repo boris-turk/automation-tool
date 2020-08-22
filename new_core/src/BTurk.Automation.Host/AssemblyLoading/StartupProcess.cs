@@ -3,11 +3,10 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using BTurk.Automation.Host.SearchEngine;
 
 namespace BTurk.Automation.Host.AssemblyLoading
 {
-    public class StartupProcess : IDisposable, ISearchHandler
+    public class StartupProcess : IDisposable
     {
 		internal static readonly string CurrentAssemblyDirectory =
 	        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -15,24 +14,32 @@ namespace BTurk.Automation.Host.AssemblyLoading
         private readonly object _lockObject = new object();
 		private AssemblyManager _assemblyManager;
         private FileSystemWatcher _fileSystemWatcher;
-        private bool _assembliesBeingLoaded;
+        private bool _reloadAssemblies;
+        private readonly bool _exit = false;
 
         public void Run()
 		{
 			_assemblyManager = new AssemblyManager();
-            LoadAssemblies();
+            _assemblyManager.Load();
             _fileSystemWatcher = CreateFileSystemWatcher();
-		}
 
-        private static string[] GetAssemblyPaths()
-        {
-            return Directory.GetFiles(CurrentAssemblyDirectory, "*.dll");
+            Loop();
         }
 
-        private void LoadAssemblies()
+        private void Loop()
         {
-            var paths = GetAssemblyPaths();
-            _assemblyManager.LoadFrom(paths);
+            do
+            {
+                Monitor.Enter(_lockObject);
+                Monitor.Wait(_lockObject);
+
+                if (_reloadAssemblies)
+                {
+                    _assemblyManager.Load();
+                    _reloadAssemblies = false;
+                }
+            } while (!_exit);
+            Monitor.Exit(_lockObject);
         }
 
         private FileSystemWatcher CreateFileSystemWatcher()
@@ -56,13 +63,13 @@ namespace BTurk.Automation.Host.AssemblyLoading
         {
             Monitor.Enter(_lockObject);
 
-            if (_assembliesBeingLoaded)
+            if (_reloadAssemblies)
             {
                 Monitor.Exit(_lockObject);
                 return;
             }
 
-            _assembliesBeingLoaded = true;
+            _reloadAssemblies = true;
 
             Monitor.Exit(_lockObject);
 
@@ -70,24 +77,14 @@ namespace BTurk.Automation.Host.AssemblyLoading
             await Task.Delay(TimeSpan.FromSeconds(2));
 
             Monitor.Enter(_lockObject);
-
-            try
-            {
-                _assembliesBeingLoaded = true;
-                LoadAssemblies();
-            }
-            finally
-            {
-                _assembliesBeingLoaded = false;
-                Monitor.Exit(_lockObject);
-            }
+            Monitor.Pulse(_lockObject);
+            Monitor.Exit(_lockObject);
         }
 
-        public void Dispose() => _fileSystemWatcher?.Dispose();
-
-        public SearchResultsCollection Handle(SearchParameters parameters)
+        public void Dispose()
         {
-            return _assemblyManager.Handle(parameters);
+            _assemblyManager?.Unload();
+            _fileSystemWatcher?.Dispose();
         }
     }
 }

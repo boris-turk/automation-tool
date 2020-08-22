@@ -3,15 +3,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using BTurk.Automation.Host.SearchEngine;
+using BTurk.Automation.Core.SearchEngine;
 
-namespace BTurk.Automation.Host
+namespace BTurk.Automation.DependencyResolution
 {
     internal partial class MainForm : Form
     {
         private const int OutOfScreenOffset = -20000;
-
-        public event Action AhkFunctionResultReported;
 
         public MainForm()
         {
@@ -122,9 +120,7 @@ namespace BTurk.Automation.Host
 
             if (ListBox.Items.Count > itemIndex)
             {
-                //_selectedIndexChangedEventDeactivated = true;
                 ListBox.SelectedIndex = itemIndex;
-                //_selectedIndexChangedEventDeactivated = false;
             }
         }
 
@@ -140,11 +136,6 @@ namespace BTurk.Automation.Host
 
             TopMost = true;
             Activate();
-        }
-
-        public void RaiseAhkFunctionResultReportedEvent()
-        {
-            AhkFunctionResultReported?.Invoke();
         }
     }
 }

@@ -29,13 +29,6 @@ namespace BTurk.Automation.Host
             {
                 _startupProcess = new StartupProcess();
                 _startupProcess.Run();
-
-                var mainForm = new MainForm
-                {
-                    SearchHandler = _startupProcess
-                };
-
-                Application.Run(mainForm);
 			}
 			catch (Exception e)
 			{

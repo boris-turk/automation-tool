@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BTurk.Automation.Host.SearchEngine
+namespace BTurk.Automation.Core.SearchEngine
 {
     [Serializable]
     public class SearchParameters

@@ -1,22 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Permissions;
-using BTurk.Automation.Host.Plugins;
-using BTurk.Automation.Host.SearchEngine;
+using System.Threading;
 
 namespace BTurk.Automation.Host.AssemblyLoading
 {
     [Serializable]
     internal class Scanner : MarshalByRefObject
     {
-        private readonly List<IPlugin> _plugins;
-
-	    public Scanner()
-        {
-            _plugins = new List<IPlugin>();
-        }
+        private IGuestProcess _guestProcess;
 
 		[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.Infrastructure)]
 		public override object InitializeLifetimeService()
@@ -24,46 +17,44 @@ namespace BTurk.Automation.Host.AssemblyLoading
 			return null;
 		}
 
-		private void LoadAllPlugins(AppDomain domain)
+		private void InitializeGuestProcessInstance(AppDomain domain)
         {
 			var instances = (
 					from assembly in domain.GetAssemblies()
 					from type in assembly.GetTypes()
-					where type.GetInterface(typeof(IPlugin).Name) != null
+					where type.GetInterface(typeof(IGuestProcess).Name) != null
 					let constructor = type.GetConstructor(Type.EmptyTypes)
 					where constructor != null
 					select constructor.Invoke(null)
 				)
-				.Cast<IPlugin>()
+				.Cast<IGuestProcess>()
 				.ToList();
 
-			_plugins.Clear();
-			_plugins.AddRange(instances);
+            if (instances.Count == 0)
+                throw new InvalidOperationException("No guest process defined.");
 
-            if (!_plugins.Any())
-                throw new InvalidOperationException("No plugin assemblies found");
-		}
+            if (instances.Count > 1)
+            {
+                var names = string.Join(",", instances.Select(_ => _.GetType().Name));
+                throw new InvalidOperationException($"More than one guest process defined: {names}");}
+
+            _guestProcess = instances[0];
+        }
 
         public void Setup()
         {
-            LoadAllPlugins(AppDomain.CurrentDomain);
-            _plugins.ForEach(p => p.Setup());
+            InitializeGuestProcessInstance(AppDomain.CurrentDomain);
+            ThreadPool.QueueUserWorkItem(_ => _guestProcess.Start());
         }
 
-        public void Teardown()
+        public void Unload()
         {
-            _plugins.ForEach(p => p.Teardown());
+            _guestProcess.Unload();
         }
 
         public void Load(string name)
         {
             Assembly.Load(name);
-        }
-
-        public SearchResultsCollection Handle(SearchParameters parameters)
-        {
-            var handler = Bootstrapper.GetInstance<ISearchHandler>();
-            return handler.Handle(parameters);
         }
     }
 }

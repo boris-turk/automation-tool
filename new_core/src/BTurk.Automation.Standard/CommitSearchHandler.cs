@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using BTurk.Automation.Host.SearchEngine;
+using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {

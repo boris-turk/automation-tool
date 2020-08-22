@@ -42,13 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FieldSearchHandler.cs" />
-    <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BTurk.Automation.Host\BTurk.Automation.Host.csproj">
-      <Project>{BB0A2819-0EF2-4BA9-829C-CC0621CD10C0}</Project>
-      <Name>BTurk.Automation.Host</Name>
+    <ProjectReference Include="..\BTurk.Automation.Core\BTurk.Automation.Core.csproj">
+      <Project>{A48DC1B5-1E2B-41C1-AB49-998D95085B48}</Project>
+      <Name>BTurk.Automation.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
