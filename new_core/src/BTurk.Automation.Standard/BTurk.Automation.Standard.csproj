@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="CommitSearchHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositorySearchHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BTurk.Automation.Core\BTurk.Automation.Core.csproj">
