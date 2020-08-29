@@ -2,7 +2,7 @@
 
 namespace BTurk.Automation.Standard
 {
-    public class RepositorySearchHandler : ISearchHandler<Request>
+    public class RepositoryRequestHandler : IRequestHandler<Request>
     {
         public void Handle(Request request)
         {

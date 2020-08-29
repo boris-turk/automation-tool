@@ -3,15 +3,15 @@ using System.Linq;
 
 namespace BTurk.Automation.Core.SearchEngine
 {
-    public class RootSearchHandler : ISearchHandler<Request>
+    public class RootRequestHandler : IRequestHandler<Request>
     {
         private readonly List<Request> _requests;
-        private readonly ISearchHandler<CompositeRequest> _searchHandler;
+        private readonly IRequestHandler<CompositeRequest> _requestHandler;
 
-        public RootSearchHandler(ISearchHandler<CompositeRequest> searchHandler)
+        public RootRequestHandler(IRequestHandler<CompositeRequest> requestHandler)
         {
             _requests = new List<Request>();
-            _searchHandler = searchHandler;
+            _requestHandler = requestHandler;
         }
 
         protected void AddRequest(Request rule)
@@ -26,7 +26,7 @@ namespace BTurk.Automation.Core.SearchEngine
 
             var compositeRequest = new CompositeRequest(_requests);
 
-            _searchHandler.Handle(compositeRequest);
+            _requestHandler.Handle(compositeRequest);
 
             if (compositeRequest.HandledRequest == _requests.FirstOrDefault())
                 request.Handled = true;

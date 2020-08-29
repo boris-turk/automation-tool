@@ -5,16 +5,17 @@ using System.Linq;
 namespace BTurk.Automation.Core.SearchEngine
 {
     [Serializable]
-    public class MainSearchHandler : ISearchHandler<Request>
+    public class MainRequestHandler : IRequestHandler<Request>
     {
-        private ISearchHandler<Request> _activeHandler;
+        private IRequestHandler<Request> _activeHandler;
         private readonly ISearchItemsProvider _searchItemsProvider;
-        private readonly List<ISearchHandler<Request>> _searchHandlers;
+        private readonly List<IRequestHandler<Request>> _requestHandlers;
 
-        public MainSearchHandler(ISearchItemsProvider itemsProvider, List<ISearchHandler<Request>> searchHandlers)
+        public MainRequestHandler(ISearchItemsProvider searchItemsProvider,
+            List<IRequestHandler<Request>> requestHandlers)
         {
-            _searchItemsProvider = itemsProvider;
-            _searchHandlers = searchHandlers;
+            _searchItemsProvider = searchItemsProvider;
+            _requestHandlers = requestHandlers;
         }
 
         protected List<SearchItem> SearchItems => _searchItemsProvider.Items;
@@ -33,7 +34,7 @@ namespace BTurk.Automation.Core.SearchEngine
 
             SearchItems.Clear();
 
-            foreach (var handler in _searchHandlers)
+            foreach (var handler in _requestHandlers)
             {
                 var items = SearchItems.ToList();
 

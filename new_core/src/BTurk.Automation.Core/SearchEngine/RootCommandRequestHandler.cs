@@ -1,6 +1,6 @@
 ﻿namespace BTurk.Automation.Core.SearchEngine
 {
-    public class RootCommandRequestHandler : ISearchHandler<RootCommandRequest>
+    public class RootCommandRequestHandler : IRequestHandler<RootCommandRequest>
     {
         private readonly ISearchEngine _searchEngine;
 

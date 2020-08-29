@@ -24,13 +24,13 @@ namespace BTurk.Automation.DependencyResolution
             if (IsSearchEngineRequest(type))
                 instance = GetOrCreateMainForm();
 
-            if (type == typeof(ISearchHandler<CompositeRequest>))
+            if (type == typeof(IRequestHandler<CompositeRequest>))
                 instance = GetOrCreateSingleton(CompositeRequestHandler);
 
-            if (type == typeof(ISearchHandler<Request>))
-                instance = GetOrCreateSingleton(MainSearchHandler);
+            if (type == typeof(IRequestHandler<Request>))
+                instance = GetOrCreateSingleton(MainRequestHandler);
 
-            if (type == typeof(ISearchHandler<RootCommandRequest>))
+            if (type == typeof(IRequestHandler<RootCommandRequest>))
                 instance = GetOrCreateSingleton(CreateRootCommandRequestHandler);
 
             if (instance == null)
@@ -39,12 +39,12 @@ namespace BTurk.Automation.DependencyResolution
             return instance;
         }
 
-        private static ISearchHandler<RootCommandRequest> CreateRootCommandRequestHandler()
+        private static IRequestHandler<RootCommandRequest> CreateRootCommandRequestHandler()
         {
             return new RootCommandRequestHandler(GetInstance<ISearchEngine>());
         }
 
-        private static ISearchHandler<CompositeRequest> CompositeRequestHandler()
+        private static IRequestHandler<CompositeRequest> CompositeRequestHandler()
         {
             return new CompositeRequestHandler();
         }
@@ -66,23 +66,23 @@ namespace BTurk.Automation.DependencyResolution
         private static MainForm GetOrCreateMainForm()
         {
             var instance = GetOrCreateSingleton(() => new MainForm(), AttachSearchHandler);
-            void AttachSearchHandler(MainForm form) => form.SearchHandler = GetInstance<ISearchHandler<Request>>();
+            void AttachSearchHandler(MainForm form) => form.RequestHandler = GetInstance<IRequestHandler<Request>>();
             return instance;
         }
 
-        private static MainSearchHandler MainSearchHandler()
+        private static MainRequestHandler MainRequestHandler()
         {
-            var handlers = GetOrCreateSingleton(SearchHandlers);
+            var handlers = GetOrCreateSingleton(RequestHandlers);
             var searchEngine = GetInstance<ISearchItemsProvider>();
-            return new MainSearchHandler(searchEngine, handlers);
+            return new MainRequestHandler(searchEngine, handlers);
         }
 
-        private static List<ISearchHandler<Request>> SearchHandlers()
+        private static List<IRequestHandler<Request>> RequestHandlers()
         {
-            return new List<ISearchHandler<Request>>
+            return new List<IRequestHandler<Request>>
             {
-                new CommitSearchHandler(GetInstance<ISearchHandler<CompositeRequest>>()),
-                new FieldSearchHandler(GetInstance<ISearchHandler<CompositeRequest>>())
+                new CommitRequestHandler(GetInstance<IRequestHandler<CompositeRequest>>()),
+                new FieldRequestHandler(GetInstance<IRequestHandler<CompositeRequest>>())
             };
         }
 

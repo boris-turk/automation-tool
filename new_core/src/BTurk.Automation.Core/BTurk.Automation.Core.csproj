@@ -47,13 +47,13 @@
     <Compile Include="SearchEngine\Extensions.cs" />
     <Compile Include="SearchEngine\FilterAlgorithm.cs" />
     <Compile Include="SearchEngine\ISearchItemsProvider.cs" />
-    <Compile Include="SearchEngine\ISearchHandler.cs" />
-    <Compile Include="SearchEngine\MainSearchHandler.cs" />
+    <Compile Include="SearchEngine\IRequestHandler.cs" />
+    <Compile Include="SearchEngine\MainRequestHandler.cs" />
     <Compile Include="SearchEngine\Request.cs" />
     <Compile Include="SearchEngine\ISearchEngine.cs" />
     <Compile Include="SearchEngine\RootCommandRequest.cs" />
     <Compile Include="SearchEngine\RootCommandRequestHandler.cs" />
-    <Compile Include="SearchEngine\RootSearchHandler.cs" />
+    <Compile Include="SearchEngine\RootRequestHandler.cs" />
     <Compile Include="SearchEngine\SearchItem.cs" />
     <Compile Include="SearchEngine\Selection.cs" />
   </ItemGroup>

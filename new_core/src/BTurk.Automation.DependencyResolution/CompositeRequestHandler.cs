@@ -3,11 +3,11 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.DependencyResolution
 {
-    public class CompositeRequestHandler : ISearchHandler<CompositeRequest>
+    public class CompositeRequestHandler : IRequestHandler<CompositeRequest>
     {
         private dynamic GetHandler(Type requestType)
         {
-            var handlerType = typeof(ISearchHandler<>).MakeGenericType(requestType);
+            var handlerType = typeof(IRequestHandler<>).MakeGenericType(requestType);
             return Container.GetInstance(handlerType);
         }
 

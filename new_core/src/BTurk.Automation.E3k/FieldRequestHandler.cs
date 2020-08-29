@@ -2,9 +2,9 @@
 
 namespace BTurk.Automation.E3k
 {
-    public class FieldSearchHandler : RootSearchHandler
+    public class FieldRequestHandler : RootRequestHandler
     {
-        public FieldSearchHandler(ISearchHandler<CompositeRequest> searchHandler) : base(searchHandler)
+        public FieldRequestHandler(IRequestHandler<CompositeRequest> requestHandler) : base(requestHandler)
         {
             AddRequest(new RootCommandRequest("field"));
         }

@@ -31,7 +31,7 @@ namespace BTurk.Automation.DependencyResolution
 
         public List<SearchItem> Items { get; }
 
-        public ISearchHandler<Request> SearchHandler { get; set; }
+        public IRequestHandler<Request> RequestHandler { get; set; }
 
         private void MoveFocusToTextBox()
         {
@@ -106,7 +106,7 @@ namespace BTurk.Automation.DependencyResolution
         {
             ActionType = actionType;
 
-            SearchHandler.Handle(new Request());
+            RequestHandler.Handle(new Request());
 
             var filterText = GetFilterText();
 
