@@ -16,8 +16,8 @@ namespace BTurk.Automation.DependencyResolution
         {
             object instance = null;
 
-            if (typeof(T) == typeof(MainForm))
-                instance = GetOrCreateSingleton(MainForm);
+            if (IsSearchEngineRequest(typeof(T)))
+                instance = GetOrCreateMainForm();
 
             if (typeof(T) == typeof(ISearchHandler))
                 instance = GetOrCreateSingleton(MainSearchHandler);
@@ -28,10 +28,32 @@ namespace BTurk.Automation.DependencyResolution
             return (T)instance;
         }
 
+        private static bool IsSearchEngineRequest(Type type)
+        {
+            if (type == typeof(MainForm))
+                return true;
+
+            if (type == typeof(ISearchEngine))
+                return true;
+
+            if (type == typeof(ISearchItemsProvider))
+                return true;
+
+            return false;
+        }
+
+        private static MainForm GetOrCreateMainForm()
+        {
+            var instance = GetOrCreateSingleton(() => new MainForm(), AttachSearchHandler);
+            void AttachSearchHandler(MainForm form) => form.SearchHandler = GetInstance<ISearchHandler>();
+            return instance;
+        }
+
         private static MainSearchHandler MainSearchHandler()
         {
             var handlers = GetOrCreateSingleton(SearchHandlers);
-            return new MainSearchHandler(handlers);
+            var searchEngine = GetInstance<ISearchItemsProvider>();
+            return new MainSearchHandler(searchEngine, handlers);
         }
 
         private static List<ISearchHandler> SearchHandlers()
@@ -43,15 +65,7 @@ namespace BTurk.Automation.DependencyResolution
             };
         }
 
-        private static MainForm MainForm()
-        {
-            return new MainForm
-            {
-                SearchHandler = GetInstance<ISearchHandler>()
-            };
-        }
-
-        private static T GetOrCreateSingleton<T>(Func<T> provider)
+        private static T GetOrCreateSingleton<T>(Func<T> provider, Action<T> initializer = null)
         {
             var lockTaken = false;
 
@@ -65,6 +79,7 @@ namespace BTurk.Automation.DependencyResolution
                 {
                     instance = provider.Invoke();
                     Singletons.Add(instance);
+                    initializer?.Invoke(instance);
                 }
 
                 return instance;

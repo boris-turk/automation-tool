@@ -1,20 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.DependencyResolution
 {
-    internal partial class MainForm : Form
+    internal partial class MainForm : Form, ISearchEngine, ISearchItemsProvider
     {
         private const int OutOfScreenOffset = -20000;
 
         public MainForm()
         {
+            Items = new List<SearchItem>();
+
             InitializeComponent();
-            TopMost = true;
+            TopMost = false;
             KeyPreview = true;
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.Manual;
@@ -26,6 +28,8 @@ namespace BTurk.Automation.DependencyResolution
             };
             _listBox.SelectedIndexChanged += (o, a) => MoveFocusToTextBox();
         }
+
+        public List<SearchItem> Items { get; }
 
         public ISearchHandler SearchHandler { get; set; }
 
@@ -100,12 +104,15 @@ namespace BTurk.Automation.DependencyResolution
 
         public void TriggerAction(ActionType actionType)
         {
-            var searchParameters = new SearchParameters(TextBox.Text, actionType);
-            var result = SearchHandler.Handle(searchParameters);
+            ActionType = actionType;
+
+            SearchHandler.Handle(new Request());
+
+            var filterText = GetFilterText();
 
             ListBox.Items.Clear();
 
-            foreach (var item in result.Items.Where(_ => !_.IsFilteredOut))
+            foreach (var item in new FilterAlgorithm(filterText).Filter(Items))
                 ListBox.Items.Add(item.Text);
 
             SelectItem(0);
@@ -136,6 +143,43 @@ namespace BTurk.Automation.DependencyResolution
 
             TopMost = true;
             Activate();
+        }
+
+        private string GetFilterText()
+        {
+            var selection = FilterSelection;
+
+            if (FilterSelection == null)
+                selection = new Selection(0, TextBox.Text.Length);
+
+            return TextBox.Text.Substring(selection.Start, selection.Length);
+        }
+
+        public string SearchText
+        {
+            get => TextBox.Text;
+            set => TextBox.Text = value;
+        }
+
+        public Selection FilterSelection { get; set; }
+
+        public Selection TextSelection
+        {
+            get => new Selection(TextBox.SelectionStart, TextBox.SelectionLength);
+            set
+            {
+                TextBox.SelectionStart = value.Start;
+                TextBox.SelectionLength = value.Length;
+            }
+        }
+
+        public int SelectedItemIndex => ListBox.SelectedIndex;
+
+        public ActionType ActionType { get; private set; }
+
+        public void AddItems(IEnumerable<SearchItem> items)
+        {
+            Items.AddRange(items);
         }
     }
 }

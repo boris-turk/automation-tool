@@ -4,9 +4,8 @@ namespace BTurk.Automation.E3k
 {
     public class FieldSearchHandler : ISearchHandler
     {
-        public SearchResultsCollection Handle(SearchParameters parameters)
+        public void Handle(Request request)
         {
-            return SearchResultsCollection.Single("Field");
         }
     }
 }
