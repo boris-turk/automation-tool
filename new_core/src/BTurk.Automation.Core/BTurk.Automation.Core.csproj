@@ -43,11 +43,17 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchEngine\ActionType.cs" />
+    <Compile Include="SearchEngine\CompositeRequest.cs" />
+    <Compile Include="SearchEngine\Extensions.cs" />
+    <Compile Include="SearchEngine\FilterAlgorithm.cs" />
     <Compile Include="SearchEngine\ISearchItemsProvider.cs" />
     <Compile Include="SearchEngine\ISearchHandler.cs" />
     <Compile Include="SearchEngine\MainSearchHandler.cs" />
     <Compile Include="SearchEngine\Request.cs" />
     <Compile Include="SearchEngine\ISearchEngine.cs" />
+    <Compile Include="SearchEngine\RootCommandRequest.cs" />
+    <Compile Include="SearchEngine\RootCommandRequestHandler.cs" />
+    <Compile Include="SearchEngine\RootSearchHandler.cs" />
     <Compile Include="SearchEngine\SearchItem.cs" />
     <Compile Include="SearchEngine\Selection.cs" />
   </ItemGroup>

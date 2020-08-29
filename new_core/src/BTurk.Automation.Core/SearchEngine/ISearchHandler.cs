@@ -1,7 +1,7 @@
 ﻿namespace BTurk.Automation.Core.SearchEngine
 {
-    public interface ISearchHandler
+    public interface ISearchHandler<TRequest> where TRequest : Request
     {
-        void Handle(Request request);
+        void Handle(TRequest request);
     }
 }

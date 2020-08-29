@@ -2,10 +2,12 @@
 
 namespace BTurk.Automation.Standard
 {
-    public class CommitSearchHandler : ISearchHandler
+    public class CommitSearchHandler : RootSearchHandler
     {
-        public void Handle(Request request)
+        public CommitSearchHandler(ISearchHandler<CompositeRequest> searchHandler) :
+            base(searchHandler)
         {
+            AddRequest(new RootCommandRequest("commit"));
         }
     }
 }

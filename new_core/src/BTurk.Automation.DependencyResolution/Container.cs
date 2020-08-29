@@ -14,18 +14,39 @@ namespace BTurk.Automation.DependencyResolution
 
         public static T GetInstance<T>()
         {
+            return (T)GetInstance(typeof(T));
+        }
+
+        public static object GetInstance(Type type)
+        {
             object instance = null;
 
-            if (IsSearchEngineRequest(typeof(T)))
+            if (IsSearchEngineRequest(type))
                 instance = GetOrCreateMainForm();
 
-            if (typeof(T) == typeof(ISearchHandler))
+            if (type == typeof(ISearchHandler<CompositeRequest>))
+                instance = GetOrCreateSingleton(CompositeRequestHandler);
+
+            if (type == typeof(ISearchHandler<Request>))
                 instance = GetOrCreateSingleton(MainSearchHandler);
 
-            if (instance == null)
-                throw FailedToCreateInstance<T>();
+            if (type == typeof(ISearchHandler<RootCommandRequest>))
+                instance = GetOrCreateSingleton(CreateRootCommandRequestHandler);
 
-            return (T)instance;
+            if (instance == null)
+                throw FailedToCreateInstance(type);
+
+            return instance;
+        }
+
+        private static ISearchHandler<RootCommandRequest> CreateRootCommandRequestHandler()
+        {
+            return new RootCommandRequestHandler(GetInstance<ISearchEngine>());
+        }
+
+        private static ISearchHandler<CompositeRequest> CompositeRequestHandler()
+        {
+            return new CompositeRequestHandler();
         }
 
         private static bool IsSearchEngineRequest(Type type)
@@ -45,7 +66,7 @@ namespace BTurk.Automation.DependencyResolution
         private static MainForm GetOrCreateMainForm()
         {
             var instance = GetOrCreateSingleton(() => new MainForm(), AttachSearchHandler);
-            void AttachSearchHandler(MainForm form) => form.SearchHandler = GetInstance<ISearchHandler>();
+            void AttachSearchHandler(MainForm form) => form.SearchHandler = GetInstance<ISearchHandler<Request>>();
             return instance;
         }
 
@@ -56,12 +77,12 @@ namespace BTurk.Automation.DependencyResolution
             return new MainSearchHandler(searchEngine, handlers);
         }
 
-        private static List<ISearchHandler> SearchHandlers()
+        private static List<ISearchHandler<Request>> SearchHandlers()
         {
-            return new List<ISearchHandler>
+            return new List<ISearchHandler<Request>>
             {
-                new CommitSearchHandler(),
-                new FieldSearchHandler()
+                new CommitSearchHandler(GetInstance<ISearchHandler<CompositeRequest>>()),
+                new FieldSearchHandler(GetInstance<ISearchHandler<CompositeRequest>>())
             };
         }
 
@@ -90,9 +111,9 @@ namespace BTurk.Automation.DependencyResolution
             }
         }
 
-        private static InvalidOperationException FailedToCreateInstance<T>()
+        private static InvalidOperationException FailedToCreateInstance(Type type)
         {
-            return new InvalidOperationException($"Failed to create instance of type {typeof(T).Name}");
+            return new InvalidOperationException($"Failed to create instance of type {type.Name}");
         }
     }
 }

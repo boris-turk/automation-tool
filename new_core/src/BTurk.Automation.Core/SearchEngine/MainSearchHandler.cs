@@ -5,20 +5,24 @@ using System.Linq;
 namespace BTurk.Automation.Core.SearchEngine
 {
     [Serializable]
-    public class MainSearchHandler : ISearchHandler
+    public class MainSearchHandler : ISearchHandler<Request>
     {
-        private ISearchHandler _activeHandler;
+        private ISearchHandler<Request> _activeHandler;
         private readonly ISearchItemsProvider _searchItemsProvider;
-        private readonly List<ISearchHandler> _searchHandlers;
+        private readonly List<ISearchHandler<Request>> _searchHandlers;
 
-        public MainSearchHandler(ISearchItemsProvider searchItemsProvider, List<ISearchHandler> searchHandlers)
+        public MainSearchHandler(ISearchItemsProvider itemsProvider, List<ISearchHandler<Request>> searchHandlers)
         {
-            _searchItemsProvider = searchItemsProvider;
+            _searchItemsProvider = itemsProvider;
             _searchHandlers = searchHandlers;
         }
 
+        protected List<SearchItem> SearchItems => _searchItemsProvider.Items;
+
         public void Handle(Request request)
         {
+            SearchItems.Clear();
+
             if (_activeHandler != null)
             {
                 _activeHandler.Handle(request);
@@ -27,15 +31,17 @@ namespace BTurk.Automation.Core.SearchEngine
                     return;
             }
 
+            SearchItems.Clear();
+
             foreach (var handler in _searchHandlers)
             {
-                var items = _searchItemsProvider.Items.ToList();
+                var items = SearchItems.ToList();
 
                 handler.Handle(request);
 
                 if (request.Handled)
                 {
-                    _searchItemsProvider.Items.RemoveAll(_ => items.Contains(_));
+                    SearchItems.RemoveAll(_ => items.Contains(_));
                     _activeHandler = handler;
                     return;
                 }

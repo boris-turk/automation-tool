@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using BTurk.Automation.Core.SearchEngine;
 
-namespace BTurk.Automation.DependencyResolution
+namespace BTurk.Automation.Core.SearchEngine
 {
     public class FilterAlgorithm
     {

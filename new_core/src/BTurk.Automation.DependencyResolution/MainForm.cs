@@ -31,7 +31,7 @@ namespace BTurk.Automation.DependencyResolution
 
         public List<SearchItem> Items { get; }
 
-        public ISearchHandler SearchHandler { get; set; }
+        public ISearchHandler<Request> SearchHandler { get; set; }
 
         private void MoveFocusToTextBox()
         {
@@ -112,7 +112,7 @@ namespace BTurk.Automation.DependencyResolution
 
             ListBox.Items.Clear();
 
-            foreach (var item in new FilterAlgorithm(filterText).Filter(Items))
+            foreach (var item in Items)
                 ListBox.Items.Add(item.Text);
 
             SelectItem(0);
@@ -151,6 +151,9 @@ namespace BTurk.Automation.DependencyResolution
 
             if (FilterSelection == null)
                 selection = new Selection(0, TextBox.Text.Length);
+
+            if (selection.Length <= 0)
+                return "";
 
             return TextBox.Text.Substring(selection.Start, selection.Length);
         }
