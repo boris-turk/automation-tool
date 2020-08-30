@@ -147,15 +147,10 @@ namespace BTurk.Automation.DependencyResolution
 
         private string GetFilterText()
         {
-            var selection = FilterSelection;
+            if (FilterText != null)
+                return FilterText;
 
-            if (FilterSelection == null)
-                selection = new Selection(0, TextBox.Text.Length);
-
-            if (selection.Length <= 0)
-                return "";
-
-            return TextBox.Text.Substring(selection.Start, selection.Length);
+            return TextBox.Text;
         }
 
         public string SearchText
@@ -164,7 +159,7 @@ namespace BTurk.Automation.DependencyResolution
             set => TextBox.Text = value;
         }
 
-        public Selection FilterSelection { get; set; }
+        public string FilterText { get; set; }
 
         public Selection TextSelection
         {

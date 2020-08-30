@@ -1,4 +1,6 @@
-﻿namespace BTurk.Automation.Core.SearchEngine
+﻿using System.Text.RegularExpressions;
+
+namespace BTurk.Automation.Core.SearchEngine
 {
     public class RootCommandRequestHandler : IRequestHandler<RootCommandRequest>
     {
@@ -11,13 +13,19 @@
 
         public void Handle(RootCommandRequest request)
         {
-            if (!request.Name.StartsWith(_searchEngine.SearchText.Trim()))
+            var match = Regex.Match(_searchEngine.SearchText, @"^(?<command>\S+)(?<space>\s)?");
+
+            if (!match.Success)
+            {
+                _searchEngine.AddItem(request.Name);
                 return;
+            }
 
-            _searchEngine.AddItem(request.Name);
+            request.Handled = request.Name.StartsWith(match.Groups["command"].Value);
+            request.CanMoveNext = match.Groups["space"].Success;
 
-            if (_searchEngine.SearchText.EndsWith(" "))
-                request.Handled = true;
+            if (request.Handled)
+                _searchEngine.AddItem(request.Name);
         }
     }
 }

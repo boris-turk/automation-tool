@@ -5,13 +5,11 @@ namespace BTurk.Automation.Core.SearchEngine
 {
     public class CompositeRequest : Request
     {
-        public CompositeRequest(IEnumerable<Request> requests)
+        public CompositeRequest(IEnumerable<SequentialRequest> requests)
         {
             Requests = requests;
         }
 
-        public IEnumerable<Request> Requests { get; }
-
-        public Request HandledRequest => Requests.FirstOrDefault(_ => _.Handled);
+        public IEnumerable<SequentialRequest> Requests { get; }
     }
 }

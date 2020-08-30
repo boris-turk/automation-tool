@@ -22,16 +22,19 @@ namespace BTurk.Automation.DependencyResolution
             object instance = null;
 
             if (IsSearchEngineRequest(type))
-                instance = GetOrCreateMainForm();
+                return GetOrCreateMainForm();
 
             if (type == typeof(IRequestHandler<CompositeRequest>))
-                instance = GetOrCreateSingleton(CompositeRequestHandler);
+                return GetOrCreateSingleton(CompositeRequestHandler);
 
             if (type == typeof(IRequestHandler<Request>))
-                instance = GetOrCreateSingleton(MainRequestHandler);
+                return GetOrCreateSingleton(MainRequestHandler);
 
             if (type == typeof(IRequestHandler<RootCommandRequest>))
-                instance = GetOrCreateSingleton(CreateRootCommandRequestHandler);
+                return GetOrCreateSingleton(CreateRootCommandRequestHandler);
+
+            if (type == typeof(IRequestHandler<SelectionRequest<Repository>>))
+                return GetOrCreateSingleton(GetRepositoryRequestHandler);
 
             if (instance == null)
                 throw FailedToCreateInstance(type);
@@ -39,9 +42,21 @@ namespace BTurk.Automation.DependencyResolution
             return instance;
         }
 
+        private static ISearchEngine SearchEngine => GetInstance<ISearchEngine>();
+
+        public static ISearchItemsProvider SearchItemsProvider => GetInstance<ISearchItemsProvider>();
+
+        private static RepositoryRequestHandler GetRepositoryRequestHandler()
+        {
+            return new RepositoryRequestHandler(GetInstance<ISearchItemsProvider>(), SearchEngine);
+        }
+
         private static IRequestHandler<RootCommandRequest> CreateRootCommandRequestHandler()
         {
-            return new RootCommandRequestHandler(GetInstance<ISearchEngine>());
+            var handler = new RootCommandRequestHandler(SearchEngine);
+
+            return new ClearSearchItemsRequestHandlerDecorator<RootCommandRequest>(
+                handler, SearchEngine, SearchItemsProvider);
         }
 
         private static IRequestHandler<CompositeRequest> CompositeRequestHandler()
@@ -72,12 +87,12 @@ namespace BTurk.Automation.DependencyResolution
 
         private static MainRequestHandler MainRequestHandler()
         {
-            var handlers = GetOrCreateSingleton(RequestHandlers);
+            var handlers = GetOrCreateSingleton(RootRequestHandlers);
             var searchEngine = GetInstance<ISearchItemsProvider>();
             return new MainRequestHandler(searchEngine, handlers);
         }
 
-        private static List<IRequestHandler<Request>> RequestHandlers()
+        private static List<IRequestHandler<Request>> RootRequestHandlers()
         {
             return new List<IRequestHandler<Request>>
             {
@@ -94,7 +109,7 @@ namespace BTurk.Automation.DependencyResolution
             {
                 Monitor.Enter(Singletons, ref lockTaken);
 
-                var instance = Singletons.OfType<T>().SingleOrDefault();
+                var instance = (T)Singletons.SingleOrDefault(_ => _.GetType() == typeof(T));
 
                 if (instance == null)
                 {

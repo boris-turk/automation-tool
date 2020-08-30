@@ -3,33 +3,43 @@ using System.Linq;
 
 namespace BTurk.Automation.Core.SearchEngine
 {
-    public class RootRequestHandler : IRequestHandler<Request>
+    public abstract class RootRequestHandler : IRequestHandler<Request>
     {
-        private readonly List<Request> _requests;
         private readonly IRequestHandler<CompositeRequest> _requestHandler;
 
-        public RootRequestHandler(IRequestHandler<CompositeRequest> requestHandler)
+        protected RootRequestHandler(IRequestHandler<CompositeRequest> requestHandler)
         {
-            _requests = new List<Request>();
             _requestHandler = requestHandler;
+            Requests = new List<SequentialRequest>();
+            AddRootCommandRequest();
         }
 
-        protected void AddRequest(Request rule)
+        protected abstract string CommandName { get; }
+
+        public List<SequentialRequest> Requests { get; }
+
+        private void AddRootCommandRequest()
         {
-            _requests.Add(rule);
+            AddRequest(new RootCommandRequest(CommandName));
+        }
+
+        protected void AddRequest(SequentialRequest rule)
+        {
+            Requests.Add(rule);
         }
 
         public void Handle(Request request)
         {
-            if (!_requests.Any())
+            request.Handled = false;
+
+            if (!Requests.Any())
                 return;
 
-            var compositeRequest = new CompositeRequest(_requests);
+            var compositeRequest = new CompositeRequest(Requests);
 
             _requestHandler.Handle(compositeRequest);
 
-            if (compositeRequest.HandledRequest == _requests.FirstOrDefault())
-                request.Handled = true;
+            request.Handled = Requests.Any(_ => _.Handled);
         }
     }
 }

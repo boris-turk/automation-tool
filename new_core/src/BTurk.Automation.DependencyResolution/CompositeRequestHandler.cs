@@ -16,10 +16,12 @@ namespace BTurk.Automation.DependencyResolution
             foreach (var request in compositeRequest.Requests)
             {
                 request.Handled = false;
+                request.CanMoveNext = false;
 
-                GetHandler(request.GetType()).Handle((dynamic)request);
+                var handler = GetHandler(request.GetType());
+                handler.Handle((dynamic)request);
 
-                if (request.Handled)
+                if (!request.Handled || !request.CanMoveNext)
                     break;
             }
         }

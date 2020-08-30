@@ -1,4 +1,5 @@
-﻿using BTurk.Automation.Core.SearchEngine;
+﻿using System.Text.RegularExpressions;
+using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
@@ -7,7 +8,23 @@ namespace BTurk.Automation.Standard
         public CommitRequestHandler(IRequestHandler<CompositeRequest> requestHandler) :
             base(requestHandler)
         {
-            AddRequest(new RootCommandRequest("commit"));
+            var repositoryRequest = new SelectionRequest<Repository>(OnRepositorySelected)
+            {
+                FilterProvider = GetRepositorySearchText
+            };
+
+            AddRequest(repositoryRequest);
+        }
+
+        protected override string CommandName => "commit";
+
+        private string GetRepositorySearchText(string text)
+        {
+            return Regex.Replace(text, @"^\S*", "").Trim();
+        }
+
+        private void OnRepositorySelected(Repository repository)
+        {
         }
     }
 }

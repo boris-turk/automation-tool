@@ -1,6 +1,6 @@
 ﻿namespace BTurk.Automation.Core.SearchEngine
 {
-    public class RootCommandRequest : Request
+    public class RootCommandRequest : SequentialRequest, IClearSearchItemsRequest
     {
         public RootCommandRequest(string name)
         {
@@ -8,5 +8,7 @@
         }
 
         public string Name { get; set; }
+
+        public bool ShouldClearSearchItems(string text) => text.EndsWith(" ");
     }
 }

@@ -6,7 +6,7 @@ namespace BTurk.Automation.Core.SearchEngine
     {
         string SearchText { get; set; }
 
-        Selection FilterSelection { get; set; }
+        string FilterText { get; set; }
 
         Selection TextSelection { get; set; }
 
