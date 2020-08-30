@@ -1,5 +1,4 @@
 ﻿using BTurk.Automation.Core.Requests;
-using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.E3k
 {
