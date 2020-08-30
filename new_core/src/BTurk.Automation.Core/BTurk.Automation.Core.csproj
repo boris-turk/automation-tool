@@ -54,7 +54,7 @@
     <Compile Include="SearchEngine\ISearchEngine.cs" />
     <Compile Include="Requests\RootCommandRequest.cs" />
     <Compile Include="Requests\RootCommandRequestHandler.cs" />
-    <Compile Include="Requests\RootRequestHandler.cs" />
+    <Compile Include="Requests\Command.cs" />
     <Compile Include="SearchEngine\SearchItem.cs" />
     <Compile Include="SearchEngine\Selection.cs" />
     <Compile Include="Requests\SelectionRequest.cs" />

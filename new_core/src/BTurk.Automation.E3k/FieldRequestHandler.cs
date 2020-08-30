@@ -2,12 +2,8 @@
 
 namespace BTurk.Automation.E3k
 {
-    public class FieldRequestHandler : RootRequestHandler
+    public class FieldRequestHandler : Command
     {
-        public FieldRequestHandler(IRequestHandler<CompositeRequest> requestHandler) : base(requestHandler)
-        {
-        }
-
         protected override string CommandName => "field";
     }
 }

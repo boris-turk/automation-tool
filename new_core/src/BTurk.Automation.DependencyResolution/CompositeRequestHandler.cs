@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.DependencyResolution
@@ -13,15 +14,16 @@ namespace BTurk.Automation.DependencyResolution
 
         public void Handle(CompositeRequest compositeRequest)
         {
-            foreach (var request in compositeRequest.Requests)
-            {
-                request.Handled = false;
-                request.CanMoveNext = false;
+            var requests = compositeRequest.Requests.ToList();
 
+            requests.ForEach(_ => _.CanMoveNext = false);
+
+            foreach (var request in requests)
+            {
                 var handler = GetHandler(request.GetType());
                 handler.Handle((dynamic)request);
 
-                if (!request.Handled || !request.CanMoveNext)
+                if (!request.CanMoveNext)
                     break;
             }
         }

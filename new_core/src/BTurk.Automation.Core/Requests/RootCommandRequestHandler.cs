@@ -22,11 +22,11 @@ namespace BTurk.Automation.Core.Requests
                 return;
             }
 
-            request.Handled = request.Name.StartsWith(match.Groups["command"].Value);
-            request.CanMoveNext = match.Groups["space"].Success;
+            if (!request.Name.StartsWith(match.Groups["command"].Value))
+                return;
 
-            if (request.Handled)
-                _searchEngine.AddItem(request.Name);
+            _searchEngine.AddItem(request.Name);
+            request.CanMoveNext = match.Groups["space"].Success;
         }
     }
 }

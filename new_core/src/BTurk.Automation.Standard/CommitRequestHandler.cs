@@ -3,10 +3,9 @@ using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Standard
 {
-    public class CommitRequestHandler : RootRequestHandler
+    public class CommitRequestHandler : Command
     {
-        public CommitRequestHandler(IRequestHandler<CompositeRequest> requestHandler) :
-            base(requestHandler)
+        public CommitRequestHandler()
         {
             var repositoryRequest = new SelectionRequest<Repository>(OnRepositorySelected)
             {

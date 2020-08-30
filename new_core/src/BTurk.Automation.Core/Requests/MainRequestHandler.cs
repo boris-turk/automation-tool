@@ -8,15 +8,17 @@ namespace BTurk.Automation.Core.Requests
     [Serializable]
     public class MainRequestHandler : IRequestHandler<Request>
     {
-        private IRequestHandler<Request> _activeHandler;
+        private Command _activeCommand;
+        private readonly List<Command> _commands;
         private readonly ISearchItemsProvider _searchItemsProvider;
-        private readonly List<IRequestHandler<Request>> _requestHandlers;
+        private readonly IRequestHandler<CompositeRequest> _compositeRequestHandler;
 
-        public MainRequestHandler(ISearchItemsProvider searchItemsProvider,
-            List<IRequestHandler<Request>> requestHandlers)
+        public MainRequestHandler(List<Command> commands, IRequestHandler<CompositeRequest> compositeRequestHandler,
+            ISearchItemsProvider searchItemsProvider)
         {
+            _commands = commands;
+            _compositeRequestHandler = compositeRequestHandler;
             _searchItemsProvider = searchItemsProvider;
-            _requestHandlers = requestHandlers;
         }
 
         protected List<SearchItem> SearchItems => _searchItemsProvider.Items;
@@ -25,26 +27,26 @@ namespace BTurk.Automation.Core.Requests
         {
             SearchItems.Clear();
 
-            if (_activeHandler != null)
+            if (_activeCommand != null)
             {
-                _activeHandler.Handle(request);
+                _compositeRequestHandler.Handle(_activeCommand.Request);
 
-                if (request.Handled)
-                    return;
+                if (!_activeCommand.CanMoveNext)
+                    _activeCommand = null;
             }
 
             SearchItems.Clear();
 
-            foreach (var handler in _requestHandlers)
+            foreach (var command in _commands)
             {
                 var items = SearchItems.ToList();
 
-                handler.Handle(request);
+                _compositeRequestHandler.Handle(command.Request);
 
-                if (request.Handled)
+                if (command.Request.Requests.Any(_ => _.CanMoveNext))
                 {
                     SearchItems.RemoveAll(_ => items.Contains(_));
-                    _activeHandler = handler;
+                    _activeCommand = command;
                     return;
                 }
             }

@@ -88,17 +88,19 @@ namespace BTurk.Automation.DependencyResolution
 
         private static MainRequestHandler MainRequestHandler()
         {
-            var handlers = GetOrCreateSingleton(RootRequestHandlers);
+            var commands = GetOrCreateSingleton(Commands);
             var searchEngine = GetInstance<ISearchItemsProvider>();
-            return new MainRequestHandler(searchEngine, handlers);
+            var compositeRequestHandler = GetInstance<IRequestHandler<CompositeRequest>>();
+
+            return new MainRequestHandler(commands, compositeRequestHandler, searchEngine);
         }
 
-        private static List<IRequestHandler<Request>> RootRequestHandlers()
+        private static List<Command> Commands()
         {
-            return new List<IRequestHandler<Request>>
+            return new List<Command>
             {
-                new CommitRequestHandler(GetInstance<IRequestHandler<CompositeRequest>>()),
-                new FieldRequestHandler(GetInstance<IRequestHandler<CompositeRequest>>())
+                new CommitRequestHandler(),
+                new FieldRequestHandler()
             };
         }
 
