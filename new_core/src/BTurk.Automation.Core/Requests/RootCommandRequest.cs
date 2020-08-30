@@ -1,4 +1,4 @@
-﻿namespace BTurk.Automation.Core.SearchEngine
+﻿namespace BTurk.Automation.Core.Requests
 {
     public class RootCommandRequest : SequentialRequest
     {

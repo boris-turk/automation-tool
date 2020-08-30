@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using BTurk.Automation.Core.Decorators;
+using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.E3k;
 using BTurk.Automation.Standard;

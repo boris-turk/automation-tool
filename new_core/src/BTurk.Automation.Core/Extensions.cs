@@ -1,4 +1,6 @@
-﻿namespace BTurk.Automation.Core.SearchEngine
+﻿using BTurk.Automation.Core.SearchEngine;
+
+namespace BTurk.Automation.Core
 {
     public static class Extensions
     {

@@ -1,4 +1,7 @@
-﻿namespace BTurk.Automation.Core.SearchEngine
+﻿using BTurk.Automation.Core.Requests;
+using BTurk.Automation.Core.SearchEngine;
+
+namespace BTurk.Automation.Core.Decorators
 {
     public class ClearSearchItemsRequestHandlerDecorator<TRequest> : IRequestHandler<TRequest>
         where TRequest : SequentialRequest

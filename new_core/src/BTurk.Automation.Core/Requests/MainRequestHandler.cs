@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BTurk.Automation.Core.SearchEngine;
 
-namespace BTurk.Automation.Core.SearchEngine
+namespace BTurk.Automation.Core.Requests
 {
     [Serializable]
     public class MainRequestHandler : IRequestHandler<Request>

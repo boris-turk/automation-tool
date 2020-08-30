@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
+using BTurk.Automation.Core.SearchEngine;
 
-namespace BTurk.Automation.Core.SearchEngine
+namespace BTurk.Automation.Core.Requests
 {
     public class RootCommandRequestHandler : IRequestHandler<RootCommandRequest>
     {

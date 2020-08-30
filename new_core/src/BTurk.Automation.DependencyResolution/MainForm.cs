@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.DependencyResolution

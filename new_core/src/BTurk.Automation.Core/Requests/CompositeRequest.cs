@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
-namespace BTurk.Automation.Core.SearchEngine
+namespace BTurk.Automation.Core.Requests
 {
     public class CompositeRequest : Request
     {
