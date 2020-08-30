@@ -55,8 +55,7 @@ namespace BTurk.Automation.DependencyResolution
         {
             var handler = new RootCommandRequestHandler(SearchEngine);
 
-            return new ClearSearchItemsRequestHandlerDecorator<RootCommandRequest>(
-                handler, SearchEngine, SearchItemsProvider);
+            return new ClearSearchItemsRequestHandlerDecorator<RootCommandRequest>(handler, SearchItemsProvider);
         }
 
         private static IRequestHandler<CompositeRequest> CompositeRequestHandler()

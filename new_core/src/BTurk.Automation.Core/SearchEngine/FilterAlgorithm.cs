@@ -1,14 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace BTurk.Automation.Core.SearchEngine
 {
     public class FilterAlgorithm
     {
-        private readonly string _filterText;
+        private readonly string[] _words;
 
         public FilterAlgorithm(string filterText)
         {
-            _filterText = filterText;
+            _words = Regex.Split(filterText ?? "", @"\s")
+                .Where(_ => !string.IsNullOrWhiteSpace(_))
+                .ToArray();
         }
 
         public IEnumerable<SearchItem> Filter(IEnumerable<SearchItem> items)
@@ -22,7 +26,7 @@ namespace BTurk.Automation.Core.SearchEngine
 
         private bool MatchesFilter(string text)
         {
-            return text.StartsWith(_filterText);
+            return !_words.Any() || _words.All(text.Contains);
         }
     }
 }

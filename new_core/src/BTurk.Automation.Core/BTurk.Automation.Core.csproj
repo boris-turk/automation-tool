@@ -47,7 +47,6 @@
     <Compile Include="SearchEngine\CompositeRequest.cs" />
     <Compile Include="SearchEngine\Extensions.cs" />
     <Compile Include="SearchEngine\FilterAlgorithm.cs" />
-    <Compile Include="SearchEngine\IClearSearchItemsRequest.cs" />
     <Compile Include="SearchEngine\ISearchItemsProvider.cs" />
     <Compile Include="SearchEngine\IRequestHandler.cs" />
     <Compile Include="SearchEngine\MainRequestHandler.cs" />

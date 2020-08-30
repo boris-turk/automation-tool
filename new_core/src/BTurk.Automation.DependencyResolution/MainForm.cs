@@ -104,15 +104,14 @@ namespace BTurk.Automation.DependencyResolution
 
         public void TriggerAction(ActionType actionType)
         {
+            FilterText = null;
             ActionType = actionType;
 
             RequestHandler.Handle(new Request());
 
-            var filterText = GetFilterText();
-
             ListBox.Items.Clear();
 
-            foreach (var item in Items)
+            foreach (var item in new FilterAlgorithm(FilterText).Filter(Items))
                 ListBox.Items.Add(item.Text);
 
             SelectItem(0);
@@ -143,14 +142,6 @@ namespace BTurk.Automation.DependencyResolution
 
             TopMost = true;
             Activate();
-        }
-
-        private string GetFilterText()
-        {
-            if (FilterText != null)
-                return FilterText;
-
-            return TextBox.Text;
         }
 
         public string SearchText
