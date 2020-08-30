@@ -2,13 +2,13 @@
 
 namespace BTurk.Automation.Core.Requests
 {
-    public class CompositeRequest : Request
+    public class CompositeRequest : IRequest
     {
-        public CompositeRequest(IEnumerable<SequentialRequest> requests)
+        public CompositeRequest(IEnumerable<Request> requests)
         {
             Requests = requests;
         }
 
-        public IEnumerable<SequentialRequest> Requests { get; }
+        public IEnumerable<Request> Requests { get; }
     }
 }

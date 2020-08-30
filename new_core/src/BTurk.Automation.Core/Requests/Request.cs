@@ -1,7 +1,11 @@
-﻿namespace BTurk.Automation.Core.Requests
+﻿using System;
+
+namespace BTurk.Automation.Core.Requests
 {
-    public class Request
+    public class Request : IRequest
     {
-        public bool Handled { get; set; }
+        public bool CanMoveNext { get; set; }
+
+        public Func<string, string> FilterProvider { get; set; }
     }
 }

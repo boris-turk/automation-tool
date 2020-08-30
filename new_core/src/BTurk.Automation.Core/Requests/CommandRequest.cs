@@ -1,8 +1,8 @@
 ﻿namespace BTurk.Automation.Core.Requests
 {
-    public class RootCommandRequest : SequentialRequest
+    public class CommandRequest : Request
     {
-        public RootCommandRequest(string name)
+        public CommandRequest(string name)
         {
             Name = name;
         }

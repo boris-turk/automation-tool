@@ -2,7 +2,7 @@
 
 namespace BTurk.Automation.Core.Requests
 {
-    public class SelectionRequest<T> : SequentialRequest
+    public class SelectionRequest<T> : Request
     {
         public SelectionRequest(Action<T> onSelectedAction)
         {

@@ -29,11 +29,11 @@ namespace BTurk.Automation.DependencyResolution
             if (type == typeof(IRequestHandler<CompositeRequest>))
                 return GetOrCreateSingleton(CompositeRequestHandler);
 
-            if (type == typeof(IRequestHandler<Request>))
+            if (type == typeof(MainRequestHandler))
                 return GetOrCreateSingleton(MainRequestHandler);
 
-            if (type == typeof(IRequestHandler<RootCommandRequest>))
-                return GetOrCreateSingleton(CreateRootCommandRequestHandler);
+            if (type == typeof(IRequestHandler<CommandRequest>))
+                return GetOrCreateSingleton(CreateCommandRequestHandler);
 
             if (type == typeof(IRequestHandler<SelectionRequest<Repository>>))
                 return GetOrCreateSingleton(GetRepositoryRequestHandler);
@@ -53,11 +53,10 @@ namespace BTurk.Automation.DependencyResolution
             return new RepositoryRequestHandler(GetInstance<ISearchItemsProvider>(), SearchEngine);
         }
 
-        private static IRequestHandler<RootCommandRequest> CreateRootCommandRequestHandler()
+        private static IRequestHandler<CommandRequest> CreateCommandRequestHandler()
         {
-            var handler = new RootCommandRequestHandler(SearchEngine);
-
-            return new ClearSearchItemsRequestHandlerDecorator<RootCommandRequest>(handler, SearchItemsProvider);
+            var handler = new CommandRequestHandler(SearchEngine);
+            return new ClearSearchItemsRequestHandlerDecorator<CommandRequest>(handler, SearchItemsProvider);
         }
 
         private static IRequestHandler<CompositeRequest> CompositeRequestHandler()
@@ -82,7 +81,7 @@ namespace BTurk.Automation.DependencyResolution
         private static MainForm GetOrCreateMainForm()
         {
             var instance = GetOrCreateSingleton(() => new MainForm(), AttachSearchHandler);
-            void AttachSearchHandler(MainForm form) => form.RequestHandler = GetInstance<IRequestHandler<Request>>();
+            void AttachSearchHandler(MainForm form) => form.RequestHandler = GetInstance<MainRequestHandler>();
             return instance;
         }
 

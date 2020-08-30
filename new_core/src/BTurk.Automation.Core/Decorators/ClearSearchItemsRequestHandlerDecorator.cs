@@ -4,7 +4,7 @@ using BTurk.Automation.Core.SearchEngine;
 namespace BTurk.Automation.Core.Decorators
 {
     public class ClearSearchItemsRequestHandlerDecorator<TRequest> : IRequestHandler<TRequest>
-        where TRequest : SequentialRequest
+        where TRequest : Request
     {
         private readonly IRequestHandler<TRequest> _decoratee;
 

@@ -3,16 +3,16 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests
 {
-    public class RootCommandRequestHandler : IRequestHandler<RootCommandRequest>
+    public class CommandRequestHandler : IRequestHandler<CommandRequest>
     {
         private readonly ISearchEngine _searchEngine;
 
-        public RootCommandRequestHandler(ISearchEngine searchEngine)
+        public CommandRequestHandler(ISearchEngine searchEngine)
         {
             _searchEngine = searchEngine;
         }
 
-        public void Handle(RootCommandRequest request)
+        public void Handle(CommandRequest request)
         {
             var match = Regex.Match(_searchEngine.SearchText, @"^(?<command>\S+)(?<space>\s)?");
 

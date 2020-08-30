@@ -50,15 +50,15 @@
     <Compile Include="SearchEngine\ISearchItemsProvider.cs" />
     <Compile Include="Requests\IRequestHandler.cs" />
     <Compile Include="Requests\MainRequestHandler.cs" />
-    <Compile Include="Requests\Request.cs" />
+    <Compile Include="Requests\IRequest.cs" />
     <Compile Include="SearchEngine\ISearchEngine.cs" />
-    <Compile Include="Requests\RootCommandRequest.cs" />
-    <Compile Include="Requests\RootCommandRequestHandler.cs" />
+    <Compile Include="Requests\CommandRequest.cs" />
+    <Compile Include="Requests\CommandRequestHandler.cs" />
     <Compile Include="Requests\Command.cs" />
     <Compile Include="SearchEngine\SearchItem.cs" />
     <Compile Include="SearchEngine\Selection.cs" />
     <Compile Include="Requests\SelectionRequest.cs" />
-    <Compile Include="Requests\SequentialRequest.cs" />
+    <Compile Include="Requests\Request.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

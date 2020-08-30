@@ -4,13 +4,13 @@ namespace BTurk.Automation.Core.Requests
 {
     public abstract class Command
     {
-        private readonly List<SequentialRequest> _requests;
+        private readonly List<Request> _requests;
 
         protected Command()
         {
-            _requests = new List<SequentialRequest>();
+            _requests = new List<Request>();
             Request = new CompositeRequest(_requests);
-            AddRootCommandRequest();
+            AddCommandRequest();
         }
 
         public bool CanMoveNext { get; set; }
@@ -19,12 +19,12 @@ namespace BTurk.Automation.Core.Requests
 
         protected abstract string CommandName { get; }
 
-        private void AddRootCommandRequest()
+        private void AddCommandRequest()
         {
-            AddRequest(new RootCommandRequest(CommandName));
+            AddRequest(new CommandRequest(CommandName));
         }
 
-        protected void AddRequest(SequentialRequest rule)
+        protected void AddRequest(Request rule)
         {
             _requests.Add(rule);
         }
