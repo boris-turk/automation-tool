@@ -49,7 +49,7 @@
     <Compile Include="SearchEngine\FilterAlgorithm.cs" />
     <Compile Include="SearchEngine\ISearchItemsProvider.cs" />
     <Compile Include="Requests\IRequestHandler.cs" />
-    <Compile Include="Requests\MainRequestHandler.cs" />
+    <Compile Include="Requests\RootRequestHandler.cs" />
     <Compile Include="Requests\IRequest.cs" />
     <Compile Include="SearchEngine\ISearchEngine.cs" />
     <Compile Include="Requests\CommandRequest.cs" />

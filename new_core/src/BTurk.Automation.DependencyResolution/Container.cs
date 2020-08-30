@@ -29,7 +29,7 @@ namespace BTurk.Automation.DependencyResolution
             if (type == typeof(IRequestHandler<CompositeRequest>))
                 return GetOrCreateSingleton(CompositeRequestHandler);
 
-            if (type == typeof(MainRequestHandler))
+            if (type == typeof(RootRequestHandler))
                 return GetOrCreateSingleton(MainRequestHandler);
 
             if (type == typeof(IRequestHandler<CommandRequest>))
@@ -81,17 +81,17 @@ namespace BTurk.Automation.DependencyResolution
         private static MainForm GetOrCreateMainForm()
         {
             var instance = GetOrCreateSingleton(() => new MainForm(), AttachSearchHandler);
-            void AttachSearchHandler(MainForm form) => form.RequestHandler = GetInstance<MainRequestHandler>();
+            void AttachSearchHandler(MainForm form) => form.RootRequestHandler = GetInstance<RootRequestHandler>();
             return instance;
         }
 
-        private static MainRequestHandler MainRequestHandler()
+        private static RootRequestHandler MainRequestHandler()
         {
             var commands = GetOrCreateSingleton(Commands);
             var searchEngine = GetInstance<ISearchItemsProvider>();
             var compositeRequestHandler = GetInstance<IRequestHandler<CompositeRequest>>();
 
-            return new MainRequestHandler(commands, compositeRequestHandler, searchEngine);
+            return new RootRequestHandler(commands, compositeRequestHandler, searchEngine);
         }
 
         private static List<Command> Commands()

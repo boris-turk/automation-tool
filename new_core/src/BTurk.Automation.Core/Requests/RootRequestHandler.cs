@@ -6,14 +6,14 @@ using BTurk.Automation.Core.SearchEngine;
 namespace BTurk.Automation.Core.Requests
 {
     [Serializable]
-    public class MainRequestHandler : IRequestHandler<IRequest>
+    public class RootRequestHandler
     {
         private Command _activeCommand;
         private readonly List<Command> _commands;
         private readonly ISearchItemsProvider _searchItemsProvider;
         private readonly IRequestHandler<CompositeRequest> _compositeRequestHandler;
 
-        public MainRequestHandler(List<Command> commands, IRequestHandler<CompositeRequest> compositeRequestHandler,
+        public RootRequestHandler(List<Command> commands, IRequestHandler<CompositeRequest> compositeRequestHandler,
             ISearchItemsProvider searchItemsProvider)
         {
             _commands = commands;
@@ -23,7 +23,7 @@ namespace BTurk.Automation.Core.Requests
 
         protected List<SearchItem> SearchItems => _searchItemsProvider.Items;
 
-        public void Handle(IRequest request)
+        public void Handle()
         {
             SearchItems.Clear();
 

@@ -32,7 +32,7 @@ namespace BTurk.Automation.DependencyResolution
 
         public List<SearchItem> Items { get; }
 
-        public IRequestHandler<IRequest> RequestHandler { get; set; }
+        public RootRequestHandler RootRequestHandler { get; set; }
 
         private void MoveFocusToTextBox()
         {
@@ -108,7 +108,7 @@ namespace BTurk.Automation.DependencyResolution
             FilterText = null;
             ActionType = actionType;
 
-            RequestHandler.Handle(null);
+            RootRequestHandler.Handle();
 
             ListBox.Items.Clear();
 
