@@ -1,4 +1,5 @@
-﻿using BTurk.Automation.Core.Requests;
+﻿using System.Linq;
+using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Decorators
@@ -19,10 +20,10 @@ namespace BTurk.Automation.Core.Decorators
 
         public void Handle(TRequest request)
         {
+            _decoratee.Handle(request);
+
             if (request.CanMoveNext)
                 _searchItemsProvider.Items.Clear();
-
-            _decoratee.Handle(request);
         }
     }
 }
