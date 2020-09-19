@@ -68,7 +68,9 @@ namespace BTurk.Automation.DependencyResolution
         {
             if (e.KeyCode == Keys.Escape)
             {
-                Hide();
+                if (!Debugger.IsAttached)
+                    Hide();
+
                 e.SuppressKeyPress = true;
                 e.Handled = true;
             }

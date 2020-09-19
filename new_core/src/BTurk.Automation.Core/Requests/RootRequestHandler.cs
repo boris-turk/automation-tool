@@ -31,7 +31,7 @@ namespace BTurk.Automation.Core.Requests
             {
                 _compositeRequestHandler.Handle(_activeCommand.Request);
 
-                if (!_activeCommand.CanMoveNext)
+                if (!_activeCommand.Request.Requests.Any(_ => _.CanMoveNext))
                     _activeCommand = null;
             }
 
