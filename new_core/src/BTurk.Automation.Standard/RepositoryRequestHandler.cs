@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 
@@ -19,12 +22,52 @@ namespace BTurk.Automation.Standard
             _searchEngine.FilterText = request.FilterTextProvider?.Invoke(_searchEngine.SearchText);
         }
 
-        public IEnumerable<SearchItem> GetRepositories()
+        public IEnumerable<Repository> GetRepositories()
         {
-            yield return new Repository("trunk");
-            yield return new Repository("r8");
-            yield return new Repository("r7");
-            yield return new Repository("r6");
+            var projectsDirectory = @"C:\work\projects";
+
+            foreach (var directory in Directory.GetDirectories(projectsDirectory))
+            {
+                var repository = ToRepository(directory);
+
+                if (repository != null)
+                    yield return repository;
+            }
         }
+
+        private Repository ToRepository(string directory)
+        {
+            var candidate = Path.GetFileName(directory);
+
+            if (Ignored.Contains(candidate))
+                return null;
+
+            if (candidate == "V50")
+                return new Repository("trunk", RepositoryType.Git, directory);
+
+            var match = Regex.Match(candidate, @"V50Rev0*(\d+)");
+
+            if (match.Success)
+            {
+                var name = $"r{match.Groups[1].Value}";
+                return new Repository(name, RepositoryType.Svn, directory);
+            }
+
+            match = Regex.Match(candidate, @"V50(.*)");
+
+            if (match.Success)
+            {
+                var name = $"{match.Groups[1].Value.ToLower()}";
+                return new Repository(name, RepositoryType.Svn, directory);
+            }
+
+            return null;
+        }
+
+        private string[] Ignored => new[]
+        {
+            "V50MicSvn",
+            "V50NewCore",
+        };
     }
 }

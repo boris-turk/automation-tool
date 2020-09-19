@@ -45,6 +45,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="RepositoryRequestHandler.cs" />
+    <Compile Include="RepositoryType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BTurk.Automation.Core\BTurk.Automation.Core.csproj">
