@@ -12,7 +12,7 @@ namespace BTurk.Automation.Standard
         {
             yield return new SelectionRequest<Repository>(OnRepositorySelected)
             {
-                FilterProvider = GetRepositorySearchText
+                FilterTextProvider = GetRepositorySearchText
             };
         }
 

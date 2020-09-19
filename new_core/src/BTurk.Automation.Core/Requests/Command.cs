@@ -13,8 +13,7 @@ namespace BTurk.Automation.Core.Requests
         private CompositeRequest CreateCompositeRequest()
         {
             var requests = CreateRequests().Prepend(new CommandRequest(CommandName));
-            var request = new CompositeRequest(requests);
-            return request;
+            return new CompositeRequest(requests);
         }
 
         public bool CanMoveNext { get; set; }

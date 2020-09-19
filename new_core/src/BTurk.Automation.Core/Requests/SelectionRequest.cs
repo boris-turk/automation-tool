@@ -2,7 +2,7 @@
 
 namespace BTurk.Automation.Core.Requests
 {
-    public class SelectionRequest<T> : Request
+    public class SelectionRequest<T> : Request, IFilteredRequest
     {
         public SelectionRequest(Action<T> onSelectedAction)
         {
@@ -10,6 +10,8 @@ namespace BTurk.Automation.Core.Requests
         }
 
         public Predicate<T> Filter { get; set; }
+
+        public Func<string, string> FilterTextProvider { get; set; }
 
         public Action<T> OnSelectedAction { get; }
     }
