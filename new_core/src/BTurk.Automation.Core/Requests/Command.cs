@@ -1,16 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace BTurk.Automation.Core.Requests
 {
     public abstract class Command
     {
-        private readonly List<Request> _requests;
-
         protected Command()
         {
-            _requests = new List<Request>();
-            Request = new CompositeRequest(_requests);
-            AddCommandRequest();
+            Request = CreateCompositeRequest();
+        }
+
+        private CompositeRequest CreateCompositeRequest()
+        {
+            var requests = CreateRequests().Prepend(new CommandRequest(CommandName));
+            var request = new CompositeRequest(requests);
+            return request;
         }
 
         public bool CanMoveNext { get; set; }
@@ -19,14 +23,6 @@ namespace BTurk.Automation.Core.Requests
 
         protected abstract string CommandName { get; }
 
-        private void AddCommandRequest()
-        {
-            AddRequest(new CommandRequest(CommandName));
-        }
-
-        protected void AddRequest(Request rule)
-        {
-            _requests.Add(rule);
-        }
+        protected abstract IEnumerable<Request> CreateRequests();
     }
 }

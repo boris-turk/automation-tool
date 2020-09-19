@@ -1,21 +1,20 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Standard
 {
     public class CommitRequestHandler : Command
     {
-        public CommitRequestHandler()
+        protected override string CommandName => "commit";
+
+        protected override IEnumerable<Request> CreateRequests()
         {
-            var repositoryRequest = new SelectionRequest<Repository>(OnRepositorySelected)
+            yield return new SelectionRequest<Repository>(OnRepositorySelected)
             {
                 FilterProvider = GetRepositorySearchText
             };
-
-            AddRequest(repositoryRequest);
         }
-
-        protected override string CommandName => "commit";
 
         private string GetRepositorySearchText(string text)
         {
