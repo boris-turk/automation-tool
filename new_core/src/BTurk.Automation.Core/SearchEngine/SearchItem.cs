@@ -8,5 +8,7 @@
         }
 
         public string Text { get; }
+
+        public override string ToString() => Text;
     }
 }

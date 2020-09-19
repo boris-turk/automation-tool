@@ -51,8 +51,13 @@ namespace BTurk.Automation.DependencyResolution
         private static IRequestHandler<SelectionRequest<Repository>> GetRepositoryRequestHandler()
         {
             IRequestHandler<SelectionRequest<Repository>> handler = new RepositoryRequestHandler(SearchEngine);
+
             handler = new ClearSearchItemsRequestHandlerDecorator<SelectionRequest<Repository>>(handler, SearchItemsProvider);
+
             handler = new FilteredRequestHandlerDecorator<SelectionRequest<Repository>>(handler, SearchEngine);
+
+            handler = new SelectionRequestHandlerDecorator<SelectionRequest<Repository>, Repository>(handler, SearchEngine);
+
             return handler;
         }
 

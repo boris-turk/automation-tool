@@ -35,6 +35,9 @@ namespace BTurk.Automation.Core.Requests
                     _activeCommand = null;
             }
 
+            if (_activeCommand != null)
+                return;
+
             SearchItems.Clear();
 
             foreach (var command in _commands)

@@ -115,7 +115,7 @@ namespace BTurk.Automation.DependencyResolution
             ListBox.Items.Clear();
 
             foreach (var item in new FilterAlgorithm(FilterText).Filter(Items))
-                ListBox.Items.Add(item.Text);
+                ListBox.Items.Add(item);
 
             SelectItem(0);
         }
@@ -165,7 +165,7 @@ namespace BTurk.Automation.DependencyResolution
             }
         }
 
-        public int SelectedItemIndex => ListBox.SelectedIndex;
+        public SearchItem SelectedItem => (SearchItem)ListBox.SelectedItem;
 
         public ActionType ActionType { get; private set; }
 

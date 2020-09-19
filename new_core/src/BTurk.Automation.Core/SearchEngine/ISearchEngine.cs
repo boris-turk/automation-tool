@@ -10,7 +10,7 @@ namespace BTurk.Automation.Core.SearchEngine
 
         Selection TextSelection { get; set; }
 
-        int SelectedItemIndex { get; }
+        SearchItem SelectedItem { get; }
 
         ActionType ActionType { get; }
 

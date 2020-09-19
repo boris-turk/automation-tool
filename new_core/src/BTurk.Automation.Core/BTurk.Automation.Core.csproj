@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Decorators\FilteredRequestHandlerDecorator.cs" />
+    <Compile Include="Decorators\SelectionRequestHandlerDecorator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\IFilteredRequest.cs" />
     <Compile Include="SearchEngine\ActionType.cs" />
