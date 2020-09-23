@@ -58,6 +58,10 @@ namespace BTurk.Automation.Standard
             if (match.Success)
             {
                 var name = $"{match.Groups[1].Value.ToLower()}";
+
+                if (name == "mic")
+                    return new Repository(name, RepositoryType.Git, directory);
+
                 return new Repository(name, RepositoryType.Svn, directory);
             }
 

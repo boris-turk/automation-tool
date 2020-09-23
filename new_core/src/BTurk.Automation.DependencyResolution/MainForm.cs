@@ -22,12 +22,16 @@ namespace BTurk.Automation.DependencyResolution
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.Manual;
             Location = new Point(OutOfScreenOffset, OutOfScreenOffset);
-            Closing += (sender, args) =>
+
+            Closing += (_, args) =>
             {
                 args.Cancel = true;
                 Visible = false;
             };
-            _listBox.SelectedIndexChanged += (o, a) => MoveFocusToTextBox();
+
+            _listBox.SelectedIndexChanged += (_, __) => MoveFocusToTextBox();
+
+            TextBox.KeyDown += (_, args) => OnTextBoxKeyDown(args);
         }
 
         public List<SearchItem> Items { get; }
@@ -36,9 +40,9 @@ namespace BTurk.Automation.DependencyResolution
 
         private void MoveFocusToTextBox()
         {
-            if (!_textBox.Focused)
+            if (!TextBox.Focused)
             {
-                _textBox.Focus();
+                TextBox.Focus();
             }
         }
 
@@ -84,6 +88,35 @@ namespace BTurk.Automation.DependencyResolution
             base.OnKeyDown(e);
         }
 
+        private void OnTextBoxKeyDown(KeyEventArgs args)
+        {
+            var handled = false;
+
+            if (args.KeyCode == Keys.Down)
+            {
+                SelectItem(ListBox.SelectedIndex + 1);
+                handled = true;
+            }
+
+            if (args.KeyCode == Keys.Up)
+            {
+                SelectItem(ListBox.SelectedIndex - 1);
+                handled = true;
+            }
+
+            if (args.KeyData == (Keys.Control | Keys.Back))
+            {
+                SendKeys.SendWait("^+{LEFT}{BACKSPACE}");
+                handled = true;
+            }
+
+            if (handled)
+            {
+                args.SuppressKeyPress = true;
+                args.Handled = true;
+            }
+        }
+
         protected override void OnShown(EventArgs e)
         {
             if (Debugger.IsAttached)
@@ -112,25 +145,26 @@ namespace BTurk.Automation.DependencyResolution
 
             RootRequestHandler.Handle();
 
+            var selectedIndex = ListBox.SelectedIndex;
+
             ListBox.Items.Clear();
 
             foreach (var item in new FilterAlgorithm(FilterText).Filter(Items))
                 ListBox.Items.Add(item);
 
-            SelectItem(0);
+            if (actionType != ActionType.Execution)
+                selectedIndex = 0;
+
+            SelectItem(selectedIndex);
         }
 
         private void SelectItem(int itemIndex)
         {
             if (itemIndex < 0)
-            {
                 return;
-            }
 
             if (ListBox.Items.Count > itemIndex)
-            {
                 ListBox.SelectedIndex = itemIndex;
-            }
         }
 
         public void ToggleVisibility()

@@ -23,6 +23,7 @@ namespace BTurk.Automation.Standard
 
         private void OnRepositorySelected(Repository repository)
         {
+            repository.Commit();
         }
     }
 }
