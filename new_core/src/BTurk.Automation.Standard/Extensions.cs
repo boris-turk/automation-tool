@@ -17,6 +17,11 @@ namespace BTurk.Automation.Standard
             repository.ExecuteCommand("commit");
         }
 
+        public static void Open(this Solution repository)
+        {
+            Process.Start(repository.AbsolutePath);
+        }
+
         private static void ExecuteCommand(this Repository repository, string command)
         {
             var path = repository.AbsolutePath;

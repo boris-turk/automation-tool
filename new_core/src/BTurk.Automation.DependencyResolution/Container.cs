@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using BTurk.Automation.Core;
 using BTurk.Automation.Core.Decorators;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
+using BTurk.Automation.Core.Serialization;
 using BTurk.Automation.E3k;
 using BTurk.Automation.Standard;
 
@@ -26,6 +28,9 @@ namespace BTurk.Automation.DependencyResolution
             if (IsSearchEngineRequest(type))
                 return GetOrCreateMainForm();
 
+            if (type == typeof(IResourceProvider))
+                return GetOrCreateSingleton(() => new JsonResourceProvider());
+
             if (type == typeof(IRequestHandler<CompositeRequest>))
                 return GetOrCreateSingleton(CompositeRequestHandler);
 
@@ -38,11 +43,16 @@ namespace BTurk.Automation.DependencyResolution
             if (type == typeof(IRequestHandler<SelectionRequest<Repository>>))
                 return GetOrCreateSingleton(GetRepositoryRequestHandler);
 
+            if (type == typeof(IRequestHandler<SelectionRequest<Solution>>))
+                return GetOrCreateSingleton(GetSolutionRequestHandler);
+
             if (instance == null)
                 throw FailedToCreateInstance(type);
 
             return instance;
         }
+
+        private static IResourceProvider ResourceProvider => GetInstance<IResourceProvider>();
 
         private static ISearchEngine SearchEngine => GetInstance<ISearchEngine>();
 
@@ -57,6 +67,19 @@ namespace BTurk.Automation.DependencyResolution
             handler = new FilteredRequestHandlerDecorator<SelectionRequest<Repository>>(handler, SearchEngine);
 
             handler = new SelectionRequestHandlerDecorator<SelectionRequest<Repository>, Repository>(handler, SearchEngine);
+
+            return handler;
+        }
+
+        private static IRequestHandler<SelectionRequest<Solution>> GetSolutionRequestHandler()
+        {
+            IRequestHandler<SelectionRequest<Solution>> handler = new SolutionSelectionRequestHandler(SearchEngine, ResourceProvider);
+
+            handler = new ClearSearchItemsRequestHandlerDecorator<SelectionRequest<Solution>>(handler, SearchItemsProvider);
+
+            handler = new FilteredRequestHandlerDecorator<SelectionRequest<Solution>>(handler, SearchEngine);
+
+            handler = new SelectionRequestHandlerDecorator<SelectionRequest<Solution>, Solution>(handler, SearchEngine);
 
             return handler;
         }
@@ -107,6 +130,7 @@ namespace BTurk.Automation.DependencyResolution
             return new List<Command>
             {
                 new CommitRequestHandler(),
+                new SolutionRequestHandler(),
                 new FieldRequestHandler()
             };
         }
