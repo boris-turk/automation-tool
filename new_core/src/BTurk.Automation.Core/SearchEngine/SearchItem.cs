@@ -2,12 +2,7 @@
 {
     public class SearchItem
     {
-        public SearchItem(string text)
-        {
-            Text = text;
-        }
-
-        public string Text { get; }
+        public string Text { get; set; }
 
         public override string ToString() => Text;
     }

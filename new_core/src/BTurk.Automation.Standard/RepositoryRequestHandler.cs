@@ -43,14 +43,26 @@ namespace BTurk.Automation.Standard
                 return null;
 
             if (candidate == "V50")
-                return new Repository("trunk", RepositoryType.Git, directory);
+            {
+                return new Repository
+                {
+                    Text = "trunk",
+                    Type = RepositoryType.Git,
+                    AbsolutePath = directory
+                };
+            }
 
             var match = Regex.Match(candidate, @"V50Rev0*(\d+)");
 
             if (match.Success)
             {
                 var name = $"r{match.Groups[1].Value}";
-                return new Repository(name, RepositoryType.Svn, directory);
+                return new Repository
+                {
+                    Text = name,
+                    Type = RepositoryType.Svn,
+                    AbsolutePath = directory
+                };
             }
 
             match = Regex.Match(candidate, @"V50(.*)");
@@ -60,9 +72,21 @@ namespace BTurk.Automation.Standard
                 var name = $"{match.Groups[1].Value.ToLower()}";
 
                 if (name == "mic")
-                    return new Repository(name, RepositoryType.Git, directory);
+                {
+                    return new Repository
+                    {
+                        Text = name,
+                        Type = RepositoryType.Git,
+                        AbsolutePath = directory
+                    };
+                }
 
-                return new Repository(name, RepositoryType.Svn, directory);
+                return new Repository
+                {
+                    Text = name,
+                    Type = RepositoryType.Svn,
+                    AbsolutePath = directory
+                };
             }
 
             return null;

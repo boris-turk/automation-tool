@@ -97,4 +97,7 @@
     <None Include="Resources\loader.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>xcopy "$(SolutionDir)Configuration\*.*" "$(TargetDir)\Configuration" /Y /I /E</PreBuildEvent>
+  </PropertyGroup>
 </Project>

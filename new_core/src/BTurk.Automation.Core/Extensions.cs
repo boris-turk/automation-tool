@@ -6,7 +6,7 @@ namespace BTurk.Automation.Core
     {
         public static void AddItem(this ISearchEngine engine, string text)
         {
-            engine.AddItems(new[] {new SearchItem(text)});
+            engine.AddItems(new[] { new SearchItem { Text = text } });
         }
     }
 }

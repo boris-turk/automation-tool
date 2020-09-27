@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using BTurk.Automation.Host.AssemblyLoading;
@@ -25,6 +26,8 @@ namespace BTurk.Automation.Host
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            Environment.CurrentDirectory = GetExecutingAssemblyDirectory();
+
 			try
             {
                 _startupProcess = new StartupProcess();
@@ -40,6 +43,12 @@ namespace BTurk.Automation.Host
 				AppDomain.CurrentDomain.UnhandledException -= OnAppDomainUnhandledException;
 				ReleaseMutex();
             }
+        }
+
+        private static string GetExecutingAssemblyDirectory()
+        {
+            var fileLocation = Assembly.GetExecutingAssembly().Location;
+            return Path.GetDirectoryName(fileLocation) ?? Environment.CurrentDirectory;
         }
 
         private static bool CreateMutex()
