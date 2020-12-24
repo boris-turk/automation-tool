@@ -45,6 +45,9 @@
   <ItemGroup>
     <Compile Include="CompositeRequestHandler.cs" />
     <Compile Include="Container.cs" />
+    <Compile Include="Decorators.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="GenericMethodInvoker.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

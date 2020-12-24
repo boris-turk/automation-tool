@@ -23,22 +23,26 @@ namespace BTurk.Automation.DependencyResolution
 
         public static object GetInstance(Type type)
         {
-            object instance = null;
+            var instance = GetInstanceInternal(type);
+            return new Decorators(instance, type).Apply();
+        }
 
+        public static object GetInstanceInternal(Type type)
+        {
             if (IsSearchEngineRequest(type))
-                return GetOrCreateMainForm();
+                return GetOrCreateSingleton<MainForm>(InitializeMainForm);
 
             if (type == typeof(IResourceProvider))
-                return GetOrCreateSingleton(() => new JsonResourceProvider());
+                return GetOrCreateSingleton<JsonResourceProvider>();
 
             if (type == typeof(IRequestHandler<CompositeRequest>))
-                return GetOrCreateSingleton(CompositeRequestHandler);
+                return GetOrCreateSingleton<CompositeRequestHandler>();
 
             if (type == typeof(RootRequestHandler))
-                return GetOrCreateSingleton(MainRequestHandler);
+                return GetOrCreateSingleton<RootRequestHandler>();
 
             if (type == typeof(IRequestHandler<CommandRequest>))
-                return GetOrCreateSingleton(CreateCommandRequestHandler);
+                return GetOrCreateSingleton<CommandRequestHandler>();
 
             if (type == typeof(IRequestHandler<SelectionRequest<Repository>>))
                 return GetOrCreateSingleton(GetRepositoryRequestHandler);
@@ -46,10 +50,13 @@ namespace BTurk.Automation.DependencyResolution
             if (type == typeof(IRequestHandler<SelectionRequest<Solution>>))
                 return GetOrCreateSingleton(GetSolutionRequestHandler);
 
-            if (instance == null)
-                throw FailedToCreateInstance(type);
+            if (type == typeof(List<Command>))
+                return GetOrCreateSingleton(Commands);
 
-            return instance;
+            if (type == typeof(CommandRequestHandler))
+                return GetOrCreateSingleton<CommandRequestHandler>();
+
+            throw FailedToCreateInstance(type);
         }
 
         private static IResourceProvider ResourceProvider => GetInstance<IResourceProvider>();
@@ -84,17 +91,6 @@ namespace BTurk.Automation.DependencyResolution
             return handler;
         }
 
-        private static IRequestHandler<CommandRequest> CreateCommandRequestHandler()
-        {
-            var handler = new CommandRequestHandler(SearchEngine);
-            return new ClearSearchItemsRequestHandlerDecorator<CommandRequest>(handler, SearchItemsProvider);
-        }
-
-        private static IRequestHandler<CompositeRequest> CompositeRequestHandler()
-        {
-            return new CompositeRequestHandler();
-        }
-
         private static bool IsSearchEngineRequest(Type type)
         {
             if (type == typeof(MainForm))
@@ -109,20 +105,9 @@ namespace BTurk.Automation.DependencyResolution
             return false;
         }
 
-        private static MainForm GetOrCreateMainForm()
+        private static void InitializeMainForm(MainForm mainForm)
         {
-            var instance = GetOrCreateSingleton(() => new MainForm(), AttachSearchHandler);
-            void AttachSearchHandler(MainForm form) => form.RootRequestHandler = GetInstance<RootRequestHandler>();
-            return instance;
-        }
-
-        private static RootRequestHandler MainRequestHandler()
-        {
-            var commands = GetOrCreateSingleton(Commands);
-            var searchEngine = GetInstance<ISearchItemsProvider>();
-            var compositeRequestHandler = GetInstance<IRequestHandler<CompositeRequest>>();
-
-            return new RootRequestHandler(commands, compositeRequestHandler, searchEngine);
+            mainForm.RootRequestHandler = GetInstance<RootRequestHandler>();
         }
 
         private static List<Command> Commands()
@@ -133,6 +118,11 @@ namespace BTurk.Automation.DependencyResolution
                 new SolutionRequestHandler(),
                 new FieldRequestHandler()
             };
+        }
+
+        private static T GetOrCreateSingleton<T>(Action<T> initializer = null)
+        {
+            return GetOrCreateSingleton(CreateInstance<T>, initializer);
         }
 
         private static T GetOrCreateSingleton<T>(Func<T> provider, Action<T> initializer = null)
@@ -163,6 +153,32 @@ namespace BTurk.Automation.DependencyResolution
         private static InvalidOperationException FailedToCreateInstance(Type type)
         {
             return new InvalidOperationException($"Failed to create instance of type {type.Name}");
+        }
+
+        private static T CreateInstance<T>()
+        {
+            return (T)CreateInstance(typeof(T));
+        }
+
+        private static object CreateInstance(Type type)
+        {
+            var constructors = type.GetConstructors().Where(_ => _.IsPublic).ToList();
+
+            if (constructors.Count != 1)
+            {
+                throw new InvalidOperationException(
+                    $"Cannot create type {type.FullName} as it does not have exactly one public constructor");
+            }
+
+            var parameters = (
+                from parameter in constructors[0].GetParameters()
+                let parameterInstance = GetInstance(parameter.ParameterType)
+                select parameterInstance
+            ).ToArray();
+
+            var instance = Activator.CreateInstance(type, parameters);
+
+            return instance;
         }
     }
 }

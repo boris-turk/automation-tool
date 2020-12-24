@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1062
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTurk.Automation.Host", "BTurk.Automation.Host\BTurk.Automation.Host.csproj", "{BB0A2819-0EF2-4BA9-829C-CC0621CD10C0}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C2349D03-A1FF-4702-AF7C-6954B9F95D56}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTurk.Automation.Standard.UnitTests", "Tests\BTurk.Automation.Standard.UnitTests\BTurk.Automation.Standard.UnitTests.csproj", "{42B7DEA5-3AE6-4104-B214-0120FC440D77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTurk.Automation.DependencyResolution.UnitTests", "Tests\BTurk.Automation.DependencyResolution.UnitTests\BTurk.Automation.DependencyResolution.UnitTests.csproj", "{9868302B-5A70-486C-935F-9E7F2B95FA3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{42B7DEA5-3AE6-4104-B214-0120FC440D77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42B7DEA5-3AE6-4104-B214-0120FC440D77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42B7DEA5-3AE6-4104-B214-0120FC440D77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9868302B-5A70-486C-935F-9E7F2B95FA3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9868302B-5A70-486C-935F-9E7F2B95FA3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9868302B-5A70-486C-935F-9E7F2B95FA3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9868302B-5A70-486C-935F-9E7F2B95FA3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{931E7E69-09C0-4F0F-8EF5-927B1847ABFA} = {3795B307-F10A-4A52-8712-F62A18328006}
 		{A48DC1B5-1E2B-41C1-AB49-998D95085B48} = {3795B307-F10A-4A52-8712-F62A18328006}
 		{42B7DEA5-3AE6-4104-B214-0120FC440D77} = {C2349D03-A1FF-4702-AF7C-6954B9F95D56}
+		{9868302B-5A70-486C-935F-9E7F2B95FA3B} = {C2349D03-A1FF-4702-AF7C-6954B9F95D56}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6DE868CA-43FB-41BB-883C-0795B6BD49CC}
