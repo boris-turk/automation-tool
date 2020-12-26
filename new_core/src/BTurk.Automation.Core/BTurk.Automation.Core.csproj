@@ -68,9 +68,15 @@
     <Compile Include="Requests\SelectionRequest.cs" />
     <Compile Include="Requests\Request.cs" />
     <Compile Include="Serialization\JsonResourceProvider.cs" />
+    <Compile Include="WinApi\GlobalKeyboardHook.cs" />
+    <Compile Include="WinApi\GlobalKeyboardHookEventArgs.cs" />
+    <Compile Include="WinApi\Constants.cs" />
+    <Compile Include="WinApi\KeyboardState.cs" />
+    <Compile Include="WinApi\LowLevelKeyboardInputEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
