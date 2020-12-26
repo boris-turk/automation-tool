@@ -70,22 +70,32 @@ namespace BTurk.Automation.DependencyResolution
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
-            {
-                if (!Debugger.IsAttached)
-                    Hide();
+            var handled = ProcessKeyDown(e);
 
-                e.SuppressKeyPress = true;
-                e.Handled = true;
-            }
-            else if (!e.Alt && !e.Control && !e.Shift && e.KeyCode == Keys.Enter)
+            if (handled)
             {
-                TriggerAction(ActionType.Execution);
-                e.SuppressKeyPress = true;
                 e.Handled = true;
+                e.SuppressKeyPress = true;
             }
 
             base.OnKeyDown(e);
+        }
+
+        private bool ProcessKeyDown(KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    Hide();
+                    return true;
+
+                case Keys.Enter when !e.Alt && !e.Control && !e.Shift:
+                    TriggerAction(ActionType.Execution);
+                    return true;
+
+                default:
+                    return false;
+            }
         }
 
         private void OnTextBoxKeyDown(KeyEventArgs args)
