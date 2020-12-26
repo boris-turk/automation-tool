@@ -35,14 +35,28 @@ namespace BTurk.Automation.DependencyResolution
 
         private void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs e)
         {
-            if (IsToggleAutomationWindowEvent(e))
+            if (IsToggleContextWindowEvent(e))
+            {
+                e.Handled = true;
+                _mainForm.ToggleVisibility();
+            }
+
+            if (IsToggleMainWindowEvent(e))
             {
                 e.Handled = true;
                 _mainForm.ToggleVisibility();
             }
         }
 
-        private bool IsToggleAutomationWindowEvent(GlobalKeyboardHookEventArgs e)
+        private bool IsToggleContextWindowEvent(GlobalKeyboardHookEventArgs e)
+        {
+            return
+                e.KeyboardState == KeyboardState.SysKeyDown &&
+                e.KeyboardData.Flags == Constants.LlkhfAltdown &&
+                e.KeyboardData.VirtualCode == 186;
+        }
+
+        private bool IsToggleMainWindowEvent(GlobalKeyboardHookEventArgs e)
         {
             return
                 e.KeyboardState == KeyboardState.SysKeyDown &&

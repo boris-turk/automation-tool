@@ -16,8 +16,6 @@ namespace BTurk.Automation.Core.Requests
             return new CompositeRequest(requests);
         }
 
-        public bool CanMoveNext { get; set; }
-
         public CompositeRequest Request { get; }
 
         protected abstract string CommandName { get; }
