@@ -33,7 +33,11 @@ namespace AutomationEngine
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(FormFactory.Instance<MainForm>());
+
+            var mainForm = FormFactory.Instance<MainForm>();
+            mainForm.Load += (_, __) => new GlobalShortcuts().Install();
+
+            Application.Run(mainForm);
         }
 
         private static void SetCurrentDirectory()

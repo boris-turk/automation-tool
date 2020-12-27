@@ -223,7 +223,7 @@ namespace AutomationEngine
             }
         }
 
-        private void ToggleAutomationEngineVisibility()
+        protected void ToggleAutomationEngineVisibility()
         {
             if (VisibleChildForm != null)
             {

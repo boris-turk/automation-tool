@@ -14,6 +14,32 @@ namespace AutomationEngine
         public event Action Execute;
         public event Action<ActionType> ShortcutPressed;
 
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 0x0312)
+                OnGlobalShortcutKeyPressed(m.WParam.ToInt32());
+
+            base.WndProc(ref m);
+        }
+
+        private void OnGlobalShortcutKeyPressed(int shortcutId)
+        {
+            switch (shortcutId)
+            {
+                case GlobalShortcuts.OpenMainWindowShortcutId:
+                    MenuEngine.Instance.AlternateRootMenuAlias = null;
+                    MenuEngine.Instance.ApplicationContext = null;
+                    ToggleAutomationEngineVisibility();
+                    break;
+
+                case GlobalShortcuts.OpenAppContextWindowShortcutId:
+                    MenuEngine.Instance.AlternateRootMenuAlias = null;
+                    MenuEngine.Instance.ApplicationContext = null;
+                    ToggleAutomationEngineVisibility();
+                    break;
+            }
+        }
+
         public MainForm()
         {
             InitializeComponent();
