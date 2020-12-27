@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Windows.Forms;
-using BTurk.Automation.Core.WinApi;
 using BTurk.Automation.Host.AssemblyLoading;
 
 // ReSharper disable UnusedMember.Global
@@ -10,17 +9,17 @@ namespace BTurk.Automation.DependencyResolution
     public class GuestProcess : IGuestProcess
     {
         private MainForm _mainForm;
+        private GlobalShortcuts _globalShortcuts;
 
         public void Start()
         {
-            GlobalKeyboardHook keyboardHook = null;
-
             try
             {
-                keyboardHook = new GlobalKeyboardHook();
-                keyboardHook.KeyboardPressed += OnKeyPressed;
+                _globalShortcuts = new GlobalShortcuts();
 
                 _mainForm = Container.GetInstance<MainForm>();
+                _mainForm.Load += (_, __) => _globalShortcuts.Install();
+
                 Application.Run(_mainForm);
             }
             catch (ThreadAbortException)
@@ -29,39 +28,8 @@ namespace BTurk.Automation.DependencyResolution
             }
             finally
             {
-                keyboardHook?.Dispose();
+                _globalShortcuts.Uninstall();
             }
-        }
-
-        private void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs e)
-        {
-            if (IsToggleContextWindowEvent(e))
-            {
-                e.Handled = true;
-                _mainForm.ToggleVisibility();
-            }
-
-            if (IsToggleMainWindowEvent(e))
-            {
-                e.Handled = true;
-                _mainForm.ToggleVisibility();
-            }
-        }
-
-        private bool IsToggleContextWindowEvent(GlobalKeyboardHookEventArgs e)
-        {
-            return
-                e.KeyboardState == KeyboardState.SysKeyDown &&
-                e.KeyboardData.Flags == Constants.LlkhfAltdown &&
-                e.KeyboardData.VirtualCode == 186;
-        }
-
-        private bool IsToggleMainWindowEvent(GlobalKeyboardHookEventArgs e)
-        {
-            return
-                e.KeyboardState == KeyboardState.SysKeyDown &&
-                e.KeyboardData.Flags == Constants.LlkhfAltdown &&
-                e.KeyboardData.VirtualCode == Constants.VK_SPACE;
         }
 
         public void Unload()

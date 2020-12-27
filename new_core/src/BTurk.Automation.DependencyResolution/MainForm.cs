@@ -217,5 +217,27 @@ namespace BTurk.Automation.DependencyResolution
         {
             Items.AddRange(items);
         }
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 0x0312)
+                OnGlobalShortcutKeyPressed(m.WParam.ToInt32());
+
+            base.WndProc(ref m);
+        }
+
+        private void OnGlobalShortcutKeyPressed(int shortcutId)
+        {
+            switch (shortcutId)
+            {
+                case GlobalShortcuts.OpenMainWindowShortcutId:
+                    ToggleVisibility();
+                    break;
+
+                case GlobalShortcuts.OpenAppContextWindowShortcutId:
+                    ToggleVisibility();
+                    break;
+            }
+        }
     }
 }

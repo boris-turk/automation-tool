@@ -7,6 +7,8 @@ namespace BTurk.Automation.Core.WinApi
 {
     public static class Constants
     {
+        public const int MOD_ALT = 0x0001;
+
         public const int WH_KEYBOARD_LL = 13;
         public const int HC_ACTION = 0;
 
