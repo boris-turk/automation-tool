@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 using BTurk.Automation.Core.WinApi;
-
-// ReSharper disable IdentifierTypo
 
 namespace BTurk.Automation.DependencyResolution
 {
@@ -19,12 +16,6 @@ namespace BTurk.Automation.DependencyResolution
         private Timer _timer;
         private MainForm _form;
         private bool _shortcutsInstalled;
-
-        [DllImport("user32.dll")]
-        public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
-
-        [DllImport("user32.dll")]
-        public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
         public void Install()
         {
@@ -77,17 +68,17 @@ namespace BTurk.Automation.DependencyResolution
 
         private void RegisterHotKeys()
         {
-            _shortcutsInstalled = RegisterHotKey(
+            _shortcutsInstalled = Methods.RegisterHotKey(
                 _form.Handle, OpenMainWindowShortcutId, Constants.MOD_ALT, Constants.VK_SPACE);
 
-            _shortcutsInstalled = RegisterHotKey(
+            _shortcutsInstalled = Methods.RegisterHotKey(
                 _form.Handle, OpenAppContextWindowShortcutId, Constants.MOD_ALT, Constants.VK_OEM_1);
         }
 
         private void UnRegisterHotKeys()
         {
-            UnregisterHotKey(_form.Handle, OpenMainWindowShortcutId);
-            UnregisterHotKey(_form.Handle, OpenAppContextWindowShortcutId);
+            Methods.UnregisterHotKey(_form.Handle, OpenMainWindowShortcutId);
+            Methods.UnregisterHotKey(_form.Handle, OpenAppContextWindowShortcutId);
         }
     }
 }

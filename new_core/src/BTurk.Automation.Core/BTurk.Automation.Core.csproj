@@ -69,6 +69,7 @@
     <Compile Include="Requests\Request.cs" />
     <Compile Include="Serialization\JsonResourceProvider.cs" />
     <Compile Include="WinApi\Constants.cs" />
+    <Compile Include="WinApi\Methods.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
