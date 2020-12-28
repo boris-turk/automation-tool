@@ -4,7 +4,7 @@ using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Standard
 {
-    public class CommitRequestHandler : Command
+    public class CommitRequestHandler : NamedCommand
     {
         protected override string CommandName => "commit";
 

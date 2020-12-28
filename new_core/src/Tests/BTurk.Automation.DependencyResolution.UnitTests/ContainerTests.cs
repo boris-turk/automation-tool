@@ -38,7 +38,7 @@ namespace BTurk.Automation.DependencyResolution.UnitTests
             {
                 var types = new List<Type>
                 {
-                    typeof(List<Command>),
+                    typeof(List<ICommand>),
                     typeof(ISearchItemsProvider),
                     typeof(IResourceProvider),
                     typeof(IRequestHandler<CommandRequest>),

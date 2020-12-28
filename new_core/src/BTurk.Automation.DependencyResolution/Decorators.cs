@@ -11,11 +11,6 @@ namespace BTurk.Automation.DependencyResolution
         private readonly object _instance;
         private readonly Type _requestedType;
 
-        private Type[] _decorators => new[]
-        {
-            typeof(ClearSearchItemsRequestHandlerDecorator<>)
-        };
-
         public Decorators(object instance, Type requestedType)
         {
             _instance = instance;

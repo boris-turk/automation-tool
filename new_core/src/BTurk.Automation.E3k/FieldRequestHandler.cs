@@ -4,7 +4,7 @@ using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.E3k
 {
-    public class FieldRequestHandler : Command
+    public class FieldRequestHandler : NamedCommand
     {
         protected override string CommandName => "field";
 

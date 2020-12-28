@@ -18,7 +18,17 @@ namespace BTurk.Automation.Core.Decorators
         public void Handle(TRequest request)
         {
             _decoratee.Handle(request);
-            _searchEngine.FilterText = request.FilterTextProvider?.Invoke(_searchEngine.SearchText);
+            _searchEngine.FilterText = GetFilterText(request);
+        }
+
+        private string GetFilterText(TRequest request)
+        {
+            var filterText = _searchEngine.SearchText;
+
+            if (request.FilterTextProvider != null)
+                filterText = request.FilterTextProvider.Invoke(filterText);
+
+            return filterText;
         }
     }
 }

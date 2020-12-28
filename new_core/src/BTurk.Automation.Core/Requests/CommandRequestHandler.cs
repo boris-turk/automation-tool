@@ -14,7 +14,12 @@ namespace BTurk.Automation.Core.Requests
 
         public void Handle(CommandRequest request)
         {
-            var match = Regex.Match(_searchEngine.SearchText, @"^(?<command>\S+)(?<space>\s)?");
+            var searchText = _searchEngine.SearchText;
+
+            if (_searchEngine.ActionType == ActionType.Execution)
+                searchText = request.Name;
+
+            var match = Regex.Match(searchText, @"^(?<command>\S+)(?<space>\s)?");
 
             if (!match.Success)
             {

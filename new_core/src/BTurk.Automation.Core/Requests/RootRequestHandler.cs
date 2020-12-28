@@ -8,12 +8,12 @@ namespace BTurk.Automation.Core.Requests
     [Serializable]
     public class RootRequestHandler
     {
-        private Command _activeCommand;
-        private readonly List<Command> _commands;
+        private ICommand _activeCommand;
+        private readonly List<ICommand> _commands;
         private readonly ISearchItemsProvider _searchItemsProvider;
         private readonly IRequestHandler<CompositeRequest> _compositeRequestHandler;
 
-        public RootRequestHandler(List<Command> commands, IRequestHandler<CompositeRequest> compositeRequestHandler,
+        public RootRequestHandler(List<ICommand> commands, IRequestHandler<CompositeRequest> compositeRequestHandler,
             ISearchItemsProvider searchItemsProvider)
         {
             _commands = commands;

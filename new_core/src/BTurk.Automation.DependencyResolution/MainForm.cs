@@ -10,7 +10,15 @@ namespace BTurk.Automation.DependencyResolution
 {
     internal partial class MainForm : Form, ISearchEngine, ISearchItemsProvider
     {
+        private WindowContext _context;
+
         private const int OutOfScreenOffset = -20000;
+
+        public WindowContext Context
+        {
+            get => _context ?? new WindowContext("");
+            set => _context = value;
+        }
 
         public MainForm()
         {
@@ -32,6 +40,8 @@ namespace BTurk.Automation.DependencyResolution
             _listBox.SelectedIndexChanged += (_, __) => MoveFocusToTextBox();
 
             TextBox.KeyDown += (_, args) => OnTextBoxKeyDown(args);
+
+            VisibleChanged += (_, __) => { if (Visible) OnBecomingVisible(); };
         }
 
         public List<SearchItem> Items { get; }
@@ -134,12 +144,17 @@ namespace BTurk.Automation.DependencyResolution
             else
                 Visible = false;
 
+            OnBecomingVisible();
+
+            base.OnShown(e);
+        }
+
+        private void OnBecomingVisible()
+        {
             if (string.IsNullOrWhiteSpace(TextBox.Text))
                 TriggerAction(ActionType.TextChanged);
             else
                 TextBox.Text = "";
-
-            base.OnShown(e);
         }
 
         protected override void OnLoad(EventArgs e)

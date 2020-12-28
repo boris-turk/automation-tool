@@ -50,7 +50,7 @@ namespace BTurk.Automation.DependencyResolution
             if (type == typeof(IRequestHandler<SelectionRequest<Solution>>))
                 return GetOrCreateSingleton(GetSolutionRequestHandler);
 
-            if (type == typeof(List<Command>))
+            if (type == typeof(List<ICommand>))
                 return GetOrCreateSingleton(Commands);
 
             if (type == typeof(CommandRequestHandler))
@@ -69,8 +69,6 @@ namespace BTurk.Automation.DependencyResolution
         {
             IRequestHandler<SelectionRequest<Repository>> handler = new RepositoryRequestHandler(SearchEngine);
 
-            handler = new ClearSearchItemsRequestHandlerDecorator<SelectionRequest<Repository>>(handler, SearchItemsProvider);
-
             handler = new FilteredRequestHandlerDecorator<SelectionRequest<Repository>>(handler, SearchEngine);
 
             handler = new SelectionRequestHandlerDecorator<SelectionRequest<Repository>, Repository>(handler, SearchEngine);
@@ -81,8 +79,6 @@ namespace BTurk.Automation.DependencyResolution
         private static IRequestHandler<SelectionRequest<Solution>> GetSolutionRequestHandler()
         {
             IRequestHandler<SelectionRequest<Solution>> handler = new SolutionSelectionRequestHandler(SearchEngine, ResourceProvider);
-
-            handler = new ClearSearchItemsRequestHandlerDecorator<SelectionRequest<Solution>>(handler, SearchItemsProvider);
 
             handler = new FilteredRequestHandlerDecorator<SelectionRequest<Solution>>(handler, SearchEngine);
 
@@ -110,10 +106,11 @@ namespace BTurk.Automation.DependencyResolution
             mainForm.RootRequestHandler = GetInstance<RootRequestHandler>();
         }
 
-        private static List<Command> Commands()
+        private static List<ICommand> Commands()
         {
-            return new List<Command>
+            return new List<ICommand>
             {
+                new ApplicationContextMenuRequestHandler(SearchEngine),
                 new CommitRequestHandler(),
                 new SolutionRequestHandler(),
                 new FieldRequestHandler()

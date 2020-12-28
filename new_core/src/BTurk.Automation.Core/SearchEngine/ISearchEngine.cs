@@ -2,7 +2,7 @@
 
 namespace BTurk.Automation.Core.SearchEngine
 {
-    public interface ISearchEngine
+    public interface ISearchEngine : IWindowContextProvider
     {
         string SearchText { get; set; }
 

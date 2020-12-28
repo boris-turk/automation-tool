@@ -3,20 +3,15 @@ using System.Linq;
 
 namespace BTurk.Automation.Core.Requests
 {
-    public abstract class Command
+    public abstract class NamedCommand : ICommand
     {
-        protected Command()
-        {
-            Request = CreateCompositeRequest();
-        }
-
         private CompositeRequest CreateCompositeRequest()
         {
             var requests = CreateRequests().Prepend(new CommandRequest(CommandName));
             return new CompositeRequest(requests);
         }
 
-        public CompositeRequest Request { get; }
+        public CompositeRequest Request => CreateCompositeRequest();
 
         protected abstract string CommandName { get; }
 

@@ -49,12 +49,15 @@
     <Compile Include="Decorators\SelectionRequestHandlerDecorator.cs" />
     <Compile Include="IResourceProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Requests\ICommand.cs" />
     <Compile Include="Requests\IFilteredRequest.cs" />
     <Compile Include="SearchEngine\ActionType.cs" />
     <Compile Include="Decorators\ClearSearchItemsRequestHandlerDecorator.cs" />
     <Compile Include="Requests\CompositeRequest.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="SearchEngine\WindowContext.cs" />
     <Compile Include="SearchEngine\FilterAlgorithm.cs" />
+    <Compile Include="SearchEngine\IWindowContextProvider.cs" />
     <Compile Include="SearchEngine\ISearchItemsProvider.cs" />
     <Compile Include="Requests\IRequestHandler.cs" />
     <Compile Include="Requests\RootRequestHandler.cs" />
@@ -62,7 +65,7 @@
     <Compile Include="SearchEngine\ISearchEngine.cs" />
     <Compile Include="Requests\CommandRequest.cs" />
     <Compile Include="Requests\CommandRequestHandler.cs" />
-    <Compile Include="Requests\Command.cs" />
+    <Compile Include="Requests\NamedCommand.cs" />
     <Compile Include="SearchEngine\SearchItem.cs" />
     <Compile Include="SearchEngine\Selection.cs" />
     <Compile Include="Requests\SelectionRequest.cs" />

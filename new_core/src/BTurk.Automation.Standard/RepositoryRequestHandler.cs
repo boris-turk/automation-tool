@@ -19,7 +19,6 @@ namespace BTurk.Automation.Standard
         public void Handle(SelectionRequest<Repository> request)
         {
             _searchEngine.AddItems(GetRepositories());
-            _searchEngine.FilterText = request.FilterTextProvider?.Invoke(_searchEngine.SearchText);
         }
 
         public IEnumerable<Repository> GetRepositories()
