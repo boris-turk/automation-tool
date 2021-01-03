@@ -57,8 +57,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -109,7 +113,15 @@
     <Compile Include="MenuCollection.cs" />
     <Compile Include="NamePart.cs" />
     <Compile Include="NamePartType.cs" />
+    <Compile Include="RestApi\EndpointConfiguration.cs" />
+    <Compile Include="RestApi\EndPointType.cs" />
+    <Compile Include="RestApi\IRequest.cs" />
+    <Compile Include="RestApi\IRestClient.cs" />
     <Compile Include="ReferencedMenu.cs" />
+    <Compile Include="RestApi\JsonConverter.cs" />
+    <Compile Include="RestApi\RequestParameters.cs" />
+    <Compile Include="RestApi\RestClient.cs" />
+    <Compile Include="RestApi\RestApiConfiguration.cs" />
     <Compile Include="ValueType.cs" />
     <Compile Include="ITimer.cs" />
     <Compile Include="PluginContentSource.cs" />
@@ -177,6 +189,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
