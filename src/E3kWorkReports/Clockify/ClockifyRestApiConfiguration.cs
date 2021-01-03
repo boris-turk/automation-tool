@@ -27,9 +27,10 @@ namespace E3kWorkReports.Clockify
         {
             return new List<EndpointConfiguration>
             {
-                new EndpointConfiguration<UserRequest>(_ => "user"),
-                new EndpointConfiguration<WorkspaceListRequest>(_ => "workspaces"),
-                new EndpointConfiguration<ProjectListRequest>(_ => $"/workspaces/{_.WorkspaceId}/projects")
+                new EndpointConfiguration<UserRequest>(),
+                new EndpointConfiguration<WorkspaceListRequest>(),
+                new EndpointConfiguration<ProjectListRequest>(),
+                new EndpointConfiguration<TaskListRequest>()
             };
         }
     }

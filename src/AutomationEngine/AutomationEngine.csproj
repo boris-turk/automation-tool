@@ -106,6 +106,7 @@
       <DependentUpon>CreateApplicationMenuForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FilterMatchEvaluator.cs" />
+    <Compile Include="GenericMethodInvoker.cs" />
     <Compile Include="GlobalShortcuts.cs" />
     <Compile Include="IPluginExecutor.cs" />
     <Compile Include="IPluginLoader.cs" />

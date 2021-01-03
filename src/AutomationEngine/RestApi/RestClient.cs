@@ -145,9 +145,7 @@ namespace AutomationEngine.RestApi
 
         private string GetUrl<TRequest>(TRequest request) where TRequest : IRequest
         {
-            var serverAddress = _configuration.ServerAddress;
-            var requestName = _configuration.GetEndPointPath(request);
-            var url = $"{serverAddress}/{requestName}";
+            var url = $"{_configuration.ServerAddress}/{request.EndPointPath}";
             return url;
         }
 

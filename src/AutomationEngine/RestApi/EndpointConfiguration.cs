@@ -17,15 +17,12 @@ namespace AutomationEngine.RestApi
 
     public class EndpointConfiguration<TRequest> : EndpointConfiguration where TRequest : IRequest
     {
-        private readonly Func<TRequest, string> _pathProvider;
-
-        public EndpointConfiguration(Func<TRequest, string> pathProvider)
+        public EndpointConfiguration()
             : base(DetermineMethod())
         {
-            _pathProvider = pathProvider ?? throw new ArgumentNullException(nameof(pathProvider));
         }
 
-        public string GetPath(TRequest request) => _pathProvider.Invoke(request);
+        public string GetPath(TRequest request) => request.EndPointPath;
 
         public static string DetermineMethod()
         {

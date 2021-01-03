@@ -12,5 +12,7 @@ namespace E3kWorkReports.Clockify.Requests
         }
 
         public string WorkspaceId { get; }
+
+        string IRequest.EndPointPath => $"/workspaces/{WorkspaceId}/projects";
     }
 }

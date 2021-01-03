@@ -28,12 +28,6 @@ namespace AutomationEngine.RestApi
             return endPoint.Method;
         }
 
-        public string GetEndPointPath<TRequest>(TRequest request) where TRequest : IRequest
-        {
-            var endPoint = GetEndPoint<TRequest>();
-            return endPoint.GetPath(request);
-        }
-
         private EndpointConfiguration<TRequest> GetEndPoint<TRequest>() where TRequest : IRequest
         {
             var candidates = EndPoints.OfType<EndpointConfiguration<TRequest>>().ToList();
