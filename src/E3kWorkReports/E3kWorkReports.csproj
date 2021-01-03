@@ -48,11 +48,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clockify\ClockifyRestApiConfiguration.cs" />
+    <Compile Include="Clockify\DomainModel\AutomaticLock.cs" />
+    <Compile Include="Clockify\DomainModel\Estimate.cs" />
     <Compile Include="Clockify\DomainModel\HourlyRate.cs" />
     <Compile Include="Clockify\DomainModel\Membership.cs" />
+    <Compile Include="Clockify\DomainModel\Project.cs" />
+    <Compile Include="Clockify\DomainModel\Round.cs" />
+    <Compile Include="Clockify\DomainModel\TimeEstimate.cs" />
+    <Compile Include="Clockify\DomainModel\Workspace.cs" />
     <Compile Include="Clockify\DomainModel\Settings.cs" />
     <Compile Include="Clockify\DomainModel\SummaryReportSettings.cs" />
     <Compile Include="Clockify\DomainModel\User.cs" />
+    <Compile Include="Clockify\DomainModel\WorkspaceSettings.cs" />
+    <Compile Include="Clockify\Requests\ProjectListRequest.cs" />
+    <Compile Include="Clockify\Requests\WorkspaceListRequest.cs" />
     <Compile Include="Clockify\Requests\UserRequest.cs" />
     <Compile Include="ReportGeneratorBase.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

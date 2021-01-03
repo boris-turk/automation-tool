@@ -36,7 +36,7 @@ namespace AutomationEngine.RestApi
 
         private TResult SendRequestInternal<TRequest, TResult>(TRequest request) where TRequest : IRequest<TResult>
         {
-            var requestParameters = GetParameters<TRequest>();
+            var requestParameters = GetParameters(request);
 
             var webRequest = (HttpWebRequest)WebRequest.Create(requestParameters.Url);
             webRequest.Method = requestParameters.RequestMethod;
@@ -46,7 +46,7 @@ namespace AutomationEngine.RestApi
             foreach (var header in requestParameters.Headers)
                 webRequest.Headers.Add(header.Key, header.Value);
 
-            if (requestParameters.RequestType == EndPointType.Post)
+            if (requestParameters.IsPostRequest)
             {
                 var contentAsString = JsonConverter.ToJsonString(request);
                 var contentAsByteArray = Encoding.UTF8.GetBytes(contentAsString);
@@ -83,7 +83,7 @@ namespace AutomationEngine.RestApi
             var exception = new WebException("Null response");
             exception.Data.Add("requestParameters", parameters);
 
-            if (parameters.RequestType == EndPointType.Post)
+            if (parameters.IsPostRequest)
             {
                 var contentAsString = JsonConverter.ToJsonString(request);
                 exception.Data.Add("content", contentAsString);
@@ -98,10 +98,10 @@ namespace AutomationEngine.RestApi
 
             e.Data.Add("response", responseString);
             e.Data.Add("request_uri", parameters.Url);
-            e.Data.Add("http_method", parameters.RequestType);
+            e.Data.Add("http_method", parameters.RequestMethod);
             e.Data.Add("content_type", parameters.ContentType);
 
-            if (parameters.RequestType == EndPointType.Post)
+            if (parameters.IsPostRequest)
             {
                 var requestContent = JsonConverter.ToJsonString(request);
                 e.Data.Add("request_body", requestContent);
@@ -127,13 +127,13 @@ namespace AutomationEngine.RestApi
             }
         }
 
-        public RequestParameters GetParameters<TRequest>() where TRequest : IRequest
+        public RequestParameters GetParameters<TRequest>(TRequest request) where TRequest : IRequest
         {
             var parameters = new RequestParameters
             {
-                Url = GetUrl<TRequest>(),
+                Url = GetUrl(request),
                 ContentType = _configuration.ContentType,
-                RequestType = _configuration.GetEndPointType<TRequest>(),
+                RequestMethod = _configuration.GetEndPointMethod<TRequest>(),
                 RequestTimeout = GetTimeout()
             };
 
@@ -143,10 +143,10 @@ namespace AutomationEngine.RestApi
             return parameters;
         }
 
-        private string GetUrl<TRequest>()
+        private string GetUrl<TRequest>(TRequest request) where TRequest : IRequest
         {
             var serverAddress = _configuration.ServerAddress;
-            var requestName = _configuration.GetEndPointName<TRequest>();
+            var requestName = _configuration.GetEndPointPath(request);
             var url = $"{serverAddress}/{requestName}";
             return url;
         }

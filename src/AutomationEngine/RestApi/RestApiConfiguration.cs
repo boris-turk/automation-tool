@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AutomationEngine.RestApi
 {
     public class RestApiConfiguration
     {
-        public RestApiConfiguration(Dictionary<Type, EndpointConfiguration> endPoints)
+        public RestApiConfiguration(List<EndpointConfiguration> endPoints)
         {
             Headers = new Dictionary<string, string>();
             EndPoints = endPoints;
         }
 
-        public Dictionary<Type, EndpointConfiguration> EndPoints { get; }
+        public List<EndpointConfiguration> EndPoints { get; }
 
         public int Timeout { get; set; }
 
@@ -21,24 +22,29 @@ namespace AutomationEngine.RestApi
 
         public Dictionary<string, string> Headers { get; set; }
 
-        public EndPointType GetEndPointType<TRequest>()
+        public string GetEndPointMethod<TRequest>() where TRequest : IRequest
         {
             var endPoint = GetEndPoint<TRequest>();
-            return endPoint.Type;
+            return endPoint.Method;
         }
 
-        public string GetEndPointName<TRequest>()
+        public string GetEndPointPath<TRequest>(TRequest request) where TRequest : IRequest
         {
             var endPoint = GetEndPoint<TRequest>();
-            return endPoint.Name;
+            return endPoint.GetPath(request);
         }
 
-        private EndpointConfiguration GetEndPoint<TRequest>()
+        private EndpointConfiguration<TRequest> GetEndPoint<TRequest>() where TRequest : IRequest
         {
-            if (EndPoints.TryGetValue(typeof(TRequest), out var endPoint))
-                return endPoint;
+            var candidates = EndPoints.OfType<EndpointConfiguration<TRequest>>().ToList();
 
-            throw new Exception($"Unknown request type {typeof(TRequest).FullName}");
+            if (candidates.Count == 0)
+                throw new Exception($"Unknown request type {typeof(TRequest).FullName}");
+
+            if (candidates.Count > 1)
+                throw new Exception($"Multiple endpoints registered for request type {typeof(TRequest).FullName}");
+
+            return candidates.Single();
         }
     }
 }

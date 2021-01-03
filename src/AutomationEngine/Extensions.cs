@@ -202,5 +202,29 @@ namespace AutomationEngine
             var temp = dateTime.AddMonths(-1);
             return new DateTime(temp.Year, temp.Month, 1);
         }
+
+        public static bool InheritsFrom(this Type type, Type parent)
+        {
+            if (parent.IsAssignableFrom(type))
+            {
+                return true;
+            }
+
+            while (type != null && type != typeof(object))
+            {
+                Type current = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
+                if (parent == current)
+                {
+                    return true;
+                }
+                if (parent.IsInterface)
+                {
+                    var interfaces = type.GetInterfaces().Where(x => x.IsGenericType);
+                    return interfaces.Any(x => x.GetGenericTypeDefinition() == parent);
+                }
+                type = type.BaseType;
+            }
+            return false;
+        }
     }
 }

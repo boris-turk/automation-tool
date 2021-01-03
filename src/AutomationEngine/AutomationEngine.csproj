@@ -114,7 +114,8 @@
     <Compile Include="NamePart.cs" />
     <Compile Include="NamePartType.cs" />
     <Compile Include="RestApi\EndpointConfiguration.cs" />
-    <Compile Include="RestApi\EndPointType.cs" />
+    <Compile Include="RestApi\IGetRequest.cs" />
+    <Compile Include="RestApi\IPostRequest.cs" />
     <Compile Include="RestApi\IRequest.cs" />
     <Compile Include="RestApi\IRestClient.cs" />
     <Compile Include="ReferencedMenu.cs" />

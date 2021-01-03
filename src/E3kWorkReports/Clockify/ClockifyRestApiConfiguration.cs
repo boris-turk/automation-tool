@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AutomationEngine.RestApi;
 using E3kWorkReports.Clockify.Requests;
+
+// ReSharper disable StringLiteralTypo
 
 namespace E3kWorkReports.Clockify
 {
@@ -22,11 +23,13 @@ namespace E3kWorkReports.Clockify
 
         public string ApiKey => "X/Bhfe0+VhbBLcyd";
 
-        private static Dictionary<Type, EndpointConfiguration> GetSupportedEndPoints()
+        private static List<EndpointConfiguration> GetSupportedEndPoints()
         {
-            return new Dictionary<Type, EndpointConfiguration>
+            return new List<EndpointConfiguration>
             {
-                {typeof(UserRequest), new EndpointConfiguration("user", EndPointType.Get)}
+                new EndpointConfiguration<UserRequest>(_ => "user"),
+                new EndpointConfiguration<WorkspaceListRequest>(_ => "workspaces"),
+                new EndpointConfiguration<ProjectListRequest>(_ => $"/workspaces/{_.WorkspaceId}/projects")
             };
         }
     }
