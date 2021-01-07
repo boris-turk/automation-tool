@@ -28,7 +28,7 @@ namespace E3kWorkReports.Clockify
         {
             return new List<EndpointConfiguration>
             {
-                new EndpointConfiguration<UserRequest>(),
+                new EndpointConfiguration<UsersRequest>(),
                 new EndpointConfiguration<WorkspaceListRequest>(),
                 new EndpointConfiguration<ProjectListRequest>(),
                 new EndpointConfiguration<TaskListRequest>(),

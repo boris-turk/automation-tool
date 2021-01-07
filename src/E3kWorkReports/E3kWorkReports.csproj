@@ -67,7 +67,7 @@
     <Compile Include="Clockify\Requests\ProjectListRequest.cs" />
     <Compile Include="Clockify\Requests\TaskListRequest.cs" />
     <Compile Include="Clockify\Requests\WorkspaceListRequest.cs" />
-    <Compile Include="Clockify\Requests\UserRequest.cs" />
+    <Compile Include="Clockify\Requests\UsersRequest.cs" />
     <Compile Include="ReportGeneratorBase.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
