@@ -63,6 +63,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -105,6 +106,7 @@
     <Compile Include="CreateApplicationMenuForm.Designer.cs">
       <DependentUpon>CreateApplicationMenuForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Encryption.cs" />
     <Compile Include="FilterMatchEvaluator.cs" />
     <Compile Include="GenericMethodInvoker.cs" />
     <Compile Include="GlobalShortcuts.cs" />
@@ -114,6 +116,8 @@
     <Compile Include="MenuCollection.cs" />
     <Compile Include="NamePart.cs" />
     <Compile Include="NamePartType.cs" />
+    <Compile Include="RestApi\ContractResolver.cs" />
+    <Compile Include="RestApi\DateFormatConverter.cs" />
     <Compile Include="RestApi\EndpointConfiguration.cs" />
     <Compile Include="RestApi\IGetRequest.cs" />
     <Compile Include="RestApi\IPostRequest.cs" />
@@ -124,6 +128,7 @@
     <Compile Include="RestApi\RequestParameters.cs" />
     <Compile Include="RestApi\RestClient.cs" />
     <Compile Include="RestApi\RestApiConfiguration.cs" />
+    <Compile Include="RestApi\TimeSpanConverter.cs" />
     <Compile Include="ValueType.cs" />
     <Compile Include="ITimer.cs" />
     <Compile Include="PluginContentSource.cs" />

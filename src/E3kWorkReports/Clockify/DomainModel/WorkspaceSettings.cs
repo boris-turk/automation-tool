@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace E3kWorkReports.Clockify.DomainModel
 {
@@ -32,8 +33,8 @@ namespace E3kWorkReports.Clockify.DomainModel
         [DataMember(Name = "forceTasks")]
         public bool ForceTasks { get; set; }
 
-        //[DataMember(Name = "lockTimeEntries")]
-        //public DateTimeOffset LockTimeEntries { get; set; }
+        [DataMember(Name = "lockTimeEntries")]
+        public DateTime? LockTimeEntries { get; set; }
 
         [DataMember(Name = "onlyAdminsCreateProject")]
         public bool OnlyAdminsCreateProject { get; set; }

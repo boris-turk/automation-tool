@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace E3kWorkReports.Clockify.DomainModel
 {
@@ -36,7 +37,7 @@ namespace E3kWorkReports.Clockify.DomainModel
         public bool Archived { get; set; }
 
         [DataMember(Name = "duration")]
-        public string Duration { get; set; }
+        public TimeSpan Duration { get; set; }
 
         [DataMember(Name = "clientName")]
         public string ClientName { get; set; }

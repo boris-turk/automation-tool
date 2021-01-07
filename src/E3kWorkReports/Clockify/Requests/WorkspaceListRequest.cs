@@ -6,6 +6,6 @@ namespace E3kWorkReports.Clockify.Requests
 {
     public class WorkspaceListRequest : IGetRequest<List<Workspace>>
     {
-        string IRequest.EndPointPath => "workspaces";
+        string IRequest.EndPointPath => "/workspaces";
     }
 }

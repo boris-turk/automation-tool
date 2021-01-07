@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web;
 
 namespace AutomationEngine.RestApi
 {
@@ -145,13 +148,35 @@ namespace AutomationEngine.RestApi
 
         private string GetUrl<TRequest>(TRequest request) where TRequest : IRequest
         {
-            var url = $"{_configuration.ServerAddress}/{request.EndPointPath}";
+            var url = $"{_configuration.ServerAddress}{request.EndPointPath}";
+
+            var queryParameters = ToQueryParameters(request);
+
+            if (!string.IsNullOrWhiteSpace(queryParameters))
+                url = $"{url}?{queryParameters}";
+
             return url;
         }
 
         private int GetTimeout()
         {
             return _configuration.Timeout <= 0 ? 3000 : _configuration.Timeout;
+        }
+
+        private string ToQueryParameters<TRequest>(TRequest request) where TRequest : IRequest
+        {
+            var text = JsonConverter.ToJsonString(request);
+
+            var keyValuePairs = JsonConverter.FromJsonString<IDictionary<string, string>>(text);
+
+            var result = string.Join("&",
+                from pair in keyValuePairs
+                let key = HttpUtility.UrlEncode(pair.Key)
+                let value = HttpUtility.UrlEncode(pair.Value)
+                select $"{key}={value}"
+            );
+
+            return result;
         }
     }
 }

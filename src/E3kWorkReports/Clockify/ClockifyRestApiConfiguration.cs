@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AutomationEngine;
 using AutomationEngine.RestApi;
 using E3kWorkReports.Clockify.Requests;
 
@@ -21,7 +22,7 @@ namespace E3kWorkReports.Clockify
             };
         }
 
-        public string ApiKey => "X/Bhfe0+VhbBLcyd";
+        public string ApiKey { get; } = Encryption.Decrypt("VZUhNEXUoW08Yf0c+SEc23bdoyYV2vEx");
 
         private static List<EndpointConfiguration> GetSupportedEndPoints()
         {
@@ -30,7 +31,8 @@ namespace E3kWorkReports.Clockify
                 new EndpointConfiguration<UserRequest>(),
                 new EndpointConfiguration<WorkspaceListRequest>(),
                 new EndpointConfiguration<ProjectListRequest>(),
-                new EndpointConfiguration<TaskListRequest>()
+                new EndpointConfiguration<TaskListRequest>(),
+                new EndpointConfiguration<TimeEntriesRequest>()
             };
         }
     }
