@@ -1,44 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AutomationEngine.RestApi
 {
-    public class RestApiConfiguration
+    public abstract class RestApiConfiguration
     {
-        public RestApiConfiguration(List<EndpointConfiguration> endPoints)
+        public const string GetMethod = "GET";
+        public const string PostMethod = "POST";
+
+        protected RestApiConfiguration()
         {
             Headers = new Dictionary<string, string>();
-            EndPoints = endPoints;
         }
-
-        public List<EndpointConfiguration> EndPoints { get; }
 
         public int Timeout { get; set; }
 
-        public string ServerAddress { get; set; }
-
         public string ContentType { get; set; }
 
-        public Dictionary<string, string> Headers { get; set; }
+        public Dictionary<string, string> Headers { get; }
+
+        public abstract string GetServerAddress<TRequest>(TRequest request) where TRequest : IRequest;
 
         public string GetEndPointMethod<TRequest>() where TRequest : IRequest
         {
-            var endPoint = GetEndPoint<TRequest>();
-            return endPoint.Method;
-        }
+            if (typeof(TRequest).InheritsFrom(typeof(IGetRequest<>)))
+                return GetMethod;
 
-        private EndpointConfiguration<TRequest> GetEndPoint<TRequest>() where TRequest : IRequest
-        {
-            var candidates = EndPoints.OfType<EndpointConfiguration<TRequest>>().ToList();
+            if (typeof(TRequest).InheritsFrom(typeof(IPostRequest<>)))
+                return PostMethod;
 
-            if (candidates.Count == 0)
-                throw new Exception($"Unknown request type {typeof(TRequest).FullName}");
-
-            if (candidates.Count > 1)
-                throw new Exception($"Multiple endpoints registered for request type {typeof(TRequest).FullName}");
-
-            return candidates.Single();
+            throw new NotSupportedException($"Could not determine method type for request {typeof(TRequest).Name}");
         }
     }
 }

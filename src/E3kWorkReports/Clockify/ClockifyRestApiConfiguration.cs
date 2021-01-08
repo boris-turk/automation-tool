@@ -1,39 +1,24 @@
-﻿using System.Collections.Generic;
-using AutomationEngine;
+﻿using AutomationEngine;
 using AutomationEngine.RestApi;
 using E3kWorkReports.Clockify.Requests;
-
-// ReSharper disable StringLiteralTypo
 
 namespace E3kWorkReports.Clockify
 {
     public class ClockifyRestApiConfiguration : RestApiConfiguration
     {
-        public ClockifyRestApiConfiguration() :
-            base(GetSupportedEndPoints())
+        public ClockifyRestApiConfiguration()
         {
             Timeout = 10000;
             ContentType = "application/json";
-            ServerAddress = "https://api.clockify.me/api/v1";
-
-            Headers = new Dictionary<string, string>
-            {
-                {"X-Api-Key", ApiKey}
-            };
+            Headers.Add("X-Api-Key", ApiKey);
         }
 
         public string ApiKey { get; } = Encryption.Decrypt("VZUhNEXUoW08Yf0c+SEc23bdoyYV2vEx");
 
-        private static List<EndpointConfiguration> GetSupportedEndPoints()
+        public override string GetServerAddress<TRequest>(TRequest request)
         {
-            return new List<EndpointConfiguration>
-            {
-                new EndpointConfiguration<UsersRequest>(),
-                new EndpointConfiguration<WorkspaceListRequest>(),
-                new EndpointConfiguration<ProjectListRequest>(),
-                new EndpointConfiguration<TaskListRequest>(),
-                new EndpointConfiguration<TimeEntriesRequest>()
-            };
+            var isReportRequest = typeof(TRequest).InheritsFrom(typeof(IReportRequest<>)); 
+            return isReportRequest ? "https://reports.api.clockify.me/v1" : "https://api.clockify.me/api/v1";
         }
     }
 }

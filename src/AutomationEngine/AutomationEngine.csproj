@@ -118,7 +118,6 @@
     <Compile Include="NamePartType.cs" />
     <Compile Include="RestApi\ContractResolver.cs" />
     <Compile Include="RestApi\DateFormatConverter.cs" />
-    <Compile Include="RestApi\EndpointConfiguration.cs" />
     <Compile Include="RestApi\IGetRequest.cs" />
     <Compile Include="RestApi\IPostRequest.cs" />
     <Compile Include="RestApi\IRequest.cs" />

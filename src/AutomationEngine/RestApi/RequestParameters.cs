@@ -19,7 +19,7 @@ namespace AutomationEngine.RestApi
 
         public Dictionary<string, string> Headers { get; }
 
-        public bool IsPostRequest => RequestMethod == EndpointConfiguration.PostMethod;
+        public bool IsPostRequest => RequestMethod == RestApiConfiguration.PostMethod;
 
         public override string ToString()
         {

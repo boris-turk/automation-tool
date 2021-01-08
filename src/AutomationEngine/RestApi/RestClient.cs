@@ -148,7 +148,10 @@ namespace AutomationEngine.RestApi
 
         private string GetUrl<TRequest>(TRequest request) where TRequest : IRequest
         {
-            var url = $"{_configuration.ServerAddress}{request.EndPointPath}";
+            var serverAddress = _configuration.GetServerAddress(request);
+            var endPointPath = request.EndPointPath;
+
+            var url = $"{serverAddress}{endPointPath}";
 
             var queryParameters = ToQueryParameters(request);
 
@@ -165,6 +168,9 @@ namespace AutomationEngine.RestApi
 
         private string ToQueryParameters<TRequest>(TRequest request) where TRequest : IRequest
         {
+            if (typeof(TRequest).InheritsFrom(typeof(IPostRequest<>)))
+                return "";
+
             var text = JsonConverter.ToJsonString(request);
 
             var keyValuePairs = JsonConverter.FromJsonString<IDictionary<string, string>>(text);
