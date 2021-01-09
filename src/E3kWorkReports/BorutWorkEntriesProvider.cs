@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
-using Aspose.Cells;
 
-// ReSharper disable StringLiteralTypo
 // ReSharper disable IdentifierTypo
+// ReSharper disable StringLiteralTypo
 
 namespace E3kWorkReports
 {
-    public class BorutReportGenerator : ReportGeneratorBase
+    public class BorutWorkEntriesProvider : IWorkEntriesProvider
     {
-        public BorutReportGenerator(string sourceFilePath, Worksheet sheet)
-            : base(sourceFilePath, sheet)
+        public string SourceFilePath { get; }
+
+        public BorutWorkEntriesProvider(string sourceFilePath)
         {
+            SourceFilePath = sourceFilePath;
         }
 
-        protected override IEnumerable<ReportEntry> GetAllEntries()
+        public IEnumerable<ReportEntry> GetAllEntries()
         {
             var datePattern = @"^\s*(?<day>\d+)\.(?<month>\d+)\.(?<year>\d+)";
             var contentPattern = @"^\W+(?<projectCode>\w+)\W+(?<description>.*[^.])\.\.\.*\s*(?<duration>\d+.*)";
@@ -68,7 +69,8 @@ namespace E3kWorkReports
                 Task = task,
                 Description = description,
                 Hours = hours,
-                Date = date
+                Date = date,
+                EmployeeFullName = "Borut Kaučič"
             };
         }
 

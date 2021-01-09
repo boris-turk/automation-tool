@@ -11,5 +11,7 @@ namespace E3kWorkReports.Clockify.DomainModel
 
         [DataMember(Name = "start")]
         public DateTime Start { get; set; }
+
+        public decimal Hours => (decimal)(End - Start).TotalHours;
     }
 }

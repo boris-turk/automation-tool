@@ -9,17 +9,25 @@ using Aspose.Cells;
 
 namespace E3kWorkReports
 {
-    public abstract class ReportGeneratorBase
+    public class ExcelWorkReportGenerator
     {
-        protected Cells Cells { get; }
+        private Workbook _workBook;
 
-        protected string SourceFilePath { get; }
+        private Workbook Workbook => _workBook ?? (_workBook = new Workbook(OutputFilePath));
 
-        protected ReportGeneratorBase(string sourceFilePath, Worksheet sheet)
+        public IWorkEntriesProvider WorkEntriesProvider { get; }
+
+        private Cells Cells => Workbook.Worksheets[_currentWorksheet].Cells;
+
+        private int _currentWorksheet;
+
+        public ExcelWorkReportGenerator(string outputFilePath, IWorkEntriesProvider workEntriesProvider)
         {
-            Cells = sheet.Cells;
-            SourceFilePath = sourceFilePath;
+            OutputFilePath = outputFilePath;
+            WorkEntriesProvider = workEntriesProvider;
         }
+
+        public string OutputFilePath { get; set; }
 
         private Cell DateCell(int rowIndex) => Cells[rowIndex, 0];
 
@@ -33,13 +41,37 @@ namespace E3kWorkReports
 
         private Cell ChargeableCell(int rowIndex) => Cells[rowIndex, 5];
 
-        protected abstract IEnumerable<ReportEntry> GetAllEntries();
-
         public void Execute()
         {
-            SetMonthName();
+            _currentWorksheet = -1;
 
-            var entries = GetAllEntries().OrderBy(_ => _.Date).ToList();
+            Dictionary<string, List<ReportEntry>> groups = (
+                from entry in WorkEntriesProvider.GetAllEntries()
+                group entry by entry.EmployeeFullName into g
+                select new
+                {
+                    EmployeeFullName = g.Key,
+                    Entries = g.OrderBy(_ => _.Date).ToList()
+                }
+            ).ToDictionary(_ => _.EmployeeFullName, _ => _.Entries);
+
+            Export("Boris Turk", groups);
+            Export("Andrej Bratož", groups);
+            Export("Borut Kaučič", groups);
+
+            Workbook.Save(OutputFilePath);
+        }
+
+        private void Export(string employeeFullName, Dictionary<string, List<ReportEntry>> groups)
+        {
+            if (!groups.TryGetValue(employeeFullName, out var entries))
+                throw new InvalidOperationException($"Missing work entries for employee {employeeFullName}");
+
+            _currentWorksheet += 1;
+
+            entries = entries.OrderBy(_ => _.Date).ToList();
+
+            SetMonthName();
 
             for (int index = 0; index < entries.Count; index++)
             {

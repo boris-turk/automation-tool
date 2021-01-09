@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompositeEntriesProvider.cs" />
+    <Compile Include="BorutWorkEntriesProvider.cs" />
+    <Compile Include="ClockifyWorkEntriesProvider.cs" />
     <Compile Include="Clockify\ClockifyRestApiConfiguration.cs" />
     <Compile Include="Clockify\DomainModel\AutomaticLock.cs" />
     <Compile Include="Clockify\DomainModel\CustomField.cs" />
@@ -75,7 +78,8 @@
     <Compile Include="Clockify\Requests\TaskListRequest.cs" />
     <Compile Include="Clockify\Requests\WorkspaceListRequest.cs" />
     <Compile Include="Clockify\Requests\UsersRequest.cs" />
-    <Compile Include="ReportGeneratorBase.cs" />
+    <Compile Include="IWorkEntriesProvider.cs" />
+    <Compile Include="ExcelWorkReportGenerator.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -91,8 +95,6 @@
     <Compile Include="ReportGeneratorView.Designer.cs">
       <DependentUpon>ReportGeneratorView.cs</DependentUpon>
     </Compile>
-    <Compile Include="BorutReportGenerator.cs" />
-    <Compile Include="XlabReportGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AutomationEngine\AutomationEngine.csproj">

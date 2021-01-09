@@ -15,5 +15,7 @@ namespace E3kWorkReports
         public DateTime Date { get; set; }
 
         public bool Chargeable { get; set; }
+
+        public string EmployeeFullName { get; set; }
     }
 }

@@ -14,15 +14,11 @@ namespace E3kWorkReports
     public class ReportGenerator
     {
         private string Directory { get; }
-        private string BorisFilePath { get; }
-        private string AndrejFilePath { get; }
         private string BorutFilePath { get; }
 
-        public ReportGenerator(string directory, string borisFileName, string andrejFileName, string borutFileName)
+        public ReportGenerator(string directory, string borutFileName)
         {
             Directory = directory;
-            BorisFilePath = Path.Combine(Directory, borisFileName);
-            AndrejFilePath = Path.Combine(Directory, andrejFileName);
             BorutFilePath = Path.Combine(Directory, borutFileName);
         }
 
@@ -78,13 +74,13 @@ namespace E3kWorkReports
 
         private void GenerateReports()
         {
-            Workbook workbook = new Workbook(OutputFilePath);
+            var compositeEntriesProvider = new CompositeEntriesProvider(
+                new ClockifyWorkEntriesProvider(),
+                new BorutWorkEntriesProvider(BorutFilePath));
 
-            new XlabReportGenerator(BorisFilePath, workbook.Worksheets[0]).Execute();
-            new XlabReportGenerator(AndrejFilePath, workbook.Worksheets[1]).Execute();
-            new BorutReportGenerator(BorutFilePath, workbook.Worksheets[2]).Execute();
+            var generator = new ExcelWorkReportGenerator(OutputFilePath, compositeEntriesProvider);
 
-            workbook.Save(OutputFilePath);
+            generator.Execute();
         }
     }
 }
