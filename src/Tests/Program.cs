@@ -20,8 +20,6 @@ namespace Tests
 
             var generator = new ReportGenerator(
                 directory: directory,
-                borisFileName: @"boris.xls",
-                andrejFileName: @"andrej.xls",
                 borutFileName: @"borut.txt");
 
             if (File.Exists(generator.OutputFilePath))

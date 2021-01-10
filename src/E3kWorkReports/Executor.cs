@@ -15,9 +15,7 @@ namespace E3kWorkReports
 
         private void GenerateReport(ReportGeneratorView form)
         {
-            var generator = new ReportGenerator(
-                form.DirectoryPath, form.BorisFileName, form.AndrejFileName, form.BorutFileName);
-
+            var generator = new ReportGenerator(form.DirectoryPath, form.BorutFileName);
             generator.Execute();
         }
     }

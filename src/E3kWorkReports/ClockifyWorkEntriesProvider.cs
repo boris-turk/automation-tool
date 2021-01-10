@@ -82,13 +82,13 @@ namespace E3kWorkReports
                 return "STANDARD";
 
             if (internalTasks.Contains(taskName))
-                return "STANDARD";
+                return "INTERNAL";
 
             if (taskName == "Custom developments")
-                return taskName;
+                return taskName.ToUpper();
 
             if (taskName == "Troubleshooting")
-                return taskName;
+                return taskName.ToUpper();
 
             throw new InvalidOperationException($"Could not map task \"{taskName}\" into appropriate project code.");
         }
