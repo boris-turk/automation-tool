@@ -14,6 +14,11 @@ namespace Tests
     {
         static void Main()
         {
+            //var tests = new ClockifyRestApiTests();
+            //tests.Run();
+            //return;
+
+
             var dateTime = DateTime.Now.GetPreviousMonthStart();
             var yearMonth = $"{dateTime.Year:0000}-{dateTime.Month:00}";
             var directory = $@"C:\Users\boris\Dropbox\Work\Projects\E3k\Work_Reports\{yearMonth}";
