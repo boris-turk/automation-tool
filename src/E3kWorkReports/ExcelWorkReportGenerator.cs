@@ -75,19 +75,11 @@ namespace E3kWorkReports
 
             for (int index = 0; index < entries.Count; index++)
             {
-                if (SkipEntry(entries[index]))
-                    continue;
-
                 TransformEntry(entries[index]);
                 ValidateEntry(entries[index]);
                 WriteEntry(index + 1, entries[index]);
                 WriteHoursSum(entries);
             }
-        }
-
-        private bool SkipEntry(ReportEntry entry)
-        {
-            return entry.Task.Contains("Mic Styling");
         }
 
         private void ValidateEntry(ReportEntry entry)
@@ -104,7 +96,7 @@ namespace E3kWorkReports
             if (string.IsNullOrWhiteSpace(entry.Task))
                 throw new InvalidOperationException("Missing task");
 
-            if (entry.Hours <= 0 || entry.Hours > 20)
+            if (entry.Hours <= 0.15M || entry.Hours > 20)
                 throw new InvalidOperationException($"Hour duration ({entry.Hours}) outside valid range");
         }
 

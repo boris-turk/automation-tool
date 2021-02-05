@@ -19,16 +19,20 @@ namespace E3kWorkReports
 
         private const string ChargeableNamePart = " - Chargeable";
 
+        private DateTime Start => DateTime.Now.GetPreviousMonthStart();
+
+        private DateTime End => DateTime.Now.GetPreviousMonthEnd();
+
         public IEnumerable<ReportEntry> GetAllEntries()
         {
-            var project = GetProject();
+            var projectIds = GetProjectIds();
             var workspace = GetWorkspace();
 
             var request = new DetailedReportRequest(workspace.Id)
             {
-                Start = new DateTime(2020, 12, 1),
-                End = new DateTime(2020, 12, 31),
-                Projects = new EntityFilter(project.Id)
+                Start = Start,
+                End = End,
+                Projects = new EntityFilter(projectIds)
             };
 
             DetailedReport result;
@@ -43,12 +47,12 @@ namespace E3kWorkReports
                     yield return new ReportEntry
                     {
                         Date = timeEntry.TimeInterval.Start.Date,
-                        Description = timeEntry.Description,
+                        Description = GetTaskDescription(timeEntry),
                         EmployeeFullName = timeEntry.UserName,
                         Chargeable = IsChargeable(timeEntry),
                         Hours = timeEntry.TimeInterval.Hours,
                         Task = timeEntry.TaskName,
-                        ProjectCode = GetProjectCode(timeEntry.TaskName)
+                        ProjectCode = GetProjectCode(timeEntry)
                     };
                 }
             } while (result.IsWholePage(request));
@@ -59,9 +63,22 @@ namespace E3kWorkReports
             return timeEntry.TaskName.Contains(ChargeableNamePart);
         }
 
-        private string GetProjectCode(string taskName)
+        private string GetTaskDescription(TimeEntry timeEntry)
         {
-            taskName = taskName.Replace(ChargeableNamePart, "");
+            var description = timeEntry.Description?.Trim().ToUpper() ?? "";
+
+            if (description == "RPV")
+                return "XLAB project leaders meeting.";
+
+            if (description == "RSTAFF")
+                return "XLAB research department meeting.";
+
+            return timeEntry.Description;
+        }
+
+        private string GetProjectCode(TimeEntry timeEntry)
+        {
+            var taskName = timeEntry.TaskName.Replace(ChargeableNamePart, "");
 
             var internalTasks = new[]
             {
@@ -103,26 +120,27 @@ namespace E3kWorkReports
             });
         }
 
-        private Project GetProject()
+        private string[] GetProjectIds()
         {
-            return Load(() =>
-            {
-                var requestedProjectName = "europa3000";
-                var workspace = GetWorkspace();
+            var workspace = GetWorkspace();
 
-                var result = SendRequest(new ProjectListRequest(workspace.Id));
+            var result = SendRequest(new ProjectListRequest(workspace.Id));
+            var ids = result.Where(ShouldIncludeProject).Select(_ => _.Id).ToArray();
 
-                var candidates = (
-                    from project in result
-                    let projectName = project.Name.ToLower()
-                    where projectName == requestedProjectName
-                    select project
-                ).ToList();
+            return ids;
+        }
 
-                ThrowExactlyOneExceptionIfNecessary(candidates, $"name {requestedProjectName}");
+        private bool ShouldIncludeProject(Project project)
+        {
+            var projectName = project.Name.ToLower();
 
-                return candidates.Single();
-            });
+            if (projectName.Contains("europa3000"))
+                return true;
+
+            if (projectName.Contains("general"))
+                return true;
+
+            return false;
         }
 
         public TResult SendRequest<TResult>(IRequest<TResult> request)
