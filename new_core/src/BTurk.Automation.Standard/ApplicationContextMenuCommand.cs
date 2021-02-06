@@ -6,12 +6,11 @@ namespace BTurk.Automation.Standard
 {
     public class ApplicationContextMenuRequestHandler : ICommand
     {
-        private int _count;
-        private readonly ISearchEngine _searchEngine;
+        private readonly IWindowContextProvider _windowContextProvider;
 
-        public ApplicationContextMenuRequestHandler(ISearchEngine searchEngine)
+        public ApplicationContextMenuRequestHandler(IWindowContextProvider windowContextProvider)
         {
-            _searchEngine = searchEngine;
+            _windowContextProvider = windowContextProvider;
         }
 
         private void OnRepositorySelected(Repository repository)
@@ -23,9 +22,7 @@ namespace BTurk.Automation.Standard
 
         private IEnumerable<Request> CreateRequests()
         {
-            _count += 1;
-
-            if (_searchEngine.Context.IsEmpty)
+            if (_windowContextProvider.Context.IsEmpty)
                 yield break;
 
             yield return new SelectionRequest<Repository>(OnRepositorySelected)

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
+using BTurk.Automation.Core.WinApi;
 
 namespace BTurk.Automation.DependencyResolution
 {
@@ -16,7 +17,7 @@ namespace BTurk.Automation.DependencyResolution
 
         public WindowContext Context
         {
-            get => _context ?? new WindowContext("");
+            get => _context ?? WindowContext.Empty;
             set => _context = value;
         }
 
@@ -243,16 +244,23 @@ namespace BTurk.Automation.DependencyResolution
 
         private void OnGlobalShortcutKeyPressed(int shortcutId)
         {
-            switch (shortcutId)
-            {
-                case GlobalShortcuts.OpenMainWindowShortcutId:
-                    ToggleVisibility();
-                    break;
+            SetWindowContext(shortcutId);
+            ToggleVisibility();
+        }
 
-                case GlobalShortcuts.OpenAppContextWindowShortcutId:
-                    ToggleVisibility();
-                    break;
+        private void SetWindowContext(int shortcutId)
+        {
+            if (shortcutId == GlobalShortcuts.OpenMainWindowShortcutId)
+            {
+                _context = null;
+                return;
             }
+
+            var activeWindowHandle = Methods.GetForegroundWindow();
+            var activeWindowText = Methods.GetWindowText(activeWindowHandle);
+            var activeWindowClass = Methods.GetClassName(activeWindowHandle);
+
+            _context = new WindowContext(activeWindowText, activeWindowClass);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 // ReSharper disable IdentifierTypo
 
@@ -12,5 +13,41 @@ namespace BTurk.Automation.Core.WinApi
 
         [DllImport("user32.dll")]
         public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetForegroundWindow();
+
+        public static string GetWindowText(IntPtr hWnd)
+        {
+            int size = GetWindowTextLength(hWnd);
+            if (size > 0)
+            {
+                var builder = new StringBuilder(size + 1);
+                GetWindowText(hWnd, builder, builder.Capacity);
+                return builder.ToString();
+            }
+
+            return "";
+        }
+
+        public static string GetClassName(IntPtr handle)
+        {
+            const int maxChars = 256;
+            var className = new StringBuilder(maxChars);
+
+            if (GetClassName(handle.ToInt32(), className, maxChars) > 0)
+                return className.ToString();
+
+            return "";
+        }
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder strText, int maxCount);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        private static extern int GetWindowTextLength(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        private static extern int GetClassName(int hWnd, StringBuilder lpClassName, int nMaxCount);
     }
 }
