@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 
 // ReSharper disable IdentifierTypo
@@ -24,12 +25,6 @@ namespace AutomationEngine
         private Timer _timer;
         private MainForm _form;
         private bool _shortcutsInstalled;
-
-        [DllImport("user32.dll")]
-        public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
-
-        [DllImport("user32.dll")]
-        public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
         public void Install()
         {
@@ -108,5 +103,56 @@ namespace AutomationEngine
                 return ReadWithRetry(count - 1);
             }
         }
+
+        public static string GetActiveApplicationContext()
+        {
+            var currentWindow = GlobalShortcuts.GetForegroundWindow();
+            var currentWindowText = GlobalShortcuts.GetWindowText(currentWindow);
+            var className = GlobalShortcuts.GetClassName(currentWindow);
+            var text = $"{currentWindowText} ahk_class {className}";
+            return text;
+        }
+
+        private static string GetWindowText(IntPtr hWnd)
+        {
+            int size = GetWindowTextLength(hWnd);
+            if (size > 0)
+            {
+                var builder = new StringBuilder(size + 1);
+                GetWindowText(hWnd, builder, builder.Capacity);
+                return builder.ToString();
+            }
+
+            return "";
+        }
+
+        private static string GetClassName(IntPtr handle)
+        {
+            const int maxChars = 256;
+            var className = new StringBuilder(maxChars);
+
+            if (GetClassName(handle.ToInt32(), className, maxChars) > 0)
+                return className.ToString();
+
+            return "";
+        }
+
+        [DllImport("user32.dll")]
+        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+
+        [DllImport("user32.dll")]
+        private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        private static extern int GetClassName(int hWnd, StringBuilder lpClassName, int nMaxCount);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder strText, int maxCount);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        private static extern int GetWindowTextLength(IntPtr hWnd);
     }
 }

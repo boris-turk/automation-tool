@@ -164,7 +164,7 @@ namespace AutomationEngine
             }
         }
 
-        private void OpenContextMenuForSelectedItem()
+        public void OpenContextMenuForSelectedItem()
         {
             ItemWithOpenedContextMenu = State.SelectedItem;
             UpdateStateLabel();

@@ -206,7 +206,7 @@ namespace AutomationEngine
             else if (mystr.LpData == WindowMessages.ToggleContextMenuVisibility)
             {
                 MenuEngine.Instance.AlternateRootMenuAlias = null;
-                MenuEngine.Instance.ApplicationContext = AhkInterop.GetMessageFileContents().FirstOrDefault();
+                MenuEngine.Instance.ApplicationContext = GlobalShortcuts.GetActiveApplicationContext();
                 ToggleAutomationEngineVisibility();
             }
             else if (mystr.LpData == WindowMessages.AhkFunctionResultReported)

@@ -24,19 +24,24 @@ namespace AutomationEngine
 
         private void OnGlobalShortcutKeyPressed(int shortcutId)
         {
-            switch (shortcutId)
+            if (shortcutId == GlobalShortcuts.OpenMainWindowShortcutId)
             {
-                case GlobalShortcuts.OpenMainWindowShortcutId:
+                MenuEngine.Instance.AlternateRootMenuAlias = null;
+                MenuEngine.Instance.ApplicationContext = null;
+                ToggleAutomationEngineVisibility();
+            }
+            else if (shortcutId == GlobalShortcuts.OpenAppContextWindowShortcutId)
+            {
+                if (Visible)
+                {
+                    MenuEngine.Instance.OpenContextMenuForSelectedItem();
+                }
+                else
+                {
                     MenuEngine.Instance.AlternateRootMenuAlias = null;
-                    MenuEngine.Instance.ApplicationContext = null;
+                    MenuEngine.Instance.ApplicationContext = GlobalShortcuts.GetActiveApplicationContext();
                     ToggleAutomationEngineVisibility();
-                    break;
-
-                case GlobalShortcuts.OpenAppContextWindowShortcutId:
-                    MenuEngine.Instance.AlternateRootMenuAlias = null;
-                    MenuEngine.Instance.ApplicationContext = null;
-                    ToggleAutomationEngineVisibility();
-                    break;
+                }
             }
         }
 
