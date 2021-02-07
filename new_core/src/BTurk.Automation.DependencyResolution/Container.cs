@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using BTurk.Automation.Core;
-using BTurk.Automation.Core.Decorators;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.Core.Serialization;
-using BTurk.Automation.E3k;
-using BTurk.Automation.Standard;
 
 namespace BTurk.Automation.DependencyResolution
 {
@@ -23,68 +20,16 @@ namespace BTurk.Automation.DependencyResolution
 
         public static object GetInstance(Type type)
         {
-            var instance = GetInstanceInternal(type);
-            return new Decorators(instance, type).Apply();
-        }
-
-        public static object GetInstanceInternal(Type type)
-        {
             if (IsSearchEngineRequest(type))
                 return GetOrCreateSingleton<MainForm>(InitializeMainForm);
 
             if (type == typeof(IResourceProvider))
                 return GetOrCreateSingleton<JsonResourceProvider>();
 
-            if (type == typeof(IRequestHandler<CompositeRequest>))
-                return GetOrCreateSingleton<CompositeRequestHandler>();
-
-            if (type == typeof(RootRequestHandler))
-                return GetOrCreateSingleton<RootRequestHandler>();
-
-            if (type == typeof(IRequestHandler<CommandRequest>))
-                return GetOrCreateSingleton<CommandRequestHandler>();
-
-            if (type == typeof(IRequestHandler<SelectionRequest<Repository>>))
-                return GetOrCreateSingleton(GetRepositoryRequestHandler);
-
-            if (type == typeof(IRequestHandler<SelectionRequest<Solution>>))
-                return GetOrCreateSingleton(GetSolutionRequestHandler);
-
-            if (type == typeof(List<ICommand>))
-                return GetOrCreateSingleton(Commands);
-
-            if (type == typeof(CommandRequestHandler))
-                return GetOrCreateSingleton<CommandRequestHandler>();
+            if (type == typeof(RequestDispatcher))
+                return GetOrCreateSingleton<RequestDispatcher>();
 
             throw FailedToCreateInstance(type);
-        }
-
-        private static IResourceProvider ResourceProvider => GetInstance<IResourceProvider>();
-
-        private static ISearchEngine SearchEngine => GetInstance<ISearchEngine>();
-
-        public static ISearchItemsProvider SearchItemsProvider => GetInstance<ISearchItemsProvider>();
-
-        private static IRequestHandler<SelectionRequest<Repository>> GetRepositoryRequestHandler()
-        {
-            IRequestHandler<SelectionRequest<Repository>> handler = new RepositoryRequestHandler(SearchEngine);
-
-            handler = new FilteredRequestHandlerDecorator<SelectionRequest<Repository>>(handler, SearchEngine);
-
-            handler = new SelectionRequestHandlerDecorator<SelectionRequest<Repository>, Repository>(handler, SearchEngine);
-
-            return handler;
-        }
-
-        private static IRequestHandler<SelectionRequest<Solution>> GetSolutionRequestHandler()
-        {
-            IRequestHandler<SelectionRequest<Solution>> handler = new SolutionSelectionRequestHandler(SearchEngine, ResourceProvider);
-
-            handler = new FilteredRequestHandlerDecorator<SelectionRequest<Solution>>(handler, SearchEngine);
-
-            handler = new SelectionRequestHandlerDecorator<SelectionRequest<Solution>, Solution>(handler, SearchEngine);
-
-            return handler;
         }
 
         private static bool IsSearchEngineRequest(Type type)
@@ -103,18 +48,7 @@ namespace BTurk.Automation.DependencyResolution
 
         private static void InitializeMainForm(MainForm mainForm)
         {
-            mainForm.RootRequestHandler = GetInstance<RootRequestHandler>();
-        }
-
-        private static List<ICommand> Commands()
-        {
-            return new List<ICommand>
-            {
-                new ApplicationContextMenuRequestHandler(SearchEngine),
-                new CommitRequestHandler(),
-                new SolutionRequestHandler(),
-                new FieldRequestHandler()
-            };
+            mainForm.RequestDispatcher = GetInstance<RequestDispatcher>();
         }
 
         private static T GetOrCreateSingleton<T>(Action<T> initializer = null)

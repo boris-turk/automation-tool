@@ -23,7 +23,7 @@ namespace BTurk.Automation.DependencyResolution
 
         public MainForm()
         {
-            Items = new List<SearchItem>();
+            Items = new List<Request>();
 
             InitializeComponent();
             TopMost = false;
@@ -45,9 +45,9 @@ namespace BTurk.Automation.DependencyResolution
             VisibleChanged += (_, __) => { if (Visible) OnBecomingVisible(); };
         }
 
-        public List<SearchItem> Items { get; }
+        public List<Request> Items { get; }
 
-        public RootRequestHandler RootRequestHandler { get; set; }
+        public RequestDispatcher RequestDispatcher { get; set; }
 
         private void MoveFocusToTextBox()
         {
@@ -169,7 +169,7 @@ namespace BTurk.Automation.DependencyResolution
             FilterText = null;
             ActionType = actionType;
 
-            RootRequestHandler.Handle();
+            RequestDispatcher.Dispatch();
 
             var selectedIndex = ListBox.SelectedIndex;
 
@@ -225,11 +225,11 @@ namespace BTurk.Automation.DependencyResolution
             }
         }
 
-        public SearchItem SelectedItem => (SearchItem)ListBox.SelectedItem;
+        public Request SelectedItem => (Request)ListBox.SelectedItem;
 
         public ActionType ActionType { get; private set; }
 
-        public void AddItems(IEnumerable<SearchItem> items)
+        public void AddItems(IEnumerable<Request> items)
         {
             Items.AddRange(items);
         }

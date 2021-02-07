@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Core.SearchEngine
 {
@@ -16,7 +17,7 @@ namespace BTurk.Automation.Core.SearchEngine
                 .ToArray();
         }
 
-        public IEnumerable<SearchItem> Filter(IEnumerable<SearchItem> items)
+        public IEnumerable<Request> Filter(IEnumerable<Request> items)
         {
             foreach (var item in items)
             {

@@ -4,31 +4,22 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
-    public class ApplicationContextMenuRequestHandler : ICommand
+    public class ApplicationContextMenuRequestHandler : Request
     {
         private readonly IWindowContextProvider _windowContextProvider;
 
         public ApplicationContextMenuRequestHandler(IWindowContextProvider windowContextProvider)
+            : base("")
         {
             _windowContextProvider = windowContextProvider;
         }
 
-        private void OnRepositorySelected(Repository repository)
-        {
-            repository.Commit();
-        }
-
-        public CompositeRequest Request => new CompositeRequest(CreateRequests());
-
-        private IEnumerable<Request> CreateRequests()
+        public override IEnumerable<Request> ChildRequests()
         {
             if (_windowContextProvider.Context.IsEmpty)
                 yield break;
 
-            yield return new SelectionRequest<Repository>(OnRepositorySelected)
-            {
-                CanMoveNext = false
-            };
+            yield return new CommitRepositoryRequest();
         }
     }
 }

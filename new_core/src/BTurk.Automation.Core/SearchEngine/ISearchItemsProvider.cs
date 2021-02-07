@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Core.SearchEngine
 {
     public interface ISearchItemsProvider
     {
-        List<SearchItem> Items { get; }
+        List<Request> Items { get; }
     }
 }

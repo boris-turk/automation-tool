@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Core.SearchEngine
 {
@@ -10,10 +11,10 @@ namespace BTurk.Automation.Core.SearchEngine
 
         Selection TextSelection { get; set; }
 
-        SearchItem SelectedItem { get; }
+        Request SelectedItem { get; }
 
         ActionType ActionType { get; }
 
-        void AddItems(IEnumerable<SearchItem> items);
+        void AddItems(IEnumerable<Request> items);
     }
 }

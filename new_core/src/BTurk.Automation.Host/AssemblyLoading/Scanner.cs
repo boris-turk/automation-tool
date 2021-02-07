@@ -22,7 +22,7 @@ namespace BTurk.Automation.Host.AssemblyLoading
 			var instances = (
 					from assembly in domain.GetAssemblies()
 					from type in assembly.GetTypes()
-					where type.GetInterface(typeof(IGuestProcess).Name) != null
+					where type.GetInterface(nameof(IGuestProcess)) != null
 					let constructor = type.GetConstructor(Type.EmptyTypes)
 					where constructor != null
 					select constructor.Invoke(null)

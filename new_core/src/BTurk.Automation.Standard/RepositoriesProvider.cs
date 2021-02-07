@@ -3,25 +3,18 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using BTurk.Automation.Core.Requests;
-using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
-    public class RepositoryRequestHandler : IRequestHandler<SelectionRequest<Repository>>
+    public class RepositoriesProvider : RequestsProvider<Repository>
     {
-        private readonly ISearchEngine _searchEngine;
-
-        public RepositoryRequestHandler(ISearchEngine searchEngine)
+        private string[] Ignored => new[]
         {
-            _searchEngine = searchEngine;
-        }
+            "V50MicSvn",
+            "V50NewCore",
+        };
 
-        public void Handle(SelectionRequest<Repository> request)
-        {
-            _searchEngine.AddItems(GetRepositories());
-        }
-
-        public IEnumerable<Repository> GetRepositories()
+        protected override IEnumerable<Repository> Load()
         {
             var projectsDirectory = @"C:\work\projects";
 
@@ -43,9 +36,8 @@ namespace BTurk.Automation.Standard
 
             if (candidate == "V50")
             {
-                return new Repository
+                return new Repository("trunk")
                 {
-                    Text = "trunk",
                     Type = RepositoryType.Git,
                     AbsolutePath = directory
                 };
@@ -56,9 +48,8 @@ namespace BTurk.Automation.Standard
             if (match.Success)
             {
                 var name = $"r{match.Groups[1].Value}";
-                return new Repository
+                return new Repository(name)
                 {
-                    Text = name,
                     Type = RepositoryType.Svn,
                     AbsolutePath = directory
                 };
@@ -72,17 +63,15 @@ namespace BTurk.Automation.Standard
 
                 if (name == "mic")
                 {
-                    return new Repository
+                    return new Repository(name)
                     {
-                        Text = name,
                         Type = RepositoryType.Git,
                         AbsolutePath = directory
                     };
                 }
 
-                return new Repository
+                return new Repository(name)
                 {
-                    Text = name,
                     Type = RepositoryType.Svn,
                     AbsolutePath = directory
                 };
@@ -91,10 +80,5 @@ namespace BTurk.Automation.Standard
             return null;
         }
 
-        private string[] Ignored => new[]
-        {
-            "V50MicSvn",
-            "V50NewCore",
-        };
     }
 }
