@@ -1,6 +1,6 @@
 ﻿namespace BTurk.Automation.Core.SearchEngine
 {
-    public interface IWindowContextProvider
+    public interface IEnvironmentContextProvider
     {
         EnvironmentContext Context { get; }
     }

@@ -6,6 +6,7 @@ using BTurk.Automation.Core;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.Core.Serialization;
+using BTurk.Automation.Standard;
 
 namespace BTurk.Automation.DependencyResolution
 {
@@ -29,7 +30,19 @@ namespace BTurk.Automation.DependencyResolution
             if (type == typeof(RequestDispatcher))
                 return GetOrCreateSingleton<RequestDispatcher>();
 
+            if (type == typeof(List<Request>))
+                return GetOrCreateSingleton(CreateRootRequests);
+
             throw FailedToCreateInstance(type);
+        }
+
+        private static List<Request> CreateRootRequests()
+        {
+            return new List<Request>
+            {
+                new MainMenuRequest(),
+                new VisualStudioRequest()
+            };
         }
 
         private static bool IsSearchEngineRequest(Type type)
@@ -41,6 +54,9 @@ namespace BTurk.Automation.DependencyResolution
                 return true;
 
             if (type == typeof(ISearchItemsProvider))
+                return true;
+
+            if (type == typeof(IEnvironmentContextProvider))
                 return true;
 
             return false;

@@ -4,7 +4,7 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
-    public class VisualStudioRequestHandler : Request
+    public class VisualStudioRequest : Request
     {
         public override IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {

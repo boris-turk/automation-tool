@@ -54,7 +54,7 @@
     <Compile Include="SearchEngine\ActionType.cs" />
     <Compile Include="SearchEngine\EnvironmentContext.cs" />
     <Compile Include="SearchEngine\FilterAlgorithm.cs" />
-    <Compile Include="SearchEngine\IWindowContextProvider.cs" />
+    <Compile Include="SearchEngine\IEnvironmentContextProvider.cs" />
     <Compile Include="SearchEngine\ISearchItemsProvider.cs" />
     <Compile Include="Requests\RequestDispatcher.cs" />
     <Compile Include="SearchEngine\ISearchEngine.cs" />

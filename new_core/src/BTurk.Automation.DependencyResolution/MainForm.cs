@@ -244,11 +244,11 @@ namespace BTurk.Automation.DependencyResolution
 
         private void OnGlobalShortcutKeyPressed(int shortcutId)
         {
-            SetWindowContext(shortcutId);
+            SetEnvironmentContext(shortcutId);
             ToggleVisibility();
         }
 
-        private void SetWindowContext(int shortcutId)
+        private void SetEnvironmentContext(int shortcutId)
         {
             if (shortcutId == GlobalShortcuts.OpenMainWindowShortcutId)
             {
