@@ -52,7 +52,7 @@
     <Compile Include="Requests\IRequestsConsumer.cs" />
     <Compile Include="Requests\RequestsProvider.cs" />
     <Compile Include="SearchEngine\ActionType.cs" />
-    <Compile Include="SearchEngine\WindowContext.cs" />
+    <Compile Include="SearchEngine\EnvironmentContext.cs" />
     <Compile Include="SearchEngine\FilterAlgorithm.cs" />
     <Compile Include="SearchEngine\IWindowContextProvider.cs" />
     <Compile Include="SearchEngine\ISearchItemsProvider.cs" />

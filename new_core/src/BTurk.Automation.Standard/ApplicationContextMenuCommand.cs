@@ -4,19 +4,11 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
-    public class ApplicationContextMenuRequestHandler : Request
+    public class VisualStudioRequestHandler : Request
     {
-        private readonly IWindowContextProvider _windowContextProvider;
-
-        public ApplicationContextMenuRequestHandler(IWindowContextProvider windowContextProvider)
-            : base("")
+        public override IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
-            _windowContextProvider = windowContextProvider;
-        }
-
-        public override IEnumerable<Request> ChildRequests()
-        {
-            if (_windowContextProvider.Context.IsEmpty)
+            if (!context.WindowTitle.Contains("Visual Studio"))
                 yield break;
 
             yield return new CommitRepositoryRequest();

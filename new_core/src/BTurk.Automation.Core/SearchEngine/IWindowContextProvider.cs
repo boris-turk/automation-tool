@@ -2,6 +2,6 @@
 {
     public interface IWindowContextProvider
     {
-        WindowContext Context { get; }
+        EnvironmentContext Context { get; }
     }
 }

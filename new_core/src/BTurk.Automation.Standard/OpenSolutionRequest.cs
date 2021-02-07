@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BTurk.Automation.Core.Requests;
+using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
@@ -12,7 +13,7 @@ namespace BTurk.Automation.Standard
         {
         }
 
-        public override IEnumerable<Request> ChildRequests()
+        public override IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
             return _solutions;
         }

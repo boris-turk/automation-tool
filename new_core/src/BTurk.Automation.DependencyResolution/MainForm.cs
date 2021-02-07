@@ -11,13 +11,13 @@ namespace BTurk.Automation.DependencyResolution
 {
     internal partial class MainForm : Form, ISearchEngine, ISearchItemsProvider
     {
-        private WindowContext _context;
+        private EnvironmentContext _context;
 
         private const int OutOfScreenOffset = -20000;
 
-        public WindowContext Context
+        public EnvironmentContext Context
         {
-            get => _context ?? WindowContext.Empty;
+            get => _context ?? EnvironmentContext.Empty;
             set => _context = value;
         }
 
@@ -256,11 +256,11 @@ namespace BTurk.Automation.DependencyResolution
                 return;
             }
 
-            var activeWindowHandle = Methods.GetForegroundWindow();
-            var activeWindowText = Methods.GetWindowText(activeWindowHandle);
-            var activeWindowClass = Methods.GetClassName(activeWindowHandle);
+            var windowHandle = Methods.GetForegroundWindow();
+            var windowText = Methods.GetWindowText(windowHandle);
+            var windowClass = Methods.GetClassName(windowHandle);
 
-            _context = new WindowContext(activeWindowText, activeWindowClass);
+            _context = new EnvironmentContext(windowText, windowClass);
         }
     }
 }
