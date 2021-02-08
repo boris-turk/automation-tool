@@ -25,6 +25,11 @@ namespace BTurk.Automation.Core.Requests
 
         private List<Request> SearchItems => _searchItemsProvider.Items;
 
+        public void Reset()
+        {
+            _activeRequests.Clear();
+        }
+
         public void Dispatch()
         {
             if (!_activeRequests.Any())

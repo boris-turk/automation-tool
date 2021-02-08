@@ -166,7 +166,6 @@ namespace BTurk.Automation.DependencyResolution
 
         public void TriggerAction(ActionType actionType)
         {
-            FilterText = null;
             ActionType = actionType;
 
             RequestDispatcher.Dispatch();
@@ -175,7 +174,7 @@ namespace BTurk.Automation.DependencyResolution
 
             ListBox.Items.Clear();
 
-            foreach (var item in new FilterAlgorithm(FilterText).Filter(Items))
+            foreach (var item in new FilterAlgorithm(SearchText).Filter(Items))
                 ListBox.Items.Add(item);
 
             if (actionType != ActionType.Execution)
@@ -213,8 +212,6 @@ namespace BTurk.Automation.DependencyResolution
             set => TextBox.Text = value;
         }
 
-        public string FilterText { get; set; }
-
         public Selection TextSelection
         {
             get => new Selection(TextBox.SelectionStart, TextBox.SelectionLength);
@@ -244,6 +241,9 @@ namespace BTurk.Automation.DependencyResolution
 
         private void OnGlobalShortcutKeyPressed(int shortcutId)
         {
+            if (!Visible)
+                RequestDispatcher.Reset();
+
             SetEnvironmentContext(shortcutId);
             ToggleVisibility();
         }

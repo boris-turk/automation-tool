@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationContextMenuCommand.cs" />
+    <Compile Include="VisualStudioRequest.cs" />
     <Compile Include="RepositoriesProvider.cs" />
     <Compile Include="RepositoryRequest.cs" />
     <Compile Include="CommitRepositoryRequest.cs" />
