@@ -33,7 +33,27 @@ namespace BTurk.Automation.DependencyResolution
             if (type == typeof(List<Request>))
                 return GetOrCreateSingleton(CreateRootRequests);
 
+            if (type == typeof(IRequestProcessor))
+                return GetOrCreateSingleton<RequestProcessor>();
+
+            if (type.InheritsFrom(typeof(IRequestsProvider<>)))
+                return GetRequestsProvider(type);
+
             throw FailedToCreateInstance(type);
+        }
+
+        private static object GetRequestsProvider(Type type)
+        {
+            object Create()
+            {
+                var requestType = type.GetGenericArguments()[0];
+                var implementorType = GetRequestProcessorImplementorType(requestType);
+                return CreateInstance(implementorType);
+            }
+
+            var instance = GetOrCreateSingleton(type, Create);
+
+            return instance;
         }
 
         private static List<Request> CreateRootRequests()
@@ -62,6 +82,19 @@ namespace BTurk.Automation.DependencyResolution
             return false;
         }
 
+        private static Type GetRequestProcessorImplementorType(Type requestType)
+        {
+            if (requestType == typeof(Repository))
+                return typeof(RepositoriesProvider);
+
+            if (requestType == typeof(Solution))
+                return typeof(SolutionsProvider);
+
+            var emptyProviderType = typeof(EmptyRequestProvider<>).MakeGenericType(requestType);
+
+            return emptyProviderType;
+        }
+
         private static void InitializeMainForm(MainForm mainForm)
         {
             mainForm.RequestDispatcher = GetInstance<RequestDispatcher>();
@@ -74,13 +107,30 @@ namespace BTurk.Automation.DependencyResolution
 
         private static T GetOrCreateSingleton<T>(Func<T> provider, Action<T> initializer = null)
         {
+            void Initialize(object instance)
+            {
+                initializer?.Invoke((T)instance);
+            }
+
+            object Create()
+            {
+                return provider.Invoke();
+            }
+
+            var result = (T)GetOrCreateSingleton(typeof(T), Create, Initialize);
+
+            return result;
+        }
+
+        private static object GetOrCreateSingleton(Type type, Func<object> provider, Action<object> initializer = null)
+        {
             var lockTaken = false;
 
             try
             {
                 Monitor.Enter(Singletons, ref lockTaken);
 
-                var instance = (T)Singletons.SingleOrDefault(_ => _.GetType() == typeof(T));
+                var instance = Singletons.SingleOrDefault(_ => _.GetType() == type);
 
                 if (instance == null)
                 {

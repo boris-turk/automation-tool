@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+
+// ReSharper disable LocalizableElement
 
 namespace BTurk.Automation.DependencyResolution
 {
@@ -27,6 +30,37 @@ namespace BTurk.Automation.DependencyResolution
                 type = type.BaseType;
             }
             return false;
+        }
+
+        public static IEnumerable<Type> FindAllParentClosedGenerics(this Type type, Type openGenericType)
+        {
+            if (!openGenericType.IsGenericTypeDefinition)
+            {
+                throw new ArgumentException("Argument is not an open generic type", nameof(openGenericType));
+            }
+
+            if (openGenericType.IsInterface)
+            {
+                return
+                    from parentType in type.GetInterfaces()
+                    where parentType.IsGenericType
+                    let genericType = parentType.GetGenericTypeDefinition()
+                    where genericType == openGenericType
+                    select parentType;
+            }
+
+            var parent = type.BaseType;
+
+            while (parent != null)
+            {
+                if (parent.IsGenericType && parent.GetGenericTypeDefinition() == openGenericType)
+                {
+                    return new[] { parent };
+                }
+                parent = parent.BaseType;
+            }
+
+            return new Type[] { };
         }
     }
 }

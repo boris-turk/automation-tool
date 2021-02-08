@@ -11,13 +11,16 @@ namespace BTurk.Automation.Core.Requests
         private List<SearchEngineState> _states;
         private readonly List<Request> _rootRequests;
         private readonly ISearchEngine _searchEngine;
+        private readonly IRequestProcessor _requestProcessor;
 
-        public RequestDispatcher(List<Request> rootRequests, ISearchEngine searchEngine)
+        public RequestDispatcher(List<Request> rootRequests, ISearchEngine searchEngine,
+            IRequestProcessor requestProcessor)
         {
             _states = new List<SearchEngineState>();
 
             _rootRequests = rootRequests;
             _searchEngine = searchEngine;
+            _requestProcessor = requestProcessor;
         }
 
         private List<Request> SearchItems => _searchEngine.Items;
@@ -36,16 +39,28 @@ namespace BTurk.Automation.Core.Requests
             if (!_states.Any())
                 return;
 
+            if (_searchEngine.ActionType == ActionType.Execute)
+            {
+                OnExecute();
+                return;
+
+            }
+
             if (_searchEngine.ActionType == ActionType.MoveNext)
                 OnMoveNext();
             else
                 OnMovePrevious();
 
+            LoadSearchItems();
+        }
+
+        private void LoadSearchItems()
+        {
             SearchItems.Clear();
 
+            var items = _requestProcessor.LoadChildren(CurrentState.Request);
             var filter = new FilterAlgorithm(CurrentState.Text);
 
-            var items = GetChildRequests(CurrentState.Request);
             items = filter.Filter(items);
 
             SearchItems.AddRange(items);
@@ -54,6 +69,16 @@ namespace BTurk.Automation.Core.Requests
         private bool ShouldMoveToNextItem()
         {
             return CurrentState.Text.EndsWith(" ");
+        }
+
+        private void OnExecute()
+        {
+            if (_searchEngine.SelectedItem == null)
+                return;
+
+            var currentRequests = _states.Select(_ => _.Request).ToList();
+            currentRequests.Add(_searchEngine.SelectedItem);
+            _requestProcessor.Execute(currentRequests);
         }
 
         private void OnMoveNext()
