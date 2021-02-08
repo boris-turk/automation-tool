@@ -56,10 +56,10 @@ namespace BTurk.Automation.DependencyResolution
                 .Invoke();
         }
 
-        private void ExecuteChildConsumer<TChild>(Request request, TChild childRequest) where TChild : Request
+        private void ExecuteChildConsumer<TChild>(IRequestConsumer<TChild> consumer, TChild childRequest)
+            where TChild : Request
         {
-            if (request is IRequestConsumer<TChild> consumer)
-                consumer.Execute(childRequest);
+            consumer.Execute(childRequest);
         }
 
         private Type GetChildRequestType(Request request)
