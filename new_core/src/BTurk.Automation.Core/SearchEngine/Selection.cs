@@ -2,14 +2,8 @@
 {
     public class Selection
     {
-        public Selection(int start, int length)
-        {
-            Start = start;
-            Length = length;
-        }
+        public int Start { get; set; }
 
-        public int Start { get; }
-
-        public int Length { get; }
+        public int Length { get; set; }
     }
 }

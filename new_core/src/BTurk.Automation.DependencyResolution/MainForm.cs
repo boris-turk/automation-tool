@@ -9,8 +9,9 @@ using BTurk.Automation.Core.WinApi;
 
 namespace BTurk.Automation.DependencyResolution
 {
-    internal partial class MainForm : Form, ISearchEngine, ISearchItemsProvider
+    internal partial class MainForm : Form, ISearchEngine
     {
+        private string _currentText;
         private EnvironmentContext _context;
 
         private const int OutOfScreenOffset = -20000;
@@ -23,6 +24,8 @@ namespace BTurk.Automation.DependencyResolution
 
         public MainForm()
         {
+            _currentText = "";
+
             Items = new List<Request>();
 
             InitializeComponent();
@@ -101,7 +104,7 @@ namespace BTurk.Automation.DependencyResolution
                     return true;
 
                 case Keys.Enter when !e.Alt && !e.Control && !e.Shift:
-                    TriggerAction(ActionType.Execution);
+                    TriggerAction(ActionType.Execute);
                     return true;
 
                 default:
@@ -153,15 +156,26 @@ namespace BTurk.Automation.DependencyResolution
         private void OnBecomingVisible()
         {
             if (string.IsNullOrWhiteSpace(TextBox.Text))
-                TriggerAction(ActionType.TextChanged);
+                TriggerAction(ActionType.MoveNext);
             else
                 TextBox.Text = "";
         }
 
         protected override void OnLoad(EventArgs e)
         {
-            TextBox.TextChanged += (_, __) => TriggerAction(ActionType.TextChanged);
+            TextBox.TextChanged += OnSearchTextChanged;
             base.OnLoad(e);
+        }
+
+        private void OnSearchTextChanged(object sender, EventArgs e)
+        {
+            var actionType = _currentText.Length > TextBox.Text.Length
+                ? ActionType.MovePrevious
+                : ActionType.MoveNext;
+
+            _currentText = TextBox.Text;
+
+            TriggerAction(actionType);
         }
 
         public void TriggerAction(ActionType actionType)
@@ -172,12 +186,16 @@ namespace BTurk.Automation.DependencyResolution
 
             var selectedIndex = ListBox.SelectedIndex;
 
+            ListBox.BeginUpdate();
+
             ListBox.Items.Clear();
 
-            foreach (var item in new FilterAlgorithm(SearchText).Filter(Items))
+            foreach (var item in Items)
                 ListBox.Items.Add(item);
 
-            if (actionType != ActionType.Execution)
+            ListBox.EndUpdate();
+
+            if (actionType != ActionType.Execute)
                 selectedIndex = 0;
 
             SelectItem(selectedIndex);
@@ -214,7 +232,11 @@ namespace BTurk.Automation.DependencyResolution
 
         public Selection TextSelection
         {
-            get => new Selection(TextBox.SelectionStart, TextBox.SelectionLength);
+            get => new Selection
+            {
+                Start = TextBox.SelectionStart,
+                Length = TextBox.SelectionLength
+            };
             set
             {
                 TextBox.SelectionStart = value.Start;

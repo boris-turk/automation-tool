@@ -2,7 +2,8 @@
 {
     public enum ActionType
     {
-        TextChanged,
-        Execution
+        MoveNext,
+        MovePrevious,
+        Execute
     }
 }
