@@ -83,6 +83,9 @@ namespace BTurk.Automation.DependencyResolution
 
             foreach (var method in type.GetMethods(flags))
             {
+                if (_arguments.Length != method.GetParameters().Length)
+                    continue;
+
                 if (method.Name.Equals(_methodName, StringComparison.Ordinal))
                     yield return method;
             }

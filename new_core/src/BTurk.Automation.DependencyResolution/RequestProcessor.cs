@@ -22,10 +22,18 @@ namespace BTurk.Automation.DependencyResolution
             if (childRequestType == null)
                 return request.ChildRequests(_contextProvider.Context);
 
-            var service = CreateRequestsProvider(childRequestType);
-            var result = ((dynamic)service).Load();
+            var result = GenericMethodInvoker.Instance(this)
+                .Method(nameof(LoadChildren))
+                .WithGenericTypes(childRequestType)
+                .Invoke();
 
             return (IEnumerable<Request>)result;
+        }
+
+        public IEnumerable<Request> LoadChildren<TRequest>() where TRequest : Request
+        {
+            var service = Container.GetInstance<IRequestsProvider<TRequest>>();
+            return service.Load();
         }
 
         public void Execute(List<Request> currentRequests)
@@ -50,13 +58,13 @@ namespace BTurk.Automation.DependencyResolution
                 return;
 
             GenericMethodInvoker.Instance(this)
-                .Method(nameof(ExecuteChildConsumer))
+                .Method(nameof(Execute))
                 .WithGenericTypes(childRequestType)
                 .WithArguments(requests[1], requests[0])
                 .Invoke();
         }
 
-        private void ExecuteChildConsumer<TChild>(IRequestConsumer<TChild> consumer, TChild childRequest)
+        private void Execute<TChild>(IRequestConsumer<TChild> consumer, TChild childRequest)
             where TChild : Request
         {
             consumer.Execute(childRequest);
@@ -67,13 +75,6 @@ namespace BTurk.Automation.DependencyResolution
             var parentInterfaces = request.GetType().FindAllParentClosedGenerics(typeof(IRequestConsumer<>));
             var singleInterface = parentInterfaces.SingleOrDefault();
             return singleInterface?.GetGenericArguments()[0];
-        }
-
-        private object CreateRequestsProvider(Type requestType)
-        {
-            var serviceType = typeof(IRequestsProvider<>).MakeGenericType(requestType);
-            var instance = Container.GetInstance(serviceType);
-            return instance;
         }
     }
 }
