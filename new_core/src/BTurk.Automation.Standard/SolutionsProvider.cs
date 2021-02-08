@@ -4,7 +4,7 @@ using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Standard
 {
-    public class SolutionsProvider : RequestsProvider<Solution>
+    public class SolutionsProvider : IRequestsProvider<Solution>
     {
         private readonly IResourceProvider _resourceProvider;
 
@@ -13,7 +13,7 @@ namespace BTurk.Automation.Standard
             _resourceProvider = resourceProvider;
         }
 
-        protected override IEnumerable<Solution> Load()
+        public virtual IEnumerable<Solution> Load()
         {
             return _resourceProvider.Load<List<Solution>>("solutions");
         }

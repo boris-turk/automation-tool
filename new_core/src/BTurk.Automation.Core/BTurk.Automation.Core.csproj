@@ -49,8 +49,8 @@
   <ItemGroup>
     <Compile Include="IResourceProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Requests\IRequestsConsumer.cs" />
-    <Compile Include="Requests\RequestsProvider.cs" />
+    <Compile Include="Requests\IRequestConsumer.cs" />
+    <Compile Include="Requests\IRequestsProvider.cs" />
     <Compile Include="SearchEngine\ActionType.cs" />
     <Compile Include="SearchEngine\EnvironmentContext.cs" />
     <Compile Include="SearchEngine\FilterAlgorithm.cs" />

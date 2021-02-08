@@ -1,22 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using BTurk.Automation.Core.Requests;
+﻿using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Standard
 {
-    public abstract class RepositoryRequest : Request, IRequestsConsumer<Repository>
+    public abstract class RepositoryRequest : Request, IRequestConsumer<Repository>
     {
-        private List<Repository> _repositories;
-
         protected RepositoryRequest(string text)
             : base(text)
         {
         }
 
-        public void Add(IEnumerable<Repository> repositories)
+        void IRequestConsumer<Repository>.Execute(Repository request)
         {
-            _repositories = repositories.ToList();
-            _repositories.ForEach(_ => _.Action = () => OnRepositorySelected(_));
+            OnRepositorySelected(request);
         }
 
         protected abstract void OnRepositorySelected(Repository request);

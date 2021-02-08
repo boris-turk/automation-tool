@@ -6,7 +6,7 @@ using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Standard
 {
-    public class RepositoriesProvider : RequestsProvider<Repository>
+    public class RepositoriesProvider : IRequestsProvider<Repository>
     {
         private string[] Ignored => new[]
         {
@@ -14,7 +14,7 @@ namespace BTurk.Automation.Standard
             "V50NewCore",
         };
 
-        protected override IEnumerable<Repository> Load()
+        public IEnumerable<Repository> Load()
         {
             var projectsDirectory = @"C:\work\projects";
 
@@ -79,6 +79,5 @@ namespace BTurk.Automation.Standard
 
             return null;
         }
-
     }
 }

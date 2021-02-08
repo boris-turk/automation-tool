@@ -27,8 +27,8 @@ namespace BTurk.Automation.DependencyResolution.UnitTests
                 {
                     typeof(ISearchItemsProvider),
                     typeof(IResourceProvider),
-                    typeof(RequestsProvider<Solution>),
-                    typeof(RequestsProvider<Repository>),
+                    typeof(IRequestsProvider<Solution>),
+                    typeof(IRequestsProvider<Repository>),
                 };
 
                 return types.Select(x => new[] {x});
