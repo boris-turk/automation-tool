@@ -86,6 +86,9 @@ namespace BTurk.Automation.DependencyResolution
                 if (_arguments.Length != method.GetParameters().Length)
                     continue;
 
+                if (_genericTypes.Length != method.GetGenericArguments().Length)
+                    continue;
+
                 if (method.Name.Equals(_methodName, StringComparison.Ordinal))
                     yield return method;
             }

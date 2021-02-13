@@ -17,14 +17,14 @@ namespace BTurk.Automation.DependencyResolution
 
         public IEnumerable<Request> LoadChildren(Request request)
         {
-            var childRequestType = GetChildRequestType(request);
+            var parentConsumerType = GetParentConsumerType(request);
 
-            if (childRequestType == null)
+            if (parentConsumerType == null)
                 return request.ChildRequests(_contextProvider.Context);
 
             var result = GenericMethodInvoker.Instance(this)
                 .Method(nameof(LoadChildren))
-                .WithGenericTypes(childRequestType)
+                .WithGenericTypes(parentConsumerType)
                 .Invoke();
 
             return (IEnumerable<Request>)result;
@@ -36,41 +36,31 @@ namespace BTurk.Automation.DependencyResolution
             return service.Load();
         }
 
-        public void Execute(List<Request> currentRequests)
+        public void Execute(RequestExecutionContext context)
         {
-            var requests = Enumerable.Reverse(currentRequests.ToList()).Take(2).ToList();
-
-            if (!requests.Any())
-                return;
-
-            if (requests[0].Action != null)
-            {
-                requests[0].Action.Invoke();
-                return;
-            }
-
-            if (requests.Count == 1)
-                return;
-
-            var childRequestType = GetChildRequestType(requests[1]);
-
-            if (childRequestType != requests[0].GetType())
-                return;
-
             GenericMethodInvoker.Instance(this)
                 .Method(nameof(Execute))
-                .WithGenericTypes(childRequestType)
-                .WithArguments(requests[1], requests[0])
+                .WithGenericTypes(context.Request.GetType())
+                .WithArguments(context)
                 .Invoke();
         }
 
-        private void Execute<TChild>(IRequestConsumer<TChild> consumer, TChild childRequest)
-            where TChild : Request
+        private void Execute<TRequest>(RequestExecutionContext context) where TRequest : Request
         {
-            consumer.Execute(childRequest);
+            var properContext = (RequestExecutionContext<TRequest>)context;
+
+            if (context.ParentRequests.LastOrDefault() is IRequestConsumer<TRequest> consumer)
+            {
+                consumer.Execute(properContext.Request);
+            }
+            else
+            {
+                var executor = Container.GetInstance<IRequestExecutor<TRequest>>();
+                executor.Execute(properContext);
+            }
         }
 
-        private Type GetChildRequestType(Request request)
+        private Type GetParentConsumerType(Request request)
         {
             var parentInterfaces = request.GetType().FindAllParentClosedGenerics(typeof(IRequestConsumer<>));
             var singleInterface = parentInterfaces.SingleOrDefault();

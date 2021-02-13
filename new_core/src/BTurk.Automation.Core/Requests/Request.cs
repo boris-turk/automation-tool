@@ -21,8 +21,6 @@ namespace BTurk.Automation.Core.Requests
         [DataMember(Name = "Text")]
         public string Text { get; set; }
 
-        public Action Action { get; set; }
-
         public virtual IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
             return Enumerable.Empty<Request>();

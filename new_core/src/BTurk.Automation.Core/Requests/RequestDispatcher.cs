@@ -77,9 +77,15 @@ namespace BTurk.Automation.Core.Requests
 
             _searchEngine.Hide();
 
-            var currentRequests = _states.Select(_ => _.Request).ToList();
-            currentRequests.Add(_searchEngine.SelectedItem);
-            _requestProcessor.Execute(currentRequests);
+            var requests = _states.Select(_ => _.Request).ToList();
+            requests.Add(_searchEngine.SelectedItem);
+
+            if (!requests.Any())
+                return;
+
+            var context = new RequestExecutionContext(requests);
+
+            _requestProcessor.Execute(context);
         }
 
         private void OnMoveNext()

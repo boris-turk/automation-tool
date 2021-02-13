@@ -37,21 +37,25 @@ namespace BTurk.Automation.DependencyResolution
                 return GetOrCreateSingleton<RequestProcessor>();
 
             if (type.InheritsFrom(typeof(IRequestsProvider<>)))
-                return GetRequestsProvider(type);
+                return GetOpenGenericServiceInstance(type, GetRequestProcessorType);
+
+            if (type.InheritsFrom(typeof(IRequestExecutor<>)))
+                return GetOpenGenericServiceInstance(type, GetRequestExecutorType);
 
             throw FailedToCreateInstance(type);
         }
 
-        private static object GetRequestsProvider(Type type)
+        private static object GetOpenGenericServiceInstance(
+            Type openGenericType, Func<Type, Type> implementorTypeProvider)
         {
             object Create()
             {
-                var requestType = type.GetGenericArguments()[0];
-                var implementorType = GetRequestProcessorImplementorType(requestType);
+                var requestType = openGenericType.GetGenericArguments()[0];
+                var implementorType = implementorTypeProvider.Invoke(requestType);
                 return CreateInstance(implementorType);
             }
 
-            var instance = GetOrCreateSingleton(type, Create);
+            var instance = GetOrCreateSingleton(openGenericType, Create);
 
             return instance;
         }
@@ -82,7 +86,7 @@ namespace BTurk.Automation.DependencyResolution
             return false;
         }
 
-        private static Type GetRequestProcessorImplementorType(Type requestType)
+        private static Type GetRequestProcessorType(Type requestType)
         {
             if (requestType == typeof(Repository))
                 return typeof(RepositoriesProvider);
@@ -93,9 +97,15 @@ namespace BTurk.Automation.DependencyResolution
             if (requestType == typeof(Note))
                 return typeof(NotesProvider);
 
-            var emptyProviderType = typeof(EmptyRequestProvider<>).MakeGenericType(requestType);
+            return typeof(EmptyRequestProvider<>).MakeGenericType(requestType);
+        }
 
-            return emptyProviderType;
+        private static Type GetRequestExecutorType(Type requestType)
+        {
+            if (requestType == typeof(AhkRequest))
+                return typeof(AhkRequestExecutor);
+
+            return typeof(EmptyRequestExecutor<>).MakeGenericType(requestType);
         }
 
         private static void InitializeMainForm(MainForm mainForm)
