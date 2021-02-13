@@ -13,6 +13,8 @@ namespace BTurk.Automation.Core.SearchEngine
 
         ActionType ActionType { get; }
 
+        void Hide();
+
         void AddItems(IEnumerable<Request> items);
     }
 }

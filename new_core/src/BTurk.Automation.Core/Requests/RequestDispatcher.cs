@@ -43,7 +43,6 @@ namespace BTurk.Automation.Core.Requests
             {
                 OnExecute();
                 return;
-
             }
 
             if (_searchEngine.ActionType == ActionType.MoveNext)
@@ -75,6 +74,8 @@ namespace BTurk.Automation.Core.Requests
         {
             if (_searchEngine.SelectedItem == null)
                 return;
+
+            _searchEngine.Hide();
 
             var currentRequests = _states.Select(_ => _.Request).ToList();
             currentRequests.Add(_searchEngine.SelectedItem);
