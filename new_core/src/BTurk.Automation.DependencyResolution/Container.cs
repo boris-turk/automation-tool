@@ -90,6 +90,9 @@ namespace BTurk.Automation.DependencyResolution
             if (requestType == typeof(Solution))
                 return typeof(SolutionsProvider);
 
+            if (requestType == typeof(Note))
+                return typeof(NotesProvider);
+
             var emptyProviderType = typeof(EmptyRequestProvider<>).MakeGenericType(requestType);
 
             return emptyProviderType;

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Standard
 {
@@ -17,9 +18,9 @@ namespace BTurk.Automation.Standard
             repository.ExecuteCommand("commit");
         }
 
-        public static void Open(this Solution repository)
+        public static void Open(this IFileRequest request)
         {
-            Process.Start(repository.AbsolutePath);
+            Process.Start(request.Path);
         }
 
         private static void ExecuteCommand(this Repository repository, string command)

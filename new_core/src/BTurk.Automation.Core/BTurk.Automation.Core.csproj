@@ -50,6 +50,7 @@
     <Compile Include="IResourceProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\EmptyRequestProvider.cs" />
+    <Compile Include="Requests\IFileRequest.cs" />
     <Compile Include="Requests\IRequestConsumer.cs" />
     <Compile Include="Requests\IRequestProcessor.cs" />
     <Compile Include="Requests\IRequestsProvider.cs" />

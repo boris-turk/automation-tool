@@ -18,6 +18,7 @@ namespace BTurk.Automation.DependencyResolution
 
             yield return new CommitRepositoryRequest();
             yield return new OpenSolutionRequest();
+            yield return new NotesRequest();
         }
     }
 }

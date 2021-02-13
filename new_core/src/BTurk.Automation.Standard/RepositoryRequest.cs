@@ -9,11 +9,6 @@ namespace BTurk.Automation.Standard
         {
         }
 
-        void IRequestConsumer<Repository>.Execute(Repository request)
-        {
-            OnRepositorySelected(request);
-        }
-
-        protected abstract void OnRepositorySelected(Repository request);
+        public abstract void Execute(Repository request);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace BTurk.Automation.Standard
 {
-    public class Solution : Request, IFileRequest
+    public class Note : Request, IFileRequest
     {
         public string Path { get; set; }
     }

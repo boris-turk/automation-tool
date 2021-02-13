@@ -6,7 +6,7 @@
         {
         }
 
-        protected override void OnRepositorySelected(Repository repository)
+        public override void Execute(Repository repository)
         {
             repository.Commit();
         }

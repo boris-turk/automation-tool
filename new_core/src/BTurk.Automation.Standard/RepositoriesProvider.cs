@@ -36,8 +36,9 @@ namespace BTurk.Automation.Standard
 
             if (candidate == "V50")
             {
-                return new Repository("trunk")
+                return new Repository
                 {
+                    Text = "trunk",
                     Type = RepositoryType.Git,
                     AbsolutePath = directory
                 };
@@ -48,8 +49,9 @@ namespace BTurk.Automation.Standard
             if (match.Success)
             {
                 var name = $"r{match.Groups[1].Value}";
-                return new Repository(name)
+                return new Repository
                 {
+                    Text = name,
                     Type = RepositoryType.Svn,
                     AbsolutePath = directory
                 };
@@ -63,15 +65,17 @@ namespace BTurk.Automation.Standard
 
                 if (name == "mic")
                 {
-                    return new Repository(name)
+                    return new Repository
                     {
+                        Text = name,
                         Type = RepositoryType.Git,
                         AbsolutePath = directory
                     };
                 }
 
-                return new Repository(name)
+                return new Repository
                 {
+                    Text = name,
                     Type = RepositoryType.Svn,
                     AbsolutePath = directory
                 };
