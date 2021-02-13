@@ -2,12 +2,20 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using BTurk.Automation.Core;
 using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Standard
 {
     public class RepositoriesProvider : IRequestsProvider<Repository>
     {
+        private readonly IResourceProvider _resourceProvider;
+
+        public RepositoriesProvider(IResourceProvider resourceProvider)
+        {
+            _resourceProvider = resourceProvider;
+        }
+
         private string[] Ignored => new[]
         {
             "V50MicSvn",
@@ -25,6 +33,9 @@ namespace BTurk.Automation.Standard
                 if (repository != null)
                     yield return repository;
             }
+
+            foreach (var repository in _resourceProvider.Load<List<Repository>>("repositories"))
+                yield return repository;
         }
 
         private Repository ToRepository(string directory)
