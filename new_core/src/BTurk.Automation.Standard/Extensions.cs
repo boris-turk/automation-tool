@@ -25,7 +25,7 @@ namespace BTurk.Automation.Standard
 
         private static void ExecuteCommand(this Repository repository, string command)
         {
-            var path = repository.AbsolutePath;
+            var path = repository.Path;
             var programPath = repository.GetProgramPath();
             Process.Start(programPath, $"/command:{command} /path:{path}");
         }

@@ -40,7 +40,7 @@ namespace BTurk.Automation.Standard
                 {
                     Text = "trunk",
                     Type = RepositoryType.Git,
-                    AbsolutePath = directory
+                    Path = directory
                 };
             }
 
@@ -53,7 +53,7 @@ namespace BTurk.Automation.Standard
                 {
                     Text = name,
                     Type = RepositoryType.Svn,
-                    AbsolutePath = directory
+                    Path = directory
                 };
             }
 
@@ -69,7 +69,7 @@ namespace BTurk.Automation.Standard
                     {
                         Text = name,
                         Type = RepositoryType.Git,
-                        AbsolutePath = directory
+                        Path = directory
                     };
                 }
 
@@ -77,7 +77,7 @@ namespace BTurk.Automation.Standard
                 {
                     Text = name,
                     Type = RepositoryType.Svn,
-                    AbsolutePath = directory
+                    Path = directory
                 };
             }
 

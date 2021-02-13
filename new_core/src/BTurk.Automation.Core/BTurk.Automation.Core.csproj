@@ -63,7 +63,9 @@
     <Compile Include="SearchEngine\ISearchEngine.cs" />
     <Compile Include="SearchEngine\Selection.cs" />
     <Compile Include="Requests\Request.cs" />
+    <Compile Include="Serialization\ContractResolver.cs" />
     <Compile Include="Serialization\JsonResourceProvider.cs" />
+    <Compile Include="Serialization\TimeSpanConverter.cs" />
     <Compile Include="WinApi\Constants.cs" />
     <Compile Include="WinApi\Methods.cs" />
   </ItemGroup>

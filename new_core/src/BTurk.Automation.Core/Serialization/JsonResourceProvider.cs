@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.Serialization.Json;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+// ReSharper disable ConvertToUsingDeclaration
 
 namespace BTurk.Automation.Core.Serialization
 {
@@ -15,8 +17,10 @@ namespace BTurk.Automation.Core.Serialization
                 var serializer = new JsonSerializer
                 {
                     Formatting = Formatting.Indented,
-                    NullValueHandling = NullValueHandling.Ignore
+                    NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new ContractResolver()
                 };
+
                 serializer.Serialize(file, instance);
             }
         }
@@ -43,36 +47,30 @@ namespace BTurk.Automation.Core.Serialization
         private T Deserialize<T>(MemoryStream memoryStream)
         {
             memoryStream.Position = 0;
-
-            try
-            {
-                var serializer = new DataContractJsonSerializer(typeof(T));
-                var result = (T)serializer.ReadObject(memoryStream);
-                return result;
-            }
-            catch (Exception e)
-            {
-                memoryStream.Position = 0;
-                var responseString = Encoding.UTF8.GetString(memoryStream.ToArray());
-
-                try
-                {
-                    var result = FromJsonString<T>(responseString);
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    e.Data.Add("newtonsoft_json_converter_exception", ex.Message);
-                }
-
-                e.Data.Add("response_string", responseString);
-                throw;
-            }
+            var bytes = memoryStream.ToArray();
+            var text = Encoding.UTF8.GetString(bytes);
+            var result = FromJsonString<T>(text);
+            return result;
         }
 
         private T FromJsonString<T>(string content)
         {
-            return JsonConvert.DeserializeObject<T>(content);
+            var settings = CreateSerializationSettings();
+            var result = JsonConvert.DeserializeObject<T>(content, settings);
+            return result;
+        }
+
+        private static JsonSerializerSettings CreateSerializationSettings()
+        {
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
+
+            settings.Converters.Add(new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffZ" });
+            settings.Converters.Add(new TimeSpanConverter());
+
+            return settings;
         }
     }
 }
