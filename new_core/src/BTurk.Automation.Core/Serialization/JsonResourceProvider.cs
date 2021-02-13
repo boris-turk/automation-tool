@@ -14,13 +14,8 @@ namespace BTurk.Automation.Core.Serialization
         {
             using (var file = File.CreateText(filePath))
             {
-                var serializer = new JsonSerializer
-                {
-                    Formatting = Formatting.Indented,
-                    NullValueHandling = NullValueHandling.Ignore,
-                    ContractResolver = new ContractResolver()
-                };
-
+                var settings = CreateSerializationSettings();
+                var serializer = JsonSerializer.Create(settings);
                 serializer.Serialize(file, instance);
             }
         }
@@ -64,11 +59,14 @@ namespace BTurk.Automation.Core.Serialization
         {
             var settings = new JsonSerializerSettings
             {
-                NullValueHandling = NullValueHandling.Ignore
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new ContractResolver()
             };
 
-            settings.Converters.Add(new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffZ" });
             settings.Converters.Add(new TimeSpanConverter());
+            settings.Converters.Add(new StringEnumConverter());
+            settings.Converters.Add(new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffZ" });
 
             return settings;
         }
