@@ -22,7 +22,7 @@ namespace BTurk.Automation.Core.Serialization
 
         public T Load<T>(string resourceName)
         {
-            var filePath = Path.Combine("Configuration", resourceName);
+            var filePath = Path.Combine("configuration", resourceName);
 
             if (!filePath.EndsWith(".json", StringComparison.InvariantCultureIgnoreCase))
                 filePath = $"{filePath}.json";

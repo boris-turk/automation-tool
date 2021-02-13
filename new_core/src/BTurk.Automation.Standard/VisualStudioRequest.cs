@@ -11,10 +11,10 @@ namespace BTurk.Automation.Standard
             if (!context.WindowTitle.Contains("Visual Studio"))
                 yield break;
 
-            yield return new AhkRequest
+            yield return new AhkSendRequest
             {
                 Text = "close all tabs but current",
-                Command = "!^c"
+                Keys = "!^c"
             };
         }
     }

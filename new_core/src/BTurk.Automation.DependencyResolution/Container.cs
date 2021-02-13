@@ -102,8 +102,8 @@ namespace BTurk.Automation.DependencyResolution
 
         private static Type GetRequestExecutorType(Type requestType)
         {
-            if (requestType == typeof(AhkRequest))
-                return typeof(AhkRequestExecutor);
+            if (requestType == typeof(AhkSendRequest))
+                return typeof(AhkSendRequestExecutor);
 
             return typeof(EmptyRequestExecutor<>).MakeGenericType(requestType);
         }
