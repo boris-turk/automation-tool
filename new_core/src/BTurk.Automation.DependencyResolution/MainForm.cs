@@ -278,7 +278,7 @@ namespace BTurk.Automation.DependencyResolution
                 return;
             }
 
-            var windowHandle = Methods.GetForegroundWindow();
+            var windowHandle = Methods.GetActiveWindow();
             var windowText = Methods.GetWindowText(windowHandle);
             var windowClass = Methods.GetClassName(windowHandle);
 

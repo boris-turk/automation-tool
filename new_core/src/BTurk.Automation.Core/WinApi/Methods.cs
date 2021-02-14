@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 
 // ReSharper disable IdentifierTypo
@@ -11,23 +12,33 @@ namespace BTurk.Automation.Core.WinApi
         [DllImport("user32.dll")]
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
+        [DllImport("ole32.dll")]
+        public static extern int CreateBindCtx(uint reserved, out IBindCtx ppbc);
+
+        [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr GetParent(IntPtr hWnd);
+
         [DllImport("user32.dll")]
         public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
-        [DllImport("user32.dll")]
-        public static extern IntPtr GetForegroundWindow();
+        public static IntPtr GetActiveWindow()
+        {
+            var foregroundWindow = GetForegroundWindow();
+            var parentWindow = GetParent(foregroundWindow);
+            return parentWindow != IntPtr.Zero ? parentWindow : foregroundWindow;
+        }
 
         public static string GetWindowText(IntPtr hWnd)
         {
             int size = GetWindowTextLength(hWnd);
-            if (size > 0)
-            {
-                var builder = new StringBuilder(size + 1);
-                GetWindowText(hWnd, builder, builder.Capacity);
-                return builder.ToString();
-            }
 
-            return "";
+            if (size <= 0)
+                return "";
+
+            var builder = new StringBuilder(size + 1);
+            GetWindowText(hWnd, builder, builder.Capacity);
+
+            return builder.ToString();
         }
 
         public static string GetClassName(IntPtr handle)
@@ -40,6 +51,9 @@ namespace BTurk.Automation.Core.WinApi
 
             return "";
         }
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         private static extern int GetWindowText(IntPtr hWnd, StringBuilder strText, int maxCount);
