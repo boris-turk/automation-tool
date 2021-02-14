@@ -11,17 +11,30 @@ namespace BTurk.Automation.DependencyResolution
 		GenericMethodInvoker.IWithArguments
 	{
 		private readonly object _instance;
+        private readonly Type _hostingClassType;
 		private string _methodName;
 		private object[] _arguments;
 		private Type[] _genericTypes;
 
-		private GenericMethodInvoker(object instance)
-		{
-			_instance = instance;
+        private GenericMethodInvoker(Type hostingClassType)
+        {
+            _hostingClassType = hostingClassType ?? throw new ArgumentNullException(nameof(hostingClassType));
             _arguments = new object[] { };
         }
 
-		public static IMethod Instance(object instance)
+        private GenericMethodInvoker(object instance)
+        {
+			_instance = instance ?? throw new ArgumentNullException(nameof(instance));
+            _hostingClassType = instance.GetType();
+            _arguments = new object[] { };
+        }
+
+        public static IMethod Type(Type type)
+        {
+			return new GenericMethodInvoker(type);
+        }
+
+        public static IMethod Instance(object instance)
 		{
 			return new GenericMethodInvoker(instance);
 		}
@@ -46,7 +59,7 @@ namespace BTurk.Automation.DependencyResolution
 
 		public object Invoke()
         {
-            var candidates = GetCandidates(_instance.GetType()).ToList();
+            var candidates = GetCandidates(_hostingClassType).ToList();
 
             if (candidates.Count > 1)
                 candidates = candidates.Where(MatchesParameterTypes).ToList();
@@ -54,19 +67,22 @@ namespace BTurk.Automation.DependencyResolution
             if (candidates.Count == 0)
             {
                 throw new InvalidOperationException(
-                    $"Type ${_instance.GetType().FullName} contains no method " +
+                    $"Type ${_hostingClassType.FullName} contains no method " +
                     $"with name {_methodName} that matches given constraints.");
             }
 
             if (candidates.Count > 1)
             {
                 throw new InvalidOperationException(
-                    $"Type ${_instance.GetType().FullName} contains multiple " +
+                    $"Type ${_hostingClassType.FullName} contains multiple " +
                     $"methods named {_methodName} and it is impossible to " +
                     "the correct one according to argument types.");
             }
 
             var method = candidates[0].MakeGenericMethod(_genericTypes);
+
+            if (_instance == null)
+                return method.Invoke(null, _arguments.ToArray());
 
             return method.Invoke(_instance, _arguments.ToArray());
         }
@@ -76,10 +92,12 @@ namespace BTurk.Automation.DependencyResolution
             if (type == null)
                 yield break;
 
-            var flags =
-                BindingFlags.Instance |
-                BindingFlags.NonPublic |
-                BindingFlags.Public;
+            var flags = BindingFlags.NonPublic | BindingFlags.Public;
+
+            if (_instance == null)
+                flags = flags | BindingFlags.Static;
+            else
+                flags = flags | BindingFlags.Instance;
 
             foreach (var method in type.GetMethods(flags))
             {

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using BTurk.Automation.Core.WinApi;
 using EnvDTE;
-using Process = System.Diagnostics.Process;
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable InconsistentNaming
@@ -14,13 +12,11 @@ namespace BTurk.Automation.Standard
     public class DTEInstanceProvider
     {
         private const string VisualStudio2019Version = "16.0";
-        private const string VisualStudioProcessName = "devenv";
 
         public static DTEInstance GetActiveInstance()
         {
-            var windowHandle = Methods.GetActiveWindow();
-            var process = GetVisualStudioProcess(windowHandle);
-            var instance = GetDTE(process.Id);
+            var processId = Methods.GetActiveProcessId();
+            var instance = GetDTE(processId);
 
             if (instance == null)
                 throw new InvalidOperationException("Cannot obtain Visual Studio handle.");
@@ -83,26 +79,6 @@ namespace BTurk.Automation.Standard
             }
 
             return (DTE)runningObject;
-        }
-
-        private static Process GetVisualStudioProcess(IntPtr windowHandle)
-        {
-            var processes = Process.GetProcesses()
-                .Where(x => x.ProcessName == VisualStudioProcessName)
-                .ToList();
-
-            if (processes.Count == 0)
-                throw new InvalidOperationException("No visual studio instance running.");
-
-            if (processes.Count > 1)
-            {
-                processes = processes
-                    .Where(x => x.MainWindowHandle == windowHandle)
-                    .ToList();
-            }
-
-            var process = processes[0];
-            return process;
         }
 
         public class DTEInstance : IDisposable

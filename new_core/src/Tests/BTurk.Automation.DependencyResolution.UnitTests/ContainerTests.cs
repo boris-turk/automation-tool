@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BTurk.Automation.Core;
+using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.Standard;
@@ -29,6 +30,7 @@ namespace BTurk.Automation.DependencyResolution.UnitTests
                     typeof(IResourceProvider),
                     typeof(IRequestsProvider<Solution>),
                     typeof(IRequestsProvider<Repository>),
+                    typeof(IMessageHandler<ShowingAutomationWindowMessage>)
                 };
 
                 return types.Select(x => new[] {x});

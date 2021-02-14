@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using BTurk.Automation.Core;
+using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.Core.Serialization;
@@ -36,13 +38,87 @@ namespace BTurk.Automation.DependencyResolution
             if (type == typeof(IRequestProcessor))
                 return GetOrCreateSingleton<RequestProcessor>();
 
+            if (type == typeof(IEnvironmentContextProvider))
+                return GetOrCreateSingleton<EnvironmentContextProvider>();
+
+            if (type == typeof(IMessagePublisher))
+                return GetOrCreateSingleton<MessagePublisher>();
+
+            if (type.InheritsFrom(typeof(IMessageHandler<>)))
+                return GetOpenGenericServiceInstance(type, GetCompositeMessageHandlerType);
+
             if (type.InheritsFrom(typeof(IRequestsProvider<>)))
                 return GetOpenGenericServiceInstance(type, GetRequestProcessorType);
 
             if (type.InheritsFrom(typeof(IRequestExecutor<>)))
                 return GetOpenGenericServiceInstance(type, GetRequestExecutorType);
 
+            if (type.InheritsFrom(typeof(IEnumerable<>)))
+                return GetEnumerableInstance(type);
+
             throw FailedToCreateInstance(type);
+        }
+
+        private static object GetEnumerableInstance(Type enumerableType)
+        {
+            var serviceType = enumerableType.GetGenericArguments()[0];
+
+            if (!serviceType.IsGenericType)
+                return GetAllInstances(serviceType);
+
+            var genericArguments = serviceType.GetGenericArguments();
+
+            if (genericArguments.Length > 1)
+            {
+                throw new NotSupportedException(
+                    "Creation of enumerable services with two generic arguments is not supported.");
+            }
+
+            var genericServiceTypeDefinition = serviceType.GetGenericTypeDefinition();
+            var enumerable = GetAllInstances(genericServiceTypeDefinition, genericArguments[0]);
+
+            var result = CastToProperEnumerable(enumerable, serviceType);
+
+            return result;
+        }
+
+        private static object GetAllInstances(Type serviceType)
+        {
+            if (serviceType == typeof(IAdditionalEnvironmentDataProvider))
+                return GetAllAdditionalEnvironmentDataProviders();
+
+            return Activator.CreateInstance(typeof(List<>).MakeGenericType(serviceType));
+        }
+
+        private static IEnumerable GetAllInstances(Type openGenericServiceType, Type genericArgument)
+        {
+            if (openGenericServiceType == typeof(IMessageHandler<>))
+                return GetAllMessageHandlers(genericArgument);
+
+            return GetEmptyEnumerable(openGenericServiceType, genericArgument);
+        }
+
+        private static IEnumerable GetEmptyEnumerable(Type openGenericServiceType, Type genericArgument)
+        {
+            var serviceType = openGenericServiceType.MakeGenericType(genericArgument);
+            var result = (IEnumerable)Activator.CreateInstance(typeof(List<>).MakeGenericType(serviceType));
+            return result;
+        }
+
+        private static IEnumerable GetAllMessageHandlers(Type messageType)
+        {
+            if (messageType == typeof(ShowingAutomationWindowMessage))
+                yield return GetOrCreateSingleton<EnvironmentContextProvider>();
+        }
+
+        private static IEnumerable<IAdditionalEnvironmentDataProvider> GetAllAdditionalEnvironmentDataProviders()
+        {
+            yield return GetOrCreateSingleton<VisualStudioEnvironmentDataProvider>();
+        }
+
+        private static Type GetCompositeMessageHandlerType(Type messageType)
+        {
+            return typeof(CompositeMessageHandler<>).MakeGenericType(messageType);
         }
 
         private static object GetOpenGenericServiceInstance(
@@ -80,9 +156,6 @@ namespace BTurk.Automation.DependencyResolution
             if (type == typeof(ISearchItemsProvider))
                 return true;
 
-            if (type == typeof(IEnvironmentContextProvider))
-                return true;
-
             return false;
         }
 
@@ -111,6 +184,8 @@ namespace BTurk.Automation.DependencyResolution
         private static void InitializeMainForm(MainForm mainForm)
         {
             mainForm.RequestDispatcher = GetInstance<RequestDispatcher>();
+            mainForm.EnvironmentContextProvider = GetInstance<IEnvironmentContextProvider>();
+            mainForm.MessagePublisher = GetInstance<IMessagePublisher>();
         }
 
         private static T GetOrCreateSingleton<T>(Action<T> initializer = null)
@@ -180,15 +255,28 @@ namespace BTurk.Automation.DependencyResolution
                     $"Cannot create type {type.FullName} as it does not have exactly one public constructor");
             }
 
-            var parameters = (
+            object[] parameters = (
                 from parameter in constructors[0].GetParameters()
                 let parameterInstance = GetInstance(parameter.ParameterType)
                 select parameterInstance
             ).ToArray();
 
             var instance = Activator.CreateInstance(type, parameters);
-
             return instance;
+        }
+
+        private static object CastToProperEnumerable(object instance, Type targetType)
+        {
+            return GenericMethodInvoker.Type(typeof(Container))
+                .Method(nameof(CastToProperEnumerable))
+                .WithGenericTypes(targetType)
+                .WithArguments(instance)
+                .Invoke();
+        }
+
+        private static IEnumerable<TItem> CastToProperEnumerable<TItem>(IEnumerable instance)
+        {
+            return instance.Cast<TItem>();
         }
     }
 }

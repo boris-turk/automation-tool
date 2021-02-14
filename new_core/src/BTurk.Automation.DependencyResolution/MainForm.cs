@@ -3,24 +3,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
-using BTurk.Automation.Core.WinApi;
 
 namespace BTurk.Automation.DependencyResolution
 {
     internal partial class MainForm : Form, ISearchEngine
     {
         private string _currentText;
-        private EnvironmentContext _context;
 
         private const int OutOfScreenOffset = -20000;
-
-        public EnvironmentContext Context
-        {
-            get => _context ?? EnvironmentContext.Empty;
-            set => _context = value;
-        }
 
         public MainForm()
         {
@@ -51,6 +44,12 @@ namespace BTurk.Automation.DependencyResolution
         public List<Request> Items { get; }
 
         public RequestDispatcher RequestDispatcher { get; set; }
+
+        public EnvironmentContext Context => EnvironmentContextProvider.Context;
+
+        public IEnvironmentContextProvider EnvironmentContextProvider { get; set; }
+
+        public IMessagePublisher MessagePublisher { get; set; }
 
         private void MoveFocusToTextBox()
         {
@@ -155,6 +154,8 @@ namespace BTurk.Automation.DependencyResolution
 
         private void OnBecomingVisible()
         {
+            MessagePublisher.Publish(ShowingAutomationWindowMessage.MainMenu);
+
             if (string.IsNullOrWhiteSpace(TextBox.Text))
                 TriggerAction(ActionType.MoveNext);
             else
@@ -266,23 +267,13 @@ namespace BTurk.Automation.DependencyResolution
             if (!Visible)
                 RequestDispatcher.Reset();
 
-            SetEnvironmentContext(shortcutId);
+            var message = shortcutId == GlobalShortcuts.OpenMainWindowShortcutId
+                ? ShowingAutomationWindowMessage.MainMenu
+                : ShowingAutomationWindowMessage.ApplicationMenu;
+
+            MessagePublisher.Publish(message);
+
             ToggleVisibility();
-        }
-
-        private void SetEnvironmentContext(int shortcutId)
-        {
-            if (shortcutId == GlobalShortcuts.OpenMainWindowShortcutId)
-            {
-                _context = null;
-                return;
-            }
-
-            var windowHandle = Methods.GetActiveWindow();
-            var windowText = Methods.GetWindowText(windowHandle);
-            var windowClass = Methods.GetClassName(windowHandle);
-
-            _context = new EnvironmentContext(windowText, windowClass);
         }
     }
 }

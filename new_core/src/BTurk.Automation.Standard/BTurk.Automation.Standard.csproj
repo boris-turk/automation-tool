@@ -51,6 +51,7 @@
     <Compile Include="Note.cs" />
     <Compile Include="NotesProvider.cs" />
     <Compile Include="NotesRequest.cs" />
+    <Compile Include="VisualStudioEnvironmentDataProvider.cs" />
     <Compile Include="VisualStudioRequest.cs" />
     <Compile Include="RepositoriesProvider.cs" />
     <Compile Include="RepositoryRequest.cs" />

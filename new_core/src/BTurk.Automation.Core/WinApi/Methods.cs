@@ -12,6 +12,9 @@ namespace BTurk.Automation.Core.WinApi
         [DllImport("user32.dll")]
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
+        [DllImport("user32.dll")]
+        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
         [DllImport("ole32.dll")]
         public static extern int CreateBindCtx(uint reserved, out IBindCtx ppbc);
 
@@ -20,6 +23,13 @@ namespace BTurk.Automation.Core.WinApi
 
         [DllImport("user32.dll")]
         public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+
+        public static int GetActiveProcessId()
+        {
+            var windowHandle = GetActiveWindow();
+            GetWindowThreadProcessId(windowHandle, out var processId);
+            return (int)processId;
+        }
 
         public static IntPtr GetActiveWindow()
         {
