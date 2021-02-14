@@ -13,6 +13,7 @@ namespace BTurk.Automation.Core.SearchEngine
 
         public EnvironmentContextProvider(IEnumerable<IAdditionalEnvironmentDataProvider> additionalDataProviders)
         {
+            _context = EnvironmentContext.Empty;
             _additionalDataProviders = additionalDataProviders;
         }
 

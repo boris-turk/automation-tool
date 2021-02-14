@@ -154,8 +154,6 @@ namespace BTurk.Automation.DependencyResolution
 
         private void OnBecomingVisible()
         {
-            MessagePublisher.Publish(ShowingAutomationWindowMessage.MainMenu);
-
             if (string.IsNullOrWhiteSpace(TextBox.Text))
                 TriggerAction(ActionType.MoveNext);
             else
@@ -165,6 +163,7 @@ namespace BTurk.Automation.DependencyResolution
         protected override void OnLoad(EventArgs e)
         {
             TextBox.TextChanged += OnSearchTextChanged;
+            MessagePublisher.Publish(ShowingAutomationWindowMessage.MainMenu);
             base.OnLoad(e);
         }
 
