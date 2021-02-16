@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
     <Compile Include="IResourceProvider.cs" />
     <Compile Include="Messages\CompositeMessageHandler.cs" />
     <Compile Include="Messages\IMessage.cs" />

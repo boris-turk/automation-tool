@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Automation", "Automation", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C2349D03-A1FF-4702-AF7C-6954B9F95D56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTurk.Automation.Standard.UnitTests", "Tests\BTurk.Automation.Standard.UnitTests\BTurk.Automation.Standard.UnitTests.csproj", "{42B7DEA5-3AE6-4104-B214-0120FC440D77}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTurk.Automation.Core.UnitTests", "Tests\BTurk.Automation.Core.UnitTests\BTurk.Automation.Core.UnitTests.csproj", "{42B7DEA5-3AE6-4104-B214-0120FC440D77}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTurk.Automation.DependencyResolution.UnitTests", "Tests\BTurk.Automation.DependencyResolution.UnitTests\BTurk.Automation.DependencyResolution.UnitTests.csproj", "{9868302B-5A70-486C-935F-9E7F2B95FA3B}"
 EndProject
