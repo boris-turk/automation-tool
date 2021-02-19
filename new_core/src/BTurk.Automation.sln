@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTurk.Automation.Core.UnitT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTurk.Automation.DependencyResolution.UnitTests", "Tests\BTurk.Automation.DependencyResolution.UnitTests\BTurk.Automation.DependencyResolution.UnitTests.csproj", "{9868302B-5A70-486C-935F-9E7F2B95FA3B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTurk.Automation.Mic", "BTurk.Automation.Mic\BTurk.Automation.Mic.csproj", "{D6EFBCC2-09E6-4D86-ACCE-A9CA6F197E4F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{9868302B-5A70-486C-935F-9E7F2B95FA3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9868302B-5A70-486C-935F-9E7F2B95FA3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9868302B-5A70-486C-935F-9E7F2B95FA3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6EFBCC2-09E6-4D86-ACCE-A9CA6F197E4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6EFBCC2-09E6-4D86-ACCE-A9CA6F197E4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6EFBCC2-09E6-4D86-ACCE-A9CA6F197E4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6EFBCC2-09E6-4D86-ACCE-A9CA6F197E4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{A48DC1B5-1E2B-41C1-AB49-998D95085B48} = {3795B307-F10A-4A52-8712-F62A18328006}
 		{42B7DEA5-3AE6-4104-B214-0120FC440D77} = {C2349D03-A1FF-4702-AF7C-6954B9F95D56}
 		{9868302B-5A70-486C-935F-9E7F2B95FA3B} = {C2349D03-A1FF-4702-AF7C-6954B9F95D56}
+		{D6EFBCC2-09E6-4D86-ACCE-A9CA6F197E4F} = {3795B307-F10A-4A52-8712-F62A18328006}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6DE868CA-43FB-41BB-883C-0795B6BD49CC}

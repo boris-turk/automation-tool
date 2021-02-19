@@ -57,6 +57,9 @@ namespace BTurk.Automation.Core.Requests
         {
             SearchItems.Clear();
 
+            if (CurrentState.Request == null)
+                return;
+
             var items = _requestProcessor.LoadChildren(CurrentState.Request);
             var filter = new FilterAlgorithm(CurrentState.Text);
 
@@ -67,6 +70,9 @@ namespace BTurk.Automation.Core.Requests
 
         private bool ShouldMoveToNextItem()
         {
+            if (_states.Count > 1)
+                return false;
+
             return CurrentState.Text.EndsWith(" ");
         }
 
