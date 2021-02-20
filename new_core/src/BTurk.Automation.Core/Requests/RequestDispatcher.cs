@@ -127,13 +127,8 @@ namespace BTurk.Automation.Core.Requests
 
         private Request GetRootRequest()
         {
-            var request = _rootRequests.FirstOrDefault(_ => GetChildRequests(_).Any());
+            var request = _rootRequests.FirstOrDefault(_ => _requestProcessor.LoadChildren(_).Any());
             return request;
-        }
-
-        private IEnumerable<Request> GetChildRequests(Request request)
-        {
-            return request.ChildRequests(_searchEngine.Context);
         }
 
         private class SearchEngineState
