@@ -2,11 +2,16 @@
 
 namespace BTurk.Automation.Core.Requests
 {
-    public class SelectionRequest<TRequest> : Request where TRequest : Request
+    public class SelectionRequest<TRequest> : Request, ISelectionRequest where TRequest : Request
     {
-        public bool IsOptional { get; set; }
+        public SelectionRequest()
+        {
+        }
 
-        public string OptionPrefix { get; set; }
+        public SelectionRequest(string text)
+        {
+            Text = text;
+        }
 
         public Action<TRequest> Selected { get; set; }
     }

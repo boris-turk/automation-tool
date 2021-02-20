@@ -6,6 +6,10 @@ namespace BTurk.Automation.Standard
 {
     public class VisualStudioRequest : SelectionRequest<Request>
     {
+        public VisualStudioRequest() : base("Visual studio")
+        {
+        }
+
         public override IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
             if (!context.WindowTitle.Contains("Visual Studio"))

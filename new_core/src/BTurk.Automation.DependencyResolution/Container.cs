@@ -29,14 +29,8 @@ namespace BTurk.Automation.DependencyResolution
             if (type == typeof(IResourceProvider))
                 return GetOrCreateSingleton<JsonResourceProvider>();
 
-            if (type == typeof(RequestDispatcher))
-                return GetOrCreateSingleton<RequestDispatcher>();
-
-            if (type == typeof(List<Request>))
-                return GetOrCreateSingleton(CreateRootRequests);
-
-            if (type == typeof(IRequestProcessor))
-                return GetOrCreateSingleton<RequestProcessor>();
+            if (type == typeof(IRequestVisitor))
+                return GetOrCreateSingleton<RequestVisitDispatcher>();
 
             if (type == typeof(IEnvironmentContextProvider))
                 return GetOrCreateSingleton<EnvironmentContextProvider>();
@@ -52,6 +46,9 @@ namespace BTurk.Automation.DependencyResolution
 
             if (type.InheritsFrom(typeof(IRequestExecutor<>)))
                 return GetOpenGenericServiceInstance(type, GetRequestExecutorType);
+
+            if (type.InheritsFrom(typeof(IRequestVisitor<>)))
+                return GetOpenGenericServiceInstance(type, GetRequestVisitorType);
 
             if (type.InheritsFrom(typeof(IEnumerable<>)))
                 return GetEnumerableInstance(type);
@@ -136,15 +133,6 @@ namespace BTurk.Automation.DependencyResolution
             return instance;
         }
 
-        private static List<Request> CreateRootRequests()
-        {
-            return new List<Request>
-            {
-                new MainMenuRequest(),
-                new VisualStudioRequest()
-            };
-        }
-
         private static bool IsSearchEngineRequest(Type type)
         {
             if (type == typeof(MainForm))
@@ -173,6 +161,11 @@ namespace BTurk.Automation.DependencyResolution
             return typeof(EmptyRequestProvider<>).MakeGenericType(requestType);
         }
 
+        private static Type GetRequestVisitorType(Type requestType)
+        {
+            return typeof(RequestVisitor<>).MakeGenericType(requestType);
+        }
+
         private static Type GetRequestExecutorType(Type requestType)
         {
             if (requestType == typeof(AhkSendRequest))
@@ -183,7 +176,7 @@ namespace BTurk.Automation.DependencyResolution
 
         private static void InitializeMainForm(MainForm mainForm)
         {
-            mainForm.RequestDispatcher = GetInstance<RequestDispatcher>();
+            mainForm.RequestVisitor = GetInstance<IRequestVisitor>();
             mainForm.EnvironmentContextProvider = GetInstance<IEnvironmentContextProvider>();
             mainForm.MessagePublisher = GetInstance<IMessagePublisher>();
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
@@ -39,11 +40,13 @@ namespace BTurk.Automation.DependencyResolution
             TextBox.KeyDown += (_, args) => OnTextBoxKeyDown(args);
 
             VisibleChanged += (_, __) => { if (Visible) OnBecomingVisible(); };
+
+            CreateInitialStep();
         }
 
         public List<Request> Items { get; }
 
-        public RequestDispatcher RequestDispatcher { get; set; }
+        public IRequestVisitor RequestVisitor { get; set; }
 
         public EnvironmentContext Context => EnvironmentContextProvider.Context;
 
@@ -79,6 +82,14 @@ namespace BTurk.Automation.DependencyResolution
                 else
                     _workInProgressPictureBox.SendToBack();
             }
+        }
+
+        private void CreateInitialStep()
+        {
+            Steps = new List<SearchStep>
+            {
+                new SearchStep(new RootMenuRequest())
+            };
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -147,8 +158,6 @@ namespace BTurk.Automation.DependencyResolution
             else
                 Visible = false;
 
-            OnBecomingVisible();
-
             base.OnShown(e);
         }
 
@@ -182,7 +191,7 @@ namespace BTurk.Automation.DependencyResolution
         {
             ActionType = actionType;
 
-            RequestDispatcher.Dispatch();
+            RequestVisitor.Visit(Steps.Last().Request);
 
             var selectedIndex = ListBox.SelectedIndex;
 
@@ -224,34 +233,17 @@ namespace BTurk.Automation.DependencyResolution
             Activate();
         }
 
+        public List<SearchStep> Steps { get; private set; }
+
         public string SearchText
         {
             get => TextBox.Text;
             set => TextBox.Text = value;
         }
 
-        public Selection TextSelection
-        {
-            get => new Selection
-            {
-                Start = TextBox.SelectionStart,
-                Length = TextBox.SelectionLength
-            };
-            set
-            {
-                TextBox.SelectionStart = value.Start;
-                TextBox.SelectionLength = value.Length;
-            }
-        }
-
         public Request SelectedItem => (Request)ListBox.SelectedItem;
 
         public ActionType ActionType { get; private set; }
-
-        public void AddItems(IEnumerable<Request> items)
-        {
-            Items.AddRange(items);
-        }
 
         protected override void WndProc(ref Message m)
         {
@@ -264,7 +256,7 @@ namespace BTurk.Automation.DependencyResolution
         private void OnGlobalShortcutKeyPressed(int shortcutId)
         {
             if (!Visible)
-                RequestDispatcher.Reset();
+                CreateInitialStep();
 
             var message = shortcutId == GlobalShortcuts.OpenMainWindowShortcutId
                 ? ShowingAutomationWindowMessage.MainMenu

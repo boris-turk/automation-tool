@@ -5,16 +5,14 @@ namespace BTurk.Automation.Core.SearchEngine
 {
     public interface ISearchEngine : IEnvironmentContextProvider, ISearchItemsProvider
     {
-        string SearchText { get; set; }
+        List<SearchStep> Steps { get; }
 
-        Selection TextSelection { get; set; }
+        string SearchText { get; set; }
 
         Request SelectedItem { get; }
 
         ActionType ActionType { get; }
 
         void Hide();
-
-        void AddItems(IEnumerable<Request> items);
     }
 }

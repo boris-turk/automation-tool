@@ -7,6 +7,10 @@ namespace BTurk.Automation.DependencyResolution
 {
     public class MainMenuRequest : SelectionRequest<Request>
     {
+        public MainMenuRequest() : base("Main menu")
+        {
+        }
+
         public override IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
             if (context != EnvironmentContext.Empty)

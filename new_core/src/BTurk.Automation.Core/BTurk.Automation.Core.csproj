@@ -61,12 +61,14 @@
     <Compile Include="Requests\AhkSendRequest.cs" />
     <Compile Include="Requests\AhkSendRequestExecutor.cs" />
     <Compile Include="Requests\EmptyRequestExecutor.cs" />
+    <Compile Include="Requests\ISelectionRequest.cs" />
+    <Compile Include="Requests\RequestVisitor.cs" />
     <Compile Include="Requests\SelectionRequest.cs" />
     <Compile Include="Requests\RequestExecutionContext.cs" />
     <Compile Include="Requests\EmptyRequestProvider.cs" />
     <Compile Include="Requests\IFileRequest.cs" />
     <Compile Include="Requests\IRequestExecutor.cs" />
-    <Compile Include="Requests\IRequestProcessor.cs" />
+    <Compile Include="Requests\IRequestVisitor.cs" />
     <Compile Include="Requests\IRequestsProvider.cs" />
     <Compile Include="SearchEngine\ActionType.cs" />
     <Compile Include="SearchEngine\EnvironmentContext.cs" />
@@ -75,10 +77,10 @@
     <Compile Include="SearchEngine\IAdditionalEnvironmentDataProvider.cs" />
     <Compile Include="SearchEngine\IEnvironmentContextProvider.cs" />
     <Compile Include="SearchEngine\ISearchItemsProvider.cs" />
-    <Compile Include="Requests\RequestDispatcher.cs" />
     <Compile Include="SearchEngine\ISearchEngine.cs" />
     <Compile Include="SearchEngine\Selection.cs" />
     <Compile Include="Requests\Request.cs" />
+    <Compile Include="SearchEngine\SearchStep.cs" />
     <Compile Include="Serialization\ContractResolver.cs" />
     <Compile Include="Serialization\JsonResourceProvider.cs" />
     <Compile Include="Serialization\TimeSpanConverter.cs" />
