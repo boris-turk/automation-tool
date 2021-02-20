@@ -13,6 +13,11 @@ namespace BTurk.Automation.Standard
             return @"c:\Program Files\TortoiseSVN\bin\TortoiseProc.exe";
         }
 
+        public static void Log(this Repository repository)
+        {
+            repository.ExecuteCommand("log");
+        }
+
         public static void Commit(this Repository repository)
         {
             repository.ExecuteCommand("commit");
