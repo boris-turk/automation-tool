@@ -1,14 +1,21 @@
-﻿namespace BTurk.Automation.Standard
+﻿using System.Collections.Generic;
+using BTurk.Automation.Core.Requests;
+using BTurk.Automation.Core.SearchEngine;
+
+namespace BTurk.Automation.Standard
 {
-    public class CommitRepositoryRequest : RepositoryRequest
+    public class CommitRepositoryRequest : Request
     {
         public CommitRepositoryRequest() : base("commit")
         {
         }
 
-        public override void Execute(Repository repository)
+        public override IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
-            repository.Commit();
+            yield return new SelectionRequest<Repository>
+            {
+                Selected = repository => repository.Commit()
+            };
         }
     }
 }

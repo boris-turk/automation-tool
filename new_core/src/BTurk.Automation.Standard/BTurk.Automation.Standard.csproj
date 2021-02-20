@@ -50,12 +50,11 @@
     <Compile Include="DTEInstanceProvider.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="NotesProvider.cs" />
-    <Compile Include="NotesRequest.cs" />
-    <Compile Include="RepositoryLogRequest.cs" />
+    <Compile Include="OpenNoteRequest.cs" />
+    <Compile Include="ShowRepositoryLogRequest.cs" />
     <Compile Include="VisualStudioEnvironmentDataProvider.cs" />
     <Compile Include="VisualStudioRequest.cs" />
     <Compile Include="RepositoriesProvider.cs" />
-    <Compile Include="RepositoryRequest.cs" />
     <Compile Include="CommitRepositoryRequest.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

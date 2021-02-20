@@ -61,10 +61,10 @@
     <Compile Include="Requests\AhkSendRequest.cs" />
     <Compile Include="Requests\AhkSendRequestExecutor.cs" />
     <Compile Include="Requests\EmptyRequestExecutor.cs" />
+    <Compile Include="Requests\SelectionRequest.cs" />
     <Compile Include="Requests\RequestExecutionContext.cs" />
     <Compile Include="Requests\EmptyRequestProvider.cs" />
     <Compile Include="Requests\IFileRequest.cs" />
-    <Compile Include="Requests\IRequestConsumer.cs" />
     <Compile Include="Requests\IRequestExecutor.cs" />
     <Compile Include="Requests\IRequestProcessor.cs" />
     <Compile Include="Requests\IRequestsProvider.cs" />

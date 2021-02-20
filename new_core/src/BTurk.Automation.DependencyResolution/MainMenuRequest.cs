@@ -5,21 +5,17 @@ using BTurk.Automation.Standard;
 
 namespace BTurk.Automation.DependencyResolution
 {
-    public class MainMenuRequest : Request
+    public class MainMenuRequest : SelectionRequest<Request>
     {
-        public MainMenuRequest() : base("main menu")
-        {
-        }
-
         public override IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
             if (context != EnvironmentContext.Empty)
                 yield break;
 
             yield return new CommitRepositoryRequest();
-            yield return new RepositoryLogRequest();
+            yield return new ShowRepositoryLogRequest();
             yield return new OpenSolutionRequest();
-            yield return new NotesRequest();
+            yield return new OpenNoteRequest();
         }
     }
 }

@@ -17,20 +17,25 @@ namespace BTurk.Automation.DependencyResolution
 
         public IEnumerable<Request> LoadChildren(Request request)
         {
-            var parentConsumerType = GetParentConsumerType(request);
+            var children = request.ChildRequests(_contextProvider.Context).ToList();
 
-            if (parentConsumerType == null)
-                return request.ChildRequests(_contextProvider.Context);
+            if (children.Any())
+                return children;
+
+            var selectingRequestType = GetSelectingRequestType(request);
+
+            if (selectingRequestType == null)
+                return Enumerable.Empty<Request>();
 
             var result = GenericMethodInvoker.Instance(this)
-                .Method(nameof(LoadChildren))
-                .WithGenericTypes(parentConsumerType)
+                .Method(nameof(LoadRequests))
+                .WithGenericTypes(selectingRequestType)
                 .Invoke();
 
             return (IEnumerable<Request>)result;
         }
 
-        public IEnumerable<Request> LoadChildren<TRequest>() where TRequest : Request
+        public IEnumerable<Request> LoadRequests<TRequest>() where TRequest : Request
         {
             var service = Container.GetInstance<IRequestsProvider<TRequest>>();
             return service.Load();
@@ -49,9 +54,9 @@ namespace BTurk.Automation.DependencyResolution
         {
             var properContext = (RequestExecutionContext<TRequest>)context;
 
-            if (context.ParentRequests.LastOrDefault() is IRequestConsumer<TRequest> consumer)
+            if (context.ParentRequests.LastOrDefault() is SelectionRequest<TRequest> selectionRequest)
             {
-                consumer.Execute(properContext.Request);
+                selectionRequest.Selected?.Invoke(properContext.Request);
             }
             else
             {
@@ -60,9 +65,9 @@ namespace BTurk.Automation.DependencyResolution
             }
         }
 
-        private Type GetParentConsumerType(Request request)
+        private Type GetSelectingRequestType(Request request)
         {
-            var parentInterfaces = request.GetType().FindAllParentClosedGenerics(typeof(IRequestConsumer<>));
+            var parentInterfaces = request.GetType().FindAllParentClosedGenerics(typeof(SelectionRequest<>));
             var singleInterface = parentInterfaces.SingleOrDefault();
             return singleInterface?.GetGenericArguments()[0];
         }

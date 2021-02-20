@@ -26,6 +26,6 @@ namespace BTurk.Automation.Core.Requests
             return Enumerable.Empty<Request>();
         }
 
-        public override string ToString() => Text;
+        public override string ToString() => Text ?? "";
     }
 }

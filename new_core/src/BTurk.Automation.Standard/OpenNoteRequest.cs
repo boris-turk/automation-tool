@@ -4,17 +4,17 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
-    public class OpenSolutionRequest : Request
+    public class OpenNoteRequest : Request
     {
-        public OpenSolutionRequest() : base("solution")
+        public OpenNoteRequest() : base("note")
         {
         }
 
         public override IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
-            yield return new SelectionRequest<Solution>
+            yield return new SelectionRequest<Note>
             {
-                Selected = solution => solution.Open()
+                Selected = note => note.Open()
             };
         }
     }

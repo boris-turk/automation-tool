@@ -4,17 +4,17 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
-    public class OpenSolutionRequest : Request
+    public class ShowRepositoryLogRequest : Request
     {
-        public OpenSolutionRequest() : base("solution")
+        public ShowRepositoryLogRequest() : base("log")
         {
         }
 
         public override IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
-            yield return new SelectionRequest<Solution>
+            yield return new SelectionRequest<Repository>
             {
-                Selected = solution => solution.Open()
+                Selected = repository => repository.Log()
             };
         }
     }
