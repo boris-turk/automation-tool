@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using BTurk.Automation.Core.SearchEngine;
 
@@ -8,34 +9,98 @@ namespace BTurk.Automation.Core.Requests
     {
         private readonly ISearchEngine _searchEngine;
         private readonly IRequestVisitor _requestVisitor;
-        private readonly IRequestsProvider<TRequest> _requestsProvider;
+        private readonly IChildRequestsProvider _childRequestsProvider;
 
         public RequestVisitor(ISearchEngine searchEngine, IRequestVisitor requestVisitor,
-            IRequestsProvider<TRequest> requestsProvider)
+            IChildRequestsProvider childRequestsProvider)
         {
             _searchEngine = searchEngine;
-            _requestsProvider = requestsProvider;
+            _childRequestsProvider = childRequestsProvider;
             _requestVisitor = requestVisitor;
         }
 
-        private SearchStep CurrentStep { get; set; }
+        private SearchStep CurrentStep => _searchEngine.Steps.Last();
 
         private List<Request> SearchItems => _searchEngine.Items;
 
-        private bool IsMovingNext => _searchEngine.ActionType == ActionType.MoveNext;
-
         public void Visit(TRequest request)
         {
-            CurrentStep = _searchEngine.Steps.Last();
+            var currentStep = CurrentStep;
 
-            SearchItems.Clear();
+            if (_searchEngine.ActionType == ActionType.Execute)
+                OnExecute(request);
 
-            if (IsMovingNext)
+            if (_searchEngine.ActionType == ActionType.MoveNext)
                 OnMoveNext(request);
+
+            if (_searchEngine.ActionType == ActionType.MovePrevious)
+                OnMovePrevious();
+
+            if (currentStep == CurrentStep)
+                LoadSearchItems();
+        }
+
+        private void OnExecute(TRequest request)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void OnMoveNext(TRequest request)
+        {
+            var currentStep = CurrentStep;
+
+            if (currentStep.Children.Count == 0)
+            {
+                currentStep.Children.AddRange(GetChildren(request));
+                VisitChildren(currentStep.Children);
+            }
+            else if (SearchItems.Count == 1)
+            {
+                VisitChild(SearchItems.Single());
+            }
+            else
+            {
+                if (_searchEngine.SearchText.Length > 0)
+                    currentStep.Text += _searchEngine.SearchText.Last();
+            }
+        }
+
+        private void VisitChildren(List<Request> children)
+        {
+            foreach (var child in children)
+            {
+                if (!(child is ISelectionRequest))
+                    break;
+
+                VisitChild(child);
+
+                _requestVisitor.Visit(child);
+
+                if (CurrentStep.Children.Any())
+                    break;
+            }
+        }
+
+        private void VisitChild(Request child)
+        {
+            var step = new SearchStep(child);
+            _searchEngine.Steps.Add(step);
+            _requestVisitor.Visit(child);
+        }
+
+        private void OnMovePrevious()
+        {
+            if (CurrentStep.Text.Length == 0 && _searchEngine.Steps.Count > 2)
+                _searchEngine.Steps.RemoveAt(_searchEngine.Steps.Count - 1);
+
+            if (CurrentStep.Text.Length > 0)
+                CurrentStep.Text = CurrentStep.Text.Remove(CurrentStep.Text.Length - 1);
         }
 
         private void LoadSearchItems()
         {
+            SearchItems.Clear();
+
             if (CurrentStep.Request == null)
                 return;
 
@@ -46,41 +111,9 @@ namespace BTurk.Automation.Core.Requests
             SearchItems.AddRange(items);
         }
 
-        private void OnMoveNext(TRequest request)
-        {
-            CurrentStep.Children.AddRange(GetChildren(request));
-
-            foreach (var child in CurrentStep.Children)
-            {
-                if (!(child is ISelectionRequest))
-                {
-                    LoadSearchItems();
-                    return;
-                }
-
-                AddStep(child);
-
-                _requestVisitor.Visit(child);
-
-                if (_searchEngine.Steps.Last().Children.Any())
-                    break;
-            }
-        }
-
-        private void AddStep(Request nextRequest)
-        {
-            var step = new SearchStep(nextRequest);
-            _searchEngine.Steps.Add(step);
-        }
-
         private IEnumerable<Request> GetChildren(TRequest request)
         {
-            var children = request.ChildRequests(_searchEngine.Context).ToList();
-
-            if (children.Any())
-                return children;
-
-            return _requestsProvider.Load();
+            return _childRequestsProvider.LoadChildren(request);
         }
     }
 }

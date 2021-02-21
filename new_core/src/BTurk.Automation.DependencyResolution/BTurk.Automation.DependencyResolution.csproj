@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChildRequestsProvider.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenericMethodInvoker.cs" />

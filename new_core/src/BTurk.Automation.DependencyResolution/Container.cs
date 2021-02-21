@@ -26,6 +26,9 @@ namespace BTurk.Automation.DependencyResolution
             if (IsSearchEngineRequest(type))
                 return GetOrCreateSingleton<MainForm>(InitializeMainForm);
 
+            if (type == typeof(IChildRequestsProvider))
+                return GetOrCreateSingleton<ChildRequestsProvider>();
+
             if (type == typeof(IResourceProvider))
                 return GetOrCreateSingleton<JsonResourceProvider>();
 
@@ -42,7 +45,7 @@ namespace BTurk.Automation.DependencyResolution
                 return GetOpenGenericServiceInstance(type, GetCompositeMessageHandlerType);
 
             if (type.InheritsFrom(typeof(IRequestsProvider<>)))
-                return GetOpenGenericServiceInstance(type, GetRequestProcessorType);
+                return GetOpenGenericServiceInstance(type, GetRequestProviderType);
 
             if (type.InheritsFrom(typeof(IRequestExecutor<>)))
                 return GetOpenGenericServiceInstance(type, GetRequestExecutorType);
@@ -147,7 +150,7 @@ namespace BTurk.Automation.DependencyResolution
             return false;
         }
 
-        private static Type GetRequestProcessorType(Type requestType)
+        private static Type GetRequestProviderType(Type requestType)
         {
             if (requestType == typeof(Repository))
                 return typeof(RepositoriesProvider);

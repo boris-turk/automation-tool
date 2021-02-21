@@ -49,7 +49,7 @@ namespace BTurk.Automation.DependencyResolution
                     select parentType;
             }
 
-            var parent = type.BaseType;
+            var parent = type;
 
             while (parent != null)
             {

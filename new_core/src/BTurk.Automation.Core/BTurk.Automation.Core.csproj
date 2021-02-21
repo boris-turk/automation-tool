@@ -61,6 +61,7 @@
     <Compile Include="Requests\AhkSendRequest.cs" />
     <Compile Include="Requests\AhkSendRequestExecutor.cs" />
     <Compile Include="Requests\EmptyRequestExecutor.cs" />
+    <Compile Include="Requests\IChildRequestsProvider.cs" />
     <Compile Include="Requests\ISelectionRequest.cs" />
     <Compile Include="Requests\RequestVisitor.cs" />
     <Compile Include="Requests\SelectionRequest.cs" />
