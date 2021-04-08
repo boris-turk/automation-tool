@@ -206,7 +206,7 @@ namespace AutomationEngine
         public static DateTime GetPreviousMonthEnd(this DateTime dateTime)
         {
             var temp = new DateTime(dateTime.Year, dateTime.Month, 1);
-            return temp.AddDays(-1);
+            return temp.AddSeconds(-1);
         }
 
         public static bool InheritsFrom(this Type type, Type parent)
