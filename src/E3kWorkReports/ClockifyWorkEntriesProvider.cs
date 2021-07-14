@@ -68,7 +68,7 @@ namespace E3kWorkReports
             var description = timeEntry.Description?.Trim().ToUpper() ?? "";
 
             if (description == "RPV")
-                return "XLAB project leaders meeting.";
+                return "Weekly meeting of commercial project leaders.";
 
             if (description == "RSTAFF")
                 return "XLAB research department meeting.";
@@ -82,6 +82,7 @@ namespace E3kWorkReports
 
             var internalTasks = new[]
             {
+                "Administrative work",
                 "Know how exchange",
                 "Meetings"
             };
