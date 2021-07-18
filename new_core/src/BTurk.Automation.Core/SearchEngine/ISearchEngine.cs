@@ -12,7 +12,5 @@ namespace BTurk.Automation.Core.SearchEngine
         Request SelectedItem { get; }
 
         ActionType ActionType { get; }
-
-        void Hide();
     }
 }

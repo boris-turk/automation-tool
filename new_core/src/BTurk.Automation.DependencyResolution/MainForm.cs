@@ -35,11 +35,11 @@ namespace BTurk.Automation.DependencyResolution
                 Visible = false;
             };
 
-            _listBox.SelectedIndexChanged += (_, __) => MoveFocusToTextBox();
+            _listBox.SelectedIndexChanged += (_, _) => MoveFocusToTextBox();
 
             TextBox.KeyDown += (_, args) => OnTextBoxKeyDown(args);
 
-            VisibleChanged += (_, __) => { if (Visible) OnBecomingVisible(); };
+            VisibleChanged += (_, _) => { if (Visible) OnBecomingVisible(); };
 
             CreateInitialStep();
         }
@@ -86,10 +86,7 @@ namespace BTurk.Automation.DependencyResolution
 
         private void CreateInitialStep()
         {
-            Steps = new List<SearchStep>
-            {
-                new SearchStep(new RootMenuRequest())
-            };
+            Steps = new List<SearchStep> { new(new RootMenuRequest()) };
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
