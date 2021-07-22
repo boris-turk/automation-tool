@@ -33,7 +33,7 @@ namespace BTurk.Automation.DependencyResolution
                 return GetOrCreateSingleton<JsonResourceProvider>();
 
             if (type == typeof(IRequestVisitor))
-                return GetOrCreateSingleton<RequestVisitDispatcher>();
+                return GetOrCreateSingleton<RequestVisitor>();
 
             if (type == typeof(IEnvironmentContextProvider))
                 return GetOrCreateSingleton<EnvironmentContextProvider>();

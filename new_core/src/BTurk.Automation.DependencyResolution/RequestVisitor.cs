@@ -2,7 +2,7 @@
 
 namespace BTurk.Automation.DependencyResolution
 {
-    public class RequestVisitDispatcher : IRequestVisitor
+    public class RequestVisitor : IRequestVisitor
     {
         void IRequestVisitor.Visit(Request request)
         {
