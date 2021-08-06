@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BTurk.Automation.Core.SearchEngine;
 
@@ -50,35 +49,13 @@ namespace BTurk.Automation.Core.Requests
             var currentStep = CurrentStep;
 
             if (currentStep.Children.Count == 0)
-            {
                 currentStep.Children.AddRange(GetChildren(request));
-                VisitChildren(currentStep.Children);
-            }
-            else if (SearchItems.Count == 1)
-            {
-                VisitChild(SearchItems.Single());
-            }
-            else
-            {
-                if (_searchEngine.SearchText.Length > 0)
-                    currentStep.Text += _searchEngine.SearchText.Last();
-            }
-        }
 
-        private void VisitChildren(List<Request> children)
-        {
-            foreach (var child in children)
-            {
-                if (!(child is ISelectionRequest))
-                    break;
+            var context = new VisitPredicateContext(currentStep.Text, _searchEngine.ActionType, _searchEngine.Context);
+            var visitableChild = currentStep.Children.FirstOrDefault(_ => _.CanVisit(context));
 
-                VisitChild(child);
-
-                _requestVisitor.Visit(child);
-
-                if (CurrentStep.Children.Any())
-                    break;
-            }
+            if (visitableChild != null)
+                VisitChild(visitableChild);
         }
 
         private void VisitChild(Request child)

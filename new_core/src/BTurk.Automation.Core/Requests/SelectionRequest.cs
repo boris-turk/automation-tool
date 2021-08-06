@@ -1,4 +1,5 @@
 ﻿using System;
+using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests
 {
@@ -14,5 +15,10 @@ namespace BTurk.Automation.Core.Requests
         }
 
         public Action<TRequest> Selected { get; set; }
+
+        public override bool CanVisit(VisitPredicateContext predicateContext)
+        {
+            return predicateContext.ActionType == ActionType.Execute;
+        }
     }
 }

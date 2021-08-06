@@ -9,6 +9,7 @@ namespace BTurk.Automation.Core.SearchEngine
         {
             Request = request;
             Children = new List<Request>();
+            Text = "";
         }
 
         public Request Request { get; }

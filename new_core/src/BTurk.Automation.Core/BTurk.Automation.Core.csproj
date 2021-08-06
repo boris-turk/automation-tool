@@ -71,6 +71,7 @@
     <Compile Include="Requests\IRequestExecutor.cs" />
     <Compile Include="Requests\IRequestVisitor.cs" />
     <Compile Include="Requests\IRequestsProvider.cs" />
+    <Compile Include="Requests\VisitPredicateContext.cs" />
     <Compile Include="SearchEngine\ActionType.cs" />
     <Compile Include="SearchEngine\EnvironmentContext.cs" />
     <Compile Include="SearchEngine\EnvironmentContextProvider.cs" />

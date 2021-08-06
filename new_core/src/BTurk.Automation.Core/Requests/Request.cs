@@ -27,5 +27,13 @@ namespace BTurk.Automation.Core.Requests
         }
 
         public override string ToString() => Text ?? "";
+
+        public virtual bool CanVisit(VisitPredicateContext predicateContext)
+        {
+            if (predicateContext.ActionType == ActionType.MoveNext)
+                return predicateContext.Text.EndsWith(" ");
+
+            return predicateContext.ActionType == ActionType.Execute;
+        }
     }
 }

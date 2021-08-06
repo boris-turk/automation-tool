@@ -12,7 +12,7 @@ namespace BTurk.Automation.Standard
 
         public override IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
-            if (!context.WindowTitle.Contains("Visual Studio"))
+            if (!IsVisualStudioContext(context))
                 yield break;
 
             yield return new AhkSendRequest
@@ -20,6 +20,16 @@ namespace BTurk.Automation.Standard
                 Text = "close all tabs but current",
                 Keys = "!^c"
             };
+        }
+
+        public override bool CanVisit(VisitPredicateContext predicateContext)
+        {
+            return IsVisualStudioContext(predicateContext.EnvironmentContext);
+        }
+
+        private bool IsVisualStudioContext(EnvironmentContext context)
+        {
+            return context.WindowTitle.Contains("Visual Studio");
         }
     }
 }
