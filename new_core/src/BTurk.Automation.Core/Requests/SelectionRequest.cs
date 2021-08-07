@@ -3,7 +3,7 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests
 {
-    public class SelectionRequest<TRequest> : Request, ISelectionRequest where TRequest : Request
+    public class SelectionRequest<TRequest> : Request, ISelectionRequest where TRequest : IRequest
     {
         public SelectionRequest()
         {

@@ -4,7 +4,7 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests
 {
-    public class RequestVisitor<TRequest> : IRequestVisitor<TRequest> where TRequest : IRequest
+    public class RequestVisitor<TRequest> : IRequestVisitor<TRequest> where TRequest : class, IRequest
     {
         private readonly ISearchEngine _searchEngine;
         private readonly IRequestVisitor _requestVisitor;
@@ -38,7 +38,23 @@ namespace BTurk.Automation.Core.Requests
 
         private void OnExecute(TRequest request)
         {
-            throw new System.NotImplementedException();
+            var selectedRequest = _searchEngine.SelectedItem;
+
+            if (request == selectedRequest)
+                Execute(request);
+            else
+                _requestVisitor.Visit(selectedRequest, ActionType.Execute);
+        }
+
+        private void Execute(TRequest request)
+        {
+            request.Load();
+
+            var parentStep = _searchEngine.Steps.ElementAtOrDefault(_searchEngine.Steps.Count - 1);
+            var parentRequest = parentStep?.Request;
+
+            if (parentRequest is SelectionRequest<TRequest> selectionRequest)
+                selectionRequest.Selected?.Invoke(request);
         }
 
         private void OnMoveNext(TRequest request)
@@ -53,6 +69,8 @@ namespace BTurk.Automation.Core.Requests
                 RemoveLastStep();
                 return;
             }
+
+            Execute(request);
 
             var context = new VisitPredicateContext(currentStep.Text, ActionType.MoveNext, _searchEngine.Context);
             var visitableChild = currentStep.Children.FirstOrDefault(_ => _.CanVisit(context));
