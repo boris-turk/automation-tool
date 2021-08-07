@@ -169,10 +169,7 @@ namespace BTurk.Automation.DependencyResolution
 
         private static Type GetRequestExecutorType(Type requestType)
         {
-            if (requestType == typeof(AhkSendRequest))
-                return typeof(AhkSendRequestExecutor);
-
-            return typeof(DefaultRequestExecutor<>).MakeGenericType(requestType);
+            return ClosedGenericTypeProvider.Get(typeof(IRequestExecutor<>), requestType);
         }
 
         private static void InitializeMainForm(MainForm mainForm)
@@ -276,6 +273,7 @@ namespace BTurk.Automation.DependencyResolution
         private static void RegisterOpenGenericTypes()
         {
             ClosedGenericTypeProvider.Register(typeof(IRequestsProvider<>), typeof(EmptyRequestProvider<>));
+            ClosedGenericTypeProvider.Register(typeof(IRequestExecutor<>), typeof(DefaultRequestExecutor<>));
         }
     }
 }

@@ -39,8 +39,6 @@ namespace BTurk.Automation.DependencyResolution
 
             TextBox.KeyDown += (_, args) => OnTextBoxKeyDown(args);
 
-            VisibleChanged += (_, _) => { if (Visible) OnBecomingVisible(); };
-
             CreateInitialStep();
         }
 
@@ -158,9 +156,9 @@ namespace BTurk.Automation.DependencyResolution
             base.OnShown(e);
         }
 
-        private void OnBecomingVisible()
+        protected override void OnVisibleChanged(EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(TextBox.Text))
+            if (Visible)
                 TriggerAction(ActionType.MoveNext);
             else
                 TextBox.Text = "";
@@ -175,6 +173,9 @@ namespace BTurk.Automation.DependencyResolution
 
         private void OnSearchTextChanged(object sender, EventArgs e)
         {
+            if (!Visible)
+                return;
+
             var actionType = _currentText.Length > TextBox.Text.Length
                 ? ActionType.MovePrevious
                 : ActionType.MoveNext;
