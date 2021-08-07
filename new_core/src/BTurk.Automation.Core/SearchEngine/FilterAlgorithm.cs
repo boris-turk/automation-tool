@@ -17,7 +17,7 @@ namespace BTurk.Automation.Core.SearchEngine
                 .ToArray();
         }
 
-        public IEnumerable<Request> Filter(IEnumerable<Request> items)
+        public IEnumerable<IRequest> Filter(IEnumerable<IRequest> items)
         {
             var result =
                 from item in items

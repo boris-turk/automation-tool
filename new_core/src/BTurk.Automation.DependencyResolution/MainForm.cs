@@ -20,7 +20,7 @@ namespace BTurk.Automation.DependencyResolution
         {
             _currentText = "";
 
-            Items = new List<Request>();
+            Items = new List<IRequest>();
 
             InitializeComponent();
             TopMost = false;
@@ -44,7 +44,7 @@ namespace BTurk.Automation.DependencyResolution
             CreateInitialStep();
         }
 
-        public List<Request> Items { get; }
+        public List<IRequest> Items { get; }
 
         public IRequestVisitor RequestVisitor { get; set; }
 

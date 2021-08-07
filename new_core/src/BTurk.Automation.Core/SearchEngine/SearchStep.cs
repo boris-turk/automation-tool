@@ -9,16 +9,16 @@ namespace BTurk.Automation.Core.SearchEngine
     [DebuggerDisplay("{" + nameof(RequestTypeName) + "}")]
     public class SearchStep
     {
-        public SearchStep(Request request)
+        public SearchStep(IRequest request)
         {
             Request = request;
-            Children = new List<Request>();
+            Children = new List<IRequest>();
             Text = "";
         }
 
-        public Request Request { get; }
+        public IRequest Request { get; }
 
-        public List<Request> Children { get; }
+        public List<IRequest> Children { get; }
 
         public string Text { get; set; }
 

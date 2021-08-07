@@ -15,7 +15,7 @@ namespace BTurk.Automation.DependencyResolution
             _environmentContextProvider = environmentContextProvider;
         }
 
-        public IEnumerable<Request> LoadChildren(Request request)
+        public IEnumerable<IRequest> LoadChildren(IRequest request)
         {
             var children = request.ChildRequests(_environmentContextProvider.Context).ToList();
 
@@ -41,7 +41,7 @@ namespace BTurk.Automation.DependencyResolution
             return provider.Load();
         }
 
-        private Type GetChildRequestType(Request request)
+        private Type GetChildRequestType(IRequest request)
         {
             var parentType = request.GetType();
 

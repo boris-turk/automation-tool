@@ -6,10 +6,10 @@ namespace BTurk.Automation.Core.Requests
 {
     public interface IRequestVisitor
     {
-        void Visit(Request request, ActionType actionType);
+        void Visit(IRequest request, ActionType actionType);
     }
 
-    public interface IRequestVisitor<TRequest> where TRequest : Request
+    public interface IRequestVisitor<TRequest> where TRequest : IRequest
     {
         void Visit(TRequest request, ActionType actionType);
     }

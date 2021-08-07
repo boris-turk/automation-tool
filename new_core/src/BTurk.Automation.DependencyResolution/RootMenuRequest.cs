@@ -11,7 +11,7 @@ namespace BTurk.Automation.DependencyResolution
         {
         }
 
-        public override IEnumerable<Request> ChildRequests(EnvironmentContext context)
+        protected override IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
             yield return new MainMenuRequest();
             yield return new VisualStudioRequest();

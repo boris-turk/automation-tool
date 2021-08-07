@@ -5,6 +5,6 @@ namespace BTurk.Automation.Core.SearchEngine
 {
     public interface ISearchItemsProvider
     {
-        List<Request> Items { get; }
+        List<IRequest> Items { get; }
     }
 }

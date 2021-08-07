@@ -10,7 +10,7 @@ namespace BTurk.Automation.Standard
         {
         }
 
-        public override IEnumerable<Request> ChildRequests(EnvironmentContext context)
+        protected override IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
             if (!IsVisualStudioContext(context))
                 yield break;
@@ -22,7 +22,7 @@ namespace BTurk.Automation.Standard
             };
         }
 
-        public override bool CanVisit(VisitPredicateContext context)
+        protected override bool CanVisit(VisitPredicateContext context)
         {
             return IsVisualStudioContext(context.EnvironmentContext);
         }

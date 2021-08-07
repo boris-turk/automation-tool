@@ -7,8 +7,11 @@ using BTurk.Automation.Core.SearchEngine;
 namespace BTurk.Automation.Core.Requests
 {
     [DataContract]
-    public class Request
+    public class Request : IRequest
     {
+        public event Action Loaded;
+        public event Action Unloaded;
+
         public Request()
         {
         }
@@ -21,19 +24,27 @@ namespace BTurk.Automation.Core.Requests
         [DataMember(Name = "Text")]
         public string Text { get; set; }
 
-        public virtual IEnumerable<Request> ChildRequests(EnvironmentContext context)
+        protected virtual IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
             return Enumerable.Empty<Request>();
         }
 
         public override string ToString() => Text ?? "";
 
-        public virtual bool CanVisit(VisitPredicateContext context)
+        protected virtual bool CanVisit(VisitPredicateContext context)
         {
             if (context.ActionType == ActionType.MoveNext)
                 return context.Text.Trim().Length > 0 && context.Text.EndsWith(" ");
 
             return context.ActionType == ActionType.Execute;
         }
+
+        void IRequest.Load() => Loaded?.Invoke();
+
+        void IRequest.Unload() => Unloaded?.Invoke();
+
+        bool IRequest.CanVisit(VisitPredicateContext context) => CanVisit(context);
+
+        IEnumerable<Request> IRequest.ChildRequests(EnvironmentContext context) => ChildRequests(context);
     }
 }

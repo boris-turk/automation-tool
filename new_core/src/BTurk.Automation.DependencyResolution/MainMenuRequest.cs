@@ -11,7 +11,7 @@ namespace BTurk.Automation.DependencyResolution
         {
         }
 
-        public override IEnumerable<Request> ChildRequests(EnvironmentContext context)
+        protected override IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
             if (context != EnvironmentContext.Empty)
                 yield break;
@@ -22,7 +22,7 @@ namespace BTurk.Automation.DependencyResolution
             yield return new OpenNoteRequest();
         }
 
-        public override bool CanVisit(VisitPredicateContext context)
+        protected override bool CanVisit(VisitPredicateContext context)
         {
             return context.EnvironmentContext == EnvironmentContext.Empty;
         }

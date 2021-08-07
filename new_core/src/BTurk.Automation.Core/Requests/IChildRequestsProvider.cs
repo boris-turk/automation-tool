@@ -4,6 +4,6 @@ namespace BTurk.Automation.Core.Requests
 {
     public interface IChildRequestsProvider
     {
-        IEnumerable<Request> LoadChildren(Request request);
+        IEnumerable<IRequest> LoadChildren(IRequest request);
     }
 }

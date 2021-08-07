@@ -4,7 +4,7 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests
 {
-    public class RequestVisitor<TRequest> : IRequestVisitor<TRequest> where TRequest : Request
+    public class RequestVisitor<TRequest> : IRequestVisitor<TRequest> where TRequest : IRequest
     {
         private readonly ISearchEngine _searchEngine;
         private readonly IRequestVisitor _requestVisitor;
@@ -20,7 +20,7 @@ namespace BTurk.Automation.Core.Requests
 
         private SearchStep CurrentStep => _searchEngine.Steps.Last();
 
-        private List<Request> SearchItems => _searchEngine.Items;
+        private List<IRequest> SearchItems => _searchEngine.Items;
 
         public void Visit(TRequest request, ActionType actionType)
         {
@@ -61,7 +61,7 @@ namespace BTurk.Automation.Core.Requests
                 VisitChild(visitableChild, ActionType.MoveNext);
         }
 
-        private void VisitChild(Request child, ActionType actionType)
+        private void VisitChild(IRequest child, ActionType actionType)
         {
             var step = new SearchStep(child);
             _searchEngine.Steps.Add(step);
@@ -89,7 +89,9 @@ namespace BTurk.Automation.Core.Requests
 
         private void RemoveLastStep()
         {
-            _searchEngine.Steps.RemoveAt(_searchEngine.Steps.Count - 1);
+            var lastStep = _searchEngine.Steps.Last();
+            lastStep.Request.Unload();
+            _searchEngine.Steps.Remove(lastStep);
         }
 
         private void LoadSearchItems()
@@ -106,7 +108,7 @@ namespace BTurk.Automation.Core.Requests
             SearchItems.AddRange(items);
         }
 
-        private IEnumerable<Request> GetChildren(TRequest request)
+        private IEnumerable<IRequest> GetChildren(TRequest request)
         {
             return _childRequestsProvider.LoadChildren(request);
         }

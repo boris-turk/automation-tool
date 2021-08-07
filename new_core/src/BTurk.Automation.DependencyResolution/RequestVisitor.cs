@@ -5,7 +5,7 @@ namespace BTurk.Automation.DependencyResolution
 {
     public class RequestVisitor : IRequestVisitor
     {
-        void IRequestVisitor.Visit(Request request, ActionType actionType)
+        void IRequestVisitor.Visit(IRequest request, ActionType actionType)
         {
             GenericMethodInvoker.Instance(this)
                 .Method(nameof(Visit))
@@ -14,7 +14,7 @@ namespace BTurk.Automation.DependencyResolution
                 .Invoke();
         }
 
-        public void Visit<TRequest>(TRequest request, ActionType actionType) where TRequest : Request
+        public void Visit<TRequest>(TRequest request, ActionType actionType) where TRequest : IRequest
         {
             var visitor = Container.GetInstance<IRequestVisitor<TRequest>>();
             visitor.Visit(request, actionType);
