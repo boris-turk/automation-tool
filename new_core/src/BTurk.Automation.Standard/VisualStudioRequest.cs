@@ -22,9 +22,9 @@ namespace BTurk.Automation.Standard
             };
         }
 
-        public override bool CanVisit(VisitPredicateContext predicateContext)
+        public override bool CanVisit(VisitPredicateContext context)
         {
-            return IsVisualStudioContext(predicateContext.EnvironmentContext);
+            return IsVisualStudioContext(context.EnvironmentContext);
         }
 
         private bool IsVisualStudioContext(EnvironmentContext context)

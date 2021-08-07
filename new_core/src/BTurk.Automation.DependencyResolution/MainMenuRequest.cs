@@ -22,9 +22,9 @@ namespace BTurk.Automation.DependencyResolution
             yield return new OpenNoteRequest();
         }
 
-        public override bool CanVisit(VisitPredicateContext predicateContext)
+        public override bool CanVisit(VisitPredicateContext context)
         {
-            return predicateContext.EnvironmentContext == EnvironmentContext.Empty;
+            return context.EnvironmentContext == EnvironmentContext.Empty;
         }
     }
 }

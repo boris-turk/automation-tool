@@ -22,21 +22,18 @@ namespace BTurk.Automation.Core.Requests
 
         private List<Request> SearchItems => _searchEngine.Items;
 
-        public void Visit(TRequest request)
+        public void Visit(TRequest request, ActionType actionType)
         {
-            var currentStep = CurrentStep;
-
-            if (_searchEngine.ActionType == ActionType.Execute)
+            if (actionType == ActionType.Execute)
                 OnExecute(request);
 
-            if (_searchEngine.ActionType == ActionType.MoveNext)
+            if (actionType == ActionType.MoveNext)
                 OnMoveNext(request);
 
-            if (_searchEngine.ActionType == ActionType.MovePrevious)
+            if (actionType == ActionType.MovePrevious)
                 OnMovePrevious();
 
-            if (currentStep == CurrentStep)
-                LoadSearchItems();
+            LoadSearchItems();
         }
 
         private void OnExecute(TRequest request)
@@ -51,27 +48,48 @@ namespace BTurk.Automation.Core.Requests
             if (currentStep.Children.Count == 0)
                 currentStep.Children.AddRange(GetChildren(request));
 
-            var context = new VisitPredicateContext(currentStep.Text, _searchEngine.ActionType, _searchEngine.Context);
+            if (!currentStep.Children.Any())
+            {
+                RemoveLastStep();
+                return;
+            }
+
+            var context = new VisitPredicateContext(currentStep.Text, ActionType.MoveNext, _searchEngine.Context);
             var visitableChild = currentStep.Children.FirstOrDefault(_ => _.CanVisit(context));
 
             if (visitableChild != null)
-                VisitChild(visitableChild);
+                VisitChild(visitableChild, ActionType.MoveNext);
         }
 
-        private void VisitChild(Request child)
+        private void VisitChild(Request child, ActionType actionType)
         {
             var step = new SearchStep(child);
             _searchEngine.Steps.Add(step);
-            _requestVisitor.Visit(child);
+            _requestVisitor.Visit(child, actionType);
         }
 
         private void OnMovePrevious()
         {
             if (CurrentStep.Text.Length == 0 && _searchEngine.Steps.Count > 2)
-                _searchEngine.Steps.RemoveAt(_searchEngine.Steps.Count - 1);
-
-            if (CurrentStep.Text.Length > 0)
+            {
+                RemoveLastStep();
+                VisitCurrentRequest(ActionType.MovePrevious);
+            }
+            else if (CurrentStep.Text.Length > 0)
+            {
                 CurrentStep.Text = CurrentStep.Text.Remove(CurrentStep.Text.Length - 1);
+                VisitCurrentRequest(ActionType.MoveNext);
+            }
+        }
+
+        private void VisitCurrentRequest(ActionType actionType)
+        {
+            _requestVisitor.Visit(CurrentStep.Request, actionType);
+        }
+
+        private void RemoveLastStep()
+        {
+            _searchEngine.Steps.RemoveAt(_searchEngine.Steps.Count - 1);
         }
 
         private void LoadSearchItems()

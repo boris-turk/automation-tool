@@ -191,7 +191,10 @@ namespace BTurk.Automation.DependencyResolution
             if (actionType == ActionType.MoveNext && SearchText.Length > 0)
                 Steps.Last().Text += SearchText.Last();
 
-            RequestVisitor.Visit(Steps.Last().Request);
+            if (actionType == ActionType.MoveNext && !Items.Any() && SearchText.Trim().Length > 0)
+                return;
+
+            RequestVisitor.Visit(Steps.Last().Request, actionType);
 
             var selectedIndex = ListBox.SelectedIndex;
 
