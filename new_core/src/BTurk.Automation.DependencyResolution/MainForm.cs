@@ -174,7 +174,10 @@ namespace BTurk.Automation.DependencyResolution
         private void OnSearchTextChanged(object sender, EventArgs e)
         {
             if (!Visible)
+            {
+                _currentText = TextBox.Text;
                 return;
+            }
 
             var actionType = _currentText.Length > TextBox.Text.Length
                 ? ActionType.MovePrevious

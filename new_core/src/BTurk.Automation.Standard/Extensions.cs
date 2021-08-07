@@ -1,18 +1,12 @@
 ﻿using System.Diagnostics;
 using BTurk.Automation.Core.Requests;
 
+// ReSharper disable UnusedMember.Global
+
 namespace BTurk.Automation.Standard
 {
     public static class Extensions
     {
-        public static string GetProgramPath(this Repository repository)
-        {
-            if (repository.Type == RepositoryType.Git)
-                return @"C:\Program Files\TortoiseGit\bin\TortoiseGitProc.exe";
-
-            return @"c:\Program Files\TortoiseSVN\bin\TortoiseProc.exe";
-        }
-
         public static void Log(this Repository repository)
         {
             repository.ExecuteCommand("log");
@@ -33,6 +27,13 @@ namespace BTurk.Automation.Standard
             var path = repository.Path;
             var programPath = repository.GetProgramPath();
             Process.Start(programPath, $"/command:{command} /path:{path}");
+        }
+
+        private static string GetProgramPath(this Repository repository)
+        {
+            return repository.Type == RepositoryType.Git
+                ? @"C:\Program Files\TortoiseGit\bin\TortoiseGitProc.exe"
+                : @"c:\Program Files\TortoiseSVN\bin\TortoiseProc.exe";
         }
     }
 }
