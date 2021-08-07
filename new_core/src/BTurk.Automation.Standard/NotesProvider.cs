@@ -4,6 +4,7 @@ using System.Linq;
 using BTurk.Automation.Core.Requests;
 
 // ReSharper disable StringLiteralTypo
+// ReSharper disable UnusedMember.Global
 
 namespace BTurk.Automation.Standard
 {

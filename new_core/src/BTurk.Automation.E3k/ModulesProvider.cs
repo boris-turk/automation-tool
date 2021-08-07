@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using BTurk.Automation.Core.Requests;
+
+// ReSharper disable UnusedMember.Global
 
 namespace BTurk.Automation.E3k
 {

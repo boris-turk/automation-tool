@@ -8,14 +8,20 @@ using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.Core.Serialization;
-using BTurk.Automation.E3k;
 using BTurk.Automation.Standard;
 
 namespace BTurk.Automation.DependencyResolution
 {
     public static class Container
     {
-        private static readonly List<object> Singletons = new List<object>();
+        private static readonly List<object> Singletons = new();
+
+        private static readonly ClosedGenericTypeProvider ClosedGenericTypeProvider = new();
+
+        static Container()
+        {
+            RegisterOpenGenericTypes();
+        }
 
         public static T GetInstance<T>()
         {
@@ -153,19 +159,7 @@ namespace BTurk.Automation.DependencyResolution
 
         private static Type GetRequestProviderType(Type requestType)
         {
-            if (requestType == typeof(Module))
-                return typeof(ModulesProvider);
-
-            if (requestType == typeof(Repository))
-                return typeof(RepositoriesProvider);
-
-            if (requestType == typeof(Solution))
-                return typeof(SolutionsProvider);
-
-            if (requestType == typeof(Note))
-                return typeof(NotesProvider);
-
-            return typeof(EmptyRequestProvider<>).MakeGenericType(requestType);
+            return ClosedGenericTypeProvider.Get(typeof(IRequestsProvider<>), requestType);
         }
 
         private static Type GetRequestVisitorType(Type requestType)
@@ -237,7 +231,7 @@ namespace BTurk.Automation.DependencyResolution
 
         private static InvalidOperationException FailedToCreateInstance(Type type)
         {
-            return new InvalidOperationException($"Failed to create instance of type {type.Name}");
+            return new($"Failed to create instance of type {type.Name}");
         }
 
         private static T CreateInstance<T>()
@@ -277,6 +271,11 @@ namespace BTurk.Automation.DependencyResolution
         private static IEnumerable<TItem> CastToProperEnumerable<TItem>(IEnumerable instance)
         {
             return instance.Cast<TItem>();
+        }
+
+        private static void RegisterOpenGenericTypes()
+        {
+            ClosedGenericTypeProvider.Register(typeof(IRequestsProvider<>), typeof(EmptyRequestProvider<>));
         }
     }
 }

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChildRequestsProvider.cs" />
+    <Compile Include="ClosedGenericTypeProvider.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenericMethodInvoker.cs" />
@@ -96,6 +97,10 @@
     <ProjectReference Include="..\BTurk.Automation.Host\BTurk.Automation.Host.csproj">
       <Project>{BB0A2819-0EF2-4BA9-829C-CC0621CD10C0}</Project>
       <Name>BTurk.Automation.Host</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BTurk.Automation.Mic\BTurk.Automation.Mic.csproj">
+      <Project>{d6efbcc2-09e6-4d86-acce-a9ca6f197e4f}</Project>
+      <Name>BTurk.Automation.Mic</Name>
     </ProjectReference>
     <ProjectReference Include="..\BTurk.Automation.Standard\BTurk.Automation.Standard.csproj">
       <Project>{B15CAF22-4AF9-44D9-AE9B-9F6338AA9232}</Project>

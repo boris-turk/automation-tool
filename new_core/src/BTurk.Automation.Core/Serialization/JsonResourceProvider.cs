@@ -4,6 +4,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable ConvertToUsingDeclaration
 
 namespace BTurk.Automation.Core.Serialization

@@ -81,7 +81,6 @@
     <Compile Include="SearchEngine\IEnvironmentContextProvider.cs" />
     <Compile Include="SearchEngine\ISearchItemsProvider.cs" />
     <Compile Include="SearchEngine\ISearchEngine.cs" />
-    <Compile Include="SearchEngine\Selection.cs" />
     <Compile Include="Requests\Request.cs" />
     <Compile Include="SearchEngine\SearchStep.cs" />
     <Compile Include="Serialization\ContractResolver.cs" />

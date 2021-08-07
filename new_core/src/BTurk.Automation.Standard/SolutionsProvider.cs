@@ -2,6 +2,8 @@
 using BTurk.Automation.Core;
 using BTurk.Automation.Core.Requests;
 
+// ReSharper disable UnusedMember.Global
+
 namespace BTurk.Automation.Standard
 {
     public class SolutionsProvider : IRequestsProvider<Solution>
