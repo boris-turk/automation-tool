@@ -1,7 +1,9 @@
-﻿namespace BTurk.Automation.Core.Requests
+﻿// ReSharper disable TypeParameterCanBeVariant
+
+namespace BTurk.Automation.Core.Requests
 {
-    public interface IRequestExecutor<TRequest> where TRequest : Request
+    public interface IRequestExecutor<TRequest> where TRequest : IRequest
     {
-        void Execute(RequestExecutionContext<TRequest> context);
+        void Execute(TRequest request);
     }
 }

@@ -172,7 +172,7 @@ namespace BTurk.Automation.DependencyResolution
             if (requestType == typeof(AhkSendRequest))
                 return typeof(AhkSendRequestExecutor);
 
-            return typeof(EmptyRequestExecutor<>).MakeGenericType(requestType);
+            return typeof(DefaultRequestExecutor<>).MakeGenericType(requestType);
         }
 
         private static void InitializeMainForm(MainForm mainForm)

@@ -4,9 +4,9 @@ namespace BTurk.Automation.Core.Requests
 {
     public class AhkSendRequestExecutor : IRequestExecutor<AhkSendRequest>
     {
-        public void Execute(RequestExecutionContext<AhkSendRequest> context)
+        public void Execute(AhkSendRequest request)
         {
-            AutoHotkeyEngine.Instance.ExecRaw($"Send {context.Request.Keys}");
+            AutoHotkeyEngine.Instance.ExecRaw($"Send {request.Keys}");
         }
     }
 }

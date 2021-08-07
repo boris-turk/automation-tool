@@ -8,14 +8,16 @@ namespace BTurk.Automation.Core.Requests
     {
         private readonly ISearchEngine _searchEngine;
         private readonly IRequestVisitor _requestVisitor;
+        private readonly IRequestExecutor<TRequest> _requestExecutor;
         private readonly IChildRequestsProvider _childRequestsProvider;
 
         public RequestVisitor(ISearchEngine searchEngine, IRequestVisitor requestVisitor,
-            IChildRequestsProvider childRequestsProvider)
+            IChildRequestsProvider childRequestsProvider, IRequestExecutor<TRequest> requestExecutor)
         {
             _searchEngine = searchEngine;
-            _childRequestsProvider = childRequestsProvider;
+            _requestExecutor = requestExecutor;
             _requestVisitor = requestVisitor;
+            _childRequestsProvider = childRequestsProvider;
         }
 
         private SearchStep CurrentStep => _searchEngine.Steps.Last();
@@ -40,15 +42,23 @@ namespace BTurk.Automation.Core.Requests
         {
             var selectedRequest = _searchEngine.SelectedItem;
 
-            if (request == selectedRequest)
-                Execute(request);
-            else
+            LoadChildrenIfNecessary(request);
+
+            if (request != selectedRequest)
+            {
                 _requestVisitor.Visit(selectedRequest, ActionType.Execute);
+                return;
+            }
+
+            if (!GetChildren(request).Any())
+                _searchEngine.Hide();
+
+            Execute(request);
         }
 
         private void Execute(TRequest request)
         {
-            request.Load();
+            _requestExecutor.Execute(request);
 
             var parentStep = _searchEngine.Steps.ElementAtOrDefault(_searchEngine.Steps.Count - 1);
             var parentRequest = parentStep?.Request;
@@ -61,8 +71,7 @@ namespace BTurk.Automation.Core.Requests
         {
             var currentStep = CurrentStep;
 
-            if (currentStep.Children.Count == 0)
-                currentStep.Children.AddRange(GetChildren(request));
+            LoadChildrenIfNecessary(request);
 
             if (!currentStep.Children.Any())
             {
@@ -76,6 +85,12 @@ namespace BTurk.Automation.Core.Requests
 
             if (visitableChild != null)
                 VisitChild(visitableChild, ActionType.MoveNext);
+        }
+
+        private void LoadChildrenIfNecessary(TRequest request)
+        {
+            if (CurrentStep.Children.Count == 0)
+                CurrentStep.Children.AddRange(GetChildren(request));
         }
 
         private IRequest GetVisitableChild()
