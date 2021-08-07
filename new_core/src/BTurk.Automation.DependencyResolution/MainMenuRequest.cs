@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
+using BTurk.Automation.E3k;
 using BTurk.Automation.Standard;
 
 namespace BTurk.Automation.DependencyResolution
@@ -20,6 +21,7 @@ namespace BTurk.Automation.DependencyResolution
             yield return new ShowRepositoryLogRequest();
             yield return new OpenSolutionRequest();
             yield return new OpenNoteRequest();
+            yield return new OpenWindowRequest();
         }
 
         protected override bool CanVisit(VisitPredicateContext context)

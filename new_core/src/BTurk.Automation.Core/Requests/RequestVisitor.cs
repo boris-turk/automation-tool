@@ -72,11 +72,22 @@ namespace BTurk.Automation.Core.Requests
 
             Execute(request);
 
-            var context = new VisitPredicateContext(currentStep.Text, ActionType.MoveNext, _searchEngine.Context);
-            var visitableChild = currentStep.Children.FirstOrDefault(_ => _.CanVisit(context));
+            var visitableChild = GetVisitableChild();
 
             if (visitableChild != null)
                 VisitChild(visitableChild, ActionType.MoveNext);
+        }
+
+        private IRequest GetVisitableChild()
+        {
+            var context = new VisitPredicateContext(CurrentStep.Text, ActionType.MoveNext, _searchEngine.Context);
+
+            IRequest visitableChild = _searchEngine.SelectedItem;
+
+            if (visitableChild == null || _searchEngine.Items.Count > 1 || !visitableChild.CanVisit(context))
+                visitableChild = CurrentStep.Children.FirstOrDefault(_ => _.CanVisit(context));
+
+            return visitableChild;
         }
 
         private void VisitChild(IRequest child, ActionType actionType)

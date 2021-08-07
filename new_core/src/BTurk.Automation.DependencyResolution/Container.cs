@@ -8,6 +8,7 @@ using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.Core.Serialization;
+using BTurk.Automation.E3k;
 using BTurk.Automation.Standard;
 
 namespace BTurk.Automation.DependencyResolution
@@ -152,6 +153,9 @@ namespace BTurk.Automation.DependencyResolution
 
         private static Type GetRequestProviderType(Type requestType)
         {
+            if (requestType == typeof(Module))
+                return typeof(ModulesProvider);
+
             if (requestType == typeof(Repository))
                 return typeof(RepositoriesProvider);
 
