@@ -76,6 +76,7 @@ namespace BTurk.Automation.Core.Requests
             if (!currentStep.Children.Any())
             {
                 RemoveLastStep();
+                Execute(request);
                 return;
             }
 
@@ -134,7 +135,6 @@ namespace BTurk.Automation.Core.Requests
         private void RemoveLastStep()
         {
             var lastStep = _searchEngine.Steps.Last();
-            lastStep.Request.Unload();
             _searchEngine.Steps.Remove(lastStep);
         }
 

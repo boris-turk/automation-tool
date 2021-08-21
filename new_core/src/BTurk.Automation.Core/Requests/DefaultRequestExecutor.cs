@@ -2,6 +2,8 @@
 {
     public class DefaultRequestExecutor<TRequest> : IRequestExecutor<TRequest> where TRequest : IRequest
     {
-        public void Execute(TRequest request) => request.Load();
+        public void Execute(TRequest request)
+        {
+        }
     }
 }

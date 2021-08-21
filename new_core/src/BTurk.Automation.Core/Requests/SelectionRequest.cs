@@ -16,6 +16,8 @@ namespace BTurk.Automation.Core.Requests
 
         public Action<TRequest> Selected { get; set; }
 
+        public Action<TRequest> Unloaded { get; set; }
+
         protected override bool CanVisit(VisitPredicateContext context)
         {
             return context.ActionType == ActionType.Execute || context.ActionType == ActionType.MoveNext;

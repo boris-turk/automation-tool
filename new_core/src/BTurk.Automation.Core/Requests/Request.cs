@@ -11,9 +11,6 @@ namespace BTurk.Automation.Core.Requests
     [DebuggerDisplay("{" + nameof(RequestTypeName) + "}")]
     public class Request : IRequest
     {
-        public event Action Loaded;
-        public event Action Unloaded;
-
         public Request()
         {
         }
@@ -44,10 +41,6 @@ namespace BTurk.Automation.Core.Requests
         }
 
         private string RequestTypeName => Extensions.GetDebuggerDisplayText(this);
-
-        void IRequest.Load() => Loaded?.Invoke();
-
-        void IRequest.Unload() => Unloaded?.Invoke();
 
         bool IRequest.CanVisit(VisitPredicateContext context)
         {
