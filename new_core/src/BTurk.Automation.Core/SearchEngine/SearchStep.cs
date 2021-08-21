@@ -22,24 +22,6 @@ namespace BTurk.Automation.Core.SearchEngine
 
         public string Text { get; set; }
 
-        private string RequestTypeName
-        {
-            get
-            {
-                if (Request == null)
-                    return "";
-
-                var type = Request.GetType();
-
-                if (!type.IsGenericType)
-                    return type.Name;
-
-                var typeName = Regex.Replace(type.Name, @"`\d$", "");
-                var argumentTypes = type.GetGenericArguments().Select(_ => _.Name);
-                var argumentNames = string.Join(", ", argumentTypes);
-
-                return $"{typeName}<{argumentNames}>";
-            }
-        }
+        private string RequestTypeName => Request == null ? "" : Extensions.GetDebuggerDisplayText(Request);
     }
 }

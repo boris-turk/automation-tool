@@ -1,4 +1,8 @@
-﻿namespace BTurk.Automation.Core
+﻿using System.Linq;
+using System.Text.RegularExpressions;
+using BTurk.Automation.Core.Requests;
+
+namespace BTurk.Automation.Core
 {
     public static class Extensions
     {
@@ -37,6 +41,30 @@
             }
 
             return j == value.Length;
+        }
+
+        internal static string GetDebuggerDisplayText(IRequest request)
+        {
+            var type = request.GetType();
+
+            string displayText;
+
+            if (type.IsGenericType)
+            {
+                var typeName = Regex.Replace(type.Name, @"`\d$", "");
+                var argumentTypes = type.GetGenericArguments().Select(_ => _.Name);
+                var argumentNames = string.Join(", ", argumentTypes);
+                displayText = $"{typeName}<{argumentNames}>";
+            }
+            else
+            {
+                displayText = type.Name;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Text))
+                displayText = $"{displayText}: {request.Text}";
+
+            return displayText;
         }
     }
 }
