@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.Serialization;
 using BTurk.Automation.Core.Commands;
 using BTurk.Automation.Core.SearchEngine;
@@ -26,14 +24,9 @@ namespace BTurk.Automation.Core.Requests
         [DataMember(Name = "Text")]
         public string Text { get; set; }
 
-        public ICommand Command { get; protected set; }
+        public ICommand Command { get; set; }
 
         public Predicate<DispatchPredicateContext> CanAcceptPredicate { get; set; }
-
-        protected virtual IEnumerable<Request> ChildRequests(EnvironmentContext context)
-        {
-            return Enumerable.Empty<Request>();
-        }
 
         public override string ToString() => Text ?? "";
 
@@ -54,7 +47,5 @@ namespace BTurk.Automation.Core.Requests
 
             return CanAccept(context);
         }
-
-        IEnumerable<Request> IRequest.ChildRequests(EnvironmentContext context) => ChildRequests(context);
     }
 }

@@ -7,7 +7,7 @@ namespace BTurk.Automation.E3k
 {
     public class ModulesProvider : IRequestsProvider<Module>
     {
-        public IEnumerable<Module> Load()
+        public IEnumerable<Module> GetRequests()
         {
             var modules = new Module[]
             {

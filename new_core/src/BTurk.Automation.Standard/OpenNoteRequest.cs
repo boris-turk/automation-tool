@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
 using BTurk.Automation.Core.Requests;
-using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
-    public class OpenNoteRequest : Request
+    public class OpenNoteRequest : Request, ISelectionRequest<Note>
     {
         public OpenNoteRequest() : base("note")
         {
         }
 
-        protected override IEnumerable<Request> ChildRequests(EnvironmentContext context)
+        public IEnumerable<Note> GetRequests(IRequestsProvider<Note> provider)
         {
-            yield return new SelectionRequest<Note>
+            foreach (var request in provider.GetRequests())
             {
-                ChildExecuted = note => note.Open()
-            };
+                request.Command = null; //request.Open();
+                yield return request;
+            }
         }
     }
 }

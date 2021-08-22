@@ -4,13 +4,13 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
-    public class VisualStudioRequest : Request
+    public class VisualStudioRequest : Request, ISelectionRequest
     {
         public VisualStudioRequest() : base("Visual studio")
         {
         }
 
-        protected override IEnumerable<Request> ChildRequests(EnvironmentContext context)
+        public IEnumerable<Request> GetRequests(EnvironmentContext context)
         {
             if (!IsVisualStudioContext(context))
                 yield break;

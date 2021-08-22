@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using BTurk.Automation.Core.Commands;
-using BTurk.Automation.Core.SearchEngine;
+﻿using BTurk.Automation.Core.Commands;
 
 namespace BTurk.Automation.Core.Requests
 {
@@ -9,6 +7,5 @@ namespace BTurk.Automation.Core.Requests
         ICommand Command { get; }
         string Text { get; }
         bool CanAccept(DispatchPredicateContext context);
-        IEnumerable<Request> ChildRequests(EnvironmentContext context);
     }
 }

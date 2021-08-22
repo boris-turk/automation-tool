@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
 using BTurk.Automation.Core.Requests;
-using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
-    public class ShowRepositoryLogRequest : Request
+    public class ShowRepositoryLogRequest : Request, ISelectionRequest<Repository>
     {
         public ShowRepositoryLogRequest() : base("log")
         {
         }
 
-        protected override IEnumerable<Request> ChildRequests(EnvironmentContext context)
+        public IEnumerable<Repository> GetRequests(IRequestsProvider<Repository> provider)
         {
-            yield return new SelectionRequest<Repository>
+            foreach (var request in provider.GetRequests())
             {
-                ChildExecuted = repository => repository.Log()
-            };
+                request.Command = null; //request.Log();
+                yield return request;
+            }
         }
     }
 }

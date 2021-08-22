@@ -6,6 +6,6 @@ namespace BTurk.Automation.Core.Requests
 {
     public interface IRequestsProvider<TRequest> where TRequest : Request
     {
-        IEnumerable<TRequest> Load();
+        IEnumerable<TRequest> GetRequests();
     }
 }

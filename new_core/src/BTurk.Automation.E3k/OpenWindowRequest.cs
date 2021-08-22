@@ -4,13 +4,13 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.E3k
 {
-    public class OpenWindowRequest : Request
+    public class OpenWindowRequest : Request, ISelectionRequest
     {
         public OpenWindowRequest() : base("window")
         {
         }
 
-        protected override IEnumerable<Request> ChildRequests(EnvironmentContext context)
+        public IEnumerable<Request> GetRequests(EnvironmentContext context)
         {
             yield return new SelectionRequest<Module>
             {

@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
 using BTurk.Automation.Core.Requests;
-using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
-    public class OpenSolutionRequest : Request
+    public class OpenSolutionRequest : Request, ISelectionRequest<Solution>
     {
         public OpenSolutionRequest() : base("solution")
         {
         }
 
-        protected override IEnumerable<Request> ChildRequests(EnvironmentContext context)
+        public IEnumerable<Solution> GetRequests(IRequestsProvider<Solution> provider)
         {
-            yield return new SelectionRequest<Solution>
+            foreach (var request in provider.GetRequests())
             {
-                ChildExecuted = solution => solution.Open()
-            };
+                request.Command = null; //request.Open();
+                yield return request;
+            }
         }
     }
 }

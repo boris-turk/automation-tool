@@ -68,9 +68,6 @@ namespace BTurk.Automation.Core.Requests
         private void Execute(TRequest request)
         {
             Visit(request, Request.Null, ActionType.Execute);
-
-            if (ParentRequest is SelectionRequest<TRequest> selectionRequest)
-                selectionRequest.ChildExecuted.Invoke(request);
         }
 
         private void Visit(TRequest request, Request childRequest, ActionType actionType)

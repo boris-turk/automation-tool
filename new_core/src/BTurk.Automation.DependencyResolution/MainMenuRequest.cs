@@ -6,13 +6,13 @@ using BTurk.Automation.Standard;
 
 namespace BTurk.Automation.DependencyResolution
 {
-    public class MainMenuRequest : Request
+    public class MainMenuRequest : Request, ISelectionRequest
     {
         public MainMenuRequest() : base("Main menu")
         {
         }
 
-        protected override IEnumerable<Request> ChildRequests(EnvironmentContext context)
+        public IEnumerable<Request> GetRequests(EnvironmentContext context)
         {
             if (context != EnvironmentContext.Empty)
                 yield break;

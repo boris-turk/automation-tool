@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
 using BTurk.Automation.Core.Requests;
-using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
-    public class CommitRepositoryRequest : Request
+    public class CommitRepositoryRequest : Request, ISelectionRequest<Repository>
     {
         public CommitRepositoryRequest() : base("commit")
         {
         }
 
-        protected override IEnumerable<Request> ChildRequests(EnvironmentContext context)
+        public IEnumerable<Repository> GetRequests(IRequestsProvider<Repository> provider)
         {
-            yield return new SelectionRequest<Repository>
+            foreach (var repository in provider.GetRequests())
             {
-                ChildExecuted = repository => repository.Commit()
-            };
+                repository.Command = null;
+                yield return repository;
+            }
         }
     }
 }

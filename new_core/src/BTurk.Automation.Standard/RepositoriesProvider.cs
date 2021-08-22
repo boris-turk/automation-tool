@@ -24,7 +24,7 @@ namespace BTurk.Automation.Standard
             "V50NewCore",
         };
 
-        public IEnumerable<Repository> Load()
+        public IEnumerable<Repository> GetRequests()
         {
             var projectsDirectory = @"C:\work\projects";
 
