@@ -16,8 +16,8 @@ namespace BTurk.Automation.DependencyResolution
 
         public void Dispatch<TRequest>(TRequest request, ActionType actionType) where TRequest : IRequest
         {
-            var visitor = Container.GetInstance<IRequestActionDispatcher<TRequest>>();
-            visitor.Dispatch(request, actionType);
+            var dispatcher = Container.GetInstance<IRequestActionDispatcher<TRequest>>();
+            dispatcher.Dispatch(request, actionType);
         }
     }
 }
