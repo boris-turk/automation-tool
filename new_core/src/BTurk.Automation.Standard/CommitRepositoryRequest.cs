@@ -13,7 +13,7 @@ namespace BTurk.Automation.Standard
         {
             foreach (var repository in provider.GetRequests())
             {
-                repository.Command = null;
+                repository.Command = new CommitRepositoryCommand(repository);
                 yield return repository;
             }
         }

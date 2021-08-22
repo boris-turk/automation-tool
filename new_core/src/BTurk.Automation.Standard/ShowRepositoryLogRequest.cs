@@ -13,7 +13,7 @@ namespace BTurk.Automation.Standard
         {
             foreach (var request in provider.GetRequests())
             {
-                request.Command = null; //request.Log();
+                request.Command = new ShowRepositoryLogCommand(request);
                 yield return request;
             }
         }

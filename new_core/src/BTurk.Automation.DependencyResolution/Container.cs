@@ -34,6 +34,9 @@ namespace BTurk.Automation.DependencyResolution
             if (IsSearchEngineRequest(type))
                 return GetOrCreateSingleton<MainForm>(InitializeMainForm);
 
+            if (type == typeof(IProcessStarter))
+                return GetOrCreateSingleton<ProcessStarter>();
+
             if (type == typeof(IChildRequestsProvider))
                 return GetOrCreateSingleton<ChildRequestsProvider>();
 

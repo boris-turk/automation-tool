@@ -47,10 +47,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommitRepositoryCommand.cs" />
+    <Compile Include="CommitRepositoryCommandHandler.cs" />
     <Compile Include="DTEInstanceProvider.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="NotesProvider.cs" />
     <Compile Include="OpenNoteRequest.cs" />
+    <Compile Include="RepositoryCommand.cs" />
+    <Compile Include="ShowRepositoryLogCommand.cs" />
+    <Compile Include="ShowRepositoryLogCommandHandler.cs" />
     <Compile Include="ShowRepositoryLogRequest.cs" />
     <Compile Include="VisualStudioEnvironmentDataProvider.cs" />
     <Compile Include="VisualStudioRequest.cs" />

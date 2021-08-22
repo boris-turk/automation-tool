@@ -53,6 +53,7 @@
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="IProcessStarter.cs" />
     <Compile Include="IResourceProvider.cs" />
     <Compile Include="Messages\CompositeMessageHandler.cs" />
     <Compile Include="Messages\IMessage.cs" />

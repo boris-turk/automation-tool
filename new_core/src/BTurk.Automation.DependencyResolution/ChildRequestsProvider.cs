@@ -20,37 +20,41 @@ namespace BTurk.Automation.DependencyResolution
             if (request is ICollectionRequest selectionRequest)
                 return selectionRequest.GetRequests(_environmentContextProvider.Context);
 
-            var childRequestType = GetChildRequestType(request);
+            var collectionElementType = GetCollectionElementType(request);
 
-            if (childRequestType == null)
+            if (collectionElementType == null)
                 return Enumerable.Empty<Request>();
 
             var childRequests = GenericMethodInvoker.Instance(this)
                 .Method(nameof(GetRequests))
-                .WithGenericTypes(childRequestType)
+                .WithGenericTypes(collectionElementType)
+                .WithArguments(request)
                 .Invoke();
 
-            return (IEnumerable<Request>)childRequests;
+            return (IEnumerable<IRequest>)childRequests;
         }
 
-        private IEnumerable<Request> GetRequests<TRequest>() where TRequest : Request
+        private IEnumerable<Request> GetRequests<TRequest>(ICollectionRequest<TRequest> collectionRequest)
+            where TRequest : Request
         {
             var provider = Container.GetInstance<IRequestsProvider<TRequest>>();
-            return provider.GetRequests();
+
+            foreach (var request in provider.GetRequests())
+                yield return request;
         }
 
-        private Type GetChildRequestType(IRequest request)
+        private Type GetCollectionElementType(IRequest request)
         {
             var parentType = request.GetType();
 
             if (!parentType.InheritsFrom(typeof(ICollectionRequest<>)))
                 return null;
 
-            var selectionRequestType = parentType.FindAllParentClosedGenerics(typeof(ICollectionRequest<>)).Single();
+            var closedGenericType = parentType.FindAllParentClosedGenerics(typeof(ICollectionRequest<>)).Single();
 
-            var childType = selectionRequestType.GetGenericArguments()[0];
+            var collectionElementType = closedGenericType.GetGenericArguments()[0];
 
-            return childType;
+            return collectionElementType;
         }
     }
 }
