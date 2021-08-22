@@ -17,7 +17,7 @@ namespace BTurk.Automation.DependencyResolution
 
         public IEnumerable<IRequest> LoadChildren(IRequest request)
         {
-            if (request is ISelectionRequest selectionRequest)
+            if (request is ICollectionRequest selectionRequest)
                 return selectionRequest.GetRequests(_environmentContextProvider.Context);
 
             var childRequestType = GetChildRequestType(request);
@@ -43,10 +43,10 @@ namespace BTurk.Automation.DependencyResolution
         {
             var parentType = request.GetType();
 
-            if (!parentType.InheritsFrom(typeof(ISelectionRequest<>)))
+            if (!parentType.InheritsFrom(typeof(ICollectionRequest<>)))
                 return null;
 
-            var selectionRequestType = parentType.FindAllParentClosedGenerics(typeof(ISelectionRequest<>)).Single();
+            var selectionRequestType = parentType.FindAllParentClosedGenerics(typeof(ICollectionRequest<>)).Single();
 
             var childType = selectionRequestType.GetGenericArguments()[0];
 

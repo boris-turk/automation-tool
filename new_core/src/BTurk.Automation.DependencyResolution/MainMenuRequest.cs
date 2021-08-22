@@ -6,7 +6,7 @@ using BTurk.Automation.Standard;
 
 namespace BTurk.Automation.DependencyResolution
 {
-    public class MainMenuRequest : Request, ISelectionRequest
+    public class MainMenuRequest : Request, ICollectionRequest
     {
         public MainMenuRequest() : base("Main menu")
         {

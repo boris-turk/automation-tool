@@ -66,7 +66,7 @@
     <Compile Include="Requests\IChildRequestsProvider.cs" />
     <Compile Include="Requests\IRequest.cs" />
     <Compile Include="Requests\IRequestVisitor.cs" />
-    <Compile Include="Requests\ISelectionRequest.cs" />
+    <Compile Include="Requests\ICollectionRequest.cs" />
     <Compile Include="Requests\RequestActionDispatcher.cs" />
     <Compile Include="Requests\RequestVisitContext.cs" />
     <Compile Include="Requests\SelectionRequest.cs" />

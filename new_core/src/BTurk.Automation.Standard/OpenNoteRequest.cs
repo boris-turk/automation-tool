@@ -3,7 +3,7 @@ using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Standard
 {
-    public class OpenNoteRequest : Request, ISelectionRequest<Note>
+    public class OpenNoteRequest : Request, ICollectionRequest<Note>
     {
         public OpenNoteRequest() : base("note")
         {

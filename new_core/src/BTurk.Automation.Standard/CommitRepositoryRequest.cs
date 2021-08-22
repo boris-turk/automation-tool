@@ -3,7 +3,7 @@ using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Standard
 {
-    public class CommitRepositoryRequest : Request, ISelectionRequest<Repository>
+    public class CommitRepositoryRequest : Request, ICollectionRequest<Repository>
     {
         public CommitRepositoryRequest() : base("commit")
         {

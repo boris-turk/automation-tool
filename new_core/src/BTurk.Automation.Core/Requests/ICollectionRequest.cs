@@ -3,12 +3,12 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests
 {
-    public interface ISelectionRequest
+    public interface ICollectionRequest
     {
         IEnumerable<Request> GetRequests(EnvironmentContext context);
     }
 
-    public interface ISelectionRequest<TRequest> where TRequest : Request
+    public interface ICollectionRequest<TRequest> where TRequest : Request
     {
         IEnumerable<TRequest> GetRequests(IRequestsProvider<TRequest> provider);
     }

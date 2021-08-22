@@ -3,7 +3,7 @@ using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Standard
 {
-    public class ShowRepositoryLogRequest : Request, ISelectionRequest<Repository>
+    public class ShowRepositoryLogRequest : Request, ICollectionRequest<Repository>
     {
         public ShowRepositoryLogRequest() : base("log")
         {
