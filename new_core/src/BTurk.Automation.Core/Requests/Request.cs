@@ -26,7 +26,7 @@ namespace BTurk.Automation.Core.Requests
 
         public ICommand Command { get; protected set; }
 
-        public Predicate<VisitPredicateContext> CanVisitPredicate { get; set; }
+        public Predicate<DispatchPredicateContext> CanAcceptPredicate { get; set; }
 
         protected virtual IEnumerable<Request> ChildRequests(EnvironmentContext context)
         {
@@ -35,7 +35,7 @@ namespace BTurk.Automation.Core.Requests
 
         public override string ToString() => Text ?? "";
 
-        protected virtual bool CanVisit(VisitPredicateContext context)
+        protected virtual bool CanAccept(DispatchPredicateContext context)
         {
             if (context.ActionType == ActionType.MoveNext)
                 return context.Text.Trim().Length > 0 && context.Text.EndsWith(" ");
@@ -45,12 +45,12 @@ namespace BTurk.Automation.Core.Requests
 
         private string RequestTypeName => Extensions.GetDebuggerDisplayText(this);
 
-        bool IRequest.CanVisit(VisitPredicateContext context)
+        bool IRequest.CanAccept(DispatchPredicateContext context)
         {
-            if (CanVisitPredicate != null)
-                return CanVisitPredicate.Invoke(context);
+            if (CanAcceptPredicate != null)
+                return CanAcceptPredicate.Invoke(context);
 
-            return CanVisit(context);
+            return CanAccept(context);
         }
 
         IEnumerable<Request> IRequest.ChildRequests(EnvironmentContext context) => ChildRequests(context);

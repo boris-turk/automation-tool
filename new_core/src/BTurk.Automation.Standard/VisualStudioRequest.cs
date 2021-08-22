@@ -22,7 +22,7 @@ namespace BTurk.Automation.Standard
             };
         }
 
-        protected override bool CanVisit(VisitPredicateContext context)
+        protected override bool CanAccept(DispatchPredicateContext context)
         {
             return IsVisualStudioContext(context.EnvironmentContext);
         }

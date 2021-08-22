@@ -2,9 +2,9 @@
 
 namespace BTurk.Automation.Core.Requests
 {
-    public class VisitPredicateContext
+    public class DispatchPredicateContext
     {
-        public VisitPredicateContext(string text, ActionType actionType, EnvironmentContext environmentContext)
+        public DispatchPredicateContext(string text, ActionType actionType, EnvironmentContext environmentContext)
         {
             Text = text;
             ActionType = actionType;

@@ -44,7 +44,7 @@ namespace BTurk.Automation.DependencyResolution
 
         public List<IRequest> Items { get; }
 
-        public IRequestVisitor RequestVisitor { get; set; }
+        public IRequestActionDispatcher Dispatcher { get; set; }
 
         public EnvironmentContext Context => EnvironmentContextProvider.Context;
 
@@ -198,7 +198,7 @@ namespace BTurk.Automation.DependencyResolution
             if (actionType == ActionType.MoveNext && !Items.Any() && SearchText.Trim().Length > 0)
                 return;
 
-            RequestVisitor.Visit(Steps.Last().Request, actionType);
+            Dispatcher.Dispatch(Steps.Last().Request, actionType);
 
             var selectedIndex = ListBox.SelectedIndex;
 

@@ -6,7 +6,7 @@ namespace BTurk.Automation.Core.Requests
     public interface IRequest
     {
         string Text { get; }
-        bool CanVisit(VisitPredicateContext context);
+        bool CanAccept(DispatchPredicateContext context);
         IEnumerable<Request> ChildRequests(EnvironmentContext context);
     }
 }

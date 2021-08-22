@@ -4,19 +4,19 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests
 {
-    public class RequestVisitor<TRequest> : IRequestVisitor<TRequest> where TRequest : class, IRequest
+    public class RequestActionDispatcher<TRequest> : IRequestActionDispatcher<TRequest> where TRequest : class, IRequest
     {
         private readonly ISearchEngine _searchEngine;
-        private readonly IRequestVisitor _requestVisitor;
+        private readonly IRequestActionDispatcher _dispatcher;
         private readonly IRequestExecutor<TRequest> _requestExecutor;
         private readonly IChildRequestsProvider _childRequestsProvider;
 
-        public RequestVisitor(ISearchEngine searchEngine, IRequestVisitor requestVisitor,
+        public RequestActionDispatcher(ISearchEngine searchEngine, IRequestActionDispatcher dispatcher,
             IChildRequestsProvider childRequestsProvider, IRequestExecutor<TRequest> requestExecutor)
         {
             _searchEngine = searchEngine;
             _requestExecutor = requestExecutor;
-            _requestVisitor = requestVisitor;
+            _dispatcher = dispatcher;
             _childRequestsProvider = childRequestsProvider;
         }
 
@@ -33,7 +33,7 @@ namespace BTurk.Automation.Core.Requests
             }
         }
 
-        public void Visit(TRequest request, ActionType actionType)
+        public void Dispatch(TRequest request, ActionType actionType)
         {
             if (actionType == ActionType.Execute)
                 OnExecute(request);
@@ -55,7 +55,7 @@ namespace BTurk.Automation.Core.Requests
 
             if (request != selectedRequest)
             {
-                VisitChild(selectedRequest, ActionType.Execute);
+                OnChildExecute(selectedRequest, ActionType.Execute);
                 return;
             }
 
@@ -85,10 +85,10 @@ namespace BTurk.Automation.Core.Requests
                 return;
             }
 
-            var visitableChild = GetVisitableChild(ActionType.MoveNext);
+            var child = GetVisitableChild(ActionType.MoveNext);
 
-            if (visitableChild != null)
-                VisitChild(visitableChild, ActionType.MoveNext);
+            if (child != null)
+                OnChildExecute(child, ActionType.MoveNext);
         }
 
         private void OnMoveNextWithNoChildren(TRequest request)
@@ -107,21 +107,21 @@ namespace BTurk.Automation.Core.Requests
 
         private IRequest GetVisitableChild(ActionType actionType)
         {
-            var context = new VisitPredicateContext(CurrentStep.Text, actionType, _searchEngine.Context);
+            var context = new DispatchPredicateContext(CurrentStep.Text, actionType, _searchEngine.Context);
 
             IRequest visitableChild = _searchEngine.SelectedItem;
 
-            if (visitableChild == null || _searchEngine.Items.Count > 1 || !visitableChild.CanVisit(context))
-                visitableChild = CurrentStep.Children.FirstOrDefault(_ => _.CanVisit(context));
+            if (visitableChild == null || _searchEngine.Items.Count > 1 || !visitableChild.CanAccept(context))
+                visitableChild = CurrentStep.Children.FirstOrDefault(_ => _.CanAccept(context));
 
             return visitableChild;
         }
 
-        private void VisitChild(IRequest child, ActionType actionType)
+        private void OnChildExecute(IRequest child, ActionType actionType)
         {
             var step = new SearchStep(child);
             _searchEngine.Steps.Add(step);
-            _requestVisitor.Visit(child, actionType);
+            _dispatcher.Dispatch(child, actionType);
         }
 
         private void OnMovePrevious()
@@ -129,18 +129,13 @@ namespace BTurk.Automation.Core.Requests
             if (CurrentStep.Text.Length == 0 && _searchEngine.Steps.Count > 2)
             {
                 RemoveLastStep();
-                VisitCurrentRequest(ActionType.MovePrevious);
+                _dispatcher.Dispatch(CurrentStep.Request, ActionType.MovePrevious);
             }
             else if (CurrentStep.Text.Length > 0)
             {
                 CurrentStep.Text = CurrentStep.Text.Remove(CurrentStep.Text.Length - 1);
-                VisitCurrentRequest(ActionType.MoveNext);
+                _dispatcher.Dispatch(CurrentStep.Request, ActionType.MoveNext);
             }
-        }
-
-        private void VisitCurrentRequest(ActionType actionType)
-        {
-            _requestVisitor.Visit(CurrentStep.Request, actionType);
         }
 
         private void RemoveLastStep()

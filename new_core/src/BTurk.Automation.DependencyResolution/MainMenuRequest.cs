@@ -24,7 +24,7 @@ namespace BTurk.Automation.DependencyResolution
             yield return new OpenWindowRequest();
         }
 
-        protected override bool CanVisit(VisitPredicateContext context)
+        protected override bool CanAccept(DispatchPredicateContext context)
         {
             return context.EnvironmentContext == EnvironmentContext.Empty;
         }

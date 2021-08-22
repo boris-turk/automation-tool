@@ -39,8 +39,8 @@ namespace BTurk.Automation.DependencyResolution
             if (type == typeof(IResourceProvider))
                 return GetOrCreateSingleton<JsonResourceProvider>();
 
-            if (type == typeof(IRequestVisitor))
-                return GetOrCreateSingleton<RequestVisitor>();
+            if (type == typeof(IRequestActionDispatcher))
+                return GetOrCreateSingleton<RequestActionDispatcher>();
 
             if (type == typeof(IEnvironmentContextProvider))
                 return GetOrCreateSingleton<EnvironmentContextProvider>();
@@ -57,8 +57,8 @@ namespace BTurk.Automation.DependencyResolution
             if (type.InheritsFrom(typeof(IRequestExecutor<>)))
                 return GetOpenGenericServiceInstance(type, GetRequestExecutorType);
 
-            if (type.InheritsFrom(typeof(IRequestVisitor<>)))
-                return GetOpenGenericServiceInstance(type, GetRequestVisitorType);
+            if (type.InheritsFrom(typeof(IRequestActionDispatcher<>)))
+                return GetOpenGenericServiceInstance(type, GetRequestActionDispatcherType);
 
             if (type.InheritsFrom(typeof(IEnumerable<>)))
                 return GetEnumerableInstance(type);
@@ -162,9 +162,9 @@ namespace BTurk.Automation.DependencyResolution
             return ClosedGenericTypeProvider.Get(typeof(IRequestsProvider<>), requestType);
         }
 
-        private static Type GetRequestVisitorType(Type requestType)
+        private static Type GetRequestActionDispatcherType(Type requestType)
         {
-            return typeof(RequestVisitor<>).MakeGenericType(requestType);
+            return typeof(RequestActionDispatcher<>).MakeGenericType(requestType);
         }
 
         private static Type GetRequestExecutorType(Type requestType)
@@ -174,7 +174,7 @@ namespace BTurk.Automation.DependencyResolution
 
         private static void InitializeMainForm(MainForm mainForm)
         {
-            mainForm.RequestVisitor = GetInstance<IRequestVisitor>();
+            mainForm.Dispatcher = GetInstance<IRequestActionDispatcher>();
             mainForm.EnvironmentContextProvider = GetInstance<IEnvironmentContextProvider>();
             mainForm.MessagePublisher = GetInstance<IMessagePublisher>();
         }
