@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
+using BTurk.Automation.Core.Commands;
 using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests
@@ -22,6 +23,8 @@ namespace BTurk.Automation.Core.Requests
 
         [DataMember(Name = "Text")]
         public string Text { get; set; }
+
+        public ICommand Command { get; protected set; }
 
         public Predicate<VisitPredicateContext> CanVisitPredicate { get; set; }
 

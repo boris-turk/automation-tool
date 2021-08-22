@@ -14,7 +14,7 @@ namespace BTurk.Automation.Standard
         {
             yield return new SelectionRequest<Repository>
             {
-                Selected = repository => repository.Log()
+                ChildExecuted = repository => repository.Log()
             };
         }
     }

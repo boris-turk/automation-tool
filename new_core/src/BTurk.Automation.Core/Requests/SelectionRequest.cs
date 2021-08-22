@@ -14,9 +14,11 @@ namespace BTurk.Automation.Core.Requests
             Text = text;
         }
 
-        public Action<TRequest> Selected { get; set; }
+        public Action<TRequest> ChildExecuted { get; set; }
 
-        public Action<TRequest> Unloaded { get; set; }
+        public Action<TRequest> ChildSelected { get; set; }
+
+        public Action<TRequest> ChildDeselected { get; set; }
 
         protected override bool CanVisit(VisitPredicateContext context)
         {

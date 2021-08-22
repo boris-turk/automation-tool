@@ -24,6 +24,15 @@ namespace BTurk.Automation.Core.Requests
 
         private List<IRequest> SearchItems => _searchEngine.Items;
 
+        private IRequest ParentRequest
+        {
+            get
+            {
+                var parentStep = _searchEngine.Steps.ElementAtOrDefault(_searchEngine.Steps.Count - 2);
+                return parentStep?.Request;
+            }
+        }
+
         public void Visit(TRequest request, ActionType actionType)
         {
             if (actionType == ActionType.Execute)
@@ -46,7 +55,7 @@ namespace BTurk.Automation.Core.Requests
 
             if (request != selectedRequest)
             {
-                _requestVisitor.Visit(selectedRequest, ActionType.Execute);
+                VisitChild(selectedRequest, ActionType.Execute);
                 return;
             }
 
@@ -60,11 +69,8 @@ namespace BTurk.Automation.Core.Requests
         {
             _requestExecutor.Execute(request);
 
-            var parentStep = _searchEngine.Steps.ElementAtOrDefault(_searchEngine.Steps.Count - 1);
-            var parentRequest = parentStep?.Request;
-
-            if (parentRequest is SelectionRequest<TRequest> selectionRequest)
-                selectionRequest.Selected?.Invoke(request);
+            if (ParentRequest is SelectionRequest<TRequest> selectionRequest)
+                selectionRequest.ChildExecuted.Invoke(request);
         }
 
         private void OnMoveNext(TRequest request)
@@ -75,17 +81,22 @@ namespace BTurk.Automation.Core.Requests
 
             if (!currentStep.Children.Any())
             {
-                RemoveLastStep();
-                Execute(request);
+                OnMoveNextWithNoChildren(request);
                 return;
             }
 
-            Execute(request);
-
-            var visitableChild = GetVisitableChild();
+            var visitableChild = GetVisitableChild(ActionType.MoveNext);
 
             if (visitableChild != null)
                 VisitChild(visitableChild, ActionType.MoveNext);
+        }
+
+        private void OnMoveNextWithNoChildren(TRequest request)
+        {
+            if (ParentRequest is SelectionRequest<TRequest> selectionRequest)
+                selectionRequest.ChildSelected?.Invoke(request);
+
+            RemoveLastStep();
         }
 
         private void LoadChildrenIfNecessary(TRequest request)
@@ -94,9 +105,9 @@ namespace BTurk.Automation.Core.Requests
                 CurrentStep.Children.AddRange(GetChildren(request));
         }
 
-        private IRequest GetVisitableChild()
+        private IRequest GetVisitableChild(ActionType actionType)
         {
-            var context = new VisitPredicateContext(CurrentStep.Text, ActionType.MoveNext, _searchEngine.Context);
+            var context = new VisitPredicateContext(CurrentStep.Text, actionType, _searchEngine.Context);
 
             IRequest visitableChild = _searchEngine.SelectedItem;
 

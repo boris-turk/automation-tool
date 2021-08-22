@@ -14,7 +14,7 @@ namespace BTurk.Automation.Standard
         {
             yield return new SelectionRequest<Solution>
             {
-                Selected = solution => solution.Open()
+                ChildExecuted = solution => solution.Open()
             };
         }
     }
