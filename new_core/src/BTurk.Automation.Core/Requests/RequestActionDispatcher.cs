@@ -70,7 +70,7 @@ namespace BTurk.Automation.Core.Requests
             Visit(request, Request.Null, ActionType.Execute);
         }
 
-        private void Visit(TRequest request, Request childRequest, ActionType actionType)
+        private void Visit(TRequest request, IRequest childRequest, ActionType actionType)
         {
             var properChildRequest = childRequest ?? Request.Null;
             var context = new RequestVisitContext(request, properChildRequest, actionType);
@@ -92,7 +92,7 @@ namespace BTurk.Automation.Core.Requests
             var child = GetVisitableChild(ActionType.MoveNext);
 
             if (child != null)
-                OnChildExecute(child, ActionType.MoveNext);
+                OnMoveToChild(request, child, ActionType.MoveNext);
         }
 
         private void OnMoveNextWithNoChildren(TRequest request)
@@ -121,10 +121,10 @@ namespace BTurk.Automation.Core.Requests
             return visitableChild;
         }
 
-        private void OnChildExecute(IRequest child, ActionType actionType)
+        private void OnMoveToChild(TRequest request, IRequest child, ActionType actionType)
         {
-            var step = new SearchStep(child);
-            _searchEngine.Steps.Add(step);
+            Visit(request, child, ActionType.MoveNext);
+            _searchEngine.Steps.Add(new SearchStep(child));
             _dispatcher.Dispatch(child, actionType);
         }
 
