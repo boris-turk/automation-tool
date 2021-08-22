@@ -12,6 +12,8 @@ namespace BTurk.Automation.Core.Requests
     [DebuggerDisplay("{" + nameof(RequestTypeName) + "}")]
     public class Request : IRequest
     {
+        public static readonly Request Null = new();
+
         public Request()
         {
         }

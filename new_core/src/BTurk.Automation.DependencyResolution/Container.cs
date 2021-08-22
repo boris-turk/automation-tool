@@ -42,6 +42,9 @@ namespace BTurk.Automation.DependencyResolution
             if (type == typeof(IRequestActionDispatcher))
                 return GetOrCreateSingleton<RequestActionDispatcher>();
 
+            if (type == typeof(IRequestVisitor))
+                return GetOrCreateSingleton<RequestVisitor>();
+
             if (type == typeof(IEnvironmentContextProvider))
                 return GetOrCreateSingleton<EnvironmentContextProvider>();
 
@@ -59,6 +62,9 @@ namespace BTurk.Automation.DependencyResolution
 
             if (type.InheritsFrom(typeof(IRequestActionDispatcher<>)))
                 return GetOpenGenericServiceInstance(type, GetRequestActionDispatcherType);
+
+            if (type.InheritsFrom(typeof(IRequestVisitor<,>)))
+                return GetOpenGenericServiceInstance(type, GetRequestVisitorType);
 
             if (type.InheritsFrom(typeof(IEnumerable<>)))
                 return GetEnumerableInstance(type);
@@ -133,8 +139,24 @@ namespace BTurk.Automation.DependencyResolution
         {
             object Create()
             {
-                var requestType = openGenericType.GetGenericArguments()[0];
-                var implementorType = implementorTypeProvider.Invoke(requestType);
+                var argumentType = openGenericType.GetGenericArguments()[0];
+                var implementorType = implementorTypeProvider.Invoke(argumentType);
+                return CreateInstance(implementorType);
+            }
+
+            var instance = GetOrCreateSingleton(openGenericType, Create);
+
+            return instance;
+        }
+
+        private static object GetOpenGenericServiceInstance(
+            Type openGenericType, Func<Type, Type, Type> implementorTypeProvider)
+        {
+            object Create()
+            {
+                var argumentType0 = openGenericType.GetGenericArguments()[0];
+                var argumentType1 = openGenericType.GetGenericArguments()[1];
+                var implementorType = implementorTypeProvider.Invoke(argumentType0, argumentType1);
                 return CreateInstance(implementorType);
             }
 
@@ -165,6 +187,19 @@ namespace BTurk.Automation.DependencyResolution
         private static Type GetRequestActionDispatcherType(Type requestType)
         {
             return typeof(RequestActionDispatcher<>).MakeGenericType(requestType);
+        }
+
+        private static Type GetRequestVisitorType(Type requestType, Type childRequestType)
+        {
+            if (requestType.InheritsFrom(typeof(SelectionRequest<>)))
+            {
+                var parentClosedGeneric = requestType.FindAllParentClosedGenerics(typeof(SelectionRequest<>)).Single();
+
+                if (parentClosedGeneric.GetGenericArguments()[0] == childRequestType)
+                    return typeof(SelectionRequestVisitor<>).MakeGenericType(childRequestType);
+            }
+
+            return typeof(DefaultRequestVisitor<,>).MakeGenericType(requestType, childRequestType);
         }
 
         private static Type GetRequestExecutorType(Type requestType)

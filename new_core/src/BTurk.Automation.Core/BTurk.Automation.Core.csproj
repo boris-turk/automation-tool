@@ -62,10 +62,13 @@
     <Compile Include="Requests\AhkSendRequest.cs" />
     <Compile Include="Requests\AhkSendRequestExecutor.cs" />
     <Compile Include="Requests\DefaultRequestExecutor.cs" />
+    <Compile Include="Requests\DefaultRequestVisitor.cs" />
     <Compile Include="Requests\IChildRequestsProvider.cs" />
     <Compile Include="Requests\IRequest.cs" />
+    <Compile Include="Requests\IRequestVisitor.cs" />
     <Compile Include="Requests\ISelectionRequest.cs" />
     <Compile Include="Requests\RequestActionDispatcher.cs" />
+    <Compile Include="Requests\RequestVisitContext.cs" />
     <Compile Include="Requests\SelectionRequest.cs" />
     <Compile Include="Requests\EmptyRequestProvider.cs" />
     <Compile Include="Requests\IFileRequest.cs" />
@@ -73,6 +76,7 @@
     <Compile Include="Requests\IRequestActionDispatcher.cs" />
     <Compile Include="Requests\IRequestsProvider.cs" />
     <Compile Include="Requests\DispatchPredicateContext.cs" />
+    <Compile Include="Requests\SelectionRequestVisitor.cs" />
     <Compile Include="SearchEngine\ActionType.cs" />
     <Compile Include="SearchEngine\EnvironmentContext.cs" />
     <Compile Include="SearchEngine\EnvironmentContextProvider.cs" />

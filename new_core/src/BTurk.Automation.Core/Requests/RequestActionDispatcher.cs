@@ -6,16 +6,16 @@ namespace BTurk.Automation.Core.Requests
 {
     public class RequestActionDispatcher<TRequest> : IRequestActionDispatcher<TRequest> where TRequest : class, IRequest
     {
+        private readonly IRequestVisitor _visitor;
         private readonly ISearchEngine _searchEngine;
         private readonly IRequestActionDispatcher _dispatcher;
-        private readonly IRequestExecutor<TRequest> _requestExecutor;
         private readonly IChildRequestsProvider _childRequestsProvider;
 
-        public RequestActionDispatcher(ISearchEngine searchEngine, IRequestActionDispatcher dispatcher,
-            IChildRequestsProvider childRequestsProvider, IRequestExecutor<TRequest> requestExecutor)
+        public RequestActionDispatcher(IRequestVisitor visitor, ISearchEngine searchEngine,
+            IRequestActionDispatcher dispatcher, IChildRequestsProvider childRequestsProvider)
         {
+            _visitor = visitor;
             _searchEngine = searchEngine;
-            _requestExecutor = requestExecutor;
             _dispatcher = dispatcher;
             _childRequestsProvider = childRequestsProvider;
         }
@@ -55,7 +55,7 @@ namespace BTurk.Automation.Core.Requests
 
             if (request != selectedRequest)
             {
-                OnChildExecute(selectedRequest, ActionType.Execute);
+                Visit(request, selectedRequest, ActionType.Execute);
                 return;
             }
 
@@ -67,10 +67,17 @@ namespace BTurk.Automation.Core.Requests
 
         private void Execute(TRequest request)
         {
-            _requestExecutor.Execute(request);
+            Visit(request, Request.Null, ActionType.Execute);
 
             if (ParentRequest is SelectionRequest<TRequest> selectionRequest)
                 selectionRequest.ChildExecuted.Invoke(request);
+        }
+
+        private void Visit(TRequest request, Request childRequest, ActionType actionType)
+        {
+            var properChildRequest = childRequest ?? Request.Null;
+            var context = new RequestVisitContext(request, properChildRequest, actionType);
+            _visitor.Visit(context);
         }
 
         private void OnMoveNext(TRequest request)
