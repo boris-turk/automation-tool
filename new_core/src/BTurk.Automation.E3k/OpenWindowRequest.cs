@@ -10,9 +10,9 @@ namespace BTurk.Automation.E3k
         {
         }
 
-        public IEnumerable<Request> GetRequests(EnvironmentContext context)
+        public IEnumerable<IRequest> GetRequests(EnvironmentContext context)
         {
-            yield return new SelectionRequest<Module>
+            yield return new SelectionRequest<Module>()
             {
                 //Selected = solution => solution.Open()
             };

@@ -10,7 +10,7 @@ namespace BTurk.Automation.Standard
         {
         }
 
-        public IEnumerable<Request> GetRequests(EnvironmentContext context)
+        public IEnumerable<IRequest> GetRequests(EnvironmentContext context)
         {
             if (!IsVisualStudioContext(context))
                 yield break;

@@ -202,6 +202,10 @@ namespace BTurk.Automation.DependencyResolution
                 if (parentClosedGeneric.GetGenericArguments()[0] == childRequestType)
                     return typeof(SelectionRequestVisitor<>).MakeGenericType(childRequestType);
             }
+            else if (requestType.InheritsFrom(typeof(OptionRequest)))
+            {
+                return typeof(OptionRequestVisitor<>).MakeGenericType(childRequestType);
+            }
 
             return typeof(DefaultRequestVisitor<,>).MakeGenericType(requestType, childRequestType);
         }

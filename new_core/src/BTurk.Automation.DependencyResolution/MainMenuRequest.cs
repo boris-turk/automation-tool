@@ -12,7 +12,7 @@ namespace BTurk.Automation.DependencyResolution
         {
         }
 
-        public IEnumerable<Request> GetRequests(EnvironmentContext context)
+        public IEnumerable<IRequest> GetRequests(EnvironmentContext context)
         {
             if (context != EnvironmentContext.Empty)
                 yield break;

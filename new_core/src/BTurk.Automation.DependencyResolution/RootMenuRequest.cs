@@ -11,7 +11,7 @@ namespace BTurk.Automation.DependencyResolution
         {
         }
 
-        public IEnumerable<Request> GetRequests(EnvironmentContext context)
+        public IEnumerable<IRequest> GetRequests(EnvironmentContext context)
         {
             yield return new MainMenuRequest();
             yield return new VisualStudioRequest();
