@@ -33,7 +33,7 @@ namespace BTurk.Automation.DependencyResolution
             return collection.Get(argumentType);
         }
 
-        public void Register(Type openGenericServiceType, Type fallbackOpenGenericServiceType)
+        public void Register(Type openGenericServiceType, Type fallbackOpenGenericServiceType = null)
         {
             if (!openGenericServiceType.IsGenericTypeDefinition)
                 throw new Exception($"Not a generic type definition: {openGenericServiceType.FullName}");
@@ -73,6 +73,12 @@ namespace BTurk.Automation.DependencyResolution
 
                 if (candidate != null)
                     return candidate;
+
+                if (_fallbackOpenGenericType == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Could not retrieve implementation for service {_openGenericType.FullName}");
+                }
 
                 return _fallbackOpenGenericType.MakeGenericType(argumentType);
             }

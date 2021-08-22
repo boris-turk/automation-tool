@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IResourceProvider.cs" />
     <Compile Include="Messages\CompositeMessageHandler.cs" />
@@ -60,8 +61,7 @@
     <Compile Include="Messages\ShowingAutomationWindowMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AhkSendRequest.cs" />
-    <Compile Include="Requests\AhkSendRequestExecutor.cs" />
-    <Compile Include="Requests\DefaultRequestExecutor.cs" />
+    <Compile Include="Requests\AhkSendCommandHandler.cs" />
     <Compile Include="Requests\DefaultRequestVisitor.cs" />
     <Compile Include="Requests\IChildRequestsProvider.cs" />
     <Compile Include="Requests\IRequest.cs" />
@@ -72,7 +72,7 @@
     <Compile Include="Requests\SelectionRequest.cs" />
     <Compile Include="Requests\EmptyRequestProvider.cs" />
     <Compile Include="Requests\IFileRequest.cs" />
-    <Compile Include="Requests\IRequestExecutor.cs" />
+    <Compile Include="Requests\ICommandProcessor.cs" />
     <Compile Include="Requests\IRequestActionDispatcher.cs" />
     <Compile Include="Requests\IRequestsProvider.cs" />
     <Compile Include="Requests\DispatchPredicateContext.cs" />

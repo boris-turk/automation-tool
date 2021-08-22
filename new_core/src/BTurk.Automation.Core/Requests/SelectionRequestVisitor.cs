@@ -7,8 +7,11 @@ namespace BTurk.Automation.Core.Requests
     {
         public void Visit(RequestVisitContext<SelectionRequest<TChild>, TChild> context)
         {
-            if (context.ActionType == ActionType.Execute)
-                context.Request.ChildExecuted?.Invoke(context.ChildRequest);
+            if (context.ActionType == ActionType.MoveNext)
+                context.Request.ChildSelected?.Invoke(context.ChildRequest);
+
+            if (context.ActionType == ActionType.MovePrevious)
+                context.Request.ChildDeselected?.Invoke(context.ChildRequest);
         }
     }
 }

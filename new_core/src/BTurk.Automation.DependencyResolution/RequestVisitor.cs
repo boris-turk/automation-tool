@@ -17,8 +17,9 @@ namespace BTurk.Automation.DependencyResolution
             where TRequest : IRequest
             where TChild : IRequest
         {
+            var properContext = context.CastTo<TRequest, TChild>();
             var visitor = Container.GetInstance<IRequestVisitor<TRequest, TChild>>();
-            visitor.Visit(context.CastTo<TRequest, TChild>());
+            visitor.Visit(properContext);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using BTurk.Automation.Core;
+using BTurk.Automation.Core.Commands;
 using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
@@ -51,14 +52,17 @@ namespace BTurk.Automation.DependencyResolution
             if (type == typeof(IMessagePublisher))
                 return GetOrCreateSingleton<MessagePublisher>();
 
+            if (type.InheritsFrom(typeof(ICommandProcessor)))
+                return GetOrCreateSingleton<CommandProcessor>();
+
             if (type.InheritsFrom(typeof(IMessageHandler<>)))
                 return GetOpenGenericServiceInstance(type, GetCompositeMessageHandlerType);
 
             if (type.InheritsFrom(typeof(IRequestsProvider<>)))
                 return GetOpenGenericServiceInstance(type, GetRequestProviderType);
 
-            if (type.InheritsFrom(typeof(IRequestExecutor<>)))
-                return GetOpenGenericServiceInstance(type, GetRequestExecutorType);
+            if (type.InheritsFrom(typeof(ICommandHandler<>)))
+                return GetOpenGenericServiceInstance(type, GetCommandHandlerType);
 
             if (type.InheritsFrom(typeof(IRequestActionDispatcher<>)))
                 return GetOpenGenericServiceInstance(type, GetRequestActionDispatcherType);
@@ -202,9 +206,9 @@ namespace BTurk.Automation.DependencyResolution
             return typeof(DefaultRequestVisitor<,>).MakeGenericType(requestType, childRequestType);
         }
 
-        private static Type GetRequestExecutorType(Type requestType)
+        private static Type GetCommandHandlerType(Type commandType)
         {
-            return ClosedGenericTypeProvider.Get(typeof(IRequestExecutor<>), requestType);
+            return ClosedGenericTypeProvider.Get(typeof(ICommandHandler<>), commandType);
         }
 
         private static void InitializeMainForm(MainForm mainForm)
@@ -308,7 +312,7 @@ namespace BTurk.Automation.DependencyResolution
         private static void RegisterOpenGenericTypes()
         {
             ClosedGenericTypeProvider.Register(typeof(IRequestsProvider<>), typeof(EmptyRequestProvider<>));
-            ClosedGenericTypeProvider.Register(typeof(IRequestExecutor<>), typeof(DefaultRequestExecutor<>));
+            ClosedGenericTypeProvider.Register(typeof(ICommandHandler<>));
         }
     }
 }
