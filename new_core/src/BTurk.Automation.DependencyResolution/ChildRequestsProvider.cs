@@ -40,7 +40,10 @@ namespace BTurk.Automation.DependencyResolution
             var provider = Container.GetInstance<IRequestsProvider<TRequest>>();
 
             foreach (var request in provider.GetRequests())
+            {
+                collectionRequest.OnLoaded(request);
                 yield return request;
+            }
         }
 
         private Type GetCollectionElementType(IRequest request)

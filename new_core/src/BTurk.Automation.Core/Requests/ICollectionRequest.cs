@@ -8,8 +8,8 @@ namespace BTurk.Automation.Core.Requests
         IEnumerable<IRequest> GetRequests(EnvironmentContext context);
     }
 
-    public interface ICollectionRequest<TRequest> where TRequest : IRequest
+    public interface ICollectionRequest<in TRequest> where TRequest : IRequest
     {
-        IEnumerable<TRequest> GetRequests(IRequestsProvider<TRequest> provider);
+        void OnLoaded(TRequest childRequest);
     }
 }

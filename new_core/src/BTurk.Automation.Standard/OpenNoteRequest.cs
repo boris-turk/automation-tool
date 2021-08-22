@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using BTurk.Automation.Core.Requests;
+﻿using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Standard
 {
@@ -9,13 +8,9 @@ namespace BTurk.Automation.Standard
         {
         }
 
-        public IEnumerable<Note> GetRequests(IRequestsProvider<Note> provider)
+        void ICollectionRequest<Note>.OnLoaded(Note note)
         {
-            foreach (var request in provider.GetRequests())
-            {
-                request.Command = null; //request.Open();
-                yield return request;
-            }
+            note.Command = null; //request.Open();
         }
     }
 }

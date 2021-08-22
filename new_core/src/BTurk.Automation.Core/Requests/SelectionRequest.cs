@@ -15,6 +15,6 @@ namespace BTurk.Automation.Core.Requests
             return context.ActionType == ActionType.Execute || context.ActionType == ActionType.MoveNext;
         }
 
-        public IEnumerable<TRequest> GetRequests(IRequestsProvider<TRequest> provider) => provider.GetRequests();
+        void ICollectionRequest<TRequest>.OnLoaded(TRequest childRequest) { }
     }
 }

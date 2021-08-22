@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using BTurk.Automation.Core.Requests;
+﻿using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Standard
 {
@@ -9,13 +8,9 @@ namespace BTurk.Automation.Standard
         {
         }
 
-        public IEnumerable<Repository> GetRequests(IRequestsProvider<Repository> provider)
+        void ICollectionRequest<Repository>.OnLoaded(Repository repository)
         {
-            foreach (var repository in provider.GetRequests())
-            {
-                repository.Command = new CommitRepositoryCommand(repository);
-                yield return repository;
-            }
+            repository.Command = new CommitRepositoryCommand(repository);
         }
     }
 }
