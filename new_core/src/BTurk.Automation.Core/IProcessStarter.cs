@@ -2,6 +2,6 @@
 {
     public interface IProcessStarter
     {
-        void Start(string fileName, string arguments);
+        void Start(string fileName, string arguments = null);
     }
 }

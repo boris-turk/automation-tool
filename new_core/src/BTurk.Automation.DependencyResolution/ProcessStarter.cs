@@ -7,7 +7,10 @@ namespace BTurk.Automation.DependencyResolution
     {
         public void Start(string fileName, string arguments)
         {
-            Process.Start(fileName, arguments);
+            if (arguments == null)
+                Process.Start(fileName);
+            else
+                Process.Start(fileName, arguments);
         }
     }
 }

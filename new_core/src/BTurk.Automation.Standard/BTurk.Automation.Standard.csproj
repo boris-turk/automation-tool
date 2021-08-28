@@ -53,6 +53,8 @@
     <Compile Include="Note.cs" />
     <Compile Include="NotesProvider.cs" />
     <Compile Include="OpenNoteRequest.cs" />
+    <Compile Include="OpenWithDefaultProgramCommand.cs" />
+    <Compile Include="OpenWithDefaultProgramCommandHandler.cs" />
     <Compile Include="RepositoryCommand.cs" />
     <Compile Include="ShowRepositoryLogCommand.cs" />
     <Compile Include="ShowRepositoryLogCommandHandler.cs" />
