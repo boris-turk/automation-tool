@@ -22,6 +22,7 @@ namespace BTurk.Automation.DependencyResolution
             yield return new OpenSolutionRequest();
             yield return new OpenNoteRequest();
             yield return new OpenWindowRequest();
+            yield return new UrlCollectionRequest();
         }
 
         protected override bool CanAccept(DispatchPredicateContext context)

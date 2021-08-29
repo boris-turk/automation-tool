@@ -1,0 +1,646 @@
+[
+  {
+    "Text": "xlab webmail",
+    "Url": "https://zimbra2.xlab.si"
+  },
+  {
+    "Text": "gmail",
+    "Url": "http://www.gmail.com"
+  },
+  {
+    "Text": "24 ur",
+    "Url": "https://www.24ur.com"
+  },
+  {
+    "Text": "XLAB marketing / presentation material",
+    "Url": "https://drive.google.com/drive/folders/0B6CSfSQ-DhLUeVRaaWxyUWpMYUk"
+  },
+  {
+    "Text": "e3k - refactoring old code",
+    "Url": "https://docs.google.com/document/d/1-T_yfQ-86dSwF2oDid3ZqcsohW8m20iBnE7f-1uWj-4/edit#heading=h.2gazcsgmxkub"
+  },
+  {
+    "Text": "banka",
+    "Url": "https://bankanet.nkbm.si/"
+  },
+  {
+    "Text": "e3k jira",
+    "Url": "http://track.europa3000.ch:8080/secure/Dashboard.jspa"
+  },
+  {
+    "Text": "jira markup",
+    "Url": "https://jira.atlassian.com/secure/WikiRendererHelpAction.jspa?section=texteffects"
+  },
+  {
+    "Text": "e3k hub",
+    "Url": "https://e3k-dev.xlab.si/"
+  },
+  {
+    "Text": "e3k future net",
+    "Url": "https://futurenet.europa3000.ch/"
+  },
+  {
+    "Text": "e3k continuous integration",
+    "Url": "https://e3k-devops.xlab.si/DefaultCollection/europa3000"
+  },
+  {
+    "Text": "e3k Modernization",
+    "Url": "http://track.europa3000.ch:8080/secure/RapidBoard.jspa?rapidView=45&amp;view=detail&amp;selectedIssue=MOD3-8"
+  },
+  {
+    "Text": "e3k confluence - modernization",
+    "Url": "http://track.europa3000.ch:8090/display/EUR3000/Modernisierung"
+  },
+  {
+    "Text": "e3k jenkins",
+    "Url": "http://e3k-build01.lan.europa3000.ch:8082/"
+  },
+  {
+    "Text": "e3k jaap nve issues",
+    "Url": "http://track.europa3000.ch:8090/pages/viewpageattachments.action?pageId=11011470&amp;metadataLink=true"
+  },
+  {
+    "Text": "e3k confluence - development",
+    "Url": "http://track.europa3000.ch:8090/display/E3000W/Development"
+  },
+  {
+    "Text": "Work plan",
+    "Url": "https://goo.gl/wRhK9Q"
+  },
+  {
+    "Text": "Xlab wiki",
+    "Url": "https://wiki.xlab.si"
+  },
+  {
+    "Text": "Xlab research svn",
+    "Url": "https://rep-isl.xlab.si/svn/xlab/research/"
+  },
+  {
+    "Text": "Podnapisi",
+    "Url": "https://www.podnapisi.net/"
+  },
+  {
+    "Text": "e3k old europa3000",
+    "Url": "http://old.europa3000.ch/"
+  },
+  {
+    "Text": "e3k wiki trac",
+    "Url": "https://e3k.xlab.si/trac/"
+  },
+  {
+    "Text": "AHK ControlGet Windows 7",
+    "Url": "http://www.autohotkey.com/forum/topic50654.html"
+  },
+  {
+    "Text": "MsSql - data types",
+    "Url": "http://msdn.microsoft.com/en-us/library/ms187752.aspx"
+  },
+  {
+    "Text": "MsSql - query fundamentals",
+    "Url": "http://msdn.microsoft.com/en-us/library/ms190659.aspx"
+  },
+  {
+    "Text": "MsSql - views",
+    "Url": "http://msdn.microsoft.com/en-us/library/ms190706.aspx"
+  },
+  {
+    "Text": "MsSql - system schema",
+    "Url": "http://msdn.microsoft.com/en-us/library/ms186778.aspx"
+  },
+  {
+    "Text": "VS extending visual studio",
+    "Url": "http://msdn.microsoft.com/en-us/library/esk3eey8(v=VS.90).aspx"
+  },
+  {
+    "Text": "debug .net framework",
+    "Url": "http://blogs.msdn.com/b/sburke/archive/2008/01/16/configuring-visual-studio-to-debug-net-framework-source-code.aspx"
+  },
+  {
+    "Text": "excel OLAP",
+    "Url": "http://office.microsoft.com/en-us/excel-help/CH010064853.aspx"
+  },
+  {
+    "Text": "VS tell file reference from project reference",
+    "Url": "http://stackoverflow.com/questions/4227583/in-visual-studio-programming-net-how-can-i-tell-a-file-reference-from-a-projec"
+  },
+  {
+    "Text": "VS structuring solutions / projects, managing dependencies",
+    "Url": "http://msdn.microsoft.com/en-us/library/ee817679.aspx"
+  },
+  {
+    "Text": "AHK main documentation",
+    "Url": "http://www.autohotkey.com/docs/"
+  },
+  {
+    "Text": "AHK docs hotkeys",
+    "Url": "http://www.autohotkey.com/docs/Hotkeys.htm"
+  },
+  {
+    "Text": "AHK docs newbies tutorial",
+    "Url": "http://www.autohotkey.com/forum/viewtopic.php?t=47791"
+  },
+  {
+    "Text": "AHK docs ifelse",
+    "Url": "http://www.autohotkey.com/docs/commands/IfEqual.htm"
+  },
+  {
+    "Text": "AHK docs hotstrings",
+    "Url": "http://www.autohotkey.com/docs/Hotstrings.htm"
+  },
+  {
+    "Text": "AHK docs command reference",
+    "Url": "http://www.autohotkey.com/docs/commands.htm"
+  },
+  {
+    "Text": "AHK docs keylist",
+    "Url": "http://www.autohotkey.com/docs/KeyList.htm"
+  },
+  {
+    "Text": "AHK docs builtin variables",
+    "Url": "http://www.autohotkey.com/docs/Variables.htm#BuiltIn"
+  },
+  {
+    "Text": "AHK docs gui",
+    "Url": "http://www.autohotkey.com/docs/commands/Gui.htm"
+  },
+  {
+    "Text": "torrent search",
+    "Url": "https://thepiratebay.org"
+  },
+  {
+    "Text": "developing for android with eclipse",
+    "Url": "http://mashable.com/2010/09/16/android-comscore-july-2010/"
+  },
+  {
+    "Text": "android documentation",
+    "Url": "http://developer.android.com/guide/index.html"
+  },
+  {
+    "Text": "sysinternals stuxnet virus",
+    "Url": "http://blogs.technet.com/b/markrussinovich/archive/2011/03/30/3416253.aspx"
+  },
+  {
+    "Text": "sysinternals mark russinovich blog",
+    "Url": "http://blogs.technet.com/b/markrussinovich/"
+  },
+  {
+    "Text": "eiffel base source code",
+    "Url": "http://docs.eiffel.com/static/libraries/"
+  },
+  {
+    "Text": "eiffel tutorial",
+    "Url": "http://docs.eiffel.com/book/method/eiffel-tutorial-et"
+  },
+  {
+    "Text": "e3k ftp",
+    "Url": "ftp://ftp.europa3000.ch/"
+  },
+  {
+    "Text": "books Robert C. Martin: Open-Closed Principle",
+    "Url": "http://www.objectmentor.com/resources/articles/ocp.pdf"
+  },
+  {
+    "Text": "books Robert C. Martin: Dependency Inversion Principle",
+    "Url": "http://www.objectmentor.com/resources/articles/dip.pdf"
+  },
+  {
+    "Text": "books Robert C. Martin: Liskov Substitution Principle",
+    "Url": "http://www.objectmentor.com/resources/articles/lsp.pdf"
+  },
+  {
+    "Text": "MSDN Magazine: tame dependencies",
+    "Url": "-||- http://msdn.microsoft.com/en-us/magazine/cc337885.aspx"
+  },
+  {
+    "Text": "Web application - classroom courses",
+    "Url": "http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=WebApplications"
+  },
+  {
+    "Text": "Map a Network Drive",
+    "Url": "http://windows.microsoft.com/en-US/windows7/Create-a-shortcut-to-map-a-network-drive"
+  },
+  {
+    "Text": "home drawing cartoons",
+    "Url": "http://www.how-to-draw-cartoons-online.com/"
+  },
+  {
+    "Text": "same font size on all computers",
+    "Url": "http://stackoverflow.com/questions/3041081/how-can-i-force-a-winforms-app-to-use-the-fonts-fontsizes-i-specify-on-every-mac"
+  },
+  {
+    "Text": "Home Hanselman: cool tool list",
+    "Url": "http://www.hanselman.com/blog/"
+  },
+  {
+    "Text": "ReSharper documentation",
+    "Url": "http://www.jetbrains.com/resharper/webhelp/Introduction__Help_on_Help.html"
+  },
+  {
+    "Text": "poslovno sporazumevanje",
+    "Url": "http://www.impletum.zavod-irc.si/docs/Skriti_dokumenti/Poslovno_sporazumevanje_v_slovenskem_jeziku-Milavec.pdf"
+  },
+  {
+    "Text": "2D barcode online reader",
+    "Url": "http://zxing.org/w/decode.jspx"
+  },
+  {
+    "Text": "Resharper Videos",
+    "Url": "http://tv.jetbrains.net/channel/resharper"
+  },
+  {
+    "Text": "Form Layout and Performance",
+    "Url": "http://blogs.msdn.com/b/jfoscoding/archive/2005/03/04/385625.aspx"
+  },
+  {
+    "Text": "wm constants",
+    "Url": "http://www.pinvoke.net/default.aspx/Constants.WM"
+  },
+  {
+    "Text": "IBM DB2/400, i5/OS",
+    "Url": "http://publib.boulder.ibm.com/infocenter/iseries/v5r4/index.jsp?topic=%2Frzaik%2Frzaikdotnetprovider.htm"
+  },
+  {
+    "Text": "Integrating DB2 UDB for iSeries with MS ADO.NET",
+    "Url": "http://www.redbooks.ibm.com/redbooks/SG246440/wwhelp/wwhimpl/js/html/wwhelp.htm"
+  },
+  {
+    "Text": "ahk forum",
+    "Url": "http://www.autohotkey.com/community/"
+  },
+  {
+    "Text": "Movies by genre",
+    "Url": "http://www.jinni.com/"
+  },
+  {
+    "Text": "youtube",
+    "Url": "http://www.youtube.com/"
+  },
+  {
+    "Text": "office word excel online (skydrive)",
+    "Url": "https://skydrive.live.com/"
+  },
+  {
+    "Text": "ANTS performance profiler documentation",
+    "Url": "http://www.red-gate.com/supportcenter/Content/ANTS_Performance_Profiler/help/7.3/app_getting_started"
+  },
+  {
+    "Text": "zanimivo jquery fundamentals",
+    "Url": "http://jqfundamentals.com/chapter/jquery-basics"
+  },
+  {
+    "Text": "dropbox",
+    "Url": "https://www.dropbox.com/"
+  },
+  {
+    "Text": "Miha Stopar - blog",
+    "Url": "http://theworldofyesterday.net/"
+  },
+  {
+    "Text": "unit tests",
+    "Url": "http://www.codeproject.com/Articles/44276/Unit-Testing-and-Integration-Testing-in-Business-A"
+  },
+  {
+    "Text": "units converter",
+    "Url": "http://www.unitconversion.org/unit_converter/typography-ex.html"
+  },
+  {
+    "Text": "DSL engineering (JetBrains MPS)",
+    "Url": "http://dslbook.org/"
+  },
+  {
+    "Text": "Rabljeni racunalniki",
+    "Url": "http://www.bbt.si/"
+  },
+  {
+    "Text": "Aspose old dll",
+    "Url": "http://www.aspose.com/community/files/default.aspx"
+  },
+  {
+    "Text": "external component has thrown an exception",
+    "Url": "http://social.msdn.microsoft.com/Forums/en-US/winforms/thread/55920d31-1e06-4bbb-9a4d-b7e3bf4cc03c/"
+  },
+  {
+    "Text": "Windsor Castle",
+    "Url": "http://docs.castleproject.org/Windsor.MainPage.ashx"
+  },
+  {
+    "Text": "Azure Localhost",
+    "Url": "http://localhost/Connector/Help"
+  },
+  {
+    "Text": "Command Pattern",
+    "Url": "http://www.cuttingedge.it/blogs/steven/pivot/entry.php?id=91"
+  },
+  {
+    "Text": "Service timeout (registry)",
+    "Url": "http://biatlink.wordpress.com/2013/04/29/sql-server-request-failed-or-the-service-did-not-respond-in-a-timely-fashion/"
+  },
+  {
+    "Text": "KeyIt Socialcast",
+    "Url": "https://abak-si.socialcast.com/groups/101944-keyit"
+  },
+  {
+    "Text": "Google Calendar API",
+    "Url": "https://developers.google.com/google-apps/calendar/v3/reference/"
+  },
+  {
+    "Text": "Free Icons",
+    "Url": "https://www.iconfinder.com/icons/85307/edit_file_icon#size=32"
+  },
+  {
+    "Text": "Vista .Net Framework update (patch)",
+    "Url": "http://www.microsoft.com/en-gb/download/details.aspx?id=3556"
+  },
+  {
+    "Text": "Google Developer Console",
+    "Url": "https://console.developers.google.com/project"
+  },
+  {
+    "Text": "Google Calendar",
+    "Url": "https://www.google.com/calendar/render"
+  },
+  {
+    "Text": "Google Contacts",
+    "Url": "https://www.google.com/contacts/#contacts"
+  },
+  {
+    "Text": "Refactoring",
+    "Url": "http://sourcemaking.com/refactoring"
+  },
+  {
+    "Text": "koofr",
+    "Url": "https://app.koofr.net"
+  },
+  {
+    "Text": "Game of Thrones podnapisi",
+    "Url": "www.podnapisi.net/sl/ppodnapisi/search?sT=1&amp;sM=439704&amp;sJ=2%2C1&amp;sK=Game+of+Thrones&amp;sTS=1&amp;sTE=1"
+  },
+  {
+    "Text": "git reference",
+    "Url": "http://gitref.org/remotes/#remote"
+  },
+  {
+    "Text": "pro git book",
+    "Url": "http://git-scm.com/book/en"
+  },
+  {
+    "Text": "radio swisspop",
+    "Url": "http://tunein.com/radio/Radio-Swiss-Pop-s25243/"
+  },
+  {
+    "Text": "DPI explained",
+    "Url": "http://www.webdesignerdepot.com/2010/02/the-myth-of-dpi/"
+  },
+  {
+    "Text": "WinForms layout engines",
+    "Url": "https://msdn.microsoft.com/en-us/library/ms973821.aspx?f=255&amp;MSPPError=-2147217396"
+  },
+  {
+    "Text": "Winforms Layout examples",
+    "Url": "http://dotnet.jku.at/projects/slm/"
+  },
+  {
+    "Text": "Google search",
+    "Url": "http://www.google.com"
+  },
+  {
+    "Text": "NLog custom context variables",
+    "Url": "http://www.bfcamara.com/post/67752957760/nlog-how-to-include-custom-context-variables-in"
+  },
+  {
+    "Text": "github slo fiskalizacija",
+    "Url": "https://github.com/MPrtenjak/SLOTax"
+  },
+  {
+    "Text": "slo fiskalizacija tehnicna dokumentacija - pdf",
+    "Url": "http://www.datoteke.fu.gov.si/dpr/files/TehnicnaDokumentacijaVer1.6.pdf"
+  },
+  {
+    "Text": "slo fiskalizacija tehnicna dokumentacija - kazalo",
+    "Url": "https://edavki.durs.si/EdavkiPortal/OpenPortal/CommonPages/Opdynp/PageD.aspx?category=dpr_teh_spec"
+  },
+  {
+    "Text": "slo fiskalizacija - pravilnik o izvajanju Zakona",
+    "Url": "http://www.pisrs.si/Pis.web/pregledPredpisa?id=PRAV12531"
+  },
+  {
+    "Text": "slo fiskalizacija - splosno, nadzor in prekrski",
+    "Url": "http://www.fu.gov.si/fileadmin/Internet/Nadzor/Podrocja/Davcne_blagajne_in_VKR/Opis/Davcne_blagajne_-_splosno_nadzor_in_prekrski.pdf"
+  },
+  {
+    "Text": "slo fiskalizacija - Zavezanec po Zakonu o davčnem potrjevanju računov",
+    "Url": "http://www.fu.gov.si/fileadmin/Internet/Nadzor/Podrocja/Davcne_blagajne_in_VKR/Opis/Davcne_blagajne_-_zavezanec_po_Zakonu_o_davcnem_potrjevanju_racunov_ZDavPR.pdf"
+  },
+  {
+    "Text": "slo fiskalizacija - postopki potrjevanja",
+    "Url": "http://www.fu.gov.si/fileadmin/Internet/Nadzor/Podrocja/Davcne_blagajne_in_VKR/Opis/Davcne_blagajne_-_postopki_potrjevanja.pdf"
+  },
+  {
+    "Text": "slo fiskalizacija - preverjanje fiskaliziranega racuna",
+    "Url": "https://blagajne-test.fu.gov.si:9002/cash_registers/ui/check_invoice/index.html"
+  },
+  {
+    "Text": "MsBuild - extending build process (before, after bulid)",
+    "Url": "http://sedodream.com/2010/10/22/MSBuildExtendingTheSolutionBuild.aspx"
+  },
+  {
+    "Text": "google translate",
+    "Url": "https://translate.google.com/"
+  },
+  {
+    "Text": "microsoft partner membership subscription",
+    "Url": "https://mspartner.microsoft.com/en/us/pages/membership/msdn-subscriptions.aspx"
+  },
+  {
+    "Text": "good morning in different languages",
+    "Url": "http://www.omniglot.com/language/phrases/goodmorning.htm"
+  },
+  {
+    "Text": "gitlab - xlab git",
+    "Url": "https://gitlab.xlab.si"
+  },
+  {
+    "Text": "git successful branching model",
+    "Url": "http://nvie.com/posts/a-successful-git-branching-model/"
+  },
+  {
+    "Text": "intesa masina za kavo - navodila",
+    "Url": "http://download.p4c.philips.com/files/h/hd8751_95/hd8751_95_dfu_eng.pdf"
+  },
+  {
+    "Text": "intesa masina za kavo - mazanje",
+    "Url": "https://www.youtube.com/watch?v=THKbdTiHySA"
+  },
+  {
+    "Text": "intesa masina za kavo - ciscenje",
+    "Url": "https://www.youtube.com/watch?v=BdYMS6ZqsiA"
+  },
+  {
+    "Text": "Fluent assertions (zanimivo)",
+    "Url": "https://github.com/dennisdoomen/fluentassertions/wiki"
+  },
+  {
+    "Text": "Continuous improver (zanimivo)",
+    "Url": "http://www.continuousimprover.com/2015/12/10-more-things-professional-software.html"
+  },
+  {
+    "Text": ".Net Junkie twitter",
+    "Url": "https://twitter.com/dot_net_junkie"
+  },
+  {
+    "Text": "unit test beginning tdd chalenges stackoverflow",
+    "Url": "http://stackoverflow.com/questions/24965/beginning-tdd-challenges-solutions-recommendations"
+  },
+  {
+    "Text": "unit test tdd getting started",
+    "Url": "http://cantgrokwontgrok.blogspot.si/2008/09/tdd-getting-started-with-test-driven.html"
+  },
+  {
+    "Text": "writing great unit tests best and worst practices",
+    "Url": "http://blog.stevensanderson.com/2009/08/24/writing-great-unit-tests-best-and-worst-practises/"
+  },
+  {
+    "Text": "speeding up resharper",
+    "Url": "https://goo.gl/Ucl3g0"
+  },
+  {
+    "Text": ".net custom localization",
+    "Url": "http://stackoverflow.com/questions/6638447/c-sharp-localization"
+  },
+  {
+    "Text": "internet time synchronization servers",
+    "Url": "http://www.pool.ntp.org/en/"
+  },
+  {
+    "Text": "sqlite database locks",
+    "Url": "http://dba.stackexchange.com/questions/45368/how-do-i-prevent-sqlite-database-locks"
+  },
+  {
+    "Text": "hrvaska - poste in obcine",
+    "Url": "http://liders.hr/korisno/postanski-brojevi/?zupanija=grad-zagreb"
+  },
+  {
+    "Text": "unit test xml serialization",
+    "Url": "https://visualstudiomagazine.com/articles/2011/02/16/unit-testing-in-c-sharp.aspx"
+  },
+  {
+    "Text": "prevzem certifikata za fiskalizacijo",
+    "Url": "https://taxca.gov.si/DPR-PKI-Enroll/enrollp12_step1.jsp"
+  },
+  {
+    "Text": ".Net junkie steven stackoverflow",
+    "Url": "http://stackoverflow.com/users/264697/steven?tab=answers"
+  },
+  {
+    "Text": "Mark Seemann (ploeh) stackoverflow",
+    "Url": "https://stackoverflow.com/users/126014/mark-seemann"
+  },
+  {
+    "Text": "Hans Passant stackoverflow - WinForms expert",
+    "Url": "https://stackoverflow.com/users/17034/hans-passant"
+  },
+  {
+    "Text": "Jon Skeet stackoverflow",
+    "Url": "http://stackoverflow.com/users/22656/jon-skeet"
+  },
+  {
+    "Text": "Eric Lippert stackoverflow",
+    "Url": "http://stackoverflow.com/users/88656/eric-lippert"
+  },
+  {
+    "Text": "Virtual memory, working set",
+    "Url": "http://stackoverflow.com/questions/3112011/how-to-use-idisposable-to-fix-memory-leaks"
+  },
+  {
+    "Text": "razlaga peta ahilova tetiva bolecina",
+    "Url": "https://goo.gl/TmkD7C"
+  },
+  {
+    "Text": "vaje peta ahilova tetiva bolecina",
+    "Url": "https://goo.gl/hfJ070"
+  },
+  {
+    "Text": "interesting blog",
+    "Url": "https://jszapp.com"
+  },
+  {
+    "Text": "DotMemory bug report",
+    "Url": "https://youtrack.jetbrains.com/issue/DMRY-4994"
+  },
+  {
+    "Text": "Debug (step into) .Net framework source code",
+    "Url": "https://stackoverflow.com/questions/27655014/cannot-step-into-net-framework-source-code"
+  },
+  {
+    "Text": "E3k one note",
+    "Url": "https://onedrive.live.com/edit.aspx?resid=6B6264B4BB649F8F!115&amp;cid=-2739012142065174113&amp;app=OneNote"
+  },
+  {
+    "Text": "Debugging UI - Aaron Lerch",
+    "Url": "http://www.aaronlerch.com/blog/2008/12/15/debugging-ui/"
+  },
+  {
+    "Text": "xlab sentry",
+    "Url": "https://sentry2.xlab.si/auth/login/europa3000/"
+  },
+  {
+    "Text": "Xlab RPV resource planning",
+    "Url": "https://docs.google.com/spreadsheets/d/1FHzMJEQmFdzlELdH0XwqtzDV7aJwH3FBdMxCwJcXVXY/edit#gid=1665778519"
+  },
+  {
+    "Text": "Spletno narocanje - facebook",
+    "Url": "https://www.facebook.com/Test-spletnega-narocanja-105543310866223/appointments/"
+  },
+  {
+    "Text": "Spletno narocanje - google",
+    "Url": "https://calendar.google.com/calendar/r"
+  },
+  {
+    "Text": "NoPrintZ uat",
+    "Url": "https://app.uat.noprintz.si"
+  },
+  {
+    "Text": "NoPrintZ - technical specification",
+    "Url": "https://docs.google.com/document/d/167SoIWZvsURrKvYs_s3aDIlkr0rxHXFLiczz17DKRg4/edit"
+  },
+  {
+    "Text": "NoPrintZ - API specification",
+    "Url": "https://docs.google.com/document/d/1RKVazhvvWLq1YTNqAynJwOIadlJTXrtjU1h2pSssw40/edit#heading=h.5x0d5h95i329"
+  },
+  {
+    "Text": "NoPrintZ - implementation instructions",
+    "Url": "https://docs.google.com/document/d/1POJoDDuQa3YsZj7M0HOKZoSKkO-iVgHOqVMdT3wqBOs/edit"
+  },
+  {
+    "Text": "Recepti: zapeceni makaroni s klobaso in sirom",
+    "Url": "https://okusno.je/recept/zapeceni-makaroni-s-klobaso-in-sirom"
+  },
+  {
+    "Text": "Recepti: hitri jogurtovi kruhki brez kvasa",
+    "Url": "https://okusno.je/recept/hitri-jogurtovi-kruhki-brez-kvasa"
+  },
+  {
+    "Text": "Recepti: skutni zepki blazinice z rozinami",
+    "Url": "https://okusno.je/recept/skutni-zepki-blazinice-z-rozinami"
+  },
+  {
+    "Text": "Govedina po toskansko s kremasto polento",
+    "Url": "https://okusno.je/recept/govedina-po-toskansko-s-kremasto-polento"
+  },
+  {
+    "Text": "Pecen krompir",
+    "Url": "https://okusno.je/triki-in-nasveti/triki-za-najboljsi-pecen-krompir.html"
+  },
+  {
+    "Text": "clockify",
+    "Url": "https://clockify.me/tracker"
+  },
+  {
+    "Text": "absence.io",
+    "Url": "https://app.absence.io"
+  },
+  {
+    "Text": "ScreenLeap",
+    "Url": "https://www.screenleap.com/"
+  }
+]

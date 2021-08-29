@@ -59,6 +59,9 @@
     <Compile Include="ShowRepositoryLogCommand.cs" />
     <Compile Include="ShowRepositoryLogCommandHandler.cs" />
     <Compile Include="ShowRepositoryLogRequest.cs" />
+    <Compile Include="UrlCollectionRequest.cs" />
+    <Compile Include="UrlRequest.cs" />
+    <Compile Include="UrlsProvider.cs" />
     <Compile Include="VisualStudioEnvironmentDataProvider.cs" />
     <Compile Include="VisualStudioRequest.cs" />
     <Compile Include="RepositoriesProvider.cs" />
