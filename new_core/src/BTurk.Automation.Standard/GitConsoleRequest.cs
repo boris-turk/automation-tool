@@ -10,6 +10,7 @@ namespace BTurk.Automation.Standard
 
         void ICollectionRequest<Repository>.OnLoaded(Repository repository)
         {
+            repository.Command = new OpenGitConsoleCommand(repository.Path);
         }
 
         bool ICollectionRequestFilter<Repository>.CanLoad(Repository request)

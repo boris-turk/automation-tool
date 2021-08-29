@@ -53,6 +53,8 @@
     <Compile Include="GitConsoleRequest.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="NotesProvider.cs" />
+    <Compile Include="OpenGitConsoleCommand.cs" />
+    <Compile Include="OpenGitConsoleCommandHandler.cs" />
     <Compile Include="OpenNoteRequest.cs" />
     <Compile Include="OpenWithDefaultProgramCommand.cs" />
     <Compile Include="OpenWithDefaultProgramCommandHandler.cs" />
