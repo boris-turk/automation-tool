@@ -18,7 +18,7 @@ namespace BTurk.Automation.Core.Requests
         {
             var command = context.ChildRequest.Command;
 
-            if (command != null)
+            if (context.ActionType == ActionType.Execute && command != null)
             {
                 _searchEngine.Hide();
                 _commandProcessor.Process(command);

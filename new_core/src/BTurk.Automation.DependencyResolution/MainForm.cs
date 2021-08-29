@@ -160,22 +160,25 @@ namespace BTurk.Automation.DependencyResolution
         {
             if (Visible)
                 TriggerAction(ActionType.MoveNext);
-            else
+            else if (TextBox.Text != "")
                 TextBox.Text = "";
+            else
+                OnSearchTextChanged();
         }
 
         protected override void OnLoad(EventArgs e)
         {
-            TextBox.TextChanged += OnSearchTextChanged;
+            TextBox.TextChanged += (_, _) => OnSearchTextChanged();
             MessagePublisher.Publish(ShowingAutomationWindowMessage.MainMenu);
             base.OnLoad(e);
         }
 
-        private void OnSearchTextChanged(object sender, EventArgs e)
+        private void OnSearchTextChanged()
         {
             if (!Visible)
             {
                 _currentText = TextBox.Text;
+                CreateInitialStep();
                 return;
             }
 

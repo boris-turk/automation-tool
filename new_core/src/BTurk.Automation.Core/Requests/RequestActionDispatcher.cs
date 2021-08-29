@@ -89,10 +89,10 @@ namespace BTurk.Automation.Core.Requests
                 return;
             }
 
-            var child = GetVisitableChild(ActionType.MoveNext);
+            var nextRequest = GetNextVisitableRequest(ActionType.MoveNext);
 
-            if (child != null)
-                OnMoveToChild(request, child, ActionType.MoveNext);
+            if (nextRequest != null)
+                OnMoveToNextRequest(request, nextRequest, ActionType.MoveNext);
         }
 
         private void OnMoveNextWithNoChildren(TRequest request)
@@ -109,19 +109,31 @@ namespace BTurk.Automation.Core.Requests
                 CurrentStep.Children.AddRange(GetChildren(request));
         }
 
-        private IRequest GetVisitableChild(ActionType actionType)
+        private IRequest GetNextVisitableRequest(ActionType actionType)
         {
             var context = new DispatchPredicateContext(CurrentStep.Text, actionType, _searchEngine.Context);
 
-            IRequest visitableChild = _searchEngine.SelectedItem;
+            IRequest nextRequest = _searchEngine.SelectedItem;
 
-            if (visitableChild == null || _searchEngine.Items.Count > 1 || !visitableChild.CanAccept(context))
-                visitableChild = CurrentStep.Children.FirstOrDefault(_ => _.CanAccept(context));
+            if (nextRequest == null)
+                return GetVisitableChild(context);
 
+            if (nextRequest == CurrentStep.Request)
+                return GetVisitableChild(context);
+
+            if (!nextRequest.CanAccept(context))
+                return GetVisitableChild(context);
+
+            return nextRequest;
+        }
+
+        private IRequest GetVisitableChild(DispatchPredicateContext context)
+        {
+            var visitableChild = CurrentStep.Children.FirstOrDefault(_ => _.CanAccept(context));
             return visitableChild;
         }
 
-        private void OnMoveToChild(TRequest request, IRequest child, ActionType actionType)
+        private void OnMoveToNextRequest(TRequest request, IRequest child, ActionType actionType)
         {
             Visit(request, child, ActionType.MoveNext);
             _searchEngine.Steps.Add(new SearchStep(child));
