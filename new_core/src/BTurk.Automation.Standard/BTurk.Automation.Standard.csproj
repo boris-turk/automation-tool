@@ -50,6 +50,7 @@
     <Compile Include="CommitRepositoryCommand.cs" />
     <Compile Include="CommitRepositoryCommandHandler.cs" />
     <Compile Include="DTEInstanceProvider.cs" />
+    <Compile Include="GitConsoleRequest.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="NotesProvider.cs" />
     <Compile Include="OpenNoteRequest.cs" />
