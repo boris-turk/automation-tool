@@ -10,7 +10,6 @@ namespace BTurk.Automation.Standard
 
         void ICollectionRequest<UrlRequest>.OnLoaded(UrlRequest urlRequest)
         {
-            urlRequest.Command = new OpenWithDefaultProgramCommand(urlRequest);
         }
     }
 }

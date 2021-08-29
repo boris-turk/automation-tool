@@ -13,7 +13,7 @@ namespace BTurk.Automation.Standard
             _resourceProvider = resourceProvider;
         }
 
-        public virtual IEnumerable<UrlRequest> GetRequests()
+        public IEnumerable<UrlRequest> GetRequests()
         {
             return _resourceProvider.Load<List<UrlRequest>>("urls");
         }

@@ -10,7 +10,6 @@ namespace BTurk.Automation.Standard
 
         void ICollectionRequest<Solution>.OnLoaded(Solution solution)
         {
-            solution.Command = new OpenWithDefaultProgramCommand(solution);
         }
     }
 }

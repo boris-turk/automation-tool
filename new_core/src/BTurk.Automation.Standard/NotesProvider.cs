@@ -10,7 +10,7 @@ namespace BTurk.Automation.Standard
 {
     public class NotesProvider : IRequestsProvider<Note>
     {
-        public virtual IEnumerable<Note> GetRequests()
+        public IEnumerable<Note> GetRequests()
         {
             var directory = @"C:\Users\boris\Dropbox\Automation\notes";
 

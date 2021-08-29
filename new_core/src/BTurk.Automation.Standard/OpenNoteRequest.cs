@@ -10,7 +10,6 @@ namespace BTurk.Automation.Standard
 
         void ICollectionRequest<Note>.OnLoaded(Note note)
         {
-            note.Command = null; //request.Open();
         }
     }
 }

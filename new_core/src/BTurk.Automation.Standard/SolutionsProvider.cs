@@ -15,7 +15,7 @@ namespace BTurk.Automation.Standard
             _resourceProvider = resourceProvider;
         }
 
-        public virtual IEnumerable<Solution> GetRequests()
+        public IEnumerable<Solution> GetRequests()
         {
             return _resourceProvider.Load<List<Solution>>("solutions");
         }
