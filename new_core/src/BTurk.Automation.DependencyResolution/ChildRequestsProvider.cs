@@ -41,7 +41,11 @@ namespace BTurk.Automation.DependencyResolution
 
             foreach (var request in provider.GetRequests())
             {
+                if (collectionRequest is ICollectionRequestFilter<TRequest> filter && !filter.CanLoad(request))
+                    continue;
+
                 collectionRequest.OnLoaded(request);
+
                 yield return request;
             }
         }

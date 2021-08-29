@@ -65,6 +65,7 @@
     <Compile Include="Requests\AhkSendCommandHandler.cs" />
     <Compile Include="Requests\DefaultRequestVisitor.cs" />
     <Compile Include="Requests\IChildRequestsProvider.cs" />
+    <Compile Include="Requests\ICollectionRequestFilter.cs" />
     <Compile Include="Requests\IRequest.cs" />
     <Compile Include="Requests\IRequestVisitor.cs" />
     <Compile Include="Requests\ICollectionRequest.cs" />
