@@ -20,18 +20,9 @@ namespace BTurk.Automation.Standard
             var minttyExe = @"C:\Program Files\Git\usr\bin\mintty.exe";
             var gitBash = @"C:\Program Files\Git\git-bash.exe";
 
-            var gitBashOptions = new[]
-            {
-                $"--dir \"{command.Directory}\"",
-                "-o AppID=GitForWindows.Bash",
-                $"-o AppLaunchCmd=\"{gitBash}\"",
-                "-o AppName=\"Git Bash\"",
-                $"-i \"{gitBash}\"",
-                "--store-taskbar-properties",
-                "-- /usr/bin/bash",
-                "--login",
-                "-i"
-            };
+            var gitBashOptions =
+                $"--dir \"{command.Directory}\" -o AppID=GitForWindows.Bash -o AppLaunchCmd=\"{gitBash}\" " +
+                $"-o AppName=\"Git Bash\" -i \"{gitBash}\" --store-taskbar-properties -- /usr/bin/bash --login -i";
 
             var argument = string.Join(" ", gitBashOptions);
 
