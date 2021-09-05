@@ -24,6 +24,7 @@ namespace BTurk.Automation.DependencyResolution
             yield return new OpenWindowRequest();
             yield return new UrlCollectionRequest();
             yield return new GitConsoleRequest();
+            yield return new BuildCleanupRequest();
         }
 
         protected override bool CanAccept(DispatchPredicateContext context)
