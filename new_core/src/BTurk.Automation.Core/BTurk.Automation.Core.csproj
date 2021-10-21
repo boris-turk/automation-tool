@@ -50,6 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncServices\AsyncExecutionExtensions.cs" />
+    <Compile Include="AsyncServices\IAsyncExecution.cs" />
+    <Compile Include="AsyncServices\ProgressData.cs" />
+    <Compile Include="Commands\IAsyncCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Extensions.cs" />

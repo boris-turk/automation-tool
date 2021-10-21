@@ -2,7 +2,7 @@
 
 namespace BTurk.Automation.E3k
 {
-    public class BuildCleanupCommand : ICommand
+    public class BuildCleanupCommand : IAsyncCommand
     {
         public BuildCleanupCommand(string rootPath)
         {

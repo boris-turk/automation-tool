@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using BTurk.Automation.Core;
+using BTurk.Automation.Core.AsyncServices;
 using BTurk.Automation.Core.Commands;
 using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.Core.Serialization;
+using BTurk.Automation.DependencyResolution.AsyncServices;
 using BTurk.Automation.Standard;
 
 namespace BTurk.Automation.DependencyResolution
@@ -33,6 +35,12 @@ namespace BTurk.Automation.DependencyResolution
         {
             if (IsSearchEngineRequest(type))
                 return GetOrCreateSingleton<MainForm>(InitializeMainForm);
+
+            if (type == typeof(IAsyncExecution))
+                return GetOrCreateSingleton<AsyncExecutionDialog>();
+
+            if (type == typeof(IAsyncExecutionDialog))
+                return GetOrCreateSingleton<AsyncExecutionDialog>();
 
             if (type == typeof(IProcessStarter))
                 return GetOrCreateSingleton<ProcessStarter>();
@@ -152,6 +160,19 @@ namespace BTurk.Automation.DependencyResolution
             }
 
             var instance = GetOrCreateSingleton(openGenericType, Create);
+
+            var decoratorProducerParameters = GetDecoratorProducerParameters(openGenericType);
+
+            if (decoratorProducerParameters == null)
+                return instance;
+
+            var producer = (Func<object, object>)
+                GenericMethodInvoker.Type(typeof(Container))
+                .Method(decoratorProducerParameters.MethodName)
+                .WithGenericTypes(decoratorProducerParameters.Arguments)
+                .Invoke();
+
+            instance = producer.Invoke(instance);
 
             return instance;
         }
@@ -320,6 +341,39 @@ namespace BTurk.Automation.DependencyResolution
         {
             ClosedGenericTypeProvider.Register(typeof(IRequestsProvider<>), typeof(EmptyRequestProvider<>));
             ClosedGenericTypeProvider.Register(typeof(ICommandHandler<>));
+        }
+
+        private static DecoratorProducerParameters GetDecoratorProducerParameters(Type serviceType)
+        {
+            if (!serviceType.InheritsFrom(typeof(ICommandHandler<>)))
+                return null;
+
+            var commandType = serviceType.GetGenericArguments().Single();
+
+            if (!commandType.InheritsFrom(typeof(IAsyncCommand)))
+                return null;
+
+            return new DecoratorProducerParameters(
+                nameof(GetAsyncCommandHandlerDecoratorProducer), commandType);
+        }
+
+        private static Func<object, object> GetAsyncCommandHandlerDecoratorProducer<TCommand>()
+            where TCommand : IAsyncCommand
+        {
+            return _ => new AsyncCommandHandlerDecorator<TCommand>(
+                (ICommandHandler<TCommand>)_, GetInstance<IAsyncExecutionDialog>());
+        }
+
+        private class DecoratorProducerParameters
+        {
+            public DecoratorProducerParameters(string methodName, params Type[] arguments)
+            {
+                MethodName = methodName;
+                Arguments = arguments;
+            }
+
+            public string MethodName { get; }
+            public Type[] Arguments { get; }
         }
     }
 }

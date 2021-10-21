@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using BTurk.Automation.Core;
+using BTurk.Automation.Core.AsyncServices;
 using BTurk.Automation.Core.Commands;
 using BTurk.Automation.Core.Helpers;
 
@@ -10,17 +11,29 @@ namespace BTurk.Automation.E3k
 {
     public class BuildCleanupCommandHandler : ICommandHandler<BuildCleanupCommand>
     {
-        public BuildCleanupCommandHandler(IProcessStarter processStarter)
+        private string _rootPath;
+
+        public BuildCleanupCommandHandler(IProcessStarter processStarter, IAsyncExecution asyncExecution)
         {
             ProcessStarter = processStarter;
+            AsyncExecution = asyncExecution;
         }
 
         public IProcessStarter ProcessStarter { get; }
 
+        public IAsyncExecution AsyncExecution { get; }
+
         public void Handle(BuildCleanupCommand command)
         {
+            _rootPath = command.RootPath;
+
             foreach (var directory in GetDirectories(command.RootPath))
+            {
                 DeleteDirectoryContents(directory);
+
+                if (AsyncExecution.IsCanceled)
+                    return;
+            }
         }
 
         private void DeleteDirectoryContents(string directory)
@@ -28,10 +41,30 @@ namespace BTurk.Automation.E3k
             var directoryInfo = new DirectoryInfo(directory);
 
             foreach (FileInfo file in directoryInfo.GetFiles())
+            {
                 file.Delete();
 
+                if (AsyncExecution.IsCanceled)
+                    return;
+            }
+
             foreach (DirectoryInfo subDirectory in directoryInfo.GetDirectories())
-                subDirectory.Delete(true);
+            {
+                subDirectory.Delete(recursive: true);
+
+                var relativeSubDirectoryPath = GetRelativeSubDirectoryPath(subDirectory);
+                AsyncExecution.SetProgressText($"Deleting directory {relativeSubDirectoryPath}");
+
+                if (AsyncExecution.IsCanceled)
+                    return;
+            }
+        }
+
+        private string GetRelativeSubDirectoryPath(DirectoryInfo subDirectory)
+        {
+            var relativeSubDirectory = subDirectory.FullName.Substring(_rootPath.Length);
+            relativeSubDirectory = relativeSubDirectory.TrimEnd(Path.DirectorySeparatorChar);
+            return relativeSubDirectory;
         }
 
         private IEnumerable<string> GetDirectories(string rootPath)

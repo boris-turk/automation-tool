@@ -45,6 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncServices\AsyncCommandHandlerDecorator.cs" />
+    <Compile Include="AsyncServices\AsyncExecutionDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AsyncServices\IAsyncExecutionDialog.cs" />
     <Compile Include="ChildRequestsProvider.cs" />
     <Compile Include="ClosedGenericTypeProvider.cs" />
     <Compile Include="CommandProcessor.cs" />
