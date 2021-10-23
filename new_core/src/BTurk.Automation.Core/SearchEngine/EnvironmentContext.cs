@@ -10,13 +10,12 @@ namespace BTurk.Automation.Core.SearchEngine
         {
             WindowTitle = windowTitle;
             WindowClass = windowClass;
-            Paths = new List<string>();
         }
 
         public string WindowTitle { get; }
 
         public string WindowClass { get; }
 
-        public List<string> Paths { get; }
+        public string Path { get; set; }
     }
 }

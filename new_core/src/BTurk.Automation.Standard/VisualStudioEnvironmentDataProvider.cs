@@ -7,8 +7,8 @@ namespace BTurk.Automation.Standard
         public void Process(EnvironmentContext context)
         {
             using var provider = DTEInstanceProvider.GetActiveInstance();
-            context.Paths.Add(provider.Instance.Solution.FullName);
-            context.Paths.Add(provider.Instance.Solution.DTE.Documents.DTE.ActiveDocument.FullName);
+            var solution = provider.Instance.Solution;
+            context.Path = solution.DTE.Documents.DTE.ActiveDocument?.FullName ?? solution.FullName;
         }
     }
 }
