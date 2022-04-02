@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace AutomationEngine
@@ -231,6 +232,22 @@ namespace AutomationEngine
                 type = type.BaseType;
             }
             return false;
+        }
+
+        public static bool IsVisible(this BaseItem item, string title)
+        {
+            foreach (var visibilityCondition in item.VisibilityConditions)
+            {
+                if (visibilityCondition.Type != VisibilityConditionType.WindowTitleRegex)
+                    continue;
+
+                var isMatch = Regex.IsMatch(title, visibilityCondition.Value);
+
+                if (isMatch)
+                    return true;
+            }
+
+            return true;
         }
     }
 }

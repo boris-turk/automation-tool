@@ -26,7 +26,8 @@ namespace AutomationEngine
 
         public bool ExecutingMethodNameSpecified => !string.IsNullOrWhiteSpace(ExecutingMethodName);
 
-        public VisibilityCondition VisibilityCondition { get; set; }
+        [XmlElement("VisibilityCondition")]
+        public List<VisibilityCondition> VisibilityConditions { get; set; }
 
         public string Name
         {

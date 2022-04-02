@@ -91,13 +91,8 @@ namespace AutomationEngine
 
         public Menu GetApplicationMenu(string applicationTitle)
         {
-            return (
-                from menu in _menus
-                where menu.VisibilityCondition != null
-                where menu.VisibilityCondition.Type == VisibilityConditionType.WindowTitleRegex
-                where Regex.IsMatch(applicationTitle, menu.VisibilityCondition.Value)
-                select menu)
-                .FirstOrDefault();
+            var menu = _menus.FirstOrDefault(_ => _.IsVisible(applicationTitle));
+            return menu;
         }
     }
 }

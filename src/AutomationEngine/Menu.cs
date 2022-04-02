@@ -65,9 +65,11 @@ namespace AutomationEngine
 
         public virtual IEnumerable<BaseItem> GetSelectableItems()
         {
+            var title = MenuEngine.Instance.ApplicationContext;
+
             foreach (BaseItem item in Items)
             {
-                if (!IsItemVisible(item) || IsMergedIntoParent(item))
+                if (!item.IsVisible(title) || IsMergedIntoParent(item))
                 {
                     continue;
                 }
@@ -101,16 +103,6 @@ namespace AutomationEngine
         private bool IsMergedIntoParent(BaseItem item)
         {
             return (item as ReferencedMenu)?.MergedIntoParent ?? false;
-        }
-
-        private bool IsItemVisible(BaseItem item)
-        {
-            if (item.VisibilityCondition?.Type == VisibilityConditionType.WindowTitleRegex)
-            {
-                string title = MenuEngine.Instance.ApplicationContext;
-                return Regex.IsMatch(title, item.VisibilityCondition.Value);
-            }
-            return true;
         }
 
         public void LoadItemsIfNecessary()
