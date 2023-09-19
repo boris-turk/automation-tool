@@ -65,10 +65,10 @@ namespace AutomationEngine
 
         public virtual IEnumerable<BaseItem> GetSelectableItems()
         {
-            var title = MenuEngine.Instance.ApplicationContext;
-
             foreach (BaseItem item in Items)
             {
+                var title = MenuEngine.Instance?.ApplicationContext;
+
                 if (!item.IsVisible(title) || IsMergedIntoParent(item))
                 {
                     continue;

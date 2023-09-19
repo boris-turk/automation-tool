@@ -234,20 +234,23 @@ namespace AutomationEngine
             return false;
         }
 
-        public static bool IsVisible(this BaseItem item, string title)
+        public static bool IsVisible(this BaseItem item, string applicationTitle)
         {
+            if (item.VisibilityConditions == null || !item.VisibilityConditions.Any())
+                return true;
+
             foreach (var visibilityCondition in item.VisibilityConditions)
             {
                 if (visibilityCondition.Type != VisibilityConditionType.WindowTitleRegex)
                     continue;
 
-                var isMatch = Regex.IsMatch(title, visibilityCondition.Value);
+                var isMatch = Regex.IsMatch(applicationTitle, visibilityCondition.Value);
 
                 if (isMatch)
                     return true;
             }
 
-            return true;
+            return false;
         }
     }
 }
