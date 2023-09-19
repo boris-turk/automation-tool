@@ -84,7 +84,8 @@ namespace E3kWorkReports
             {
                 "Administrative work",
                 "Know how exchange",
-                "Meetings"
+                "Meetings",
+                "Job Interviews"
             };
 
             var standardTasks = new[]
@@ -107,6 +108,9 @@ namespace E3kWorkReports
 
             if (taskName == "Troubleshooting")
                 return taskName.ToUpper();
+
+            if (taskName == "Education / Seminars")
+                return "INTERNAL";
 
             throw new InvalidOperationException($"Could not map task \"{taskName}\" into appropriate project code.");
         }
@@ -134,6 +138,9 @@ namespace E3kWorkReports
         private bool ShouldIncludeProject(Project project)
         {
             var projectName = project.Name.ToLower();
+
+            if (projectName.Contains("human resources"))
+                return true;
 
             if (projectName.Contains("europa3000"))
                 return true;

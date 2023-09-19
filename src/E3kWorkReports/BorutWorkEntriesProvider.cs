@@ -21,7 +21,9 @@ namespace E3kWorkReports
         public IEnumerable<ReportEntry> GetAllEntries()
         {
             var datePattern = @"^\s*(?<day>\d+)\.(?<month>\d+)\.(?<year>\d+)";
-            var contentPattern = @"^\W+(?<projectCode>\w+)\W+(?<description>.*[^.])\.\.\.*\s*(?<duration>\d+.*)";
+
+            var contentPattern = @"^\W+(?<projectCode>\w+)(?<separator>\W+)(?<description>.*[^.:])" + 
+                                 @"(\.\.\.*\s*|:\s*)(?<duration>\d+.*)h\s*$";
 
             var date = DateTime.MinValue;
 
@@ -61,7 +63,13 @@ namespace E3kWorkReports
             var task = "New core";
 
             if (!allowedProjectCodes.Contains(projectCode.ToUpper()))
-                throw new InvalidOperationException($"Invalid project code {projectCode}");
+            {
+                projectCode = match.Groups["projectCode"].Value;
+                description = match.Groups["description"].Value;
+                description = $"{projectCode}{match.Groups["separator"].Value}{description}";
+                description = description.Trim();
+                projectCode = allowedProjectCodes[0];
+            }
 
             return new ReportEntry
             {

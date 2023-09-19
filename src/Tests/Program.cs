@@ -14,6 +14,10 @@ namespace Tests
     {
         static void Main()
         {
+            //var s = new ShowExecutedSalonCommands();
+            //s.Execute("SLO", "3D69");
+            //return;
+
             //var tests = new ClockifyRestApiTests();
             //tests.Run();
             //return;

@@ -56,6 +56,7 @@ namespace E3kWorkReports
             ).ToDictionary(_ => _.EmployeeFullName, _ => _.Entries);
 
             Export("Boris Turk", groups);
+            Export("Katarina Krišelj", groups);
             Export("Borut Kaučič", groups);
 
             Workbook.Save(OutputFilePath);
