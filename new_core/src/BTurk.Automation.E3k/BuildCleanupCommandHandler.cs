@@ -75,7 +75,7 @@ namespace BTurk.Automation.E3k
 
             var iterator = new DirectoryIterator(srcDirectory)
             {
-                CanVisit = _ => !_.EndsWith(@"src\packages") && !_.IsHiddenDirectory()
+                CanVisit = d => !d.EndsWith(@"src\packages") && !d.IsHiddenDirectory()
             };
 
             foreach (var directoryScope in iterator)

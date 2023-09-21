@@ -276,7 +276,7 @@ namespace BTurk.Automation.DependencyResolution
             {
                 Monitor.Enter(Singletons, ref lockTaken);
 
-                var instance = Singletons.SingleOrDefault(_ => _.GetType() == type);
+                var instance = Singletons.SingleOrDefault(s => s.GetType() == type);
 
                 if (instance == null)
                 {
@@ -305,7 +305,7 @@ namespace BTurk.Automation.DependencyResolution
 
         private static object CreateInstance(Type type)
         {
-            var constructors = type.GetConstructors().Where(_ => _.IsPublic).ToList();
+            var constructors = type.GetConstructors().Where(t => t.IsPublic).ToList();
 
             if (constructors.Count != 1)
             {
@@ -360,8 +360,8 @@ namespace BTurk.Automation.DependencyResolution
         private static Func<object, object> GetAsyncCommandHandlerDecoratorProducer<TCommand>()
             where TCommand : IAsyncCommand
         {
-            return _ => new AsyncCommandHandlerDecorator<TCommand>(
-                (ICommandHandler<TCommand>)_, GetInstance<IAsyncExecutionDialog>());
+            return h => new AsyncCommandHandlerDecorator<TCommand>(
+                (ICommandHandler<TCommand>)h, GetInstance<IAsyncExecutionDialog>());
         }
 
         private class DecoratorProducerParameters

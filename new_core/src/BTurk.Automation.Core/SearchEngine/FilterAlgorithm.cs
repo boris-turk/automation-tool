@@ -13,7 +13,7 @@ namespace BTurk.Automation.Core.SearchEngine
         public FilterAlgorithm(string filterText)
         {
             _filterWords = Regex.Split(filterText ?? "", @"\s")
-                .Where(_ => !string.IsNullOrWhiteSpace(_))
+                .Where(w => !string.IsNullOrWhiteSpace(w))
                 .ToArray();
         }
 

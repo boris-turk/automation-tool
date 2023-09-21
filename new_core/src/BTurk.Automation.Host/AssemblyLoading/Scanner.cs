@@ -35,7 +35,7 @@ namespace BTurk.Automation.Host.AssemblyLoading
 
             if (instances.Count > 1)
             {
-                var names = string.Join(",", instances.Select(_ => _.GetType().Name));
+                var names = string.Join(",", instances.Select(p => p.GetType().Name));
                 throw new InvalidOperationException($"More than one guest process defined: {names}");}
 
             _guestProcess = instances[0];

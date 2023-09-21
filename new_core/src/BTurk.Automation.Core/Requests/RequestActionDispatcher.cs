@@ -129,7 +129,7 @@ namespace BTurk.Automation.Core.Requests
 
         private IRequest GetVisitableChild(DispatchPredicateContext context)
         {
-            var visitableChild = CurrentStep.Children.FirstOrDefault(_ => _.CanAccept(context));
+            var visitableChild = CurrentStep.Children.FirstOrDefault(r => r.CanAccept(context));
             return visitableChild;
         }
 

@@ -11,9 +11,9 @@ namespace BTurk.Automation.Core.Requests
 
         public OptionRequest(params string[] options)
         {
-            _childRequests = options.Select(_ => new Request(_)).Cast<IRequest>().ToList();
+            _childRequests = options.Select(o => new Request(o)).Cast<IRequest>().ToList();
 
-            ChildSelected = _ => SelectedIndex = _childRequests.IndexOf(_);
+            ChildSelected = r => SelectedIndex = _childRequests.IndexOf(r);
             ChildDeselected = _ => SelectedIndex = -1;
         }
 

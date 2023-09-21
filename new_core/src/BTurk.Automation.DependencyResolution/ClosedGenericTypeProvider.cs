@@ -66,7 +66,7 @@ namespace BTurk.Automation.DependencyResolution
 
             public Type Get(Type argumentType)
             {
-                var candidate = _types.FirstOrDefault(_ => _
+                var candidate = _types.FirstOrDefault(t => t
                     .FindAllParentClosedGenerics(_openGenericType)
                     .Any(p => p.GetGenericArguments()[0] == argumentType)
                 );

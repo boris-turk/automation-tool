@@ -52,7 +52,7 @@ namespace BTurk.Automation.Core
             if (type.IsGenericType)
             {
                 var typeName = Regex.Replace(type.Name, @"`\d$", "");
-                var argumentTypes = type.GetGenericArguments().Select(_ => _.Name);
+                var argumentTypes = type.GetGenericArguments().Select(t => t.Name);
                 var argumentNames = string.Join(", ", argumentTypes);
                 displayText = $"{typeName}<{argumentNames}>";
             }
