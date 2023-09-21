@@ -5,7 +5,7 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests
 {
-    public class OptionRequest : Request, ICollectionRequest
+    public class OptionRequest : CollectionRequest
     {
         private readonly List<IRequest> _childRequests;
 
@@ -30,6 +30,6 @@ namespace BTurk.Automation.Core.Requests
             return context.ActionType == ActionType.Execute || context.ActionType == ActionType.MoveNext;
         }
 
-        public IEnumerable<IRequest> GetRequests(EnvironmentContext context) => _childRequests;
+        protected override IEnumerable<IRequest> GetRequests() => _childRequests;
     }
 }

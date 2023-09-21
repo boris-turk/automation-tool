@@ -6,17 +6,14 @@ using BTurk.Automation.Standard;
 
 namespace BTurk.Automation.DependencyResolution
 {
-    public class MainMenuRequest : Request, ICollectionRequest
+    public class MainMenuRequest : CollectionRequest
     {
         public MainMenuRequest() : base("Main menu")
         {
         }
 
-        public IEnumerable<IRequest> GetRequests(EnvironmentContext context)
+        protected override IEnumerable<IRequest> GetRequests()
         {
-            if (context != EnvironmentContext.Empty)
-                yield break;
-
             yield return new CommitRepositoryRequest();
             yield return new ShowRepositoryLogRequest();
             yield return new OpenSolutionRequest();

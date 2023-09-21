@@ -17,9 +17,6 @@ namespace BTurk.Automation.DependencyResolution
 
         public IEnumerable<IRequest> LoadChildren(IRequest request)
         {
-            if (request is ICollectionRequest selectionRequest)
-                return selectionRequest.GetRequests(_environmentContextProvider.Context);
-
             var collectionElementType = GetCollectionElementType(request);
 
             if (collectionElementType == null)
@@ -34,20 +31,16 @@ namespace BTurk.Automation.DependencyResolution
             return (IEnumerable<IRequest>)childRequests;
         }
 
-        private IEnumerable<Request> GetRequests<TRequest>(ICollectionRequest<TRequest> collectionRequest)
-            where TRequest : Request
+        private IEnumerable<IRequest> GetRequests<TRequest>(ICollectionRequest<TRequest> collectionRequest)
+            where TRequest : IRequest
         {
             var provider = Container.GetInstance<IRequestsProvider<TRequest>>();
 
-            foreach (var request in provider.GetRequests())
-            {
-                if (collectionRequest is ICollectionRequestFilter<TRequest> filter && !filter.CanLoad(request))
-                    continue;
+            var suppliedRequests = provider.GetRequests().ToList();
+            var environmentContext = _environmentContextProvider.Context;
+            var context = new RequestLoadContext<TRequest>(environmentContext, suppliedRequests);
 
-                collectionRequest.OnLoaded(request);
-
-                yield return request;
-            }
+            return collectionRequest.GetRequests(context);
         }
 
         private Type GetCollectionElementType(IRequest request)

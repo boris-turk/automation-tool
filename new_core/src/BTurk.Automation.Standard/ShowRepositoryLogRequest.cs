@@ -2,13 +2,13 @@
 
 namespace BTurk.Automation.Standard
 {
-    public class ShowRepositoryLogRequest : Request, ICollectionRequest<Repository>
+    public class ShowRepositoryLogRequest : CollectionRequest<Repository>
     {
         public ShowRepositoryLogRequest() : base("log")
         {
         }
 
-        void ICollectionRequest<Repository>.OnLoaded(Repository repository)
+        protected override void OnRequestLoaded(Repository repository)
         {
             repository.Command = new ShowRepositoryLogCommand(repository);
         }

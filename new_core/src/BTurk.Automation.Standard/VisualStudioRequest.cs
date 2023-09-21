@@ -4,17 +4,14 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
-    public class VisualStudioRequest : Request, ICollectionRequest
+    public class VisualStudioRequest : CollectionRequest
     {
         public VisualStudioRequest() : base("Visual studio")
         {
         }
 
-        public IEnumerable<IRequest> GetRequests(EnvironmentContext context)
+        protected override IEnumerable<IRequest> GetRequests()
         {
-            if (!IsVisualStudioContext(context))
-                yield break;
-
             yield return new AhkSendRequest
             {
                 Text = "close all tabs but current",

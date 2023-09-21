@@ -4,15 +4,15 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.E3k
 {
-    public class OpenWindowRequest : Request, ICollectionRequest
+    public class OpenWindowRequest : CollectionRequest
     {
         public OpenWindowRequest() : base("window")
         {
         }
 
-        public IEnumerable<IRequest> GetRequests(EnvironmentContext context)
+        protected override IEnumerable<IRequest> GetRequests()
         {
-            yield return new SelectionRequest<Module>()
+            yield return new SelectionRequest<Module>
             {
                 //Selected = solution => solution.Open()
             };

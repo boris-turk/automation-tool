@@ -5,13 +5,13 @@ using BTurk.Automation.Standard;
 
 namespace BTurk.Automation.DependencyResolution
 {
-    public class RootMenuRequest : Request, ICollectionRequest
+    public class RootMenuRequest : CollectionRequest
     {
         public RootMenuRequest() : base("Root")
         {
         }
 
-        public IEnumerable<IRequest> GetRequests(EnvironmentContext context)
+        protected override IEnumerable<IRequest> GetRequests()
         {
             yield return new MainMenuRequest();
             yield return new VisualStudioRequest();

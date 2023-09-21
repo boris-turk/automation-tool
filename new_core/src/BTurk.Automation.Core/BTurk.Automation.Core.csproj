@@ -69,15 +69,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AhkSendRequest.cs" />
     <Compile Include="Requests\AhkSendCommandHandler.cs" />
+    <Compile Include="Requests\CollectionRequest.cs" />
     <Compile Include="Requests\DefaultRequestVisitor.cs" />
     <Compile Include="Requests\IChildRequestsProvider.cs" />
-    <Compile Include="Requests\ICollectionRequestFilter.cs" />
     <Compile Include="Requests\IRequest.cs" />
     <Compile Include="Requests\IRequestVisitor.cs" />
     <Compile Include="Requests\ICollectionRequest.cs" />
     <Compile Include="Requests\OptionRequest.cs" />
     <Compile Include="Requests\OptionRequestVisitor.cs" />
     <Compile Include="Requests\RequestActionDispatcher.cs" />
+    <Compile Include="Requests\RequestLoadContext.cs" />
     <Compile Include="Requests\RequestVisitContext.cs" />
     <Compile Include="Requests\SelectionRequest.cs" />
     <Compile Include="Requests\EmptyRequestProvider.cs" />

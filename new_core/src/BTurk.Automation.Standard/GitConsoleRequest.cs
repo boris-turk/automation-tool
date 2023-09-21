@@ -1,21 +1,22 @@
 ﻿using BTurk.Automation.Core.Requests;
+using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard
 {
-    public class GitConsoleRequest : Request, ICollectionRequestFilter<Repository>
+    public class GitConsoleRequest : CollectionRequest<Repository>
     {
         public GitConsoleRequest() : base("git")
         {
         }
 
-        void ICollectionRequest<Repository>.OnLoaded(Repository repository)
+        protected override void OnRequestLoaded(Repository repository)
         {
             repository.Command = new OpenGitConsoleCommand(repository.Path);
         }
 
-        bool ICollectionRequestFilter<Repository>.CanLoad(Repository request)
+        protected override bool CanLoadRequest(Repository repository, EnvironmentContext context)
         {
-            return request.Type == RepositoryType.Git;
+            return repository.Type == RepositoryType.Git;
         }
     }
 }

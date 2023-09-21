@@ -1,20 +1,21 @@
 ﻿using BTurk.Automation.Core.Requests;
+using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.Standard;
 
 namespace BTurk.Automation.E3k
 {
-    public class BuildCleanupRequest : Request, ICollectionRequestFilter<Repository>
+    public class BuildCleanupRequest : CollectionRequest<Repository>
     {
         public BuildCleanupRequest() : base("cleanup")
         {
         }
 
-        void ICollectionRequest<Repository>.OnLoaded(Repository repository)
+        protected override void OnRequestLoaded(Repository repository)
         {
             repository.Command = new BuildCleanupCommand(repository.Path);
         }
 
-        bool ICollectionRequestFilter<Repository>.CanLoad(Repository repository)
+        protected override bool CanLoadRequest(Repository repository, EnvironmentContext context)
         {
             return repository.IsTrunk() || repository.IsClean() || repository.Revision() >= 8;
         }
