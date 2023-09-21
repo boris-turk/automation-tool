@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using System.Text.RegularExpressions;
 using BTurk.Automation.Core.WinApi;
 using EnvDTE;
 
@@ -11,8 +12,6 @@ namespace BTurk.Automation.Standard
 {
     public class DTEInstanceProvider
     {
-        private const string VisualStudio2019Version = "16.0";
-
         public static DTEInstance GetActiveInstance()
         {
             var processId = Methods.GetActiveProcessId();
@@ -26,8 +25,6 @@ namespace BTurk.Automation.Standard
 
         private static DTE GetDTE(int processId)
         {
-            var programId = $"!VisualStudio.DTE.{VisualStudio2019Version}:{processId}";
-
             object runningObject = null;
             IBindCtx bindContext = null;
             IRunningObjectTable runningObjectTable = null;
@@ -58,7 +55,10 @@ namespace BTurk.Automation.Standard
                         // Do nothing, there is something in the ROT that we do not have access to.
                     }
 
-                    if (string.Equals(name, programId, StringComparison.Ordinal))
+                    if (name == null)
+                        continue;
+
+                    if (Regex.IsMatch(name, @$"!VisualStudio.DTE.(\d|.)*:{processId}", RegexOptions.IgnoreCase))
                     {
                         var errorCode = runningObjectTable.GetObject(runningObjectMoniker, out runningObject);
                         Marshal.ThrowExceptionForHR(errorCode);
