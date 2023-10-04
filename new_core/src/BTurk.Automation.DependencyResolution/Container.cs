@@ -45,6 +45,9 @@ namespace BTurk.Automation.DependencyResolution
             if (type == typeof(IProcessStarter))
                 return GetOrCreateSingleton<ProcessStarter>();
 
+            if (type == typeof(IConfigurationProvider))
+                return GetOrCreateSingleton<ConfigurationProvider>();
+
             if (type == typeof(IChildRequestsProvider))
                 return GetOrCreateSingleton<ChildRequestsProvider>();
 

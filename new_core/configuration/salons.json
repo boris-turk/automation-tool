@@ -1,0 +1,604 @@
+[
+  {
+    "Id": "000",
+	"Name": "centralc (win-mico-sql)",
+    "Type": "",
+	"Address": "",
+	"Company": "XLAB"
+  },
+  {
+    "Id": "001",
+	"Name": "Simple Arena",
+    "Type": "Simple",
+	"Address": "Zagreb-Novi Zagreb, Vice Vukova 6",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "002",
+	"Name": "Simple City",
+    "Type": "Simple",
+	"Address": "Zagreb, Slavonska avenija 11d",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "003",
+	"Name": "Simple Zadar",
+    "Type": "Simple",
+	"Address": "Zadar, Ulica Akcije Maslenica 1",
+	"Company": "Solis"
+  },
+  {
+    "Id": "006",
+	"Name": "Simple Cakovec",
+    "Type": "Simple",
+	"Address": "Cakovec, Svetojelenska Cesta 25",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "010",
+	"Name": "Mix Ilica",
+    "Type": "Mix",
+	"Address": "Zagreb, Ilica 288",
+	"Company": "Tuškan"
+  },
+  {
+    "Id": "013",
+	"Name": "Simple Karlovac",
+    "Type": "Simple",
+	"Address": "Karlovac, Prilaz V.Holj. 12",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "014",
+	"Name": "Mix Zadar",
+    "Type": "Mix",
+	"Address": "Zadar, Blejburških žrtava 17",
+	"Company": "Solis"
+  },
+  {
+    "Id": "015",
+	"Name": "Simple Pula",
+    "Type": "Simple",
+	"Address": "Pula, Šijanska cesta 1",
+	"Company": "VE-KU"
+  },
+  {
+    "Id": "020",
+	"Name": "Simple West Gate",
+    "Type": "Simple",
+	"Address": "Zaprešic, Zaprešicka ulica 2",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "027",
+	"Name": "Simple Portanova",
+    "Type": "Simple",
+	"Address": "Osijek, Svilajska 31A",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "029",
+	"Name": "Simple Tower",
+    "Type": "Simple",
+	"Address": "Rijeka, J.P. Kamanova 81A",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "042",
+	"Name": "Mic Styling Split",
+    "Type": "MicStyling",
+	"Address": "Split, Bihaćka 2",
+	"Company": "Medula, Obrt za usluge"
+  },
+  {
+    "Id": "043",
+	"Name": "Simple Avenue Mall",
+    "Type": "Simple",
+	"Address": "Zagreb, Avenija Dubrovnik 16",
+	"Company": "Tuškan"
+  },
+  {
+    "Id": "044",
+	"Name": "Simple Radnicka",
+    "Type": "Simple",
+	"Address": "Zagreb, Radnicka Cesta 49",
+	"Company": "Tuškan"
+  },
+  {
+    "Id": "046",
+	"Name": "Simple Ztc",
+    "Type": "Simple",
+	"Address": "Rijeka, Zvonimirova ulica 3",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "049",
+	"Name": "Simple Beauty Pula",
+    "Type": "Simple",
+	"Address": "Pula, Šijanska cesta 1",
+	"Company": "Simple beauty"
+  },
+  {
+    "Id": "050",
+	"Name": "Simple Solin",
+    "Type": "Simple",
+	"Address": "Solin, Matoševa 10",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "052",
+	"Name": "Simple Makarska",
+    "Type": "Simple",
+	"Address": "Makarska, Ulica Europske zajednice 1",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "054",
+	"Name": "Simple Garden Mall",
+    "Type": "Simple",
+	"Address": "Zagreb-Dubrava, Rudolfa Kolaka 14",
+	"Company": "Brončana"
+  },
+  {
+    "Id": "055",
+	"Name": "Barbershop Zagreb",
+    "Type": "Barbershop",
+	"Address": "Zagreb, Ljubljanska avenija 2b",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "056",
+	"Name": "Mix Cakovec",
+    "Type": "Mix",
+	"Address": "Cakovec, Zrinsko Frankopanska 5",
+	"Company": "Duga kosa"
+  },
+  {
+    "Id": "057",
+	"Name": "Mix Supernova Zagreb",
+    "Type": "Mix",
+	"Address": "Zagreb, Veceslava Holjevca 62",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "058",
+	"Name": "Mix Velika Gorica",
+    "Type": "Mix",
+	"Address": "Velika Gorica, Marina Getaldica 1",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "059",
+	"Name": "Mix Sarajevska",
+    "Type": "Mix",
+	"Address": "Zagreb-Sloboština, Sarajevska 6",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "061",
+	"Name": "Mic Styling Hvar trg",
+    "Type": "MicStyling",
+	"Address": "Hvar, Dr. Mate Miličića 3",
+	"Company": "Baš sve"
+  },
+  {
+    "Id": "200",
+	"Name": "Simple Nova gorica Mercator center",
+    "Type": "Simple",
+	"Address": "Nova gorica, Industrijska cesta 6",
+	"Company": "Biara"
+  },
+  {
+    "Id": "201",
+	"Name": "Simple Koper Mercator center",
+    "Type": "Simple",
+	"Address": "Koper, Dolinska cesta 1a",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "203",
+	"Name": "Simple Kamnik",
+    "Type": "Simple",
+	"Address": "Kamnik, Kovinarska 36",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "204",
+	"Name": "Logatec Mercator center",
+    "Type": "Simple",
+	"Address": "Logatec, Tržaška cesta 3",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "207",
+	"Name": "Simple Maribor Europark",
+    "Type": "Simple",
+	"Address": "Maribor, Pobreška 18",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "208",
+	"Name": "Koper Supernova",
+    "Type": "Simple",
+	"Address": "Koper, Ankaranska 3",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "210",
+	"Name": "Domžale Mercator center",
+    "Type": "Simple",
+	"Address": "Domžale, Cesta talcev 4",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "212",
+	"Name": "Simple Lj Hura",
+    "Type": "Simple",
+	"Address": "Ljubljana, Pot k sejmišcu 32",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "213",
+	"Name": "Ivancna Gorica Mercator center",
+    "Type": "Mix",
+	"Address": "Ivanca Gorica, Vodotucine 18",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "214",
+	"Name": "Simple Trebnje",
+    "Type": "Simple",
+	"Address": "Trebnje, Stari trg 48",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "216",
+	"Name": "Simple Ajdovšcina",
+    "Type": "Simple",
+	"Address": "Ajdovšcina, Vipavska cesta 6",
+	"Company": "Sapi"
+  },
+  {
+    "Id": "217",
+	"Name": "Simple Ptuj",
+    "Type": "Simple",
+	"Address": "Ptuj, Ormoška cesta 15",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "219",
+	"Name": "Ljubljana Supernova Rudnik",
+    "Type": "Simple",
+	"Address": "Ljubljana, Jurckova cesta 223",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "220",
+	"Name": "Simple Ljubljana Citypark",
+    "Type": "Simple",
+	"Address": "Ljubljana, Moskovska ulica 4",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "221",
+	"Name": "Simple Maribor Eleclerc",
+    "Type": "Simple",
+	"Address": "Maribor, Tržaška cesta 67a",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "223",
+	"Name": "Vrhnika",
+    "Type": "Simple",
+	"Address": "Vrhnika, Ljubljanska cesta 29",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "224",
+	"Name": "Simple Kranj",
+    "Type": "Simple",
+	"Address": "Kranj, Cesta 1. maja 77",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "228",
+	"Name": "Simple NovoMesto Qlandija",
+    "Type": "Simple",
+	"Address": "Novo mesto, Otoška cesta 5",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "230",
+	"Name": "Simple Maribor Mercator center",
+    "Type": "Simple",
+	"Address": "Maribor, Ulica Eve Lovše 1",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "231",
+	"Name": "Simple Nova gorica Supernova",
+    "Type": "Simple",
+	"Address": "Nova gorica, Prvomajska ulica 35",
+	"Company": "Biara"
+  },
+  {
+    "Id": "232",
+	"Name": "Simple Ljubljana Mercator center",
+    "Type": "Simple",
+	"Address": "Ljubljana, Cesta Ljubljanske brigade 33",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "233",
+	"Name": "Simple NovoMesto Mercator center",
+    "Type": "Simple",
+	"Address": "Novo mesto, Ljubljanska 47",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "234",
+	"Name": "MS Kongresni",
+    "Type": "MicStyling",
+	"Address": "Ljubljana, Kongresni trg 4",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "235",
+	"Name": "MS Poljanska",
+    "Type": "MicStyling",
+	"Address": "Ljubljana, Poljanska cesta 13",
+	"Company": "Kajtazovic Asmira"
+  },
+  {
+    "Id": "237",
+	"Name": "MS Rimska",
+    "Type": "MicStyling",
+	"Address": "Ljubljana, Rimska 16",
+	"Company": "Ferrent"
+  },
+  {
+    "Id": "238",
+	"Name": "MS Nova gorica",
+    "Type": "MicStyling",
+	"Address": "Nova Gorica, Bevkov trg 6",
+	"Company": "Frizerstvo Paty"
+  },
+  {
+    "Id": "239",
+	"Name": "MS Kristalna",
+    "Type": "MicStyling",
+	"Address": "Ljubljana, Ameriška ulica 8",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "242",
+	"Name": "Mic Styling Maribor",
+    "Type": "MicStyling",
+	"Address": "Slovenska ulica 7",
+	"Company": "Manosa"
+  },
+  {
+    "Id": "245",
+	"Name": "Simple Ljubljana Center",
+    "Type": "Simple",
+	"Address": "Ljubljana, Slovenska Cesta 30",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "246",
+	"Name": "Mix Velenje",
+    "Type": "Mix",
+	"Address": "Velenje, Šalek 112",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "247",
+	"Name": "Brivec Union",
+    "Type": "MicStyling",
+	"Address": "Ljubljana, Miklošiceva cesta 1",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "252",
+	"Name": "Simple Ljubljana",
+    "Type": "Simple",
+	"Address": "Jurckova cesta 225",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "253",
+	"Name": "Mix Ljubljana",
+    "Type": "Mix",
+	"Address": "Šmartinska cesta 152",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "254",
+	"Name": "Simple vic",
+    "Type": "Simple",
+	"Address": "Ljubljana, Tržaška cesta 116",
+	"Company": "Nives Marinko"
+  },
+  {
+    "Id": "255",
+	"Name": "Simple Postojna",
+    "Type": "Simple",
+	"Address": "Postojna, Tržaška 59",
+	"Company": "ŠpeLas"
+  },
+  {
+    "Id": "256",
+	"Name": "Simple Sežana",
+    "Type": "Simple",
+	"Address": "Sežana, Cesta na Lenivec 5",
+	"Company": "ŠpeLas"
+  },
+  {
+    "Id": "257",
+	"Name": "Simple Krško",
+    "Type": "Simple",
+	"Address": "Krško, Cesta Krških žrtev 141",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "258",
+	"Name": "Barbershop Gorica",
+    "Type": "Simple Brivec",
+	"Address": "Nova Gorica, Cesta 25. junija 1a",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "259",
+	"Name": "Brivec Slovenska",
+    "Type": "MicStyling",
+	"Address": "Ljubljana, Slovenska cesta 30",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "261",
+	"Name": "Barbershop Maribor",
+    "Type": "Simple Brivec",
+	"Address": "Maribor, Pobreška 18",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "262",
+	"Name": "Simple Radovljica",
+    "Type": "Simple",
+	"Address": "Radovljica, Gradnikova cesta 1b",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "263",
+	"Name": "Simple Velenje",
+    "Type": "Simple",
+	"Address": "Velenje, Celjska cesta 40",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "264",
+	"Name": "Simple Jesenice",
+    "Type": "Simple",
+	"Address": "Jesenice, Spodnji plavž 5",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "265",
+	"Name": "Barbershop Koper",
+    "Type": "Simple Brivec",
+	"Address": "Koper, Ankaranska cesta 2",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "266",
+	"Name": "Yms Trubarjeva",
+    "Type": "Yms",
+	"Address": "Ljubljana, Trubarjeva cesta 28",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "268",
+	"Name": "Yms Aleja",
+    "Type": "Yms",
+	"Address": "Ljubljana, Rakuševa ulica 1",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "269",
+	"Name": "Simple Mostec",
+    "Type": "Simple",
+	"Address": "Ljubljana, Karingerjeva 6",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "270",
+	"Name": "Simple Celje",
+    "Type": "Simple",
+	"Address": "Celje, Opekarniška 9",
+	"Company": "Luda"
+  },
+  {
+    "Id": "271",
+	"Name": "Šola",
+    "Type": "Sola",
+	"Address": "Ljubljana, Rožna dolina VI 7",
+	"Company": "Zavod"
+  },
+  {
+    "Id": "272",
+	"Name": "Barbershop Ljubljana",
+    "Type": "Simple Brivec",
+	"Address": "Ljubljana, Jurčkova cesta 223",
+	"Company": "Pravi raj"
+  },
+  {
+    "Id": "273",
+	"Name": "Simple Nova gorica Qlandija",
+    "Type": "Simple",
+	"Address": "Nova gorica, Cesta 25. junija 1a",
+	"Company": "Luda"
+  },
+  {
+    "Id": "273",
+	"Name": "Simple Nova gorica Qlandija",
+    "Type": "Simple",
+	"Address": "Nova gorica, Cesta 25. junija 1a",
+	"Company": "Luda"
+  },
+  {
+    "Id": "275",
+	"Name": "Barbershop CityPark",
+    "Type": "Barbershop",
+	"Address": "Ljubljana, Moskovska ulica 4",
+	"Company": "Sojer"
+  },
+  {
+    "Id": "404",
+	"Name": "Mic Styling Bulevar",
+    "Type": "MicStyling",
+	"Address": "Beograd, Bulevar umetnosti 4",
+	"Company": "Mič Styling"
+  },
+  {
+    "Id": "",
+	"Name": "HomeTheater-Pc",
+    "Type": "",
+	"Address": "",
+	"Company": ""
+  },
+  {
+    "Id": "",
+	"Name": "Lea Laptop",
+    "Type": "",
+	"Address": "Gaberje 34A",
+	"Company": ""
+  },
+  {
+    "Id": "",
+	"Name": "Ana Laptop",
+    "Type": "",
+	"Address": "Gaberje 34A",
+	"Company": ""
+  },
+  {
+    "Id": "",
+	"Name": "Darja Laptop",
+    "Type": "",
+	"Address": "Gaberje 34A",
+	"Company": ""
+  },
+  {
+    "Id": "",
+	"Name": "Darja Laptop",
+    "Type": "",
+	"Address": "Gaberje 34A",
+	"Company": ""
+  },
+  {
+    "Id": "",
+	"Name": "Boris Laptop Star",
+    "Type": "",
+	"Address": "Gaberje 34A",
+	"Company": ""
+  }
+]

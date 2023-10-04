@@ -10,7 +10,7 @@ namespace BTurk.Automation.Core.Serialization
         {
             var property = base.CreateProperty(member, memberSerialization);
 
-            if (!property.HasMemberAttribute)
+            if (!property.HasMemberAttribute || !property.Writable)
             {
                 property.ShouldSerialize = _ => false;
                 property.ShouldDeserialize = _ => false;

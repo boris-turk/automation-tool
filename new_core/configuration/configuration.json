@@ -1,0 +1,16 @@
+{
+  "ProgramPaths": [
+    {
+      "Name": "Isl",
+      "Path": "C:\\Program Files (x86)\\ISL Online\\ISL Light\\ISLLight.exe"
+    },
+    {
+      "Name": "TortoiseSvn",
+      "Path": "C:\\Program Files\\TortoiseSVN\\bin\\TortoiseProc.exe"
+    },
+    {
+      "Name": "TortoiseGit",
+      "Path": "C:\\Program Files\\TortoiseGit\\bin\\TortoiseGitProc.exe"
+    }
+  ]
+}

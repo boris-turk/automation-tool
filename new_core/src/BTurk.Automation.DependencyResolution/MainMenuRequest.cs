@@ -2,6 +2,7 @@
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.E3k;
+using BTurk.Automation.Mic;
 using BTurk.Automation.Standard;
 
 namespace BTurk.Automation.DependencyResolution
@@ -22,6 +23,7 @@ namespace BTurk.Automation.DependencyResolution
             yield return new UrlCollectionRequest();
             yield return new GitConsoleRequest();
             yield return new BuildCleanupRequest();
+            yield return new SalonsCollectionRequest();
         }
 
         protected override bool CanAccept(DispatchPredicateContext context)

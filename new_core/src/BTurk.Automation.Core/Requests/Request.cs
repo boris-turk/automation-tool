@@ -4,6 +4,8 @@ using System.Runtime.Serialization;
 using BTurk.Automation.Core.Commands;
 using BTurk.Automation.Core.SearchEngine;
 
+// ReSharper disable VirtualMemberCallInConstructor
+
 namespace BTurk.Automation.Core.Requests
 {
     [DataContract]
@@ -22,7 +24,7 @@ namespace BTurk.Automation.Core.Requests
         }
 
         [DataMember(Name = "Text")]
-        public string Text { get; set; }
+        public virtual string Text { get; set; }
 
         public ICommand Command { get; set; }
 

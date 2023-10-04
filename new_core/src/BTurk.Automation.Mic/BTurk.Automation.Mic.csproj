@@ -46,11 +46,17 @@
   <ItemGroup>
     <Compile Include="Salon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SalonsCollectionRequest.cs" />
+    <Compile Include="SalonsProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BTurk.Automation.Core\BTurk.Automation.Core.csproj">
       <Project>{A48DC1B5-1E2B-41C1-AB49-998D95085B48}</Project>
       <Name>BTurk.Automation.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BTurk.Automation.Standard\BTurk.Automation.Standard.csproj">
+      <Project>{B15CAF22-4AF9-44D9-AE9B-9F6338AA9232}</Project>
+      <Name>BTurk.Automation.Standard</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

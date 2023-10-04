@@ -6,6 +6,11 @@ namespace BTurk.Automation.Core
 {
     public static class Extensions
     {
+        public static bool HasLength(this string text)
+        {
+            return !string.IsNullOrWhiteSpace(text);
+        }
+
         public static bool StartsPartiallyWith(this string testedText, string value)
         {
             return ContainsPartially(testedText, value, true);

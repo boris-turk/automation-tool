@@ -11,5 +11,10 @@ namespace BTurk.Automation.Standard
         {
             Process.Start(request.Path);
         }
+
+        public static string GetIslProgramPath(this Configuration configuration)
+        {
+            return configuration.GetProgramPath("Isl");
+        }
     }
 }
