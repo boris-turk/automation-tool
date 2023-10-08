@@ -1,4 +1,6 @@
-﻿using BTurk.Automation.Core.SearchEngine;
+﻿using System.Collections.Generic;
+using BTurk.Automation.Core.Credentials;
+using BTurk.Automation.Core.SearchEngine;
 using FluentAssertions;
 using Xunit;
 

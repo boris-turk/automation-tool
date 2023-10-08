@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="FilterAlgorithmTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserCredentialsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
