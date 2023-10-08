@@ -1,7 +1,6 @@
-﻿namespace BTurk.Automation.Core.SearchEngine
+﻿namespace BTurk.Automation.Core.SearchEngine;
+
+public interface IAdditionalEnvironmentDataProvider
 {
-    public interface IAdditionalEnvironmentDataProvider
-    {
-        void Process(EnvironmentContext context);
-    }
+    void Process(EnvironmentContext context);
 }

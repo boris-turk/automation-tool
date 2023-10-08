@@ -1,7 +1,6 @@
-﻿namespace BTurk.Automation.Core
+﻿namespace BTurk.Automation.Core;
+
+public interface IProcessStarter
 {
-    public interface IProcessStarter
-    {
-        void Start(string fileName, string arguments = null);
-    }
+    void Start(string fileName, string arguments = null);
 }

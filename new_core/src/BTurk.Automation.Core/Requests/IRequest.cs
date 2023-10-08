@@ -1,11 +1,10 @@
 ﻿using BTurk.Automation.Core.Commands;
 
-namespace BTurk.Automation.Core.Requests
+namespace BTurk.Automation.Core.Requests;
+
+public interface IRequest
 {
-    public interface IRequest
-    {
-        ICommand Command { get; }
-        string Text { get; }
-        bool CanAccept(DispatchPredicateContext context);
-    }
+    ICommand Command { get; }
+    string Text { get; }
+    bool CanAccept(DispatchPredicateContext context);
 }

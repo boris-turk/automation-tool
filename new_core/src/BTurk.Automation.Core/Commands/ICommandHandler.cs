@@ -1,9 +1,8 @@
 ﻿// ReSharper disable TypeParameterCanBeVariant
 
-namespace BTurk.Automation.Core.Commands
+namespace BTurk.Automation.Core.Commands;
+
+public interface ICommandHandler<TCommand> where TCommand : ICommand
 {
-    public interface ICommandHandler<TCommand> where TCommand : ICommand
-    {
-        void Handle(TCommand command);
-    }
+    void Handle(TCommand command);
 }

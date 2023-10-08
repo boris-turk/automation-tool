@@ -1,8 +1,7 @@
-﻿namespace BTurk.Automation.Host.AssemblyLoading
+﻿namespace BTurk.Automation.Host.AssemblyLoading;
+
+public interface IGuestProcess
 {
-    public interface IGuestProcess
-    {
-        void Start();
-        void Unload();
-    }
+    void Start();
+    void Unload();
 }

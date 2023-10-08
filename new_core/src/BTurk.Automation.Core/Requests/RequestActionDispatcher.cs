@@ -2,181 +2,180 @@
 using System.Linq;
 using BTurk.Automation.Core.SearchEngine;
 
-namespace BTurk.Automation.Core.Requests
+namespace BTurk.Automation.Core.Requests;
+
+public class RequestActionDispatcher<TRequest> : IRequestActionDispatcher<TRequest> where TRequest : class, IRequest
 {
-    public class RequestActionDispatcher<TRequest> : IRequestActionDispatcher<TRequest> where TRequest : class, IRequest
+    private readonly IRequestVisitor _visitor;
+    private readonly ISearchEngine _searchEngine;
+    private readonly IRequestActionDispatcher _dispatcher;
+    private readonly IChildRequestsProvider _childRequestsProvider;
+
+    public RequestActionDispatcher(IRequestVisitor visitor, ISearchEngine searchEngine,
+        IRequestActionDispatcher dispatcher, IChildRequestsProvider childRequestsProvider)
     {
-        private readonly IRequestVisitor _visitor;
-        private readonly ISearchEngine _searchEngine;
-        private readonly IRequestActionDispatcher _dispatcher;
-        private readonly IChildRequestsProvider _childRequestsProvider;
+        _visitor = visitor;
+        _searchEngine = searchEngine;
+        _dispatcher = dispatcher;
+        _childRequestsProvider = childRequestsProvider;
+    }
 
-        public RequestActionDispatcher(IRequestVisitor visitor, ISearchEngine searchEngine,
-            IRequestActionDispatcher dispatcher, IChildRequestsProvider childRequestsProvider)
+    private SearchStep CurrentStep => _searchEngine.Steps.Last();
+
+    private List<IRequest> SearchItems => _searchEngine.Items;
+
+    private IRequest ParentRequest
+    {
+        get
         {
-            _visitor = visitor;
-            _searchEngine = searchEngine;
-            _dispatcher = dispatcher;
-            _childRequestsProvider = childRequestsProvider;
+            var parentStep = _searchEngine.Steps.ElementAtOrDefault(_searchEngine.Steps.Count - 2);
+            return parentStep?.Request;
+        }
+    }
+
+    public void Dispatch(TRequest request, ActionType actionType)
+    {
+        if (actionType == ActionType.Execute)
+            OnExecute(request);
+
+        if (actionType == ActionType.MoveNext)
+            OnMoveNext(request);
+
+        if (actionType == ActionType.MovePrevious)
+            OnMovePrevious();
+
+        LoadSearchItems();
+    }
+
+    private void OnExecute(TRequest request)
+    {
+        var selectedRequest = _searchEngine.SelectedItem;
+
+        LoadChildrenIfNecessary(request);
+
+        if (request != selectedRequest)
+        {
+            Visit(request, selectedRequest, ActionType.Execute);
+            return;
         }
 
-        private SearchStep CurrentStep => _searchEngine.Steps.Last();
+        if (!GetChildren(request).Any())
+            _searchEngine.Hide();
 
-        private List<IRequest> SearchItems => _searchEngine.Items;
+        Execute(request);
+    }
 
-        private IRequest ParentRequest
+    private void Execute(TRequest request)
+    {
+        Visit(request, Request.Null, ActionType.Execute);
+    }
+
+    private void Visit(TRequest request, IRequest childRequest, ActionType actionType)
+    {
+        var properChildRequest = childRequest ?? Request.Null;
+        var context = new RequestVisitContext(request, properChildRequest, actionType);
+        _visitor.Visit(context);
+    }
+
+    private void OnMoveNext(TRequest request)
+    {
+        var currentStep = CurrentStep;
+
+        LoadChildrenIfNecessary(request);
+
+        if (!currentStep.Children.Any())
         {
-            get
-            {
-                var parentStep = _searchEngine.Steps.ElementAtOrDefault(_searchEngine.Steps.Count - 2);
-                return parentStep?.Request;
-            }
+            OnMoveNextWithNoChildren(request);
+            return;
         }
 
-        public void Dispatch(TRequest request, ActionType actionType)
+        var nextRequest = GetNextVisitableRequest(ActionType.MoveNext);
+
+        if (nextRequest != null)
+            OnMoveToNextRequest(request, nextRequest, ActionType.MoveNext);
+    }
+
+    private void OnMoveNextWithNoChildren(TRequest request)
+    {
+        if (ParentRequest is SelectionRequest<TRequest> selectionRequest)
+            selectionRequest.ChildSelected?.Invoke(request);
+
+        RemoveLastStep();
+    }
+
+    private void LoadChildrenIfNecessary(TRequest request)
+    {
+        if (CurrentStep.Children.Count == 0)
+            CurrentStep.Children.AddRange(GetChildren(request));
+    }
+
+    private IRequest GetNextVisitableRequest(ActionType actionType)
+    {
+        var context = new DispatchPredicateContext(CurrentStep.Text, actionType, _searchEngine.Context);
+
+        IRequest nextRequest = _searchEngine.SelectedItem;
+
+        if (nextRequest == null)
+            return GetVisitableChild(context);
+
+        if (nextRequest == CurrentStep.Request)
+            return GetVisitableChild(context);
+
+        if (!nextRequest.CanAccept(context))
+            return GetVisitableChild(context);
+
+        return nextRequest;
+    }
+
+    private IRequest GetVisitableChild(DispatchPredicateContext context)
+    {
+        var visitableChild = CurrentStep.Children.FirstOrDefault(r => r.CanAccept(context));
+        return visitableChild;
+    }
+
+    private void OnMoveToNextRequest(TRequest request, IRequest child, ActionType actionType)
+    {
+        Visit(request, child, ActionType.MoveNext);
+        _searchEngine.Steps.Add(new SearchStep(child));
+        _dispatcher.Dispatch(child, actionType);
+    }
+
+    private void OnMovePrevious()
+    {
+        if (CurrentStep.Text.Length == 0 && _searchEngine.Steps.Count > 2)
         {
-            if (actionType == ActionType.Execute)
-                OnExecute(request);
-
-            if (actionType == ActionType.MoveNext)
-                OnMoveNext(request);
-
-            if (actionType == ActionType.MovePrevious)
-                OnMovePrevious();
-
-            LoadSearchItems();
-        }
-
-        private void OnExecute(TRequest request)
-        {
-            var selectedRequest = _searchEngine.SelectedItem;
-
-            LoadChildrenIfNecessary(request);
-
-            if (request != selectedRequest)
-            {
-                Visit(request, selectedRequest, ActionType.Execute);
-                return;
-            }
-
-            if (!GetChildren(request).Any())
-                _searchEngine.Hide();
-
-            Execute(request);
-        }
-
-        private void Execute(TRequest request)
-        {
-            Visit(request, Request.Null, ActionType.Execute);
-        }
-
-        private void Visit(TRequest request, IRequest childRequest, ActionType actionType)
-        {
-            var properChildRequest = childRequest ?? Request.Null;
-            var context = new RequestVisitContext(request, properChildRequest, actionType);
-            _visitor.Visit(context);
-        }
-
-        private void OnMoveNext(TRequest request)
-        {
-            var currentStep = CurrentStep;
-
-            LoadChildrenIfNecessary(request);
-
-            if (!currentStep.Children.Any())
-            {
-                OnMoveNextWithNoChildren(request);
-                return;
-            }
-
-            var nextRequest = GetNextVisitableRequest(ActionType.MoveNext);
-
-            if (nextRequest != null)
-                OnMoveToNextRequest(request, nextRequest, ActionType.MoveNext);
-        }
-
-        private void OnMoveNextWithNoChildren(TRequest request)
-        {
-            if (ParentRequest is SelectionRequest<TRequest> selectionRequest)
-                selectionRequest.ChildSelected?.Invoke(request);
-
             RemoveLastStep();
+            _dispatcher.Dispatch(CurrentStep.Request, ActionType.MovePrevious);
         }
-
-        private void LoadChildrenIfNecessary(TRequest request)
+        else if (CurrentStep.Text.Length > 0)
         {
-            if (CurrentStep.Children.Count == 0)
-                CurrentStep.Children.AddRange(GetChildren(request));
+            CurrentStep.Text = CurrentStep.Text.Remove(CurrentStep.Text.Length - 1);
+            _dispatcher.Dispatch(CurrentStep.Request, ActionType.MoveNext);
         }
+    }
 
-        private IRequest GetNextVisitableRequest(ActionType actionType)
-        {
-            var context = new DispatchPredicateContext(CurrentStep.Text, actionType, _searchEngine.Context);
+    private void RemoveLastStep()
+    {
+        var lastStep = _searchEngine.Steps.Last();
+        _searchEngine.Steps.Remove(lastStep);
+    }
 
-            IRequest nextRequest = _searchEngine.SelectedItem;
+    private void LoadSearchItems()
+    {
+        SearchItems.Clear();
 
-            if (nextRequest == null)
-                return GetVisitableChild(context);
+        if (CurrentStep.Request == null)
+            return;
 
-            if (nextRequest == CurrentStep.Request)
-                return GetVisitableChild(context);
+        var filter = new FilterAlgorithm(CurrentStep.Text);
 
-            if (!nextRequest.CanAccept(context))
-                return GetVisitableChild(context);
+        var items = filter.Filter(CurrentStep.Children);
 
-            return nextRequest;
-        }
+        SearchItems.AddRange(items);
+    }
 
-        private IRequest GetVisitableChild(DispatchPredicateContext context)
-        {
-            var visitableChild = CurrentStep.Children.FirstOrDefault(r => r.CanAccept(context));
-            return visitableChild;
-        }
-
-        private void OnMoveToNextRequest(TRequest request, IRequest child, ActionType actionType)
-        {
-            Visit(request, child, ActionType.MoveNext);
-            _searchEngine.Steps.Add(new SearchStep(child));
-            _dispatcher.Dispatch(child, actionType);
-        }
-
-        private void OnMovePrevious()
-        {
-            if (CurrentStep.Text.Length == 0 && _searchEngine.Steps.Count > 2)
-            {
-                RemoveLastStep();
-                _dispatcher.Dispatch(CurrentStep.Request, ActionType.MovePrevious);
-            }
-            else if (CurrentStep.Text.Length > 0)
-            {
-                CurrentStep.Text = CurrentStep.Text.Remove(CurrentStep.Text.Length - 1);
-                _dispatcher.Dispatch(CurrentStep.Request, ActionType.MoveNext);
-            }
-        }
-
-        private void RemoveLastStep()
-        {
-            var lastStep = _searchEngine.Steps.Last();
-            _searchEngine.Steps.Remove(lastStep);
-        }
-
-        private void LoadSearchItems()
-        {
-            SearchItems.Clear();
-
-            if (CurrentStep.Request == null)
-                return;
-
-            var filter = new FilterAlgorithm(CurrentStep.Text);
-
-            var items = filter.Filter(CurrentStep.Children);
-
-            SearchItems.AddRange(items);
-        }
-
-        private IEnumerable<IRequest> GetChildren(TRequest request)
-        {
-            return _childRequestsProvider.LoadChildren(request);
-        }
+    private IEnumerable<IRequest> GetChildren(TRequest request)
+    {
+        return _childRequestsProvider.LoadChildren(request);
     }
 }

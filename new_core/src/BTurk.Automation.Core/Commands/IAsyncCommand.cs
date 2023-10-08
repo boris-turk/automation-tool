@@ -1,6 +1,5 @@
-﻿namespace BTurk.Automation.Core.Commands
+﻿namespace BTurk.Automation.Core.Commands;
+
+public interface IAsyncCommand : ICommand
 {
-    public interface IAsyncCommand : ICommand
-    {
-    }
 }

@@ -1,7 +1,6 @@
-﻿namespace BTurk.Automation.Core
+﻿namespace BTurk.Automation.Core;
+
+public interface IResourceProvider
 {
-    public interface IResourceProvider
-    {
-        T Load<T>(string resourceName);
-    }
+    T Load<T>(string resourceName);
 }

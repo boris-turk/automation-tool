@@ -2,10 +2,9 @@
 
 // ReSharper disable TypeParameterCanBeVariant
 
-namespace BTurk.Automation.Core.Requests
+namespace BTurk.Automation.Core.Requests;
+
+public interface ICommandProcessor
 {
-    public interface ICommandProcessor
-    {
-        void Process(ICommand command);
-    }
+    void Process(ICommand command);
 }

@@ -5,110 +5,109 @@ using System.Threading;
 using System.Windows.Forms;
 using BTurk.Automation.Host.AssemblyLoading;
 
-namespace BTurk.Automation.Host
+namespace BTurk.Automation.Host;
+
+public static class Program
 {
-    public static class Program
+    private static Mutex _mutex;
+    private static StartupProcess _startupProcess;
+
+    /// <summary>
+    /// The main entry point for the application.
+    /// </summary>
+    [STAThread]
+    static void Main()
     {
-		private static Mutex _mutex;
-		private static StartupProcess _startupProcess;
+        AppDomain.CurrentDomain.UnhandledException += OnAppDomainUnhandledException;
 
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        if (!CreateMutex())
+            return;
+
+        Application.EnableVisualStyles();
+        Application.SetCompatibleTextRenderingDefault(false);
+
+        Environment.CurrentDirectory = GetExecutingAssemblyDirectory();
+
+        try
         {
-			AppDomain.CurrentDomain.UnhandledException += OnAppDomainUnhandledException;
+            _startupProcess = new StartupProcess();
+            _startupProcess.Run();
+        }
+        catch (Exception e)
+        {
+            ReportError(e);
+        }
+        finally
+        {
+            _startupProcess?.Dispose();
+            AppDomain.CurrentDomain.UnhandledException -= OnAppDomainUnhandledException;
+            ReleaseMutex();
+        }
+    }
 
-            if (!CreateMutex())
-                return;
+    private static string GetExecutingAssemblyDirectory()
+    {
+        var fileLocation = Assembly.GetExecutingAssembly().Location;
+        return Path.GetDirectoryName(fileLocation) ?? Environment.CurrentDirectory;
+    }
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+    private static bool CreateMutex()
+    {
+        var mutexId = GetMutexId(Environment.CurrentDirectory);
+        _mutex = new Mutex(true, mutexId, out var result);
 
-            Environment.CurrentDirectory = GetExecutingAssemblyDirectory();
+        if (result)
+            return true;
 
-			try
-            {
-                _startupProcess = new StartupProcess();
-                _startupProcess.Run();
-			}
-			catch (Exception e)
-			{
-				ReportError(e);
-			}
-			finally
-			{
-                _startupProcess?.Dispose();
-				AppDomain.CurrentDomain.UnhandledException -= OnAppDomainUnhandledException;
-				ReleaseMutex();
-            }
+        _mutex.Close();
+        _mutex = null;
+        return false;
+    }
+
+    private static void OnAppDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
+        ReleaseMutex();
+
+        if (e == null)
+        {
+            ReportError(null);
+            return;
         }
 
-        private static string GetExecutingAssemblyDirectory()
+        if (e.ExceptionObject is Exception exception)
+            ReportError(exception);
+        else
+            ReportError(null);
+    }
+
+    private static string GetMutexId(string directory)
+    {
+        string id = directory.Replace(":", "_").Replace(@"\", "_");
+        return $"MicServiceMutex_{id}";
+    }
+
+    private static void ReleaseMutex()
+    {
+        try
         {
-            var fileLocation = Assembly.GetExecutingAssembly().Location;
-            return Path.GetDirectoryName(fileLocation) ?? Environment.CurrentDirectory;
-        }
-
-        private static bool CreateMutex()
-        {
-			var mutexId = GetMutexId(Environment.CurrentDirectory);
-			_mutex = new Mutex(true, mutexId, out var result);
-
-            if (result)
-                return true;
-
-            _mutex.Close();
+            _mutex?.ReleaseMutex();
+            _mutex?.Close();
             _mutex = null;
-            return false;
         }
-
-        private static void OnAppDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        catch (Exception)
         {
-			ReleaseMutex();
-
-            if (e == null)
-            {
-                ReportError(null);
-                return;
-            }
-
-	        if (e.ExceptionObject is Exception exception)
-				ReportError(exception);
-            else
-                ReportError(null);
+            // ignore possible exceptions
         }
+    }
 
-		private static string GetMutexId(string directory)
-		{
-			string id = directory.Replace(":", "_").Replace(@"\", "_");
-			return $"MicServiceMutex_{id}";
-		}
+    private static void ReportError(Exception exception)
+    {
+        var message = exception == null
+            ? "Unknown error occurred."
+            : $"{exception.Message}{Environment.NewLine}{exception.StackTrace}";
 
-		private static void ReleaseMutex()
-        {
-            try
-            {
-                _mutex?.ReleaseMutex();
-                _mutex?.Close();
-                _mutex = null;
-            }
-            catch (Exception)
-            {
-                // ignore possible exceptions
-            }
-        }
+        string errorFilePath = Path.Combine(StartupProcess.CurrentAssemblyDirectory, @"ERROR_REPORT.txt");
 
-		private static void ReportError(Exception exception)
-		{
-            var message = exception == null
-                ? "Unknown error occurred."
-                : $"{exception.Message}{Environment.NewLine}{exception.StackTrace}";
-
-			string errorFilePath = Path.Combine(StartupProcess.CurrentAssemblyDirectory, @"ERROR_REPORT.txt");
-
-			File.AppendAllText(errorFilePath, message);
-		}
+        File.AppendAllText(errorFilePath, message);
     }
 }

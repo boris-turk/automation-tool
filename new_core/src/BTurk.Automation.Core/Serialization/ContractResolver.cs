@@ -2,21 +2,20 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace BTurk.Automation.Core.Serialization
+namespace BTurk.Automation.Core.Serialization;
+
+public class ContractResolver : DefaultContractResolver
 {
-    public class ContractResolver : DefaultContractResolver
+    protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
     {
-        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        var property = base.CreateProperty(member, memberSerialization);
+
+        if (!property.HasMemberAttribute || !property.Writable)
         {
-            var property = base.CreateProperty(member, memberSerialization);
-
-            if (!property.HasMemberAttribute || !property.Writable)
-            {
-                property.ShouldSerialize = _ => false;
-                property.ShouldDeserialize = _ => false;
-            }
-
-            return property;
+            property.ShouldSerialize = _ => false;
+            property.ShouldDeserialize = _ => false;
         }
+
+        return property;
     }
 }

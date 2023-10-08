@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using BTurk.Automation.Core.Requests;
 
-namespace BTurk.Automation.Core.SearchEngine
+namespace BTurk.Automation.Core.SearchEngine;
+
+public interface ISearchEngine : IEnvironmentContextProvider, ISearchItemsProvider
 {
-    public interface ISearchEngine : IEnvironmentContextProvider, ISearchItemsProvider
-    {
-        List<SearchStep> Steps { get; }
+    List<SearchStep> Steps { get; }
 
-        string SearchText { get; set; }
+    string SearchText { get; set; }
 
-        Request SelectedItem { get; }
+    Request SelectedItem { get; }
 
-        void Hide();
-    }
+    void Hide();
 }

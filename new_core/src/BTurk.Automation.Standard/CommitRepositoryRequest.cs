@@ -1,16 +1,15 @@
 ﻿using BTurk.Automation.Core.Requests;
 
-namespace BTurk.Automation.Standard
-{
-    public class CommitRepositoryRequest : CollectionRequest<Repository>
-    {
-        public CommitRepositoryRequest() : base("commit")
-        {
-        }
+namespace BTurk.Automation.Standard;
 
-        protected override void OnRequestLoaded(Repository repository)
-        {
-            repository.Command = new CommitRepositoryCommand(repository);
-        }
+public class CommitRepositoryRequest : CollectionRequest<Repository>
+{
+    public CommitRepositoryRequest() : base("commit")
+    {
+    }
+
+    protected override void OnRequestLoaded(Repository repository)
+    {
+        repository.Command = new CommitRepositoryCommand(repository);
     }
 }

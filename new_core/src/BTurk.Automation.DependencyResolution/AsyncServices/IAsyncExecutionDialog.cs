@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace BTurk.Automation.DependencyResolution.AsyncServices
+namespace BTurk.Automation.DependencyResolution.AsyncServices;
+
+public interface IAsyncExecutionDialog
 {
-    public interface IAsyncExecutionDialog
-    {
-        void Start(Action action);
-    }
+    void Start(Action action);
 }

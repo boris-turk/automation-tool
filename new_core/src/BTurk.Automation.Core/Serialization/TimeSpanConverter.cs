@@ -2,36 +2,35 @@
 using System.Xml;
 using Newtonsoft.Json;
 
-namespace BTurk.Automation.Core.Serialization
+namespace BTurk.Automation.Core.Serialization;
+
+public class TimeSpanConverter : JsonConverter
 {
-    public class TimeSpanConverter : JsonConverter
+    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
     {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            var timeSpan = (TimeSpan)value;
-            var text = XmlConvert.ToString(timeSpan);
-            serializer.Serialize(writer, text);
-        }
+        var timeSpan = (TimeSpan)value;
+        var text = XmlConvert.ToString(timeSpan);
+        serializer.Serialize(writer, text);
+    }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-            JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null)
-                return null;
+    public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+        JsonSerializer serializer)
+    {
+        if (reader.TokenType == JsonToken.Null)
+            return null;
 
-            var value = serializer.Deserialize<string>(reader);
+        var value = serializer.Deserialize<string>(reader);
 
-            if (value == null)
-                return null;
+        if (value == null)
+            return null;
 
-            var timeSpan = XmlConvert.ToTimeSpan(value);
+        var timeSpan = XmlConvert.ToTimeSpan(value);
 
-            return timeSpan;
-        }
+        return timeSpan;
+    }
 
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(TimeSpan) || objectType == typeof(TimeSpan?);
-        }
+    public override bool CanConvert(Type objectType)
+    {
+        return objectType == typeof(TimeSpan) || objectType == typeof(TimeSpan?);
     }
 }

@@ -2,31 +2,30 @@
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 
-namespace BTurk.Automation.Standard
+namespace BTurk.Automation.Standard;
+
+public class VisualStudioRequest : CollectionRequest
 {
-    public class VisualStudioRequest : CollectionRequest
+    public VisualStudioRequest() : base("Visual studio")
     {
-        public VisualStudioRequest() : base("Visual studio")
-        {
-        }
+    }
 
-        protected override IEnumerable<IRequest> GetRequests()
+    protected override IEnumerable<IRequest> GetRequests()
+    {
+        yield return new AhkSendRequest
         {
-            yield return new AhkSendRequest
-            {
-                Text = "close all tabs but current",
-                Keys = "!^c"
-            };
-        }
+            Text = "close all tabs but current",
+            Keys = "!^c"
+        };
+    }
 
-        protected override bool CanAccept(DispatchPredicateContext context)
-        {
-            return IsVisualStudioContext(context.EnvironmentContext);
-        }
+    protected override bool CanAccept(DispatchPredicateContext context)
+    {
+        return IsVisualStudioContext(context.EnvironmentContext);
+    }
 
-        private bool IsVisualStudioContext(EnvironmentContext context)
-        {
-            return context.WindowTitle.Contains("Visual Studio");
-        }
+    private bool IsVisualStudioContext(EnvironmentContext context)
+    {
+        return context.WindowTitle.Contains("Visual Studio");
     }
 }

@@ -7,94 +7,93 @@ using BTurk.Automation.Core.Requests;
 
 // ReSharper disable UnusedMember.Global
 
-namespace BTurk.Automation.Standard
+namespace BTurk.Automation.Standard;
+
+public class RepositoriesProvider : IRequestsProvider<Repository>
 {
-    public class RepositoriesProvider : IRequestsProvider<Repository>
+    private readonly IResourceProvider _resourceProvider;
+
+    public RepositoriesProvider(IResourceProvider resourceProvider)
     {
-        private readonly IResourceProvider _resourceProvider;
+        _resourceProvider = resourceProvider;
+    }
 
-        public RepositoriesProvider(IResourceProvider resourceProvider)
+    private string[] Ignored => new[]
+    {
+        "V50MicSvn",
+        "V50NewCore",
+    };
+
+    public IEnumerable<Repository> GetRequests()
+    {
+        var projectsDirectory = @"C:\work\projects";
+
+        foreach (var directory in Directory.GetDirectories(projectsDirectory))
         {
-            _resourceProvider = resourceProvider;
-        }
+            var repository = ToRepository(directory);
 
-        private string[] Ignored => new[]
-        {
-            "V50MicSvn",
-            "V50NewCore",
-        };
-
-        public IEnumerable<Repository> GetRequests()
-        {
-            var projectsDirectory = @"C:\work\projects";
-
-            foreach (var directory in Directory.GetDirectories(projectsDirectory))
-            {
-                var repository = ToRepository(directory);
-
-                if (repository != null)
-                    yield return repository;
-            }
-
-            foreach (var repository in _resourceProvider.Load<List<Repository>>("repositories"))
+            if (repository != null)
                 yield return repository;
         }
 
-        private Repository ToRepository(string directory)
+        foreach (var repository in _resourceProvider.Load<List<Repository>>("repositories"))
+            yield return repository;
+    }
+
+    private Repository ToRepository(string directory)
+    {
+        var candidate = Path.GetFileName(directory);
+
+        if (Ignored.Contains(candidate))
+            return null;
+
+        if (candidate == "V50")
         {
-            var candidate = Path.GetFileName(directory);
+            return new Repository
+            {
+                Text = "trunk",
+                Type = RepositoryType.Git,
+                Path = directory
+            };
+        }
 
-            if (Ignored.Contains(candidate))
-                return null;
+        var match = Regex.Match(candidate, @"V50Rev0*(\d+)");
 
-            if (candidate == "V50")
+        if (match.Success)
+        {
+            var name = $"r{match.Groups[1].Value}";
+            return new Repository
+            {
+                Text = name,
+                Type = RepositoryType.Svn,
+                Path = directory
+            };
+        }
+
+        match = Regex.Match(candidate, @"V50(.*)");
+
+        if (match.Success)
+        {
+            var name = $"{match.Groups[1].Value.ToLower()}";
+
+            if (name == "mic")
             {
                 return new Repository
                 {
-                    Text = "trunk",
+                    Text = name,
                     Type = RepositoryType.Git,
                     Path = directory
                 };
             }
 
-            var match = Regex.Match(candidate, @"V50Rev0*(\d+)");
-
-            if (match.Success)
+            return new Repository
             {
-                var name = $"r{match.Groups[1].Value}";
-                return new Repository
-                {
-                    Text = name,
-                    Type = RepositoryType.Svn,
-                    Path = directory
-                };
-            }
-
-            match = Regex.Match(candidate, @"V50(.*)");
-
-            if (match.Success)
-            {
-                var name = $"{match.Groups[1].Value.ToLower()}";
-
-                if (name == "mic")
-                {
-                    return new Repository
-                    {
-                        Text = name,
-                        Type = RepositoryType.Git,
-                        Path = directory
-                    };
-                }
-
-                return new Repository
-                {
-                    Text = name,
-                    Type = RepositoryType.Svn,
-                    Path = directory
-                };
-            }
-
-            return null;
+                Text = name,
+                Type = RepositoryType.Svn,
+                Path = directory
+            };
         }
+
+        return null;
     }
 }

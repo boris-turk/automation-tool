@@ -2,20 +2,19 @@
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 
-namespace BTurk.Automation.E3k
-{
-    public class OpenWindowRequest : CollectionRequest
-    {
-        public OpenWindowRequest() : base("window")
-        {
-        }
+namespace BTurk.Automation.E3k;
 
-        protected override IEnumerable<IRequest> GetRequests()
+public class OpenWindowRequest : CollectionRequest
+{
+    public OpenWindowRequest() : base("window")
+    {
+    }
+
+    protected override IEnumerable<IRequest> GetRequests()
+    {
+        yield return new SelectionRequest<Module>
         {
-            yield return new SelectionRequest<Module>
-            {
-                //Selected = solution => solution.Open()
-            };
-        }
+            //Selected = solution => solution.Open()
+        };
     }
 }

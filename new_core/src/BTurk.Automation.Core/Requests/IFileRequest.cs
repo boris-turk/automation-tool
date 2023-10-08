@@ -1,7 +1,6 @@
-﻿namespace BTurk.Automation.Core.Requests
+﻿namespace BTurk.Automation.Core.Requests;
+
+public interface IFileRequest
 {
-    public interface IFileRequest
-    {
-        string Path { get; }
-    }
+    string Path { get; }
 }

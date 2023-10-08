@@ -1,9 +1,8 @@
-﻿namespace BTurk.Automation.Core.SearchEngine
+﻿namespace BTurk.Automation.Core.SearchEngine;
+
+public enum ActionType
 {
-    public enum ActionType
-    {
-        MoveNext,
-        MovePrevious,
-        Execute
-    }
+    MoveNext,
+    MovePrevious,
+    Execute
 }

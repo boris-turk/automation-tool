@@ -6,107 +6,106 @@ using BTurk.Automation.Core.AsyncServices;
 
 // ReSharper disable LocalizableElement
 
-namespace BTurk.Automation.DependencyResolution.AsyncServices
+namespace BTurk.Automation.DependencyResolution.AsyncServices;
+
+internal class AsyncExecutionDialog : Form, IAsyncExecution, IAsyncExecutionDialog
 {
-    internal class AsyncExecutionDialog : Form, IAsyncExecution, IAsyncExecutionDialog
+    private const int SpaceBetweenLabelAndCancelButton = 30;
+
+    public AsyncExecutionDialog(MainForm mainForm)
     {
-        private const int SpaceBetweenLabelAndCancelButton = 30;
+        MainForm = mainForm;
+        Size = new Size(200, 100);
+        Padding = new Padding(10, 10, 10, 10);
 
-        public AsyncExecutionDialog(MainForm mainForm)
+        MaximizeBox = false;
+        MinimizeBox = false;
+        FormBorderStyle = FormBorderStyle.FixedDialog;
+        StartPosition = FormStartPosition.CenterScreen;
+
+        _messageLabel = new Label
         {
-            MainForm = mainForm;
-            Size = new Size(200, 100);
-            Padding = new Padding(10, 10, 10, 10);
+            AutoSize = true,
+            Location = new Point(Padding.Left, Padding.Top)
+        };
 
-            MaximizeBox = false;
-            MinimizeBox = false;
-            FormBorderStyle = FormBorderStyle.FixedDialog;
-            StartPosition = FormStartPosition.CenterScreen;
+        _cancelButton = new Button { Text = "Cancel" };
+        _cancelButton.Click += (_, _) => OnCancelRequested();
 
-            _messageLabel = new Label
-            {
-                AutoSize = true,
-                Location = new Point(Padding.Left, Padding.Top)
-            };
+        CancelButton = _cancelButton;
 
-            _cancelButton = new Button { Text = "Cancel" };
-            _cancelButton.Click += (_, _) => OnCancelRequested();
+        Controls.Add(_messageLabel);
+        Controls.Add(_cancelButton);
 
-            CancelButton = _cancelButton;
+        Load += OnDialogLoaded;
+    }
 
-            Controls.Add(_messageLabel);
-            Controls.Add(_cancelButton);
+    private Action _action;
 
-            Load += OnDialogLoaded;
-        }
+    private readonly Label _messageLabel;
 
-        private Action _action;
+    private readonly Button _cancelButton;
 
-        private readonly Label _messageLabel;
+    public MainForm MainForm { get; }
 
-        private readonly Button _cancelButton;
+    public bool IsCanceled { get; private set; }
 
-        public MainForm MainForm { get; }
+    public void SetProgressData(ProgressData data)
+    {
+        _messageLabel.Invoke((Action)(() => RefreshProgressData(data)));
+    }
 
-        public bool IsCanceled { get; private set; }
+    private void RefreshProgressData(ProgressData data)
+    {
+        _messageLabel.Text = data.Text;
+    }
 
-        public void SetProgressData(ProgressData data)
+    protected override void OnLoad(EventArgs e)
+    {
+        Text = "Executing ...";
+        base.OnLoad(e);
+    }
+
+    protected override void OnLayout(LayoutEventArgs levent)
+    {
+        base.OnLayout(levent);
+
+        if (_messageLabel == null)
+            return;
+
+        var contentWidth = _messageLabel.Width;
+        var contentHeight = _messageLabel.Height + SpaceBetweenLabelAndCancelButton + _cancelButton.Height;
+
+        if (contentWidth < 300)
+            contentWidth = 300;
+
+        if (contentHeight < 100)
+            contentHeight = 100;
+
+        Width = contentWidth + Padding.Left + Padding.Right;
+        Height = contentHeight + Padding.Top + Padding.Bottom;
+
+        _cancelButton.Location = new Point
         {
-            _messageLabel.Invoke((Action)(() => RefreshProgressData(data)));
-        }
+            X = ClientSize.Width / 2 - _cancelButton.Width / 2,
+            Y = ClientSize.Height - Padding.Bottom - _cancelButton.Height
+        };
+    }
 
-        private void RefreshProgressData(ProgressData data)
-        {
-            _messageLabel.Text = data.Text;
-        }
+    private void OnCancelRequested()
+    {
+        IsCanceled = true;
+    }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            Text = "Executing ...";
-            base.OnLoad(e);
-        }
+    private async void OnDialogLoaded(object sender, EventArgs e)
+    {
+        await Task.Run(_action);
+        Close();
+    }
 
-        protected override void OnLayout(LayoutEventArgs levent)
-        {
-            base.OnLayout(levent);
-
-            if (_messageLabel == null)
-                return;
-
-            var contentWidth = _messageLabel.Width;
-            var contentHeight = _messageLabel.Height + SpaceBetweenLabelAndCancelButton + _cancelButton.Height;
-
-            if (contentWidth < 300)
-                contentWidth = 300;
-
-            if (contentHeight < 100)
-                contentHeight = 100;
-
-            Width = contentWidth + Padding.Left + Padding.Right;
-            Height = contentHeight + Padding.Top + Padding.Bottom;
-
-            _cancelButton.Location = new Point
-            {
-                X = ClientSize.Width / 2 - _cancelButton.Width / 2,
-                Y = ClientSize.Height - Padding.Bottom - _cancelButton.Height
-            };
-        }
-
-        private void OnCancelRequested()
-        {
-            IsCanceled = true;
-        }
-
-        private async void OnDialogLoaded(object sender, EventArgs e)
-        {
-            await Task.Run(_action);
-            Close();
-        }
-
-        public void Start(Action action)
-        {
-            _action = action;
-            ShowDialog(MainForm);
-        }
+    public void Start(Action action)
+    {
+        _action = action;
+        ShowDialog(MainForm);
     }
 }

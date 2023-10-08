@@ -4,20 +4,19 @@ using BTurk.Automation.Core.Requests;
 
 // ReSharper disable UnusedMember.Global
 
-namespace BTurk.Automation.Standard
+namespace BTurk.Automation.Standard;
+
+public class UrlsProvider : IRequestsProvider<UrlRequest>
 {
-    public class UrlsProvider : IRequestsProvider<UrlRequest>
+    private readonly IResourceProvider _resourceProvider;
+
+    public UrlsProvider(IResourceProvider resourceProvider)
     {
-        private readonly IResourceProvider _resourceProvider;
+        _resourceProvider = resourceProvider;
+    }
 
-        public UrlsProvider(IResourceProvider resourceProvider)
-        {
-            _resourceProvider = resourceProvider;
-        }
-
-        public IEnumerable<UrlRequest> GetRequests()
-        {
-            return _resourceProvider.Load<List<UrlRequest>>("urls");
-        }
+    public IEnumerable<UrlRequest> GetRequests()
+    {
+        return _resourceProvider.Load<List<UrlRequest>>("urls");
     }
 }

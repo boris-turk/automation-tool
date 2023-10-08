@@ -4,57 +4,56 @@ using System.Reflection;
 using System.Security.Permissions;
 using System.Threading;
 
-namespace BTurk.Automation.Host.AssemblyLoading
+namespace BTurk.Automation.Host.AssemblyLoading;
+
+[Serializable]
+internal class Scanner : MarshalByRefObject
 {
-    [Serializable]
-    internal class Scanner : MarshalByRefObject
+    private IGuestProcess _guestProcess;
+
+    [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.Infrastructure)]
+    public override object InitializeLifetimeService()
     {
-        private IGuestProcess _guestProcess;
+        return null;
+    }
 
-		[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.Infrastructure)]
-		public override object InitializeLifetimeService()
-		{
-			return null;
-		}
+    private void InitializeGuestProcessInstance(AppDomain domain)
+    {
+        var instances = (
+                from assembly in domain.GetAssemblies()
+                from type in assembly.GetTypes()
+                where type.GetInterface(nameof(IGuestProcess)) != null
+                let constructor = type.GetConstructor(Type.EmptyTypes)
+                where constructor != null
+                select constructor.Invoke(null)
+            )
+            .Cast<IGuestProcess>()
+            .ToList();
 
-		private void InitializeGuestProcessInstance(AppDomain domain)
+        if (instances.Count == 0)
+            throw new InvalidOperationException("No guest process defined.");
+
+        if (instances.Count > 1)
         {
-			var instances = (
-					from assembly in domain.GetAssemblies()
-					from type in assembly.GetTypes()
-					where type.GetInterface(nameof(IGuestProcess)) != null
-					let constructor = type.GetConstructor(Type.EmptyTypes)
-					where constructor != null
-					select constructor.Invoke(null)
-				)
-				.Cast<IGuestProcess>()
-				.ToList();
+            var names = string.Join(",", instances.Select(p => p.GetType().Name));
+            throw new InvalidOperationException($"More than one guest process defined: {names}");}
 
-            if (instances.Count == 0)
-                throw new InvalidOperationException("No guest process defined.");
+        _guestProcess = instances[0];
+    }
 
-            if (instances.Count > 1)
-            {
-                var names = string.Join(",", instances.Select(p => p.GetType().Name));
-                throw new InvalidOperationException($"More than one guest process defined: {names}");}
+    public void Setup()
+    {
+        InitializeGuestProcessInstance(AppDomain.CurrentDomain);
+        ThreadPool.QueueUserWorkItem(_ => _guestProcess.Start());
+    }
 
-            _guestProcess = instances[0];
-        }
+    public void Unload()
+    {
+        _guestProcess.Unload();
+    }
 
-        public void Setup()
-        {
-            InitializeGuestProcessInstance(AppDomain.CurrentDomain);
-            ThreadPool.QueueUserWorkItem(_ => _guestProcess.Start());
-        }
-
-        public void Unload()
-        {
-            _guestProcess.Unload();
-        }
-
-        public void Load(string name)
-        {
-            Assembly.Load(name);
-        }
+    public void Load(string name)
+    {
+        Assembly.Load(name);
     }
 }

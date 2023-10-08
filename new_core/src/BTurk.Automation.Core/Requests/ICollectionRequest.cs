@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace BTurk.Automation.Core.Requests
+namespace BTurk.Automation.Core.Requests;
+
+public interface ICollectionRequest<TRequest> where TRequest : IRequest
 {
-    public interface ICollectionRequest<TRequest> where TRequest : IRequest
-    {
-        IEnumerable<IRequest> GetRequests(RequestLoadContext<TRequest> context);
-    }
+    IEnumerable<IRequest> GetRequests(RequestLoadContext<TRequest> context);
 }

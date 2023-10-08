@@ -8,33 +8,32 @@ using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.Standard;
 using Xunit;
 
-namespace BTurk.Automation.DependencyResolution.UnitTests
+namespace BTurk.Automation.DependencyResolution.UnitTests;
+
+public class ContainerTests
 {
-    public class ContainerTests
+    [Theory]
+    [MemberData(nameof(Types))]
+    public void CanCreateInstance(Type type)
     {
-        [Theory]
-        [MemberData(nameof(Types))]
-        public void CanCreateInstance(Type type)
-        {
-            // Act
-            Container.GetInstance(type);
-        }
+        // Act
+        Container.GetInstance(type);
+    }
 
-        public static IEnumerable<object[]> Types
+    public static IEnumerable<object[]> Types
+    {
+        get
         {
-            get
+            var types = new List<Type>
             {
-                var types = new List<Type>
-                {
-                    typeof(ISearchItemsProvider),
-                    typeof(IResourceProvider),
-                    typeof(IRequestsProvider<Solution>),
-                    typeof(IRequestsProvider<Repository>),
-                    typeof(IMessageHandler<ShowingAutomationWindowMessage>)
-                };
+                typeof(ISearchItemsProvider),
+                typeof(IResourceProvider),
+                typeof(IRequestsProvider<Solution>),
+                typeof(IRequestsProvider<Repository>),
+                typeof(IMessageHandler<ShowingAutomationWindowMessage>)
+            };
 
-                return types.Select(x => new[] {x});
-            }
+            return types.Select(x => new[] {x});
         }
     }
 }

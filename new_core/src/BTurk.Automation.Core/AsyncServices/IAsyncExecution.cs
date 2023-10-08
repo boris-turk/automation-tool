@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel;
 
-namespace BTurk.Automation.Core.AsyncServices
-{
-    public interface IAsyncExecution
-    {
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        void SetProgressData(ProgressData data);
+namespace BTurk.Automation.Core.AsyncServices;
 
-        bool IsCanceled { get; }
-    }
+public interface IAsyncExecution
+{
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    void SetProgressData(ProgressData data);
+
+    bool IsCanceled { get; }
 }

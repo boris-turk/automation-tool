@@ -2,51 +2,50 @@
 using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.WinApi;
 
-namespace BTurk.Automation.Core.SearchEngine
+namespace BTurk.Automation.Core.SearchEngine;
+
+public class EnvironmentContextProvider : IEnvironmentContextProvider,
+    IMessageHandler<ShowingAutomationWindowMessage>
 {
-    public class EnvironmentContextProvider : IEnvironmentContextProvider,
-        IMessageHandler<ShowingAutomationWindowMessage>
+    private EnvironmentContext _context;
+
+    private readonly IEnumerable<IAdditionalEnvironmentDataProvider> _additionalDataProviders;
+
+    public EnvironmentContextProvider(IEnumerable<IAdditionalEnvironmentDataProvider> additionalDataProviders)
     {
-        private EnvironmentContext _context;
+        _context = EnvironmentContext.Empty;
+        _additionalDataProviders = additionalDataProviders;
+    }
 
-        private readonly IEnumerable<IAdditionalEnvironmentDataProvider> _additionalDataProviders;
+    private EnvironmentContext GetContext(ShowingAutomationWindowMessage message)
+    {
+        if (message == ShowingAutomationWindowMessage.MainMenu)
+            return EnvironmentContext.Empty;
 
-        public EnvironmentContextProvider(IEnumerable<IAdditionalEnvironmentDataProvider> additionalDataProviders)
-        {
-            _context = EnvironmentContext.Empty;
-            _additionalDataProviders = additionalDataProviders;
-        }
+        var windowHandle = Methods.GetActiveWindow();
+        var windowText = Methods.GetWindowText(windowHandle);
+        var windowClass = Methods.GetClassName(windowHandle);
 
-        private EnvironmentContext GetContext(ShowingAutomationWindowMessage message)
-        {
-            if (message == ShowingAutomationWindowMessage.MainMenu)
-                return EnvironmentContext.Empty;
+        var context = new EnvironmentContext(windowText, windowClass);
 
-            var windowHandle = Methods.GetActiveWindow();
-            var windowText = Methods.GetWindowText(windowHandle);
-            var windowClass = Methods.GetClassName(windowHandle);
+        var additionalDataProvider = GetAdditionalDataProvider(context);
+        additionalDataProvider?.Process(context);
 
-            var context = new EnvironmentContext(windowText, windowClass);
+        return context;
+    }
 
-            var additionalDataProvider = GetAdditionalDataProvider(context);
-            additionalDataProvider?.Process(context);
+    private IAdditionalEnvironmentDataProvider GetAdditionalDataProvider(EnvironmentContext context)
+    {
+        foreach (var provider in _additionalDataProviders)
+            provider.Process(context);
 
-            return context;
-        }
+        return null;
+    }
 
-        private IAdditionalEnvironmentDataProvider GetAdditionalDataProvider(EnvironmentContext context)
-        {
-            foreach (var provider in _additionalDataProviders)
-                provider.Process(context);
+    EnvironmentContext IEnvironmentContextProvider.Context => _context;
 
-            return null;
-        }
-
-        EnvironmentContext IEnvironmentContextProvider.Context => _context;
-
-        void IMessageHandler<ShowingAutomationWindowMessage>.Handle(ShowingAutomationWindowMessage message)
-        {
-            _context = GetContext(message);
-        }
+    void IMessageHandler<ShowingAutomationWindowMessage>.Handle(ShowingAutomationWindowMessage message)
+    {
+        _context = GetContext(message);
     }
 }

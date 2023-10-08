@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace BTurk.Automation.Core.Requests
+namespace BTurk.Automation.Core.Requests;
+
+public interface IChildRequestsProvider
 {
-    public interface IChildRequestsProvider
-    {
-        IEnumerable<IRequest> LoadChildren(IRequest request);
-    }
+    IEnumerable<IRequest> LoadChildren(IRequest request);
 }

@@ -1,7 +1,6 @@
-﻿namespace BTurk.Automation.Core.Commands
+﻿namespace BTurk.Automation.Core.Commands;
+
+public interface ICommand
 {
-    public interface ICommand
-    {
         
-    }
 }

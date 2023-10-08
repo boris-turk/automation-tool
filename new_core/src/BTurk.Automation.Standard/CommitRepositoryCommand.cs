@@ -1,14 +1,13 @@
 ﻿using BTurk.Automation.Core.Commands;
 
-namespace BTurk.Automation.Standard
-{
-    public class CommitRepositoryCommand : ICommand
-    {
-        public Repository Repository { get; }
+namespace BTurk.Automation.Standard;
 
-        public CommitRepositoryCommand(Repository repository)
-        {
-            Repository = repository;
-        }
+public class CommitRepositoryCommand : ICommand
+{
+    public Repository Repository { get; }
+
+    public CommitRepositoryCommand(Repository repository)
+    {
+        Repository = repository;
     }
 }

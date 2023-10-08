@@ -1,6 +1,5 @@
-﻿namespace BTurk.Automation.Core.Messages
+﻿namespace BTurk.Automation.Core.Messages;
+
+public interface IMessage
 {
-    public interface IMessage
-    {
-    }
 }

@@ -1,16 +1,15 @@
 ﻿using System.Runtime.Serialization;
 using BTurk.Automation.Core.Commands;
 
-namespace BTurk.Automation.Core.Requests
-{
-    [DataContract]
-    public class AhkSendRequest : Request, ICommand
-    {
-        public AhkSendRequest()
-        {
-            Command = this;
-        }
+namespace BTurk.Automation.Core.Requests;
 
-        public string Keys { get; set; }
+[DataContract]
+public class AhkSendRequest : Request, ICommand
+{
+    public AhkSendRequest()
+    {
+        Command = this;
     }
+
+    public string Keys { get; set; }
 }
