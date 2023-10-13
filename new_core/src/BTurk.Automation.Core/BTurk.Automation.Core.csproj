@@ -103,6 +103,16 @@
     <Compile Include="Serialization\ContractResolver.cs" />
     <Compile Include="Serialization\JsonResourceProvider.cs" />
     <Compile Include="Serialization\TimeSpanConverter.cs" />
+    <Compile Include="Views\Builder.cs" />
+    <Compile Include="Views\IControlConfiguration.cs" />
+    <Compile Include="Views\IViewProvider.cs" />
+    <Compile Include="Views\ShowViewAction.cs" />
+    <Compile Include="Views\ViewExtensions.cs" />
+    <Compile Include="Views\FieldConfiguration.cs" />
+    <Compile Include="Views\FieldInputStyle.cs" />
+    <Compile Include="Views\IView.cs" />
+    <Compile Include="Views\IViewAction.cs" />
+    <Compile Include="Views\ViewConfiguration.cs" />
     <Compile Include="WinApi\Constants.cs" />
     <Compile Include="WinApi\Methods.cs" />
   </ItemGroup>

@@ -10,8 +10,10 @@ using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.Core.Serialization;
+using BTurk.Automation.Core.Views;
 using BTurk.Automation.DependencyResolution.AsyncServices;
 using BTurk.Automation.Standard;
+using BTurk.Automation.WinForms;
 
 namespace BTurk.Automation.DependencyResolution;
 
@@ -86,6 +88,9 @@ public static class Container
 
         if (type.InheritsFrom(typeof(IEnumerable<>)))
             return GetEnumerableInstance(type);
+
+        if (type == typeof(IViewProvider))
+            return GetOrCreateSingleton<ViewProvider>();
 
         throw FailedToCreateInstance(type);
     }

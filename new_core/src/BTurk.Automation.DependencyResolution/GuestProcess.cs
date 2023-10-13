@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Windows.Forms;
+using BTurk.Automation.Core.Views;
 using BTurk.Automation.Host.AssemblyLoading;
 
 // ReSharper disable UnusedMember.Global
@@ -15,10 +16,13 @@ public class GuestProcess : IGuestProcess
     {
         try
         {
+            if (!AskForCredentials())
+                return;
+
             _globalShortcuts = new GlobalShortcuts();
 
             _mainForm = Container.GetInstance<MainForm>();
-            _mainForm.Load += (_, __) => _globalShortcuts.Install();
+            _mainForm.Load += (_, _) => _globalShortcuts.Install();
 
             Application.Run(_mainForm);
         }
@@ -30,6 +34,26 @@ public class GuestProcess : IGuestProcess
         {
             _globalShortcuts.Uninstall();
         }
+    }
+
+    private bool AskForCredentials()
+    {
+        string password = null;
+
+        var viewBuilder = Container.GetInstance<IViewProvider>().Builder();
+
+        viewBuilder.ModalDialogStyle();
+
+        viewBuilder.CancelQuestion("Exit?");
+
+        var field = viewBuilder
+            .AddField<string>()
+            .PasswordInputStyle()
+            .BindSetter(v => password = v);
+
+        var view = viewBuilder.CreateAndShow();
+
+        return password != null;
     }
 
     public void Unload()
