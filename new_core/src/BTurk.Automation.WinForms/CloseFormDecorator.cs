@@ -22,7 +22,7 @@ public class CloseFormDecorator
         if (e.CloseReason == CloseReason.UserClosing && !_isClosingConfirmed)
         {
             var result = ProcessCancelQuestion();
-            e.Cancel = result == DialogResult.Yes;
+            e.Cancel = result != DialogResult.Yes;
         }
     }
 

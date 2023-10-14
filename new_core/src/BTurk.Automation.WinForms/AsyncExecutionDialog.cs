@@ -3,12 +3,13 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BTurk.Automation.Core.AsyncServices;
+using BTurk.Automation.Core.Views;
 
 // ReSharper disable LocalizableElement
 
-namespace BTurk.Automation.DependencyResolution.AsyncServices;
+namespace BTurk.Automation.WinForms;
 
-internal class AsyncExecutionDialog : Form, IAsyncExecution, IAsyncExecutionDialog
+public class AsyncExecutionDialog : Form, IAsyncExecution, IAsyncExecutionDialog
 {
     private const int SpaceBetweenLabelAndCancelButton = 30;
 

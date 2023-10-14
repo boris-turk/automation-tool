@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BTurk.Automation.DependencyResolution.AsyncServices;
+namespace BTurk.Automation.Core.Views;
 
 public interface IAsyncExecutionDialog
 {

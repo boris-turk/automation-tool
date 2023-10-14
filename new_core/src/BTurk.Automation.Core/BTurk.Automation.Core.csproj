@@ -104,6 +104,7 @@
     <Compile Include="Serialization\JsonResourceProvider.cs" />
     <Compile Include="Serialization\TimeSpanConverter.cs" />
     <Compile Include="Views\Builder.cs" />
+    <Compile Include="Views\IAsyncExecutionDialog.cs" />
     <Compile Include="Views\IControlConfiguration.cs" />
     <Compile Include="Views\IViewProvider.cs" />
     <Compile Include="Views\ShowViewAction.cs" />

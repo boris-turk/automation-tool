@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading;
 using BTurk.Automation.Core.WinApi;
 
-namespace BTurk.Automation.DependencyResolution;
+namespace BTurk.Automation.WinForms;
 
 public class GlobalShortcuts
 {
@@ -14,13 +14,16 @@ public class GlobalShortcuts
     private readonly string _filePath = Path.Combine(Path.GetTempPath(), "new_automation_activity.txt");
 
     private Timer _timer;
-    private MainForm _form;
     private bool _shortcutsInstalled;
+    private readonly MainForm _form;
+
+    public GlobalShortcuts(MainForm mainForm)
+    {
+        _form = mainForm;
+    }
 
     public void Install()
     {
-        _form = Container.GetInstance<MainForm>();
-
         _timer = new Timer(OnTimerElapsed, null, Timeout.Infinite, Timeout.Infinite);
         _timer.Change(0, Timeout.Infinite);
     }
@@ -35,7 +38,7 @@ public class GlobalShortcuts
 
         _shortcutsInstalled = false;
 
-        _form.Invoke((Action)UnRegisterHotKeys);
+        _form.Invoke(UnRegisterHotKeys);
     }
         
     private void OnTimerElapsed(object state)
@@ -45,7 +48,7 @@ public class GlobalShortcuts
         if (!_shortcutsInstalled)
         {
             Thread.Sleep(1000);
-            _form.Invoke((Action)RegisterHotKeys);
+            _form.Invoke(RegisterHotKeys);
         }
 
         _timer.Change(500, Timeout.Infinite);

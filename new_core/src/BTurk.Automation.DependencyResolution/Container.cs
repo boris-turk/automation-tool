@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using BTurk.Automation.Core;
 using BTurk.Automation.Core.AsyncServices;
@@ -91,6 +92,9 @@ public static class Container
 
         if (type == typeof(IViewProvider))
             return GetOrCreateSingleton<ViewProvider>();
+
+        if (type == typeof(GlobalShortcuts))
+            return GetOrCreateSingleton<GlobalShortcuts>();
 
         throw FailedToCreateInstance(type);
     }
@@ -249,6 +253,7 @@ public static class Container
 
     private static void InitializeMainForm(MainForm mainForm)
     {
+        mainForm.RootMenuRequest = new RootMenuRequest();
         mainForm.Dispatcher = GetInstance<IRequestActionDispatcher>();
         mainForm.EnvironmentContextProvider = GetInstance<IEnvironmentContextProvider>();
         mainForm.MessagePublisher = GetInstance<IMessagePublisher>();
@@ -313,12 +318,13 @@ public static class Container
 
     private static object CreateInstance(Type type)
     {
-        var constructors = type.GetConstructors().Where(t => t.IsPublic).ToList();
+        var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        var constructors = type.GetConstructors(bindingFlags).ToList();
 
         if (constructors.Count != 1)
         {
             throw new InvalidOperationException(
-                $"Cannot create type {type.FullName} as it does not have exactly one public constructor");
+                $"Cannot create type {type.FullName} as it does not have exactly one public or internal constructor");
         }
 
         object[] parameters = (
@@ -327,7 +333,7 @@ public static class Container
             select parameterInstance
         ).ToArray();
 
-        var instance = Activator.CreateInstance(type, parameters);
+        var instance = Activator.CreateInstance(type, bindingFlags, binder: null, parameters, culture: null);
         return instance;
     }
 

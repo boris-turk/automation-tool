@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using BTurk.Automation.Core.Views;
 using BTurk.Automation.Host.AssemblyLoading;
+using BTurk.Automation.WinForms;
 
 // ReSharper disable UnusedMember.Global
 
@@ -19,8 +20,7 @@ public class GuestProcess : IGuestProcess
             if (!AskForCredentials())
                 return;
 
-            _globalShortcuts = new GlobalShortcuts();
-
+            _globalShortcuts = Container.GetInstance<GlobalShortcuts>();
             _mainForm = Container.GetInstance<MainForm>();
             _mainForm.Load += (_, _) => _globalShortcuts.Install();
 
@@ -32,7 +32,7 @@ public class GuestProcess : IGuestProcess
         }
         finally
         {
-            _globalShortcuts.Uninstall();
+            _globalShortcuts?.Uninstall();
         }
     }
 

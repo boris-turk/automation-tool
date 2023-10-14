@@ -8,15 +8,15 @@ using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 
-namespace BTurk.Automation.DependencyResolution;
+namespace BTurk.Automation.WinForms;
 
-internal partial class MainForm : Form, ISearchEngine
+public partial class MainForm : Form, ISearchEngine
 {
     private string _currentText;
 
     private const int OutOfScreenOffset = -20000;
 
-    public MainForm()
+    internal MainForm()
     {
         _currentText = "";
 
@@ -38,9 +38,9 @@ internal partial class MainForm : Form, ISearchEngine
         _listBox.SelectedIndexChanged += (_, _) => MoveFocusToTextBox();
 
         TextBox.KeyDown += (_, args) => OnTextBoxKeyDown(args);
-
-        CreateInitialStep();
     }
+
+    public IRequest RootMenuRequest { get; set; }
 
     public List<IRequest> Items { get; }
 
@@ -84,7 +84,7 @@ internal partial class MainForm : Form, ISearchEngine
 
     private void CreateInitialStep()
     {
-        Steps = new List<SearchStep> { new(new RootMenuRequest()) };
+        Steps = new List<SearchStep> { new(RootMenuRequest) };
     }
 
     protected override void OnKeyDown(KeyEventArgs e)
@@ -168,6 +168,7 @@ internal partial class MainForm : Form, ISearchEngine
 
     protected override void OnLoad(EventArgs e)
     {
+        CreateInitialStep();
         TextBox.TextChanged += (_, _) => OnSearchTextChanged();
         MessagePublisher.Publish(ShowingAutomationWindowMessage.MainMenu);
         base.OnLoad(e);
