@@ -18,7 +18,7 @@ public class AssemblyManager
 
     public void Load()
     {
-        Unload();
+        Dispose();
 
         _domain = CreateAppDomain();
         _scanner = CreateScanner();
@@ -35,17 +35,17 @@ public class AssemblyManager
         }
         catch (Exception e)
         {
-            File.AppendAllText(@"ERROR_REPORT.txt", $"{e.Message}{Environment.NewLine}{e.StackTrace}");
-            Unload();
+            File.AppendAllText("ERROR_REPORT.txt", $"{e.Message}{Environment.NewLine}{e.StackTrace}");
+            Dispose();
         }
     }
 
-    public void Unload()
+    public void Dispose()
     {
         if (_domain == null)
             return;
 
-        _scanner?.Unload();
+        _scanner?.Dispose();
         _scanner = null;
 
         AppDomain.Unload(_domain);

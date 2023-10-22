@@ -10,7 +10,6 @@ namespace BTurk.Automation.Host;
 public static class Program
 {
     private static Mutex _mutex;
-    private static StartupProcess _startupProcess;
 
     /// <summary>
     /// The main entry point for the application.
@@ -28,10 +27,11 @@ public static class Program
 
         Environment.CurrentDirectory = GetExecutingAssemblyDirectory();
 
+        StartupProcess startupProcess = null;
         try
         {
-            _startupProcess = new StartupProcess();
-            _startupProcess.Run();
+            startupProcess = StartupProcess.Instance;
+            startupProcess?.Run();
         }
         catch (Exception e)
         {
@@ -39,7 +39,7 @@ public static class Program
         }
         finally
         {
-            _startupProcess?.Dispose();
+            startupProcess?.Dispose();
             AppDomain.CurrentDomain.UnhandledException -= OnAppDomainUnhandledException;
             ReleaseMutex();
         }

@@ -6,7 +6,6 @@ using System.Threading;
 
 namespace BTurk.Automation.Host.AssemblyLoading;
 
-[Serializable]
 internal class Scanner : MarshalByRefObject
 {
     private IGuestProcess _guestProcess;
@@ -44,12 +43,17 @@ internal class Scanner : MarshalByRefObject
     public void Setup()
     {
         InitializeGuestProcessInstance(AppDomain.CurrentDomain);
-        ThreadPool.QueueUserWorkItem(_ => _guestProcess.Start());
+
+        ThreadPool.QueueUserWorkItem(_ =>
+        {
+            _guestProcess.Start();
+            StartupProcess.Instance.OnGuestProcessFinished();
+        });
     }
 
-    public void Unload()
+    public void Dispose()
     {
-        _guestProcess.Unload();
+        _guestProcess.Dispose();
     }
 
     public void Load(string name)

@@ -3,5 +3,5 @@
 public interface IGuestProcess
 {
     void Start();
-    void Unload();
+    void Dispose();
 }

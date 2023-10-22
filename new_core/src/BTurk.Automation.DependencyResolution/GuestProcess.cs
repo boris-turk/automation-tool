@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using BTurk.Automation.Core.Views;
 using BTurk.Automation.Host.AssemblyLoading;
 using BTurk.Automation.WinForms;
@@ -12,6 +11,8 @@ public class GuestProcess : IGuestProcess
 {
     private MainForm _mainForm;
     private GlobalShortcuts _globalShortcuts;
+
+    private Form ActiveForm => _mainForm ?? Form.ActiveForm;
 
     public void Start()
     {
@@ -26,13 +27,10 @@ public class GuestProcess : IGuestProcess
 
             Application.Run(_mainForm);
         }
-        catch (ThreadAbortException)
-        {
-            // most probably the domain is being unloaded, it is safe to ignore this exception
-        }
         finally
         {
             _globalShortcuts?.Uninstall();
+            _globalShortcuts = null;
         }
     }
 
@@ -56,7 +54,14 @@ public class GuestProcess : IGuestProcess
         return password != null;
     }
 
-    public void Unload()
+    public void Dispose()
     {
+        ActiveForm?.Invoke(DisposeResources);
+    }
+
+    private void DisposeResources()
+    {
+        _globalShortcuts?.Uninstall();
+        ActiveForm?.Dispose();
     }
 }
