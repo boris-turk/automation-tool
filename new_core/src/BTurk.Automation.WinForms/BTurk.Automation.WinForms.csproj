@@ -48,7 +48,11 @@
     <Compile Include="AsyncExecutionDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FieldControlProvider.cs" />
     <Compile Include="GlobalShortcuts.cs" />
+    <Compile Include="LabelTextBoxControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

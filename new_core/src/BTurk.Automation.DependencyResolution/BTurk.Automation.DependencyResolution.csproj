@@ -50,6 +50,7 @@
     <Compile Include="ClosedGenericTypeProvider.cs" />
     <Compile Include="CommandProcessor.cs" />
     <Compile Include="Container.cs" />
+    <Compile Include="ControlProvider.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenericMethodInvoker.cs" />
     <Compile Include="MessagePublisher.cs" />

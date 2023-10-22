@@ -44,12 +44,13 @@ public class GuestProcess : IGuestProcess
 
         viewBuilder.CancelQuestion("Exit?");
 
-        var field = viewBuilder
+        viewBuilder
             .AddField<string>()
+            .LabelText("Master password:")
             .PasswordInputStyle()
             .BindSetter(v => password = v);
 
-        var view = viewBuilder.CreateAndShow();
+        viewBuilder.CreateAndShow();
 
         return password != null;
     }

@@ -6,6 +6,7 @@ public class FieldConfiguration : IControlConfiguration
 {
     public int MaxLength { get; set; }
     public FieldInputStyle InputStyle { get; set; }
+    public string LabelText { get; set; }
 }
 
 public class FieldConfiguration<T> : FieldConfiguration

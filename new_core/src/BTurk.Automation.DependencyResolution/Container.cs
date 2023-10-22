@@ -96,6 +96,12 @@ public static class Container
         if (type == typeof(GlobalShortcuts))
             return GetOrCreateSingleton<GlobalShortcuts>();
 
+        if (type.InheritsFrom(typeof(IControlProvider)))
+            return GetOrCreateSingleton<ControlProvider>();
+
+        if (type.InheritsFrom(typeof(IControlProvider<>)))
+            return GetOpenGenericServiceInstance(type, GetControlProviderType);
+
         throw FailedToCreateInstance(type);
     }
 
@@ -246,6 +252,11 @@ public static class Container
         return typeof(DefaultRequestVisitor<,>).MakeGenericType(requestType, childRequestType);
     }
 
+    private static Type GetControlProviderType(Type configurationType)
+    {
+        return ClosedGenericTypeProvider.Get(typeof(IControlProvider<>), configurationType);
+    }
+
     private static Type GetCommandHandlerType(Type commandType)
     {
         return ClosedGenericTypeProvider.Get(typeof(ICommandHandler<>), commandType);
@@ -355,6 +366,7 @@ public static class Container
     {
         ClosedGenericTypeProvider.Register(typeof(IRequestsProvider<>), typeof(EmptyRequestProvider<>));
         ClosedGenericTypeProvider.Register(typeof(ICommandHandler<>));
+        ClosedGenericTypeProvider.Register(typeof(IControlProvider<>));
     }
 
     private static DecoratorProducerParameters GetDecoratorProducerParameters(Type serviceType)

@@ -1,5 +1,7 @@
 ﻿using System;
 
+// ReSharper disable UnusedMember.Global
+
 namespace BTurk.Automation.Core.Views;
 
 public static class ViewExtensions
@@ -41,6 +43,13 @@ public static class ViewExtensions
     public static Builder<FieldConfiguration<T>> PasswordInputStyle<T>(this Builder<FieldConfiguration<T>> builder)
     {
         builder.Instance.InputStyle = FieldInputStyle.Password;
+        return builder;
+    }
+
+    public static Builder<FieldConfiguration<T>> LabelText<T>(
+        this Builder<FieldConfiguration<T>> builder, string text)
+    {
+        builder.Instance.LabelText = text;
         return builder;
     }
 
