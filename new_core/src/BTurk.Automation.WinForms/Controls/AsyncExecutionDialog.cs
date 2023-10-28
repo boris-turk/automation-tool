@@ -7,7 +7,7 @@ using BTurk.Automation.Core.Views;
 
 // ReSharper disable LocalizableElement
 
-namespace BTurk.Automation.WinForms;
+namespace BTurk.Automation.WinForms.Controls;
 
 public class AsyncExecutionDialog : Form, IAsyncExecution, IAsyncExecutionDialog
 {

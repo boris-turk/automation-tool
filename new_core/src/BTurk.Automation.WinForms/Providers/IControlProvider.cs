@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using BTurk.Automation.Core.Views;
 
-namespace BTurk.Automation.WinForms;
+namespace BTurk.Automation.WinForms.Providers;
 
 public interface IControlProvider
 {

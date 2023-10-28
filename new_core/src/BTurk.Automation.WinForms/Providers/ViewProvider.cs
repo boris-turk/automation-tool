@@ -1,11 +1,16 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using BTurk.Automation.Core.Views;
+using BTurk.Automation.WinForms.Controls;
+using BTurk.Automation.WinForms.Views;
 
-namespace BTurk.Automation.WinForms;
+namespace BTurk.Automation.WinForms.Providers;
 
 public class ViewProvider : IViewProvider
 {
+    private const int VerticalPaddingBetweenControls = 5;
+
     private readonly IControlProvider _controlProvider;
 
     public ViewProvider(IControlProvider controlProvider)
@@ -19,7 +24,16 @@ public class ViewProvider : IViewProvider
         {
             KeyPreview = true,
             Configuration = configuration,
+            Padding = new Padding
+            {
+                Left = 10,
+                Right = 10,
+                Top = 5,
+                Bottom = 15
+            }
         };
+
+        _ = new FocusCoordinator(form);
 
         form.Layout += (_, _) => OnFormLayout(form);
 
@@ -37,12 +51,8 @@ public class ViewProvider : IViewProvider
 
     private void OnFormLayout(CustomForm form)
     {
-        const int verticalFormPadding = 5;
-        const int horizontalFormPadding = 5;
-        const int verticalPaddingBetweenControls = 5;
-
-        var topOffset = verticalFormPadding;
-        var leftOffset = horizontalFormPadding;
+        var topOffset = form.Padding.Top;
+        var leftOffset = form.Padding.Left;
 
         var formClientHeight = topOffset;
         var formClientWidth = leftOffset;
@@ -50,9 +60,9 @@ public class ViewProvider : IViewProvider
         foreach (Control control in form.Controls)
         {
             control.Location = new Point(leftOffset, topOffset);
-            topOffset += control.Height + verticalPaddingBetweenControls;
-            formClientWidth = control.Right + horizontalFormPadding;
-            formClientHeight = control.Bottom + verticalFormPadding;
+            topOffset += control.Height + VerticalPaddingBetweenControls;
+            formClientWidth = Math.Max(formClientWidth, control.Right + form.Padding.Right);
+            formClientHeight = Math.Max(formClientHeight, control.Bottom + form.Padding.Bottom);
         }
 
         if (formClientHeight < 50)

@@ -2,6 +2,7 @@
 using BTurk.Automation.Core.Views;
 using BTurk.Automation.Host.AssemblyLoading;
 using BTurk.Automation.WinForms;
+using BTurk.Automation.WinForms.Controls;
 
 // ReSharper disable UnusedMember.Global
 

@@ -1,12 +1,31 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
+using BTurk.Automation.Core.Converters;
 using BTurk.Automation.Core.Views;
 using BTurk.Automation.WinForms;
 using BTurk.Automation.WinForms.Providers;
 
 namespace BTurk.Automation.DependencyResolution;
 
-public class ControlProvider : IControlProvider
+public class GuiValueConverter : IGuiValueConverter
 {
+    public TGui ToGuiValue<TDomain, TGui>(TDomain value)
+    {
+        var converter = GetConverter<TDomain, TGui>();
+        return converter.ToGuiValue(value);
+    }
+
+    public TDomain FromGuiValue<TGui, TDomain>(TGui value)
+    {
+        var converter = GetConverter<TDomain, TGui>();
+        return converter.FromGuiValue(value);
+    }
+
+    private IGuiValueConverter<TDomain, TGui> GetConverter<TDomain, TGui>()
+    {
+        throw new NotImplementedException();
+    }
+
     public Control Create(IControlConfiguration configuration)
     {
         var control = GenericMethodInvoker.Instance(this)

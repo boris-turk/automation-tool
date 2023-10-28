@@ -45,32 +45,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsyncExecutionDialog.cs">
+    <Compile Include="Controls\AsyncExecutionDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FieldControlProvider.cs" />
+    <Compile Include="Controls\BindingType.cs" />
+    <Compile Include="Providers\FieldControlProvider.cs" />
+    <Compile Include="Views\FieldValueAccessor.cs" />
+    <Compile Include="Views\FocusCoordinator.cs" />
     <Compile Include="GlobalShortcuts.cs" />
-    <Compile Include="LabelTextBoxControl.cs">
+    <Compile Include="Controls\IBindableControl.cs" />
+    <Compile Include="Controls\LabelTextBoxControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MainForm.cs">
+    <Compile Include="Controls\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Controls\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CloseFormDecorator.cs" />
-    <Compile Include="CustomForm.cs">
+    <Compile Include="Controls\CloseFormDecorator.cs" />
+    <Compile Include="Controls\CustomForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="IControlProvider.cs" />
+    <Compile Include="Providers\IControlProvider.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ViewProvider.cs" />
+    <Compile Include="Providers\ViewProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BTurk.Automation.Core\BTurk.Automation.Core.csproj">
@@ -79,7 +83,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Controls\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -90,5 +94,6 @@
   <ItemGroup>
     <None Include="Resources\loader.gif" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

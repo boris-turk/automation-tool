@@ -1,16 +1,19 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 using BTurk.Automation.Core;
+using BTurk.Automation.WinForms.Views;
 
-namespace BTurk.Automation.WinForms;
+namespace BTurk.Automation.WinForms.Controls;
 
-public class LabelTextBoxControl : UserControl
+public class LabelTextBoxControl : UserControl, IBindableControl
 {
     public const int DefaultTextBoxWidth = 150;
 
     public Label Label { get; }
 
     public TextBox TextBox { get; }
+
+    public FieldValueAccessor ValueAccessor { get; set; }
 
     public LabelTextBoxControl()
     {
@@ -49,5 +52,18 @@ public class LabelTextBoxControl : UserControl
         TextBox.Top = (Size.Height - TextBox.Height) / 2;
 
         base.OnLayout(e);
+    }
+
+    void IBindableControl.Bind(BindingType bindingType)
+    {
+        switch (bindingType)
+        {
+            case BindingType.Get:
+                TextBox.Text = ValueAccessor.GetValue<string>();
+                break;
+            case BindingType.Set:
+                ValueAccessor.SetValue(TextBox.Text);
+                break;
+        }
     }
 }

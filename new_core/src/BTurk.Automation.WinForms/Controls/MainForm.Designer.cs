@@ -1,4 +1,4 @@
-﻿namespace BTurk.Automation.WinForms
+﻿namespace BTurk.Automation.WinForms.Controls
 {
     partial class MainForm
     {

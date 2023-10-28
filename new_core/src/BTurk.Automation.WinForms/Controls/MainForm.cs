@@ -8,7 +8,7 @@ using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 
-namespace BTurk.Automation.WinForms;
+namespace BTurk.Automation.WinForms.Controls;
 
 public partial class MainForm : Form, ISearchEngine
 {

@@ -22,7 +22,7 @@ public class ClosedGenericTypeProvider
             typeof(global::BTurk.Automation.E3k.Module).Assembly,
             typeof(global::BTurk.Automation.Mic.Salon).Assembly,
             typeof(global::BTurk.Automation.Standard.Note).Assembly,
-            typeof(global::BTurk.Automation.WinForms.CustomForm).Assembly,
+            typeof(global::BTurk.Automation.WinForms.Controls.CustomForm).Assembly,
         };
     }
 

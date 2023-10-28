@@ -7,6 +7,7 @@ using System.Threading;
 using BTurk.Automation.Core;
 using BTurk.Automation.Core.AsyncServices;
 using BTurk.Automation.Core.Commands;
+using BTurk.Automation.Core.Converters;
 using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
@@ -15,6 +16,8 @@ using BTurk.Automation.Core.Views;
 using BTurk.Automation.DependencyResolution.AsyncServices;
 using BTurk.Automation.Standard;
 using BTurk.Automation.WinForms;
+using BTurk.Automation.WinForms.Controls;
+using BTurk.Automation.WinForms.Providers;
 
 namespace BTurk.Automation.DependencyResolution;
 
@@ -101,6 +104,9 @@ public static class Container
 
         if (type.InheritsFrom(typeof(IControlProvider<>)))
             return GetOpenGenericServiceInstance(type, GetControlProviderType);
+
+        if (type.InheritsFrom(typeof(IGuiValueConverter)))
+            return GetOrCreateSingleton<GuiValueConverter>();
 
         throw FailedToCreateInstance(type);
     }

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 using BTurk.Automation.Core.WinApi;
+using BTurk.Automation.WinForms.Controls;
 
 namespace BTurk.Automation.WinForms;
 
