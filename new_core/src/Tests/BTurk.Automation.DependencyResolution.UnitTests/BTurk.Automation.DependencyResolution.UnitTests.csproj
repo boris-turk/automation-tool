@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContainerTests.cs" />
+    <Compile Include="FakeRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -83,6 +84,10 @@
     <ProjectReference Include="..\..\BTurk.Automation.Standard\BTurk.Automation.Standard.csproj">
       <Project>{B15CAF22-4AF9-44D9-AE9B-9F6338AA9232}</Project>
       <Name>BTurk.Automation.Standard</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\BTurk.Automation.WinForms\BTurk.Automation.WinForms.csproj">
+      <Project>{42DC0026-A464-4B5E-9273-A42F8A1FCBED}</Project>
+      <Name>BTurk.Automation.WinForms</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
