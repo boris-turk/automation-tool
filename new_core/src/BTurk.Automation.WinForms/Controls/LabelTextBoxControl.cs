@@ -5,20 +5,20 @@ using BTurk.Automation.WinForms.Views;
 
 namespace BTurk.Automation.WinForms.Controls;
 
-public class LabelTextBoxControl : UserControl, IBindableControl
+public class LabelTextBoxControl : UserControl, IBindableControl, IFocusableControl
 {
     public const int DefaultTextBoxWidth = 150;
 
     public Label Label { get; }
 
-    public TextBox TextBox { get; }
+    public CustomTextBox TextBox { get; }
 
     public FieldValueAccessor ValueAccessor { get; set; }
 
     public LabelTextBoxControl()
     {
         Label = new Label { AutoSize = true };
-        TextBox = new TextBox { Width = DefaultTextBoxWidth };
+        TextBox = new CustomTextBox { Width = DefaultTextBoxWidth };
 
         Controls.Add(Label);
         Controls.Add(TextBox);
@@ -52,6 +52,13 @@ public class LabelTextBoxControl : UserControl, IBindableControl
         TextBox.Top = (Size.Height - TextBox.Height) / 2;
 
         base.OnLayout(e);
+    }
+
+    bool IFocusableControl.AcceptsFocus => ValueAccessor.CanSetValue();
+
+    void IFocusableControl.Focus()
+    {
+        TextBox.Focus();
     }
 
     void IBindableControl.Bind(BindingType bindingType)

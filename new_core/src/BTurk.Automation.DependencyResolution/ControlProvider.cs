@@ -1,6 +1,5 @@
 ﻿using System.Windows.Forms;
 using BTurk.Automation.Core.Views;
-using BTurk.Automation.WinForms;
 using BTurk.Automation.WinForms.Providers;
 
 namespace BTurk.Automation.DependencyResolution;

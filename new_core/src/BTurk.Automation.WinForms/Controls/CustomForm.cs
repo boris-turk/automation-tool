@@ -6,6 +6,8 @@ namespace BTurk.Automation.WinForms.Controls;
 
 public class CustomForm : Form, IView
 {
+    public event EventHandler<KeyEventArgs> CmdKeyPress;
+
     public ViewConfiguration Configuration { get; set; }
 
     public CustomForm()
@@ -31,5 +33,22 @@ public class CustomForm : Form, IView
             ShowDialog();
         else
             Show();
+    }
+
+    protected override bool ProcessCmdKey(ref Message m, Keys keyData)
+    {
+        var keyEventArgs = new KeyEventArgs(keyData);
+
+        CmdKeyPress?.Invoke(this, keyEventArgs);
+
+        if (keyEventArgs.Handled)
+            return true;
+
+        return base.ProcessCmdKey(ref m, keyData);
+    }
+
+    public void CloseAsConfirmed()
+    {
+        Close();
     }
 }

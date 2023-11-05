@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using BTurk.Automation.Core;
 using BTurk.Automation.Core.Views;
 using BTurk.Automation.WinForms.Controls;
 using BTurk.Automation.WinForms.Views;
@@ -46,7 +47,14 @@ public class ViewProvider : IViewProvider
     private void CreateAndAddControl(CustomForm form, IControlConfiguration configuration)
     {
         var control = _controlProvider.Create(configuration);
+        OnControlCreated(control, form);
         form.Controls.Add(control);
+    }
+
+    private void OnControlCreated(Control control, CustomForm form)
+    {
+        if (control is IFocusableControl)
+            control.TabIndex = form.GetAllChildControls<IFocusableControl>().MaxOrDefault(c => c.TabIndex) + 1;
     }
 
     private void OnFormLayout(CustomForm form)

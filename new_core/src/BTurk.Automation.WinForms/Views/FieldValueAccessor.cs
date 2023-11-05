@@ -24,4 +24,9 @@ public class FieldValueAccessor
     {
         FieldConfiguration.SetValue(value, ValueConverter);
     }
+
+    public bool CanSetValue()
+    {
+        return FieldConfiguration.CanSetValue();
+    }
 }

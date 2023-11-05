@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using BTurk.Automation.Core.Requests;
 
@@ -46,6 +48,12 @@ public static class Extensions
         }
 
         return j == value.Length;
+    }
+
+    public static TV MaxOrDefault<T, TV>(this IEnumerable<T> items, Func<T, TV> selector)
+    {
+        var list = items.ToList();
+        return list.Any() ? list.Select(selector).Max() : default;
     }
 
     internal static string GetDebuggerDisplayText(IRequest request)
