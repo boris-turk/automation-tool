@@ -57,6 +57,7 @@
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Converters\IGuiValueConverter.cs" />
+    <Compile Include="Converters\InvariantGuiValueConverter.cs" />
     <Compile Include="Credentials\SecurePasswordStorage.cs" />
     <Compile Include="Credentials\UserCredentials.cs" />
     <Compile Include="Extensions.cs" />

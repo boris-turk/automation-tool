@@ -70,9 +70,14 @@ public class FocusCoordinator
         var control = GetFocusableControl(ListSortDirection.Ascending);
 
         if (control == null)
+        {
+            OnConfirmingFocusedFieldContents();
             _form.CloseAsConfirmed();
+        }
         else
+        {
             FocusControl(control);
+        }
     }
 
     private IFocusableControl GetFocusableControl(ListSortDirection direction)
@@ -102,5 +107,4 @@ public class FocusCoordinator
     {
         (_focusedControl as IBindableControl)?.Bind(BindingType.Set);
     }
-
 }

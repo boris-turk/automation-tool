@@ -26,12 +26,12 @@ public class ClosedGenericTypeProvider
         };
     }
 
-    public Type Get(Type openGenericType, Type argumentType)
+    public Type Get(Type openGenericType, Type[] argumentTypes)
     {
         if (!ClosedGenericTypesCollection.TryGetValue(openGenericType, out var collection))
             throw new Exception($"No registration for open generic service {openGenericType.Name}");
 
-        return collection.Get(argumentType);
+        return collection.Get(argumentTypes);
     }
 
     public void Register(Type openGenericServiceType, Type fallbackOpenGenericServiceType = null)
@@ -65,11 +65,11 @@ public class ClosedGenericTypeProvider
             _fallbackOpenGenericType = fallbackOpenGenericType;
         }
 
-        public Type Get(Type argumentType)
+        public Type Get(Type[] argumentTypes)
         {
             var candidate = _types.FirstOrDefault(t => t
                 .FindAllParentClosedGenerics(_openGenericType)
-                .Any(p => p.GetGenericArguments()[0] == argumentType)
+                .Any(p => p.GetGenericArguments().SequenceEqual(argumentTypes))
             );
 
             if (candidate != null)
@@ -81,7 +81,10 @@ public class ClosedGenericTypeProvider
                     $"Could not retrieve implementation for service {_openGenericType.FullName}");
             }
 
-            return _fallbackOpenGenericType.MakeGenericType(argumentType);
+            var argumentCount = _fallbackOpenGenericType.GetGenericArguments().Length;
+            var properArgumentTypes = argumentTypes.Take(argumentCount).ToArray();
+
+            return _fallbackOpenGenericType.MakeGenericType(properArgumentTypes);
         }
     }
 }

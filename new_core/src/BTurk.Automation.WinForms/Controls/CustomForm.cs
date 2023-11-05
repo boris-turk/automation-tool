@@ -10,6 +10,8 @@ public class CustomForm : Form, IView
 
     public ViewConfiguration Configuration { get; set; }
 
+    public bool Confirmed { get; private set; }
+
     public CustomForm()
     {
         _ = new CloseFormDecorator(this);
@@ -49,6 +51,7 @@ public class CustomForm : Form, IView
 
     public void CloseAsConfirmed()
     {
+        Confirmed = true;
         Close();
     }
 }

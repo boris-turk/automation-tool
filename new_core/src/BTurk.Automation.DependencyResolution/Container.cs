@@ -108,6 +108,9 @@ public static class Container
         if (type.InheritsFrom(typeof(IGuiValueConverter)))
             return GetOrCreateSingleton<GuiValueConverter>();
 
+        if (type.InheritsFrom(typeof(IGuiValueConverter<,>)))
+            return GetOpenGenericServiceInstance(type, GetConverterType);
+
         throw FailedToCreateInstance(type);
     }
 
@@ -168,18 +171,18 @@ public static class Container
         yield return GetOrCreateSingleton<VisualStudioEnvironmentDataProvider>();
     }
 
-    private static Type GetCompositeMessageHandlerType(Type messageType)
+    private static Type GetCompositeMessageHandlerType(Type[] typeArguments)
     {
-        return typeof(CompositeMessageHandler<>).MakeGenericType(messageType);
+        return typeof(CompositeMessageHandler<>).MakeGenericType(typeArguments);
     }
 
     private static object GetOpenGenericServiceInstance(
-        Type openGenericType, Func<Type, Type> implementorTypeProvider)
+        Type openGenericType, Func<Type[], Type> implementorTypeProvider)
     {
         object Create()
         {
-            var argumentType = openGenericType.GetGenericArguments()[0];
-            var implementorType = implementorTypeProvider.Invoke(argumentType);
+            var typeArguments = openGenericType.GetGenericArguments();
+            var implementorType = implementorTypeProvider.Invoke(typeArguments);
             return CreateInstance(implementorType);
         }
 
@@ -231,14 +234,14 @@ public static class Container
         return false;
     }
 
-    private static Type GetRequestProviderType(Type requestType)
+    private static Type GetRequestProviderType(Type[] typeArguments)
     {
-        return ClosedGenericTypeProvider.Get(typeof(IRequestsProvider<>), requestType);
+        return ClosedGenericTypeProvider.Get(typeof(IRequestsProvider<>), typeArguments);
     }
 
-    private static Type GetRequestActionDispatcherType(Type requestType)
+    private static Type GetRequestActionDispatcherType(Type[] typeArguments)
     {
-        return typeof(RequestActionDispatcher<>).MakeGenericType(requestType);
+        return typeof(RequestActionDispatcher<>).MakeGenericType(typeArguments);
     }
 
     private static Type GetRequestVisitorType(Type requestType, Type childRequestType)
@@ -258,14 +261,19 @@ public static class Container
         return typeof(DefaultRequestVisitor<,>).MakeGenericType(requestType, childRequestType);
     }
 
-    private static Type GetControlProviderType(Type configurationType)
+    private static Type GetControlProviderType(Type[] typeArguments)
     {
-        return ClosedGenericTypeProvider.Get(typeof(IControlProvider<>), configurationType);
+        return ClosedGenericTypeProvider.Get(typeof(IControlProvider<>), typeArguments);
     }
 
-    private static Type GetCommandHandlerType(Type commandType)
+    private static Type GetCommandHandlerType(Type[] typeArguments)
     {
-        return ClosedGenericTypeProvider.Get(typeof(ICommandHandler<>), commandType);
+        return ClosedGenericTypeProvider.Get(typeof(ICommandHandler<>), typeArguments);
+    }
+
+    private static Type GetConverterType(Type[] typeArguments)
+    {
+        return ClosedGenericTypeProvider.Get(typeof(IGuiValueConverter<,>), typeArguments);
     }
 
     private static void InitializeMainForm(MainForm mainForm)
@@ -373,6 +381,7 @@ public static class Container
         ClosedGenericTypeProvider.Register(typeof(IRequestsProvider<>), typeof(EmptyRequestProvider<>));
         ClosedGenericTypeProvider.Register(typeof(ICommandHandler<>));
         ClosedGenericTypeProvider.Register(typeof(IControlProvider<>));
+        ClosedGenericTypeProvider.Register(typeof(IGuiValueConverter<,>), typeof(InvariantGuiValueConverter<>));
     }
 
     private static DecoratorProducerParameters GetDecoratorProducerParameters(Type serviceType)

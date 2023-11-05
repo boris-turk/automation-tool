@@ -43,6 +43,9 @@ public class CloseFormDecorator
 
     private DialogResult ProcessCancelQuestion()
     {
+        if (_form.Confirmed)
+            return DialogResult.Yes;
+
         if (!CancelQuestion.HasLength())
             return DialogResult.Yes;
 
