@@ -27,7 +27,7 @@ public class FieldControlProvider : IControlProvider<FieldConfiguration<string>>
         labelTextBox.Label.Text = configuration.LabelText;
 
         if (configuration.InputStyle == FieldInputStyle.Password)
-            labelTextBox.TextBox.PasswordChar = '*';
+            labelTextBox.IsPasswordMode = true;
 
         return labelTextBox;
     }

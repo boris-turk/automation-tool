@@ -51,6 +51,7 @@
     <Compile Include="CommitRepositoryCommandHandler.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConnectWithAlwaysOnCommandHandler.cs" />
+    <Compile Include="DirectoryPath.cs" />
     <Compile Include="DTEInstanceProvider.cs" />
     <Compile Include="GitConsoleRequest.cs" />
     <Compile Include="IConfigurationProvider.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="ShowRepositoryLogCommand.cs" />
     <Compile Include="ShowRepositoryLogCommandHandler.cs" />
     <Compile Include="ShowRepositoryLogRequest.cs" />
+    <Compile Include="StartupPresenter.cs" />
     <Compile Include="UrlCollectionRequest.cs" />
     <Compile Include="UrlRequest.cs" />
     <Compile Include="UrlsProvider.cs" />

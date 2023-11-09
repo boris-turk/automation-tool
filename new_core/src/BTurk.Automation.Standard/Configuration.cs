@@ -11,6 +11,9 @@ public class Configuration
     [DataMember(Name = "ProgramPaths")]
     public List<ProgramPath> ProgramPaths { get; set; }
 
+    [DataMember(Name = "Directories")]
+    public List<DirectoryPath> Directories { get; set; }
+
     public string GetProgramPath(string programName)
     {
         var programPath = ProgramPaths.FirstOrDefault(p => p.Name == programName)?.Path;

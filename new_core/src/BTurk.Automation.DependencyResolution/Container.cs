@@ -111,6 +111,9 @@ public static class Container
         if (type.InheritsFrom(typeof(IGuiValueConverter<,>)))
             return GetOpenGenericServiceInstance(type, GetConverterType);
 
+        if (type == typeof(StartupPresenter))
+            return GetOrCreateSingleton<StartupPresenter>();
+
         throw FailedToCreateInstance(type);
     }
 

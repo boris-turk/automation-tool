@@ -12,5 +12,11 @@
       "Name": "TortoiseGit",
       "Path": "C:\\Program Files\\TortoiseGit\\bin\\TortoiseGitProc.exe"
     }
+  ],
+  "Directories": [
+    {
+      "Name": "LocalAutomationConfiguration",
+      "Path": "C:\Users\Boris\Automation"
+    }
   ]
 }

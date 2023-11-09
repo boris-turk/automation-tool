@@ -2,6 +2,8 @@
 using System.Windows.Forms;
 using BTurk.Automation.Core.Views;
 
+// ReSharper disable VirtualMemberCallInConstructor
+
 namespace BTurk.Automation.WinForms.Controls;
 
 public class CustomForm : Form, IView
@@ -15,6 +17,7 @@ public class CustomForm : Form, IView
     public CustomForm()
     {
         _ = new CloseFormDecorator(this);
+        Font = MainForm.PreferredFont;
     }
 
     protected override void OnLoad(EventArgs e)

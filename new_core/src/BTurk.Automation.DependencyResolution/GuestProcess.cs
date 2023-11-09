@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
-using BTurk.Automation.Core.Views;
 using BTurk.Automation.Host.AssemblyLoading;
+using BTurk.Automation.Standard;
 using BTurk.Automation.WinForms;
 using BTurk.Automation.WinForms.Controls;
 
@@ -37,23 +37,9 @@ public class GuestProcess : IGuestProcess
 
     private bool AskForCredentials()
     {
-        string password = null;
-
-        var viewBuilder = Container.GetInstance<IViewProvider>().Builder();
-
-        viewBuilder.ModalDialogStyle();
-
-        viewBuilder.CancelQuestion("Exit?");
-
-        viewBuilder
-            .AddField<string>()
-            .LabelText("Master password:")
-            .PasswordInputStyle()
-            .BindSetter(v => password = v);
-
-        viewBuilder.CreateAndShow();
-
-        return password != null;
+        var presenter = Container.GetInstance<StartupPresenter>();
+        presenter.Start();
+        return presenter.EnteredValidPassword;
     }
 
     public void Dispose()

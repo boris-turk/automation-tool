@@ -70,6 +70,7 @@
     <Compile Include="Messages\IMessageHandler.cs" />
     <Compile Include="Messages\IMessagePublisher.cs" />
     <Compile Include="Messages\ShowingAutomationWindowMessage.cs" />
+    <Compile Include="Presenters\IPresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AhkSendRequest.cs" />
     <Compile Include="Requests\AhkSendCommandHandler.cs" />

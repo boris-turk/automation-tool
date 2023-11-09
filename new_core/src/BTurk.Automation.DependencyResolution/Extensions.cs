@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BTurk.Automation.Core;
 
 // ReSharper disable LocalizableElement
 
@@ -8,6 +9,19 @@ namespace BTurk.Automation.DependencyResolution;
 
 public static class Extensions
 {
+    public static string GetFriendlyName(this Type type)
+    {
+        var typeArguments = "";
+
+        if (type.IsGenericType)
+            typeArguments = string.Join(", ", type.GetGenericArguments().Select(t => t.Name));
+
+        if (typeArguments.HasLength())
+            return $"{type.Name}<{typeArguments}>";
+
+        return type.Name;
+    }
+
     public static bool InheritsFrom(this Type type, Type parent)
     {
         if (parent.IsAssignableFrom(type))

@@ -7,7 +7,10 @@ namespace BTurk.Automation.WinForms.Controls;
 
 public class LabelTextBoxControl : UserControl, IBindableControl, IFocusableControl
 {
+    private bool _isPasswordMode;
     public const int DefaultTextBoxWidth = 150;
+
+    private Button _actionButton;
 
     public Label Label { get; }
 
@@ -27,6 +30,7 @@ public class LabelTextBoxControl : UserControl, IBindableControl, IFocusableCont
     protected override void OnLayout(LayoutEventArgs e)
     {
         const int paddingBetweenLabelAndTextBox = 5;
+        const int paddingBetweenTextBoxAndActionButton = 2;
 
         if (!Label.Text.HasLength())
         {
@@ -46,6 +50,13 @@ public class LabelTextBoxControl : UserControl, IBindableControl, IFocusableCont
         if (Label.Visible && Label.Bottom > height)
             height = Label.Bottom;
 
+        if (_actionButton != null)
+        {
+            _actionButton.Height = height;
+            _actionButton.Left = TextBox.Right + paddingBetweenTextBoxAndActionButton;
+            width = _actionButton.Right;
+        }
+
         Size = new Size(width, height);
 
         Label.Top = (Size.Height - Label.Height) / 2;
@@ -55,6 +66,39 @@ public class LabelTextBoxControl : UserControl, IBindableControl, IFocusableCont
     }
 
     bool IFocusableControl.AcceptsFocus => ValueAccessor.CanSetValue();
+
+    public bool IsPasswordMode
+    {
+        get => _isPasswordMode;
+        set
+        {
+            _isPasswordMode = value;
+            OnPasswordModeChanged();
+        }
+    }
+
+    private void OnPasswordModeChanged()
+    {
+        AddTogglePasswordVisibilityButtonIfNecessary();
+
+        if (!IsPasswordMode && _actionButton != null)
+            _actionButton.Visible = false;
+    }
+
+    private void AddTogglePasswordVisibilityButtonIfNecessary()
+    {
+        if (!IsPasswordMode || _actionButton is TogglePasswordVisibilityButton)
+            return;
+
+        _actionButton = new TogglePasswordVisibilityButton
+        {
+            AssociatedTextBox = TextBox
+        };
+
+        Controls.Add(_actionButton);
+
+        PerformLayout();
+    }
 
     void IFocusableControl.Focus()
     {

@@ -8,21 +8,27 @@ using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 
+// ReSharper disable VirtualMemberCallInConstructor
+
 namespace BTurk.Automation.WinForms.Controls;
 
 public partial class MainForm : Form, ISearchEngine
 {
+    public static Font PreferredFont = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+
     private string _currentText;
 
     private const int OutOfScreenOffset = -20000;
 
     internal MainForm()
     {
+        InitializeComponent();
+
         _currentText = "";
 
         Items = new List<IRequest>();
 
-        InitializeComponent();
+        Font = PreferredFont;
         TopMost = false;
         KeyPreview = true;
         ShowInTaskbar = false;
