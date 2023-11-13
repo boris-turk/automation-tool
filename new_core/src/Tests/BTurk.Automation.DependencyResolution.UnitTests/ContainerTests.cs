@@ -20,8 +20,12 @@ public class ContainerTests
     [MemberData(nameof(Types))]
     public void CanCreateInstance(Type type)
     {
+        // Arrange
+        Bootstrapper.InitializeContainer();
+        var sut = Bootstrapper.Container;
+
         // Act
-        Container.GetInstance(type);
+        sut.GetInstance(type);
     }
 
     public static IEnumerable<object[]> Types

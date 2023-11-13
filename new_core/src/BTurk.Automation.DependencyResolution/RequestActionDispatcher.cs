@@ -1,10 +1,18 @@
 ﻿using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
+using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
 public class RequestActionDispatcher : IRequestActionDispatcher
 {
+    public RequestActionDispatcher(Container container)
+    {
+        Container = container;
+    }
+
+    private Container Container { get; }
+
     void IRequestActionDispatcher.Dispatch(IRequest request, ActionType actionType)
     {
         GenericMethodInvoker.Instance(this)

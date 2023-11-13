@@ -1,9 +1,17 @@
 ﻿using BTurk.Automation.Core.Converters;
+using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
 public class GuiValueConverter : IGuiValueConverter
 {
+    public GuiValueConverter(Container container)
+    {
+        Container = container;
+    }
+
+    private Container Container { get; }
+
     public TGui ToGuiValue<TDomain, TGui>(TDomain value)
     {
         var converter = GetConverter<TDomain, TGui>();

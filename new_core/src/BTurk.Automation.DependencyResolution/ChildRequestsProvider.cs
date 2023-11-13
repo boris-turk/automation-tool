@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
+using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
 public class ChildRequestsProvider : IChildRequestsProvider
 {
-    private readonly IEnvironmentContextProvider _environmentContextProvider;
-
-    public ChildRequestsProvider(IEnvironmentContextProvider environmentContextProvider)
+    public ChildRequestsProvider(Container container, IEnvironmentContextProvider environmentContextProvider)
     {
-        _environmentContextProvider = environmentContextProvider;
+        Container = container;
+        EnvironmentContextProvider = environmentContextProvider;
     }
+
+    private Container Container { get; }
+
+    private IEnvironmentContextProvider EnvironmentContextProvider { get; }
 
     public IEnumerable<IRequest> LoadChildren(IRequest request)
     {
@@ -37,7 +41,7 @@ public class ChildRequestsProvider : IChildRequestsProvider
         var provider = Container.GetInstance<IRequestsProvider<TRequest>>();
 
         var suppliedRequests = provider.GetRequests().ToList();
-        var environmentContext = _environmentContextProvider.Context;
+        var environmentContext = EnvironmentContextProvider.Context;
         var context = new RequestLoadContext<TRequest>(environmentContext, suppliedRequests);
 
         return collectionRequest.GetRequests(context);

@@ -20,7 +20,7 @@ public partial class MainForm : Form, ISearchEngine
 
     private const int OutOfScreenOffset = -20000;
 
-    internal MainForm()
+    public MainForm()
     {
         InitializeComponent();
 

@@ -1,10 +1,18 @@
 ﻿using BTurk.Automation.Core.Commands;
 using BTurk.Automation.Core.Requests;
+using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
 public class CommandProcessor : ICommandProcessor
 {
+    public CommandProcessor(Container container)
+    {
+        Container = container;
+    }
+
+    private Container Container { get; }
+
     void ICommandProcessor.Process(ICommand command)
     {
         GenericMethodInvoker.Instance(this)

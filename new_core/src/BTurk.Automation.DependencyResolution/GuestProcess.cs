@@ -19,11 +19,13 @@ public class GuestProcess : IGuestProcess
     {
         try
         {
+            Bootstrapper.InitializeContainer();
+
             if (!AskForCredentials())
                 return;
 
-            _globalShortcuts = Container.GetInstance<GlobalShortcuts>();
-            _mainForm = Container.GetInstance<MainForm>();
+            _globalShortcuts = Bootstrapper.Container.GetInstance<GlobalShortcuts>();
+            _mainForm = Bootstrapper.Container.GetInstance<MainForm>();
             _mainForm.Load += (_, _) => _globalShortcuts.Install();
 
             Application.Run(_mainForm);
@@ -37,7 +39,7 @@ public class GuestProcess : IGuestProcess
 
     private bool AskForCredentials()
     {
-        var presenter = Container.GetInstance<StartupPresenter>();
+        var presenter = Bootstrapper.Container.GetInstance<StartupPresenter>();
         presenter.Start();
         return presenter.EnteredValidPassword;
     }

@@ -1,9 +1,17 @@
 ﻿using BTurk.Automation.Core.Requests;
+using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
 public class RequestVisitor : IRequestVisitor
 {
+    public RequestVisitor(Container container)
+    {
+        Container = container;
+    }
+
+    private Container Container { get; }
+
     void IRequestVisitor.Visit(RequestVisitContext context)
     {
         GenericMethodInvoker.Instance(this)

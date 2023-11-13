@@ -46,10 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncServices\AsyncCommandHandlerDecorator.cs" />
+    <Compile Include="Bootstrapper.cs" />
     <Compile Include="ChildRequestsProvider.cs" />
-    <Compile Include="ClosedGenericTypeProvider.cs" />
     <Compile Include="CommandProcessor.cs" />
-    <Compile Include="Container.cs" />
     <Compile Include="ControlProvider.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenericMethodInvoker.cs" />
@@ -97,6 +96,11 @@
       <Project>{42DC0026-A464-4B5E-9273-A42F8A1FCBED}</Project>
       <Name>BTurk.Automation.WinForms</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SimpleInjector">
+      <Version>5.4.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

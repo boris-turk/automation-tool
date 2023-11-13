@@ -1,11 +1,19 @@
 ﻿using System.Windows.Forms;
 using BTurk.Automation.Core.Views;
 using BTurk.Automation.WinForms.Providers;
+using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
 public class ControlProvider : IControlProvider
 {
+    public ControlProvider(Container container)
+    {
+        Container = container;
+    }
+
+    private Container Container { get; }
+
     public Control Create(IControlConfiguration configuration)
     {
         var control = GenericMethodInvoker.Instance(this)
