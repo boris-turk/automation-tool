@@ -16,4 +16,9 @@ public static class Extensions
     {
         return configuration.GetProgramPath("Isl");
     }
+
+    public static string GetLocalAutomationConfigurationDirectory(this Configuration configuration)
+    {
+        return configuration.GetProgramPath("LocalAutomationConfiguration");
+    }
 }

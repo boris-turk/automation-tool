@@ -7,6 +7,7 @@ using BTurk.Automation.Core.AsyncServices;
 using BTurk.Automation.Core.Commands;
 using BTurk.Automation.Core.Converters;
 using BTurk.Automation.Core.Messages;
+using BTurk.Automation.Core.Presenters;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.Core.Serialization;
@@ -61,10 +62,11 @@ public class Bootstrapper
         Container.RegisterSingleton<IMessagePublisher, MessagePublisher>();
         Container.RegisterSingleton<IViewProvider, ViewProvider>();
         Container.RegisterSingleton<GlobalShortcuts, GlobalShortcuts>();
-        Container.RegisterSingleton<StartupPresenter, StartupPresenter>();
         Container.RegisterSingleton<ICommandProcessor, CommandProcessor>();
         Container.RegisterSingleton<IControlProvider, ControlProvider>();
         Container.RegisterSingleton<IGuiValueConverter, GuiValueConverter>();
+
+        RegisterConcreteInheritors<IPresenter>(Lifestyle.Transient);
 
         Container.RegisterDecorator(typeof(ICommandHandler<>), typeof(AsyncCommandHandlerDecorator<>));
 
@@ -93,6 +95,20 @@ public class Bootstrapper
 
         Container.RegisterConditional(typeof(IRequestVisitor<,>), typeof(DefaultRequestVisitor<,>),
             Lifestyle.Singleton, c => !c.Handled);
+    }
+
+    private void RegisterConcreteInheritors<TParent>(Lifestyle lifestyle)
+    {
+        var types = (
+            from assembly in Assemblies
+            from type in assembly.GetExportedTypes()
+            where type.InheritsFrom(typeof(TParent))
+            where !type.IsAbstract
+            select type
+        ).ToList();
+
+        foreach (var type in types)
+            Container.Register(type, type, lifestyle);
     }
 
     private void InitializeMainForm(MainForm mainForm)

@@ -23,4 +23,14 @@ public class Configuration
 
         return programPath;
     }
+
+    public string GetDirectoryPath(string directoryId)
+    {
+        var directoryPath = Directories.FirstOrDefault(p => p.Name == directoryId)?.Path;
+
+        if (directoryPath == null)
+            throw new InvalidOperationException($"Missing \"{directoryId}\" directory path in configuration.");
+
+        return directoryPath;
+    }
 }

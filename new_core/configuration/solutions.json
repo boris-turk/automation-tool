@@ -1,11 +1,11 @@
 [
   {
     "Text": "e3k_trunk",
-    "Path": "C:\\work\\projects\\V50\\src\\allWithConverter.sln"
+    "Path": "C:\\work\\projects\\V50\\src\\solution_filters\\Standard.MainModulesAndTests.slnf"
   },
   {
     "Text": "e3k_clean",
-    "Path": "C:\\work\\projects\\V50Clean\\src\\allWithConverter.sln"
+    "Path": "C:\\work\\projects\\V50Clean\\src\\solution_filters\\Standard.MainModulesAndTests.slnf"
   },
   {
     "Text": "e3k_r4",
@@ -26,6 +26,14 @@
   {
     "Text": "e3k_r8",
     "Path": "C:\\work\\projects\\V50Rev08\\src\\allWithConverter.sln"
+  },
+  {
+    "Text": "e3k_r9",
+    "Path": "C:\\work\\projects\\V50Rev09\\src\\allWithConverter.sln"
+  },
+  {
+    "Text": "e3k_r11",
+    "Path": "C:\\work\\projects\\V50Rev11\\src\\solution_filters\\Standard.MainModulesAndTests.slnf"
   },
   {
     "Text": "automation",
