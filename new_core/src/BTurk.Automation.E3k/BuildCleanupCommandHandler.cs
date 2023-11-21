@@ -3,7 +3,7 @@ using System.IO;
 using BTurk.Automation.Core;
 using BTurk.Automation.Core.AsyncServices;
 using BTurk.Automation.Core.Commands;
-using BTurk.Automation.Core.Helpers;
+using BTurk.Automation.Core.FileSystem;
 
 // ReSharper disable UnusedMember.Global
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BTurk.Automation.Core;
 using BTurk.Automation.Core.Commands;
+using BTurk.Automation.Core.Configuration;
 
 namespace BTurk.Automation.Standard;
 

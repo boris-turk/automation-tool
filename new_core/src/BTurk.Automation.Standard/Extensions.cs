@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using BTurk.Automation.Core.Configuration;
 using BTurk.Automation.Core.Requests;
 
 // ReSharper disable UnusedMember.Global
@@ -12,12 +13,12 @@ public static class Extensions
         Process.Start(request.Path);
     }
 
-    public static string GetIslProgramPath(this Configuration configuration)
+    public static string GetIslProgramPath(this SystemConfiguration configuration)
     {
         return configuration.GetProgramPath("Isl");
     }
 
-    public static string GetLocalAutomationConfigurationDirectory(this Configuration configuration)
+    public static string GetLocalAutomationConfigurationDirectory(this SystemConfiguration configuration)
     {
         return configuration.GetProgramPath("LocalAutomationConfiguration");
     }

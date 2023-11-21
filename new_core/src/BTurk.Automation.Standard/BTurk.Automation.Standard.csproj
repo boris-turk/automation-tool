@@ -49,12 +49,9 @@
   <ItemGroup>
     <Compile Include="CommitRepositoryCommand.cs" />
     <Compile Include="CommitRepositoryCommandHandler.cs" />
-    <Compile Include="Configuration.cs" />
     <Compile Include="ConnectWithAlwaysOnCommandHandler.cs" />
-    <Compile Include="DirectoryPath.cs" />
     <Compile Include="DTEInstanceProvider.cs" />
     <Compile Include="GitConsoleRequest.cs" />
-    <Compile Include="IConfigurationProvider.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="NotesProvider.cs" />
     <Compile Include="ConnectWithAlwaysOnCommand.cs" />
@@ -63,8 +60,6 @@
     <Compile Include="OpenNoteRequest.cs" />
     <Compile Include="OpenWithDefaultProgramCommand.cs" />
     <Compile Include="OpenWithDefaultProgramCommandHandler.cs" />
-    <Compile Include="ProgramPath.cs" />
-    <Compile Include="ProgramPathsProvider.cs" />
     <Compile Include="RepositoryCommand.cs" />
     <Compile Include="ShowRepositoryLogCommand.cs" />
     <Compile Include="ShowRepositoryLogCommandHandler.cs" />

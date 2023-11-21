@@ -5,7 +5,10 @@ using System.Reflection;
 using BTurk.Automation.Core;
 using BTurk.Automation.Core.AsyncServices;
 using BTurk.Automation.Core.Commands;
+using BTurk.Automation.Core.Configuration;
 using BTurk.Automation.Core.Converters;
+using BTurk.Automation.Core.DataPersistence;
+using BTurk.Automation.Core.FileSystem;
 using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Presenters;
 using BTurk.Automation.Core.Requests;
@@ -65,6 +68,7 @@ public class Bootstrapper
         Container.RegisterSingleton<ICommandProcessor, CommandProcessor>();
         Container.RegisterSingleton<IControlProvider, ControlProvider>();
         Container.RegisterSingleton<IGuiValueConverter, GuiValueConverter>();
+        Container.RegisterSingleton<IDirectoryProvider, DirectoryProvider>();
 
         RegisterConcreteInheritors<IPresenter>(Lifestyle.Transient);
 

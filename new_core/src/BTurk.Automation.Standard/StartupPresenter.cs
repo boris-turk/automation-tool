@@ -1,4 +1,5 @@
-﻿using BTurk.Automation.Core.Presenters;
+﻿using BTurk.Automation.Core.Credentials;
+using BTurk.Automation.Core.Presenters;
 using BTurk.Automation.Core.Views;
 
 namespace BTurk.Automation.Standard;
@@ -32,6 +33,14 @@ public class StartupPresenter : IPresenter
 
         viewBuilder.CreateAndShow();
 
-        EnteredValidPassword = password != null;
+        OnPasswordEntered(password);
+    }
+
+    private void OnPasswordEntered(string password)
+    {
+        EnteredValidPassword = true;
+
+        if (EnteredValidPassword)
+            SecurePasswordStorage.StorePassword(password);
     }
 }

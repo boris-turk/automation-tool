@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-namespace BTurk.Automation.Core.Helpers;
+namespace BTurk.Automation.Core.FileSystem;
 
 public class DirectoryIterator : IEnumerable<DirectoryScope>
 {

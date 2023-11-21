@@ -104,6 +104,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>xcopy "$(SolutionDir)..\configuration\*.*" "$(TargetDir)\configuration" /Y /I /E</PreBuildEvent>
+    <PreBuildEvent>xcopy "$(SolutionDir)..\configuration\*.*" "$(TargetDir)..\configuration" /Y /I /E</PreBuildEvent>
   </PropertyGroup>
 </Project>

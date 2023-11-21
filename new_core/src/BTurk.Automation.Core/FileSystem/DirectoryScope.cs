@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace BTurk.Automation.Core.Helpers;
+namespace BTurk.Automation.Core.FileSystem;
 
 public class DirectoryScope
 {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using BTurk.Automation.Core.DataPersistence;
+using BTurk.Automation.Core.FileSystem;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -11,6 +13,13 @@ namespace BTurk.Automation.Core.Serialization;
 
 public class JsonResourceProvider : IResourceProvider
 {
+    public JsonResourceProvider(IDirectoryProvider directoryProvider)
+    {
+        DirectoryProvider = directoryProvider;
+    }
+
+    private IDirectoryProvider DirectoryProvider { get; }
+
     public void Save(object instance, string filePath)
     {
         using (var file = File.CreateText(filePath))
@@ -21,12 +30,9 @@ public class JsonResourceProvider : IResourceProvider
         }
     }
 
-    public T Load<T>(string resourceName)
+    public T Load<T>(FileParameters fileParameters)
     {
-        var filePath = Path.Combine("configuration", resourceName);
-
-        if (!filePath.EndsWith(".json", StringComparison.InvariantCultureIgnoreCase))
-            filePath = $"{filePath}.json";
+        var filePath = GetFilePath(fileParameters);
 
         if (!File.Exists(filePath))
             throw new InvalidOperationException($"Missing file: {filePath}");
@@ -38,6 +44,18 @@ public class JsonResourceProvider : IResourceProvider
             var result = Deserialize<T>(memoryStream);
             return result;
         }
+    }
+
+    private string GetFilePath(FileParameters fileParameters)
+    {
+        var directory = DirectoryProvider.GetDirectory(fileParameters.DirectoryParameters);
+
+        var filePath = fileParameters.FileName;
+
+        if (directory.HasLength())
+            filePath = Path.Combine(directory, filePath);
+
+        return filePath;
     }
 
     private T Deserialize<T>(MemoryStream memoryStream)

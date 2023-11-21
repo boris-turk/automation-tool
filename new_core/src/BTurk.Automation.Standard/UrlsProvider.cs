@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using BTurk.Automation.Core;
+using BTurk.Automation.Core.DataPersistence;
+using BTurk.Automation.Core.FileSystem;
 using BTurk.Automation.Core.Requests;
 
 // ReSharper disable UnusedMember.Global
@@ -17,6 +19,8 @@ public class UrlsProvider : IRequestsProvider<UrlRequest>
 
     public IEnumerable<UrlRequest> GetRequests()
     {
-        return _resourceProvider.Load<List<UrlRequest>>("urls");
+        return _resourceProvider.Load<List<UrlRequest>>(
+            new FileParameters(DirectoryParameters.Configuration, "urls.json")
+        );
     }
 }

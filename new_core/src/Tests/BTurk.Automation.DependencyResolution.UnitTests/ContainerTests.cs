@@ -4,6 +4,7 @@ using System.Linq;
 using BTurk.Automation.Core;
 using BTurk.Automation.Core.Commands;
 using BTurk.Automation.Core.Converters;
+using BTurk.Automation.Core.DataPersistence;
 using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;

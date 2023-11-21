@@ -2,7 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using BTurk.Automation.Core;
+using BTurk.Automation.Core.DataPersistence;
+using BTurk.Automation.Core.FileSystem;
 using BTurk.Automation.Core.Requests;
 
 // ReSharper disable UnusedMember.Global
@@ -36,7 +37,11 @@ public class RepositoriesProvider : IRequestsProvider<Repository>
                 yield return repository;
         }
 
-        foreach (var repository in _resourceProvider.Load<List<Repository>>("repositories"))
+        var repositories = _resourceProvider.Load<List<Repository>>(
+            new FileParameters(DirectoryParameters.Configuration, "repositories.json")
+        );
+
+        foreach (var repository in repositories)
             yield return repository;
     }
 
@@ -70,7 +75,7 @@ public class RepositoriesProvider : IRequestsProvider<Repository>
             };
         }
 
-        match = Regex.Match(candidate, @"V50(.*)");
+        match = Regex.Match(candidate, "V50(.*)");
 
         if (match.Success)
         {

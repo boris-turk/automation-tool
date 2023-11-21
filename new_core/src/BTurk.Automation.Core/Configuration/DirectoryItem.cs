@@ -1,9 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
-namespace BTurk.Automation.Standard;
+namespace BTurk.Automation.Core.Configuration;
 
 [DataContract]
-public class DirectoryPath
+public class DirectoryItem
 {
     [DataMember(Name = "Name")]
     public string Name { get; set; }

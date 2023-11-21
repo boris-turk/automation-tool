@@ -50,21 +50,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Annotations\IgnoreUnusedTypeWarningAttribute.cs" />
     <Compile Include="AsyncServices\AsyncExecutionExtensions.cs" />
     <Compile Include="AsyncServices\IAsyncExecution.cs" />
     <Compile Include="AsyncServices\ProgressData.cs" />
     <Compile Include="Commands\IAsyncCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandHandler.cs" />
+    <Compile Include="Commands\ICommandProcessor.cs" />
+    <Compile Include="Configuration\ConfigurationProvider.cs" />
+    <Compile Include="Configuration\IConfigurationProvider.cs" />
+    <Compile Include="Configuration\SystemConfiguration.cs" />
+    <Compile Include="Configuration\DirectoryItem.cs" />
+    <Compile Include="Configuration\ProgramItem.cs" />
     <Compile Include="Converters\IGuiValueConverter.cs" />
     <Compile Include="Converters\InvariantGuiValueConverter.cs" />
     <Compile Include="Credentials\SecurePasswordStorage.cs" />
-    <Compile Include="Credentials\UserCredentials.cs" />
+    <Compile Include="DataPersistence\IResourceProvider.cs" />
+    <Compile Include="DataPersistence\LoadResult.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Helpers\DirectoryIterator.cs" />
-    <Compile Include="Helpers\DirectoryScope.cs" />
+    <Compile Include="FileSystem\DirectoryIterator.cs" />
+    <Compile Include="FileSystem\DirectoryParameters.cs" />
+    <Compile Include="FileSystem\DirectoryProvider.cs" />
+    <Compile Include="FileSystem\DirectoryScope.cs" />
+    <Compile Include="FileSystem\FileParameters.cs" />
+    <Compile Include="FileSystem\IDirectoryProvider.cs" />
     <Compile Include="IProcessStarter.cs" />
-    <Compile Include="IResourceProvider.cs" />
+    <Compile Include="IRequestProcessor.cs" />
     <Compile Include="Messages\CompositeMessageHandler.cs" />
     <Compile Include="Messages\IMessage.cs" />
     <Compile Include="Messages\IMessageHandler.cs" />
@@ -72,6 +84,9 @@
     <Compile Include="Messages\ShowingAutomationWindowMessage.cs" />
     <Compile Include="Presenters\IPresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\IQuery.cs" />
+    <Compile Include="Queries\IQueryHandler.cs" />
+    <Compile Include="Queries\IQueryProcessor.cs" />
     <Compile Include="Requests\AhkSendRequest.cs" />
     <Compile Include="Requests\AhkSendCommandHandler.cs" />
     <Compile Include="Requests\CollectionRequest.cs" />
@@ -88,7 +103,6 @@
     <Compile Include="Requests\SelectionRequest.cs" />
     <Compile Include="Requests\EmptyRequestProvider.cs" />
     <Compile Include="Requests\IFileRequest.cs" />
-    <Compile Include="Requests\ICommandProcessor.cs" />
     <Compile Include="Requests\IRequestActionDispatcher.cs" />
     <Compile Include="Requests\IRequestsProvider.cs" />
     <Compile Include="Requests\DispatchPredicateContext.cs" />
