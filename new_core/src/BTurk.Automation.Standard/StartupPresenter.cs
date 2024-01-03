@@ -1,17 +1,22 @@
-﻿using BTurk.Automation.Core.Credentials;
+﻿using BTurk.Automation.Core;
+using BTurk.Automation.Core.Credentials;
 using BTurk.Automation.Core.Presenters;
+using BTurk.Automation.Core.Queries;
 using BTurk.Automation.Core.Views;
 
 namespace BTurk.Automation.Standard;
 
 public class StartupPresenter : IPresenter
 {
-    public StartupPresenter(IViewProvider viewProvider)
+    public StartupPresenter(IViewProvider viewProvider, IQueryProcessor queryProcessor)
     {
         ViewProvider = viewProvider;
+        QueryProcessor = queryProcessor;
     }
 
     private IViewProvider ViewProvider { get; }
+
+    private IQueryProcessor QueryProcessor { get; }
 
     public bool EnteredValidPassword { get; private set; }
 
@@ -38,7 +43,9 @@ public class StartupPresenter : IPresenter
 
     private void OnPasswordEntered(string password)
     {
-        EnteredValidPassword = true;
+        var passwordValidQuery = new IsMasterPasswordValidQuery(password);
+
+        EnteredValidPassword = QueryProcessor.Process(passwordValidQuery);
 
         if (EnteredValidPassword)
             SecurePasswordStorage.StorePassword(password);

@@ -62,7 +62,7 @@
     <Compile Include="Configuration\IConfigurationProvider.cs" />
     <Compile Include="Configuration\SystemConfiguration.cs" />
     <Compile Include="Configuration\DirectoryItem.cs" />
-    <Compile Include="Configuration\ProgramItem.cs" />
+    <Compile Include="Configuration\FileItem.cs" />
     <Compile Include="Converters\IGuiValueConverter.cs" />
     <Compile Include="Converters\InvariantGuiValueConverter.cs" />
     <Compile Include="Credentials\SecurePasswordStorage.cs" />

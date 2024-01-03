@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BTurk.Automation.Core;
+using BTurk.Automation.Core.Configuration;
 
 // ReSharper disable LocalizableElement
 
@@ -9,6 +10,11 @@ namespace BTurk.Automation.DependencyResolution;
 
 public static class Extensions
 {
+    public static string GetKeePassDatabase(this SystemConfiguration configuration)
+    {
+        return configuration.GetFilePath("KeePassDatabase");
+    }
+
     public static string GetFriendlyName(this Type type)
     {
         var typeArguments = "";

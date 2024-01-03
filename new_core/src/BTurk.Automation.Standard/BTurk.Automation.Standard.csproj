@@ -52,6 +52,7 @@
     <Compile Include="ConnectWithAlwaysOnCommandHandler.cs" />
     <Compile Include="DTEInstanceProvider.cs" />
     <Compile Include="GitConsoleRequest.cs" />
+    <Compile Include="IsMasterPasswordValidQuery.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="NotesProvider.cs" />
     <Compile Include="ConnectWithAlwaysOnCommand.cs" />

@@ -15,6 +15,4 @@ public class DirectoryParameters
     public static DirectoryParameters None { get; } = new(nameof(None));
 
     public static DirectoryParameters Configuration { get; } = new(nameof(Configuration));
-
-    public static DirectoryParameters LocalConfiguration { get; } = new(nameof(LocalConfiguration));
 }

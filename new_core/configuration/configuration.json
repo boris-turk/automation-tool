@@ -13,10 +13,10 @@
       "Path": "C:\\Program Files\\TortoiseGit\\bin\\TortoiseGitProc.exe"
     }
   ],
-  "Directories": [
+  "Files": [
     {
-      "Name": "LocalAutomationConfiguration",
-      "Path": "C:\Users\Boris\Automation"
+      "Name": "KeePassDatabase",
+      "Path": "C:\\Users\\Boris\\Dropbox\\Mobile\\data.kdbx"
     }
   ]
 }

@@ -11,6 +11,7 @@ using BTurk.Automation.Core.DataPersistence;
 using BTurk.Automation.Core.FileSystem;
 using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Presenters;
+using BTurk.Automation.Core.Queries;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.Core.Serialization;
@@ -52,7 +53,6 @@ public class Bootstrapper
         Container.RegisterSingleton<ISearchEngine, MainForm>();
         Container.RegisterSingleton<ISearchItemsProvider, MainForm>();
         Container.RegisterInitializer<MainForm>(InitializeMainForm);
-
         Container.RegisterSingleton<IAsyncExecution, AsyncExecutionDialog>();
         Container.RegisterSingleton<IAsyncExecutionDialog, AsyncExecutionDialog>();
         Container.RegisterSingleton<IProcessStarter, ProcessStarter>();
@@ -65,6 +65,7 @@ public class Bootstrapper
         Container.RegisterSingleton<IMessagePublisher, MessagePublisher>();
         Container.RegisterSingleton<IViewProvider, ViewProvider>();
         Container.RegisterSingleton<GlobalShortcuts, GlobalShortcuts>();
+        Container.RegisterSingleton<IQueryProcessor, QueryProcessor>();
         Container.RegisterSingleton<ICommandProcessor, CommandProcessor>();
         Container.RegisterSingleton<IControlProvider, ControlProvider>();
         Container.RegisterSingleton<IGuiValueConverter, GuiValueConverter>();
@@ -76,6 +77,8 @@ public class Bootstrapper
 
         RegisterGenericServiceImplementations(typeof(ICommandHandler<>), Lifestyle.Singleton,
             excluded: typeof(AsyncCommandHandlerDecorator<>));
+
+        RegisterGenericServiceImplementations(typeof(IQueryHandler<,>), Lifestyle.Singleton);
 
         RegisterGenericServiceImplementations(typeof(IRequestsProvider<>), Lifestyle.Singleton,
             excluded: typeof(EmptyRequestProvider<>));

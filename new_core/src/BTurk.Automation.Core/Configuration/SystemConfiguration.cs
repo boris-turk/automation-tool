@@ -11,31 +11,31 @@ public class SystemConfiguration
 {
     [DataMember(Name = "Programs")]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public List<ProgramItem> ProgramPaths { get; set; }
+    public List<FileItem> ProgramPaths { get; set; }
 
-    [DataMember(Name = "Directories")]
+    [DataMember(Name = "Files")]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public List<DirectoryItem> Directories { get; set; }
+    public List<FileItem> FilePaths { get; set; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public string GetProgramPath(string programName)
+    public string GetProgramPath(string name)
     {
-        var programPath = ProgramPaths.FirstOrDefault(p => p.Name == programName)?.Path;
+        var path = ProgramPaths.FirstOrDefault(p => p.Name == name)?.Path;
 
-        if (programPath != null)
-            return programPath;
+        if (path != null)
+            return path;
 
-        throw new InvalidOperationException($"Missing \"{programName}\" program path in configuration.");
+        throw new InvalidOperationException($"Missing \"{name}\" program path in configuration.");
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public string GetDirectoryPath(string directoryId)
+    public string GetFilePath(string name)
     {
-        var directoryPath = Directories.FirstOrDefault(p => p.Name == directoryId)?.Path;
+        var path = FilePaths.FirstOrDefault(p => p.Name == name)?.Path;
 
-        if (directoryPath != null)
-            return directoryPath;
+        if (path != null)
+            return path;
 
-        throw new InvalidOperationException($"Missing \"{directoryId}\" directory path in configuration.");
+        throw new InvalidOperationException($"Missing \"{name}\" file path in configuration.");
     }
 }

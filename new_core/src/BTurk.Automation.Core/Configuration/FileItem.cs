@@ -3,7 +3,7 @@
 namespace BTurk.Automation.Core.Configuration;
 
 [DataContract]
-public class ProgramItem
+public class FileItem
 {
     [DataMember(Name = "Name")]
     public string Name { get; set; }
