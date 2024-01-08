@@ -54,6 +54,7 @@
     <Compile Include="GenericMethodInvoker.cs" />
     <Compile Include="GuiValueConverter.cs" />
     <Compile Include="KeePassInterop\IsMasterPasswordValidQueryHandler.cs" />
+    <Compile Include="KeePassInterop\UserCredentialsQueryHandler.cs" />
     <Compile Include="MessagePublisher.cs" />
     <Compile Include="ProcessStarter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

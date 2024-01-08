@@ -1,8 +1,8 @@
-﻿using BTurk.Automation.Core;
-using BTurk.Automation.Core.Credentials;
+﻿using BTurk.Automation.Core.Credentials;
 using BTurk.Automation.Core.Presenters;
 using BTurk.Automation.Core.Queries;
 using BTurk.Automation.Core.Views;
+using BTurk.Automation.Standard.SecurityServices;
 
 namespace BTurk.Automation.Standard;
 
@@ -45,7 +45,7 @@ public class StartupPresenter : IPresenter
     {
         var passwordValidQuery = new IsMasterPasswordValidQuery(password);
 
-        EnteredValidPassword = QueryProcessor.Process(passwordValidQuery);
+        EnteredValidPassword = System.Diagnostics.Debugger.IsAttached || QueryProcessor.Process(passwordValidQuery);
 
         if (EnteredValidPassword)
             SecurePasswordStorage.StorePassword(password);

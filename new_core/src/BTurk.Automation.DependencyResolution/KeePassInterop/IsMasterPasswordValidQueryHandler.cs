@@ -2,6 +2,7 @@
 using BTurk.Automation.Core.Configuration;
 using BTurk.Automation.Core.Queries;
 using BTurk.Automation.Standard;
+using BTurk.Automation.Standard.SecurityServices;
 using KeePassLib;
 using KeePassLib.Interfaces;
 using KeePassLib.Keys;

@@ -1,6 +1,6 @@
 ﻿using BTurk.Automation.Core.Queries;
 
-namespace BTurk.Automation.Standard;
+namespace BTurk.Automation.Standard.SecurityServices;
 
 public class IsMasterPasswordValidQuery : IQuery<bool>
 {

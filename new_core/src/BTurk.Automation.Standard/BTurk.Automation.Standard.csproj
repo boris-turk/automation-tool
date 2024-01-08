@@ -52,7 +52,7 @@
     <Compile Include="ConnectWithAlwaysOnCommandHandler.cs" />
     <Compile Include="DTEInstanceProvider.cs" />
     <Compile Include="GitConsoleRequest.cs" />
-    <Compile Include="IsMasterPasswordValidQuery.cs" />
+    <Compile Include="SecurityServices\IsMasterPasswordValidQuery.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="NotesProvider.cs" />
     <Compile Include="ConnectWithAlwaysOnCommand.cs" />
@@ -62,6 +62,8 @@
     <Compile Include="OpenWithDefaultProgramCommand.cs" />
     <Compile Include="OpenWithDefaultProgramCommandHandler.cs" />
     <Compile Include="RepositoryCommand.cs" />
+    <Compile Include="SecurityServices\UserCredentialsQuery.cs" />
+    <Compile Include="SecurityServices\UserCredentials.cs" />
     <Compile Include="ShowRepositoryLogCommand.cs" />
     <Compile Include="ShowRepositoryLogCommandHandler.cs" />
     <Compile Include="ShowRepositoryLogRequest.cs" />
@@ -87,5 +89,6 @@
       <Name>BTurk.Automation.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
