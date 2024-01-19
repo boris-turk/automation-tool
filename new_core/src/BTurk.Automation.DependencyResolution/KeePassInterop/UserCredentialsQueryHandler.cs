@@ -1,4 +1,5 @@
-﻿using BTurk.Automation.Core.Annotations;
+﻿using System.Linq;
+using BTurk.Automation.Core.Annotations;
 using BTurk.Automation.Core.Configuration;
 using BTurk.Automation.Core.Credentials;
 using BTurk.Automation.Core.Queries;
@@ -37,12 +38,7 @@ public class UserCredentialsQueryHandler : IQueryHandler<UserCredentialsQuery, U
             db = new PwDatabase();
             db.Open(ioConnectionInfo, compositeKey, new NullStatusLogger());
 
-            var group = FindGroupByName(db.RootGroup, queryData.GroupName);
-
-            if (group == null)
-                return UserCredentials.Empty;
-
-            var entry = FindEntryByTitle(group, queryData.EntryTitle);
+            var entry = db.RootGroup.GetEntries(true).FirstOrDefault(e => e.Tags.Contains(queryData.Tag));
 
             if (entry == null)
                 return UserCredentials.Empty;

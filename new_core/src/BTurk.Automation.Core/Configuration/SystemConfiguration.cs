@@ -20,7 +20,7 @@ public class SystemConfiguration
     [EditorBrowsable(EditorBrowsableState.Never)]
     public string GetProgramPath(string name)
     {
-        var path = ProgramPaths.FirstOrDefault(p => p.Name == name)?.Path;
+        var path = ProgramPaths.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))?.Path;
 
         if (path != null)
             return path;

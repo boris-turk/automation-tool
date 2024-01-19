@@ -5,6 +5,8 @@ using BTurk.Automation.E3k;
 using BTurk.Automation.Mic;
 using BTurk.Automation.Standard;
 
+// ReSharper disable StringLiteralTypo
+
 namespace BTurk.Automation.DependencyResolution;
 
 public class MainMenuRequest : CollectionRequest
@@ -24,6 +26,7 @@ public class MainMenuRequest : CollectionRequest
         yield return new GitConsoleRequest();
         yield return new BuildCleanupRequest();
         yield return new SalonsCollectionRequest();
+        yield return new OpenProgramRequest("gvim");
     }
 
     protected override bool CanAccept(DispatchPredicateContext context)

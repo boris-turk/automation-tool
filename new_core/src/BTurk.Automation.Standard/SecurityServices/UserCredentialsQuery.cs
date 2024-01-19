@@ -1,16 +1,17 @@
 ﻿using BTurk.Automation.Core.Queries;
 
+// ReSharper disable InconsistentNaming
+
 namespace BTurk.Automation.Standard.SecurityServices;
 
 public class UserCredentialsQuery : IQuery<UserCredentials>
 {
-    public UserCredentialsQuery(string groupName, string entryTitle)
+    private UserCredentialsQuery(string tag)
     {
-        GroupName = groupName;
-        EntryTitle = entryTitle;
+        Tag = tag;
     }
 
-    public string GroupName { get; }
+    public string Tag { get; }
 
-    public string EntryTitle { get; }
+    public static UserCredentialsQuery BorisISL => new("BorisISL");
 }

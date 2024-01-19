@@ -95,6 +95,8 @@
     <Compile Include="Requests\IRequest.cs" />
     <Compile Include="Requests\IRequestVisitor.cs" />
     <Compile Include="Requests\ICollectionRequest.cs" />
+    <Compile Include="Requests\OpenProgramCommandHandler.cs" />
+    <Compile Include="Requests\OpenProgramRequest.cs" />
     <Compile Include="Requests\OptionRequest.cs" />
     <Compile Include="Requests\OptionRequestVisitor.cs" />
     <Compile Include="Requests\RequestActionDispatcher.cs" />

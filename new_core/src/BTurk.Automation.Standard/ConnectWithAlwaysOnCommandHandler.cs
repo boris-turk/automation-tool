@@ -26,7 +26,7 @@ public class ConnectWithAlwaysOnCommandHandler : ICommandHandler<ConnectWithAlwa
 
     public void Handle(ConnectWithAlwaysOnCommand command)
     {
-        var credentials = QueryProcessor.Process(new UserCredentialsQuery("Xlab", "ISL Pronto"));
+        var credentials = QueryProcessor.Process(UserCredentialsQuery.BorisISL);
 
         var password = credentials.Password;
         var userName = credentials.UserName;

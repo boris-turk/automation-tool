@@ -11,6 +11,10 @@
     {
       "Name": "TortoiseGit",
       "Path": "C:\\Program Files\\TortoiseGit\\bin\\TortoiseGitProc.exe"
+    },
+    {
+      "Name": "Gvim",
+      "Path": "C:\\Program Files (x86)\\Vim\\vim82\\gvim.exe"
     }
   ],
   "Files": [
