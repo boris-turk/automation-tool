@@ -4,7 +4,7 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Standard;
 
-public class VisualStudioRequest : CollectionRequest
+public class VisualStudioRequest : CollectionRequest<IRequest>
 {
     public VisualStudioRequest() : base("Visual studio")
     {

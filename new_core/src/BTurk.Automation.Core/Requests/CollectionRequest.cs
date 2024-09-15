@@ -4,17 +4,6 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests;
 
-public abstract class CollectionRequest : CollectionRequest<IRequest>
-{
-    protected CollectionRequest()
-    {
-    }
-
-    protected CollectionRequest(string text) : base(text)
-    {
-    }
-}
-
 public abstract class CollectionRequest<TRequest> : Request, ICollectionRequest<TRequest> where TRequest : IRequest
 {
     protected CollectionRequest()

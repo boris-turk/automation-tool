@@ -9,7 +9,7 @@ using BTurk.Automation.Standard;
 
 namespace BTurk.Automation.DependencyResolution;
 
-public class MainMenuRequest : CollectionRequest
+public class MainMenuRequest : CollectionRequest<IRequest>
 {
     public MainMenuRequest() : base("Main menu")
     {

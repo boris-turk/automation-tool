@@ -4,7 +4,7 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.E3k;
 
-public class OpenWindowRequest : CollectionRequest
+public class OpenWindowRequest : CollectionRequest<IRequest>
 {
     public OpenWindowRequest() : base("window")
     {

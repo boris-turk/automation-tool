@@ -5,7 +5,7 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests;
 
-public class OptionRequest : CollectionRequest
+public class OptionRequest : CollectionRequest<IRequest>
 {
     private readonly List<IRequest> _childRequests;
 
