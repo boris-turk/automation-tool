@@ -1,9 +1,11 @@
-﻿using BTurk.Automation.Core.Requests;
+﻿using System.Diagnostics;
+using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
+[DebuggerStepThrough]
 public class RequestActionDispatcher : IRequestActionDispatcher
 {
     public RequestActionDispatcher(Container container)

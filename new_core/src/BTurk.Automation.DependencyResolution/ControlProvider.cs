@@ -1,10 +1,12 @@
-﻿using System.Windows.Forms;
+﻿using System.Diagnostics;
+using System.Windows.Forms;
 using BTurk.Automation.Core.Views;
 using BTurk.Automation.WinForms.Providers;
 using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
+[DebuggerStepThrough]
 public class ControlProvider : IControlProvider
 {
     public ControlProvider(Container container)

@@ -1,9 +1,10 @@
-﻿using BTurk.Automation.Core.Commands;
-using BTurk.Automation.Core.Requests;
+﻿using System.Diagnostics;
+using BTurk.Automation.Core.Commands;
 using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
+[DebuggerStepThrough]
 public class CommandProcessor : ICommandProcessor
 {
     public CommandProcessor(Container container)

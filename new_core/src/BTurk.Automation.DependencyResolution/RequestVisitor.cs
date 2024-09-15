@@ -1,8 +1,10 @@
-﻿using BTurk.Automation.Core.Requests;
+﻿using System.Diagnostics;
+using BTurk.Automation.Core.Requests;
 using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
+[DebuggerStepThrough]
 public class RequestVisitor : IRequestVisitor
 {
     public RequestVisitor(Container container)

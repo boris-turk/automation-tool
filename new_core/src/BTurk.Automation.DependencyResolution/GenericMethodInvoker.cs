@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
 namespace BTurk.Automation.DependencyResolution;
 
+[DebuggerStepThrough]
 public class GenericMethodInvoker :
     GenericMethodInvoker.IMethod,
     GenericMethodInvoker.IWithGenericTypes,

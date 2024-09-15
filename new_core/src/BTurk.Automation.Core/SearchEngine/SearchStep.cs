@@ -4,6 +4,7 @@ using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Core.SearchEngine;
 
+[DebuggerStepThrough]
 [DebuggerDisplay("{" + nameof(RequestTypeName) + "}")]
 public class SearchStep
 {

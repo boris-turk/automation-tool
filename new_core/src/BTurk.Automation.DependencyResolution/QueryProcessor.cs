@@ -1,8 +1,10 @@
-﻿using BTurk.Automation.Core.Queries;
+﻿using System.Diagnostics;
+using BTurk.Automation.Core.Queries;
 using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
+[DebuggerStepThrough]
 public class QueryProcessor : IQueryProcessor
 {
     public QueryProcessor(Container container)

@@ -50,7 +50,7 @@ public partial class MainForm : Form, ISearchEngine
 
     public List<IRequest> Items { get; }
 
-    public IRequestActionDispatcher Dispatcher { get; set; }
+    public IRequestActionDispatcher Dispatcher { [DebuggerStepThrough] get; [DebuggerStepThrough] set; }
 
     public EnvironmentContext Context => EnvironmentContextProvider.Context;
 
@@ -208,7 +208,8 @@ public partial class MainForm : Form, ISearchEngine
         if (actionType == ActionType.Complete && !Items.Any() && SearchText.Trim().Length > 0)
             return;
 
-        Dispatcher.Dispatch(Steps.Last().Request, actionType);
+        var lastRequest = Steps.Last().Request;
+        Dispatcher.Dispatch(lastRequest, actionType);
 
         var selectedIndex = ListBox.SelectedIndex;
 
@@ -250,15 +251,22 @@ public partial class MainForm : Form, ISearchEngine
         Activate();
     }
 
-    public List<SearchStep> Steps { get; private set; }
+    public List<SearchStep> Steps { [DebuggerStepThrough] get; [DebuggerStepThrough] private set; }
 
     public string SearchText
     {
+        [DebuggerStepThrough] 
         get => TextBox.Text;
+
+        [DebuggerStepThrough] 
         set => TextBox.Text = value;
     }
 
-    public Request SelectedItem => (Request)ListBox.SelectedItem;
+    public Request SelectedItem
+    {
+        [DebuggerStepThrough] 
+        get => (Request)ListBox.SelectedItem;
+    }
 
     public ActionType ActionType { get; private set; }
 

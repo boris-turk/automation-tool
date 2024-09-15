@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using BTurk.Automation.Core.SearchEngine;
 
@@ -11,6 +12,7 @@ public class RequestActionDispatcher<TRequest> : IRequestActionDispatcher<TReque
     private readonly IRequestActionDispatcher _dispatcher;
     private readonly IChildRequestsProvider _childRequestsProvider;
 
+    [DebuggerStepThrough]
     public RequestActionDispatcher(IRequestVisitor visitor, ISearchEngine searchEngine,
         IRequestActionDispatcher dispatcher, IChildRequestsProvider childRequestsProvider)
     {
@@ -20,12 +22,21 @@ public class RequestActionDispatcher<TRequest> : IRequestActionDispatcher<TReque
         _childRequestsProvider = childRequestsProvider;
     }
 
-    private SearchStep CurrentStep => _searchEngine.Steps.Last();
+    private SearchStep CurrentStep
+    {
+        [DebuggerStepThrough]
+        get => _searchEngine.Steps.Last();
+    }
 
-    private List<IRequest> SearchItems => _searchEngine.Items;
+    private List<IRequest> SearchItems
+    {
+        [DebuggerStepThrough]
+        get => _searchEngine.Items;
+    }
 
     private IRequest ParentRequest
     {
+        [DebuggerStepThrough]
         get
         {
             var parentStep = _searchEngine.Steps.ElementAtOrDefault(_searchEngine.Steps.Count - 2);
