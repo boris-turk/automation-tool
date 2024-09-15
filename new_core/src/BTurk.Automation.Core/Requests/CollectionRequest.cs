@@ -14,9 +14,9 @@ public abstract class CollectionRequest<TRequest> : Request, ICollectionRequest<
     {
     }
 
-    protected virtual IEnumerable<TRequest> GetRequests()
+    protected virtual IEnumerable<IRequest> GetRequests()
     {
-        return Enumerable.Empty<TRequest>();
+        return [];
     }
 
     protected virtual void OnRequestLoaded(TRequest request)
@@ -30,14 +30,17 @@ public abstract class CollectionRequest<TRequest> : Request, ICollectionRequest<
 
     IEnumerable<IRequest> ICollectionRequest<TRequest>.GetRequests(RequestLoadContext<TRequest> context)
     {
-        var allRequests = context.SuppliedRequests.Union(GetRequests());
+        var allRequests = context.SuppliedRequests.Cast<IRequest>().Union(GetRequests());
 
         foreach (var request in allRequests)
         {
-            if (!CanLoadRequest(request, context.EnvironmentContext))
-                continue;
+            if (request is TRequest properRequest)
+            {
+                if (!CanLoadRequest(properRequest, context.EnvironmentContext))
+                    continue;
 
-            OnRequestLoaded(request);
+                OnRequestLoaded(properRequest);
+            }
 
             yield return request;
         }
