@@ -65,7 +65,7 @@ namespace E3kWorkReports
         private void Export(string employeeFullName, Dictionary<string, List<ReportEntry>> groups)
         {
             if (!groups.TryGetValue(employeeFullName, out var entries))
-                throw new InvalidOperationException($"Missing work entries for employee {employeeFullName}");
+                return;
 
             _currentWorksheet += 1;
 

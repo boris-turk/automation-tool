@@ -22,8 +22,11 @@ namespace E3kWorkReports
         {
             var datePattern = @"^\s*(?<day>\d+)\.(?<month>\d+)\.(?<year>\d+)";
 
-            var contentPattern = @"^\W+(?<projectCode>\w+)(?<separator>\W+)(?<description>.*[^.:])" + 
+            var contentPattern = @"^(?:\W+(?<projectCode>\w+)(?<separator>\W+))?" +
+                                 @"(?<description>.*[^.:])" + 
                                  @"(\.\.\.*\s*|:\s*)(?<duration>\d+.*)h\s*$";
+
+            var totalPattern = @"^\W*TOTAL\W*(\d|\.|h|\s)*$";
 
             var date = DateTime.MinValue;
 
@@ -37,17 +40,38 @@ namespace E3kWorkReports
                     continue;
                 }
 
-                var contentMatch = Regex.Match(line, contentPattern);
+                var totalMatch = Regex.Match(line, totalPattern, RegexOptions.IgnoreCase);
 
-                if (contentMatch.Success)
-                {
-                    if (date == DateTime.MinValue)
-                        throw new InvalidOperationException("Could not determine initial date");
+                if (totalMatch.Success)
+                    continue;
 
-                    var entry = GetSingleEntry(contentMatch, date);
-                    yield return entry;
-                }
+                var contentText = RemoveLeadingXlabMarker(line);
+
+                var contentMatch = Regex.Match(contentText, contentPattern);
+
+                if (!contentMatch.Success)
+                    continue;
+
+                if (date == DateTime.MinValue)
+                    throw new InvalidOperationException("Could not determine initial date");
+
+                var entry = GetSingleEntry(contentMatch, date);
+
+                yield return entry;
             }
+        }
+
+        private string RemoveLeadingXlabMarker(string text)
+        {
+            var pattern = @"^\W+(?<xlab>\w+)(\W+)(?<description>.*)";
+            var match = Regex.Match(text, pattern);
+
+            if (!match.Success)
+                return text;
+
+            var properText = match.Groups["description"].Value.Trim();
+
+            return properText;
         }
 
         private ReportEntry GetSingleEntry(Match match, DateTime date)
@@ -61,6 +85,9 @@ namespace E3kWorkReports
             var description = match.Groups["description"].Value.Trim();
             var hours = GetHours(match.Groups["duration"].Value.Trim());
             var task = "New core";
+
+            if (string.IsNullOrWhiteSpace(projectCode))
+                projectCode = "STANDARD";
 
             if (!allowedProjectCodes.Contains(projectCode.ToUpper()))
             {
