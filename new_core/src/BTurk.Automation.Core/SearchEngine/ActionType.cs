@@ -2,7 +2,7 @@
 
 public enum ActionType
 {
-    MoveNext,
-    MovePrevious,
+    Complete,
+    StepBack,
     Execute
 }

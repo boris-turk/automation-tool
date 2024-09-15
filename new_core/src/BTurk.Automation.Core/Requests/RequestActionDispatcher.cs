@@ -38,11 +38,11 @@ public class RequestActionDispatcher<TRequest> : IRequestActionDispatcher<TReque
         if (actionType == ActionType.Execute)
             OnExecute(request);
 
-        if (actionType == ActionType.MoveNext)
-            OnMoveNext(request);
+        if (actionType == ActionType.Complete)
+            OnComplete(request);
 
-        if (actionType == ActionType.MovePrevious)
-            OnMovePrevious();
+        if (actionType == ActionType.StepBack)
+            OnStepBack();
 
         LoadSearchItems();
     }
@@ -77,7 +77,7 @@ public class RequestActionDispatcher<TRequest> : IRequestActionDispatcher<TReque
         _visitor.Visit(context);
     }
 
-    private void OnMoveNext(TRequest request)
+    private void OnComplete(TRequest request)
     {
         var currentStep = CurrentStep;
 
@@ -89,10 +89,10 @@ public class RequestActionDispatcher<TRequest> : IRequestActionDispatcher<TReque
             return;
         }
 
-        var nextRequest = GetNextVisitableRequest(ActionType.MoveNext);
+        var nextRequest = GetNextVisitableRequest(ActionType.Complete);
 
         if (nextRequest != null)
-            OnMoveToNextRequest(request, nextRequest, ActionType.MoveNext);
+            OnMoveToNextRequest(request, nextRequest, ActionType.Complete);
     }
 
     private void OnMoveNextWithNoChildren(TRequest request)
@@ -135,22 +135,22 @@ public class RequestActionDispatcher<TRequest> : IRequestActionDispatcher<TReque
 
     private void OnMoveToNextRequest(TRequest request, IRequest child, ActionType actionType)
     {
-        Visit(request, child, ActionType.MoveNext);
+        Visit(request, child, ActionType.Complete);
         _searchEngine.Steps.Add(new SearchStep(child));
         _dispatcher.Dispatch(child, actionType);
     }
 
-    private void OnMovePrevious()
+    private void OnStepBack()
     {
         if (CurrentStep.Text.Length == 0 && _searchEngine.Steps.Count > 2)
         {
             RemoveLastStep();
-            _dispatcher.Dispatch(CurrentStep.Request, ActionType.MovePrevious);
+            _dispatcher.Dispatch(CurrentStep.Request, ActionType.StepBack);
         }
         else if (CurrentStep.Text.Length > 0)
         {
             CurrentStep.Text = CurrentStep.Text.Remove(CurrentStep.Text.Length - 1);
-            _dispatcher.Dispatch(CurrentStep.Request, ActionType.MoveNext);
+            _dispatcher.Dispatch(CurrentStep.Request, ActionType.Complete);
         }
     }
 

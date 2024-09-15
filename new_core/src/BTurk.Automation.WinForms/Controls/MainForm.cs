@@ -165,7 +165,7 @@ public partial class MainForm : Form, ISearchEngine
     protected override void OnVisibleChanged(EventArgs e)
     {
         if (Visible)
-            TriggerAction(ActionType.MoveNext);
+            TriggerAction(ActionType.Complete);
         else if (TextBox.Text != "")
             TextBox.Text = "";
         else
@@ -190,8 +190,8 @@ public partial class MainForm : Form, ISearchEngine
         }
 
         var actionType = _currentText.Length > TextBox.Text.Length
-            ? ActionType.MovePrevious
-            : ActionType.MoveNext;
+            ? ActionType.StepBack
+            : ActionType.Complete;
 
         _currentText = TextBox.Text;
 
@@ -202,10 +202,10 @@ public partial class MainForm : Form, ISearchEngine
     {
         ActionType = actionType;
 
-        if (actionType == ActionType.MoveNext && SearchText.Length > 0)
+        if (actionType == ActionType.Complete && SearchText.Length > 0)
             Steps.Last().Text += SearchText.Last();
 
-        if (actionType == ActionType.MoveNext && !Items.Any() && SearchText.Trim().Length > 0)
+        if (actionType == ActionType.Complete && !Items.Any() && SearchText.Trim().Length > 0)
             return;
 
         Dispatcher.Dispatch(Steps.Last().Request, actionType);

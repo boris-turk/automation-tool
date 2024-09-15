@@ -34,7 +34,7 @@ public class Request : IRequest
 
     protected virtual bool CanAccept(DispatchPredicateContext context)
     {
-        if (context.ActionType == ActionType.MoveNext)
+        if (context.ActionType == ActionType.Complete)
             return context.Text.Trim().Length > 0 && context.Text.EndsWith(" ");
 
         return context.ActionType == ActionType.Execute;
