@@ -1,0 +1,59 @@
+Idea: list all matches, but optimal first. Example: u<space> is entered as search text. The 'url' element is optimal match, so its items are displayed first in results pane and afterwards come less optimal (e.g., sol_u_tion, clean_u_p):
+
+url gmail
+url 24 ur
+url banka
+...
+solution e3k_trunk
+solution e3k_clean
+...
+cleanup trunk
+cleanup clean
+cleanup r8
+...
+
+
+choice delimeters:
+  url /e ⌠absence.io⌡ 
+  url /e ˂absence.io˃
+  url /e {absence.io}
+  url /e  ̀absence.io ́
+  url /e ՙabsence.io՚
+  url /e ‹absence.io›
+  url /e {absence.io}
+
+
+split entered search text into SearchItem instances
+  search text:  url /e {absence.io}
+  search items: <Word(url)><Space><Option(e)><Space><Choice(absence.io)>
+  
+  search text:  url /e absen io
+  search items: <Word(url)><Space><Option(e)><Space><Word(absen)><Space><Word(io)>
+
+introduce Empty search item; let's say that the search text box is empty; the search should scan all children of RootMenuRequest, then continue to MainMenuRequest and finally load its children
+
+collection parent can only be matched with single word; e.g. if search string is 'ur l', then 'ur' will match 'URl' and 'l' will match 'cLockify' => 'url clockify'
+
+property ScanChildrenIfUnmatched; let's say that search string 'clock' is entered; this won't match the leading part 'url' in string 'url clockify', but if 'url' is configured with ScanChildrenIfUnmatched=true, then search will continue in its children and will match 'clockify'
+
+property SupportsMultiWordSearch
+
+
+url /e abs
+<Empty><Word(url)><Space><Option(e)>
+
+url abs /e
+<Empty><Word(url)><Space><Option(e)>
+
+u xla pre /e
+url ╬ XLAB marketing / presentation material ╬ /edit
+
+
+window ╬ 002 ╬ 4 ╬ 001
+
+
+TriggerAction:
+Input:
+ - ActionType (SearchChanged, Complete, Execute)
+ - List<SearchItem>
+ - 
