@@ -7,7 +7,7 @@ using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
-public class ChildRequestsProvider : IChildRequestsProvider
+public class ChildRequestsProvider : IChildRequestsProvider, IChildRequestsProviderV2
 {
     public ChildRequestsProvider(Container container, IEnvironmentContextProvider environmentContextProvider)
     {
@@ -59,5 +59,10 @@ public class ChildRequestsProvider : IChildRequestsProvider
         var collectionElementType = closedGenericType.GetGenericArguments()[0];
 
         return collectionElementType;
+    }
+
+    IEnumerable<IRequestV2> IChildRequestsProviderV2.LoadChildren(IRequestV2 request)
+    {
+        return LoadChildren((IRequest)request);
     }
 }

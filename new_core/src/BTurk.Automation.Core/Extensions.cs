@@ -56,7 +56,7 @@ public static class Extensions
         return list.Any() ? list.Select(selector).Max() : default;
     }
 
-    internal static string GetDebuggerDisplayText(IRequest request)
+    public static string GetDebuggerDisplayText(IRequest request)
     {
         var type = request.GetType();
 

@@ -12,7 +12,7 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.WinForms.Controls;
 
-public partial class MainForm : Form, ISearchEngine
+public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
 {
     public static Font PreferredFont = new System.Drawing.Font("Microsoft Sans Serif", 12F);
 
@@ -47,6 +47,8 @@ public partial class MainForm : Form, ISearchEngine
     }
 
     public IRequest RootMenuRequest { get; set; }
+
+    IRequestV2 ISearchEngineV2.RootMenuRequest => RootMenuRequest;
 
     public List<IRequest> Items { get; }
 
@@ -266,6 +268,16 @@ public partial class MainForm : Form, ISearchEngine
     {
         [DebuggerStepThrough] 
         get => (Request)ListBox.SelectedItem;
+    }
+
+    public List<SearchToken> SearchTokens
+    {
+        get => throw new NotImplementedException();
+        set => throw new NotImplementedException();
+    }
+
+    public void SetSearchResults(List<SearchResult> resultsCollection)
+    {
     }
 
     public ActionType ActionType { get; private set; }

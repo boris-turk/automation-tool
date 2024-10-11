@@ -49,6 +49,10 @@ public class Bootstrapper
     {
         Container = new Container();
 
+        Container.RegisterSingleton<ISearchEngineV2, MainForm>();
+        Container.RegisterSingleton<IChildRequestsProviderV2, ChildRequestsProvider>();
+        Container.RegisterSingleton<IRequestActionDispatcherV2, RequestActionDispatcherV2>();
+
         Container.RegisterSingleton<MainForm>();
         Container.RegisterSingleton<ISearchEngine, MainForm>();
         Container.RegisterSingleton<ISearchItemsProvider, MainForm>();

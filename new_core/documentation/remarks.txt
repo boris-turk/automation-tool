@@ -1,3 +1,8 @@
+Alt+R shortcut for entering regex search pattern, introduce RegexToken class, show in text box withing enclosing markers, e.g. ⌠<reg>\.mp3$⌡
+
+Request.Command property should be part of an interface and only executable Request sub-classes should implement it
+
+
 Idea: list all matches, but optimal first. Example: u<space> is entered as search text. The 'url' element is optimal match, so its items are displayed first in results pane and afterwards come less optimal (e.g., sol_u_tion, clean_u_p):
 
 url gmail

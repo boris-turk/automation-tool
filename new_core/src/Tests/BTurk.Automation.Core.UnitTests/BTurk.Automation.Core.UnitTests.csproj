@@ -68,6 +68,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FakeChildRequestsProvider.cs" />
+    <Compile Include="FakeRequest.cs" />
+    <Compile Include="FakeSearchEngine.cs" />
+    <Compile Include="RequestActionDispatcherTests.cs" />
     <Compile Include="FilterAlgorithmTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -6,6 +6,11 @@ namespace BTurk.Automation.Mic;
 
 public class Salon : Request
 {
+    public Salon()
+    {
+        Configure().SetText(GetText);
+    }
+
     [DataMember(Name = "Id")]
     public string Id { get; set; }
 
@@ -21,16 +26,15 @@ public class Salon : Request
     [DataMember(Name = "Company")]
     public string Company { get; set; }
 
-    public override string Text
+    public override string Text => GetText();
+
+    private string GetText()
     {
-        get
-        {
-            var text = $"{Name} {Type} {Address} {Company}";
+        var text = $"{Name} {Type} {Address} {Company}";
 
-            if (Id.HasLength())
-                text = $"{Id} {text}";
+        if (Id.HasLength())
+            text = $"{Id} {text}";
 
-            return text;
-        }
+        return text;
     }
 }

@@ -2,7 +2,8 @@
 
 public enum ActionType
 {
+    Search,
     Complete,
-    StepBack,
+    StepBack, // obsolete
     Execute
 }

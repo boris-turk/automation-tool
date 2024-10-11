@@ -2,7 +2,7 @@
 
 namespace BTurk.Automation.Core.Requests;
 
-public interface IRequest
+public interface IRequest : IRequestV2
 {
     ICommand Command { get; }
     string Text { get; }

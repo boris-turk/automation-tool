@@ -12,19 +12,32 @@ namespace BTurk.Automation.Core.Requests;
 [DebuggerDisplay("{" + nameof(RequestTypeName) + "}")]
 public class Request : IRequest
 {
+    private string _text;
+
+    private readonly RequestConfigurationV2 _configuration;
+
     public static readonly Request Null = new();
 
     public Request()
     {
+        _configuration = new RequestConfigurationV2(this);
     }
 
-    public Request(string text)
+    public Request(string text) : this()
     {
         Text = text;
     }
 
     [DataMember(Name = "Text")]
-    public virtual string Text { get; set; }
+    public virtual string Text
+    {
+        get => _text;
+        set
+        {
+            _text = value;
+            Configure().SetText(value);
+        }
+    }
 
     public ICommand Command { get; set; }
 
@@ -48,5 +61,14 @@ public class Request : IRequest
             return CanAcceptPredicate.Invoke(context);
 
         return CanAccept(context);
+    }
+
+    [DebuggerStepThrough]
+    protected RequestConfigurationV2 Configure() => _configuration;
+
+    IRequestConfigurationV2 IRequestV2.Configuration
+    {
+        [DebuggerStepThrough]
+        get => _configuration;
     }
 }
