@@ -127,13 +127,13 @@ public class RequestActionDispatcherTests
         // Arrange
         var searchEngine = new FakeSearchEngine(
             new FakeRequest(name: "RootMenu").WithChildren(
-                new FakeRequest(name: "Url", text: "url").ScanChildrenIfUnmatched().WithChildren(
-                    new FakeRequest(name: "url1", text: "24 ur"),
-                    new FakeRequest(name: "url2", text: "google")
+                new FakeRequest(name: "ChildMenu", text: "Text").ScanChildrenIfUnmatched().WithChildren(
+                    new FakeRequest(name: "child1", text: "first child"),
+                    new FakeRequest(name: "child2", text: "second child")
                 )
             )
         );
-        searchEngine.SetSearchTokens(new WordToken("goo"));
+        searchEngine.SetSearchTokens(new WordToken("fi"), new WordToken("ch"));
         var sut = GetRequestActionDispatcher(searchEngine);
 
         // Act
@@ -141,7 +141,7 @@ public class RequestActionDispatcherTests
 
         // Assert
         AssertSearchResults(searchEngine.SearchResults, [
-            ["RootMenu", "Url", "url2"]
+            ["RootMenu", "ChildMenu", "child1"]
         ]);
     }
 
