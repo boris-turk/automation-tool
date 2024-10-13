@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests;
@@ -49,6 +50,8 @@ public class RequestConfigurationV2 : IRequestConfigurationV2
     string IRequestConfigurationV2.Text => _textProvider?.Invoke() ?? "";
 
     bool IRequestConfigurationV2.ScanChildrenIfUnmatched => _scanChildrenIfUnmatched;
+
+    bool IRequestConfigurationV2.CanHaveChildren => _childRequests.Any();
 
     bool IRequestConfigurationV2.CanProcess(EnvironmentContext environmentContext)
     {

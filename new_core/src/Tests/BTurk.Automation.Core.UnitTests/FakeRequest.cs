@@ -6,21 +6,18 @@ namespace BTurk.Automation.Core.UnitTests;
 [DebuggerDisplay("{" + nameof(DebuggerDisplayText) + "}")]
 public class FakeRequest : Request
 {
-    public FakeRequest(string friendlyName, string text = null) : base(text)
+    public FakeRequest(string name, string text = null) : base(text)
     {
-        FriendlyName = friendlyName;
+        Name = name;
     }
 
-    public string FriendlyName { get; }
+    public string Name { get; }
 
     private string DebuggerDisplayText
     {
         get
         {
-            var displayText = string.IsNullOrWhiteSpace(Text)
-                ? $"{FriendlyName}"
-                : $"{FriendlyName}: {Text}";
-
+            var displayText = string.IsNullOrWhiteSpace(Text) ? $"{Name}" : $"{Name}: {Text}";
             return displayText;
         }
     }
@@ -28,6 +25,12 @@ public class FakeRequest : Request
     public FakeRequest WithChildren(params IRequestV2[] childRequests)
     {
         Configure().AddChildRequests(childRequests);
+        return this;
+    }
+
+    public FakeRequest ScanChildrenIfUnmatched()
+    {
+        Configure().ScanChildrenIfUnmatched();
         return this;
     }
 }

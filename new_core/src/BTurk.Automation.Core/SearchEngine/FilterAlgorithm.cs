@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Core.SearchEngine;
@@ -12,9 +11,7 @@ public class FilterAlgorithm
 
     public FilterAlgorithm(string filterText)
     {
-        _filterWords = Regex.Split(filterText ?? "", @"\s")
-            .Where(w => !string.IsNullOrWhiteSpace(w))
-            .ToArray();
+        _filterWords = filterText.Split([' ', '\t'], StringSplitOptions.RemoveEmptyEntries).ToArray();
     }
 
     public IEnumerable<IRequest> Filter(IEnumerable<IRequest> items)

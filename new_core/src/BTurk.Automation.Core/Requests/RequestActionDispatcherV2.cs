@@ -7,8 +7,6 @@ namespace BTurk.Automation.Core.Requests;
 
 public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
 {
-    private readonly Dictionary<SearchToken, FilterAlgorithm> _filterAlgorithms = new();
-
     public RequestActionDispatcherV2(ISearchEngineV2 searchEngine, IChildRequestsProviderV2 childRequestsProvider)
     {
         SearchEngine = searchEngine;
@@ -42,8 +40,16 @@ public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
         {
             var request = result.Items.Last().Request;
 
-            if (request.Configuration.Text.HasLength() && searchTokens.Any() == false)
+            if (request.Configuration.CanHaveChildren == false && result.Items.Count == 1)
+            {
+                resultsCollection.Remove(result);
+                break;
+            }
+
+            if (request.Configuration.CanHaveChildren == false && searchTokens.Any() == false)
+            {
                 continue;
+            }
 
             var childrenCollection = GetChildren(request, searchTokens).ToList();
 
@@ -66,20 +72,32 @@ public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
 
     private List<SearchToken> GetChildSearchTokens((int Score, IRequestV2 Request) child, List<SearchToken> searchTokens)
     {
-        if (child.Request.Configuration.Text.HasLength() == false)
+        const int sufficientMatch = 1;
+        const int optimalMatch = 1000;
+
+        var request = child.Request;
+        var text = request.Configuration.Text;
+
+        if (text.HasLength() == false)
             return searchTokens.ToList();
 
-        if (child.Score == 1 && child.Request.Configuration.ScanChildrenIfUnmatched)
-            return searchTokens.Skip(1).ToList();
+        var skipCount = child.Score switch
+        {
+            sufficientMatch when request.Configuration.ScanChildrenIfUnmatched == false => 1,
+            sufficientMatch when searchTokens.All(x => x is SpaceToken) => 1,
+            > optimalMatch when request.Configuration.CanHaveChildren => 1,
+            > optimalMatch => searchTokens.TakeWhile(x => x is WordToken).Count(),
+            _ => 0
+        };
 
-        if (child.Score > 1000 && child.Request.Configuration.ScanChildrenIfUnmatched == false)
-            return searchTokens.Skip(1).ToList();
-
-        return searchTokens.ToList();
+        return searchTokens.Skip(skipCount).ToList();
     }
 
     private IEnumerable<(int Score, IRequestV2 Request)> GetChildren(IRequestV2 request, List<SearchToken> searchTokens)
     {
+        string singleWordSearchText = null;
+        string multiWordSearchText = null;
+
         foreach (var child in request.Configuration.GetChildren(ChildRequestsProvider))
         {
             if (child.Configuration.CanProcess(SearchEngine.Context) == false)
@@ -87,7 +105,18 @@ public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
 
             var text = child.Configuration.Text;
 
-            var score = GetScore(text, searchTokens);
+            int score;
+
+            if (child.Configuration.CanHaveChildren)
+            {
+                singleWordSearchText ??= GetSingleWordSearchText(searchTokens);
+                score = GetScore(text, singleWordSearchText);
+            }
+            else
+            {
+                multiWordSearchText ??= GetMultiWordSearchText(searchTokens);
+                score = GetScore(text, multiWordSearchText);
+            }
 
             if (score > 0)
             {
@@ -108,21 +137,30 @@ public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
         }
     }
 
-    private int GetScore(string text, List<SearchToken> searchTokensCollection)
+    private string GetSingleWordSearchText(List<SearchToken> searchTokens)
     {
-        if (searchTokensCollection.Any() == false)
+        return searchTokens.FirstOrDefault()?.Text ?? "";
+    }
+
+    private string GetMultiWordSearchText(List<SearchToken> searchTokens)
+    {
+        if (searchTokens.Count > 0 && searchTokens[0] is SpaceToken)
+            return " ";
+
+        var searchText = string.Join(" ", searchTokens.TakeWhile(x => x is WordToken).Select(x => x.Text));
+
+        return searchText;
+    }
+
+    private int GetScore(string text, string searchText)
+    {
+        if (string.IsNullOrEmpty(searchText))
             return 0;
 
         if (text.HasLength() == false)
             return 0;
 
-        var searchToken = searchTokensCollection.First();
-
-        if (_filterAlgorithms.TryGetValue(searchToken, out var filterAlgorithm) == false)
-        {
-            filterAlgorithm = new FilterAlgorithm(searchToken.Text);
-            _filterAlgorithms[searchToken] = filterAlgorithm;
-        }
+        var filterAlgorithm = new FilterAlgorithm(searchText);
 
         var score = filterAlgorithm.GetScore(text);
 
