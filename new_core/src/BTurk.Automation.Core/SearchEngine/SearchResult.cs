@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.CodeDom;
+using System.Collections.Generic;
 using System.Linq;
 using BTurk.Automation.Core.Requests;
 
@@ -20,6 +21,13 @@ public class SearchResult
         searchResult._items.Add(new Item(request, request.Configuration.Text));
 
         return searchResult;
+    }
+
+    public override string ToString()
+    {
+        var parts = _items.Select(x => x.Text).Where(x => x.HasLength()).ToList();
+        var text = string.Join(" ", parts);
+        return text;
     }
 
     public class Item

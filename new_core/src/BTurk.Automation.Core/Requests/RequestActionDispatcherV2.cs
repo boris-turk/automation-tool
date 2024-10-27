@@ -51,6 +51,11 @@ public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
                 continue;
             }
 
+            if (request.Configuration.Text.HasLength() && searchTokens.Any() == false)
+            {
+                continue;
+            }
+
             var childrenCollection = GetChildren(request, searchTokens).ToList();
 
             var insertIndex = resultsCollection.IndexOf(result);

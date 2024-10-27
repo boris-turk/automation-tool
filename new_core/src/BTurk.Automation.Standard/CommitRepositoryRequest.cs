@@ -4,8 +4,11 @@ namespace BTurk.Automation.Standard;
 
 public class CommitRepositoryRequest : CollectionRequest<Repository>
 {
-    public CommitRepositoryRequest() : base("commit")
+    public CommitRepositoryRequest()
     {
+        Configure()
+            .SetText("commit")
+            .AddChildRequestsProvider<Repository>();
     }
 
     protected override void OnRequestLoaded(Repository repository)

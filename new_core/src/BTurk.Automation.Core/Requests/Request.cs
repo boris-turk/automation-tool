@@ -20,7 +20,7 @@ public class Request : IRequest
 
     public Request()
     {
-        _configuration = new RequestConfigurationV2(this);
+        _configuration = new RequestConfigurationV2();
     }
 
     public Request(string text) : this()
@@ -47,7 +47,7 @@ public class Request : IRequest
 
     protected virtual bool CanAccept(DispatchPredicateContext context)
     {
-        if (context.ActionType == ActionType.Complete)
+        if (context.ActionType == ActionType.Search)
             return context.Text.Trim().Length > 0 && context.Text.EndsWith(" ");
 
         return context.ActionType == ActionType.Execute;

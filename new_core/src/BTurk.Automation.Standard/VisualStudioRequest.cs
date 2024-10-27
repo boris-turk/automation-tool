@@ -6,8 +6,17 @@ namespace BTurk.Automation.Standard;
 
 public class VisualStudioRequest : CollectionRequest<IRequest>
 {
-    public VisualStudioRequest() : base("Visual studio")
+    public VisualStudioRequest()
     {
+        Configure()
+            .ProcessCondition(IsVisualStudioContext)
+            .AddChildRequests(
+                new AhkSendRequest
+                {
+                    Text = "close all tabs but current",
+                    Keys = "!^c"
+                }
+            );
     }
 
     protected override IEnumerable<IRequest> GetRequests()

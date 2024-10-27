@@ -14,7 +14,7 @@ namespace BTurk.Automation.WinForms.Controls;
 
 public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
 {
-    public static Font PreferredFont = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+    public static Font PreferredFont = new("Microsoft Sans Serif", 12F);
 
     private string _currentText;
 
@@ -52,7 +52,7 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
 
     public List<IRequest> Items { get; }
 
-    public IRequestActionDispatcher Dispatcher { [DebuggerStepThrough] get; [DebuggerStepThrough] set; }
+    public IRequestActionDispatcherV2 Dispatcher { [DebuggerStepThrough] get; [DebuggerStepThrough] set; }
 
     public EnvironmentContext Context => EnvironmentContextProvider.Context;
 
@@ -68,11 +68,7 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
         }
     }
 
-    public Label StackLabel => _stackLabel;
-
-    public Label StateLabel => _stateLabel;
-
-    public TextBox TextBox => _textBox;
+    public TextBox TextBox { get; private set; }
 
     public ListBox ListBox => _listBox;
 
@@ -92,7 +88,7 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
 
     private void CreateInitialStep()
     {
-        Steps = new List<SearchStep> { new(RootMenuRequest) };
+        Steps = [new(RootMenuRequest)];
     }
 
     protected override void OnKeyDown(KeyEventArgs e)
@@ -117,7 +113,7 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
                 return true;
 
             case Keys.Enter when !e.Alt && !e.Control && !e.Shift:
-                TriggerAction(ActionType.Execute);
+                Dispatcher.Dispatch(ActionType.Execute);
                 return true;
 
             default:
@@ -167,7 +163,7 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
     protected override void OnVisibleChanged(EventArgs e)
     {
         if (Visible)
-            TriggerAction(ActionType.Complete);
+            Dispatcher.Dispatch(ActionType.Search);
         else if (TextBox.Text != "")
             TextBox.Text = "";
         else
@@ -184,50 +180,16 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
 
     private void OnSearchTextChanged()
     {
-        if (!Visible)
+        if (Visible)
+        {
+            _currentText = TextBox.Text;
+            Dispatcher.Dispatch(ActionType.Search);
+        }
+        else
         {
             _currentText = TextBox.Text;
             CreateInitialStep();
-            return;
         }
-
-        var actionType = _currentText.Length > TextBox.Text.Length
-            ? ActionType.StepBack
-            : ActionType.Complete;
-
-        _currentText = TextBox.Text;
-
-        TriggerAction(actionType);
-    }
-
-    public void TriggerAction(ActionType actionType)
-    {
-        ActionType = actionType;
-
-        if (actionType == ActionType.Complete && SearchText.Length > 0)
-            Steps.Last().Text += SearchText.Last();
-
-        if (actionType == ActionType.Complete && !Items.Any() && SearchText.Trim().Length > 0)
-            return;
-
-        var lastRequest = Steps.Last().Request;
-        Dispatcher.Dispatch(lastRequest, actionType);
-
-        var selectedIndex = ListBox.SelectedIndex;
-
-        ListBox.BeginUpdate();
-
-        ListBox.Items.Clear();
-
-        foreach (var item in Items)
-            ListBox.Items.Add(item);
-
-        ListBox.EndUpdate();
-
-        if (actionType != ActionType.Execute)
-            selectedIndex = 0;
-
-        SelectItem(selectedIndex);
     }
 
     private void SelectItem(int itemIndex)
@@ -272,15 +234,36 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
 
     public List<SearchToken> SearchTokens
     {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
+        get => GetSearchTokens();
+        set { }
+    }
+
+    private List<SearchToken> GetSearchTokens()
+    {
+        var searchText = TextBox.Text;
+
+        var words = searchText.Split([' ', '\t'], StringSplitOptions.RemoveEmptyEntries).ToArray();
+        var tokens = words.Select(w => new WordToken(w)).Cast<SearchToken>().ToList();
+
+        if (tokens.Any() && (searchText.EndsWith(" ") || searchText.EndsWith("\t")))
+            tokens.Insert(tokens.Count, new SpaceToken());
+
+        return tokens;
     }
 
     public void SetSearchResults(List<SearchResult> resultsCollection)
     {
-    }
+        ListBox.BeginUpdate();
 
-    public ActionType ActionType { get; private set; }
+        ListBox.Items.Clear();
+
+        foreach (var item in resultsCollection)
+            ListBox.Items.Add(item);
+
+        ListBox.EndUpdate();
+
+        SelectItem(itemIndex: 0);
+    }
 
     protected override void WndProc(ref Message m)
     {

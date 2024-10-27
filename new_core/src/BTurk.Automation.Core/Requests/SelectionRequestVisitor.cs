@@ -7,7 +7,7 @@ public class SelectionRequestVisitor<TChild> : IRequestVisitor<SelectionRequest<
 {
     public void Visit(RequestVisitContext<SelectionRequest<TChild>, TChild> context)
     {
-        if (context.ActionType == ActionType.Complete)
+        if (context.ActionType == ActionType.Search)
             context.Request.ChildSelected?.Invoke(context.ChildRequest);
 
         if (context.ActionType == ActionType.StepBack)

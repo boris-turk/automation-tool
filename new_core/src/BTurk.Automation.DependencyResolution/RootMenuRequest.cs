@@ -7,8 +7,13 @@ namespace BTurk.Automation.DependencyResolution;
 
 public class RootMenuRequest : CollectionRequest<IRequest>
 {
-    public RootMenuRequest() : base("Root")
+    public RootMenuRequest()
     {
+        Configure()
+            .AddChildRequests(
+                new MainMenuRequest(),
+                new VisualStudioRequest()
+            );
     }
 
     protected override IEnumerable<IRequest> GetRequests()

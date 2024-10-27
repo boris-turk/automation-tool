@@ -31,7 +31,7 @@
             this._stackLabel = new System.Windows.Forms.Label();
             this._stateLabel = new System.Windows.Forms.Label();
             this._listBox = new System.Windows.Forms.ListBox();
-            this._textBox = new System.Windows.Forms.TextBox();
+            this.TextBox = new System.Windows.Forms.TextBox();
             this._workInProgressPictureBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this._workInProgressPictureBox)).BeginInit();
             this.SuspendLayout();
@@ -72,13 +72,13 @@
             // 
             // _textBox
             // 
-            this._textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.TextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._textBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this._textBox.Location = new System.Drawing.Point(12, 39);
-            this._textBox.Name = "_textBox";
-            this._textBox.Size = new System.Drawing.Size(599, 26);
-            this._textBox.TabIndex = 0;
+            this.TextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.TextBox.Location = new System.Drawing.Point(12, 39);
+            this.TextBox.Name = "TextBox";
+            this.TextBox.Size = new System.Drawing.Size(599, 26);
+            this.TextBox.TabIndex = 0;
             // 
             // _workInProgressPictureBox
             // 
@@ -100,7 +100,7 @@
             this.Controls.Add(this._stackLabel);
             this.Controls.Add(this._stateLabel);
             this.Controls.Add(this._listBox);
-            this.Controls.Add(this._textBox);
+            this.Controls.Add(this.TextBox);
             this.Controls.Add(this._workInProgressPictureBox);
             this.Name = "MainForm";
             this.Text = "Automation engine";
@@ -112,7 +112,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox _textBox;
         private System.Windows.Forms.ListBox _listBox;
         private System.Windows.Forms.Label _stackLabel;
         private System.Windows.Forms.PictureBox _workInProgressPictureBox;

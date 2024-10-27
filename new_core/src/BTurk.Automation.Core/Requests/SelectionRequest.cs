@@ -11,6 +11,6 @@ public class SelectionRequest<TRequest> : CollectionRequest<TRequest> where TReq
 
     protected override bool CanAccept(DispatchPredicateContext context)
     {
-        return context.ActionType is ActionType.Execute or ActionType.Complete;
+        return context.ActionType is ActionType.Execute or ActionType.Search;
     }
 }

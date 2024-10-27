@@ -7,16 +7,11 @@ namespace BTurk.Automation.Core.Requests;
 
 public class RequestConfigurationV2 : IRequestConfigurationV2
 {
-    private readonly IRequestV2 _request;
     private Func<string> _textProvider;
     private readonly List<IRequestV2> _childRequests = [];
     private bool _scanChildrenIfUnmatched;
     private Predicate<EnvironmentContext> _processCondition;
-
-    public RequestConfigurationV2(IRequestV2 request)
-    {
-        _request = request;
-    }
+    private readonly List<Func<IChildRequestsProviderV2, IEnumerable<IRequestV2>>> _childRequestProviders = [];
 
     public RequestConfigurationV2 SetText(string text)
     {
@@ -32,6 +27,12 @@ public class RequestConfigurationV2 : IRequestConfigurationV2
     public RequestConfigurationV2 AddChildRequests(params IRequestV2[] requests)
     {
         _childRequests.AddRange(requests);
+        return this;
+    }
+
+    public RequestConfigurationV2 AddChildRequestsProvider<TRequest>() where TRequest : IRequestV2
+    {
+        _childRequestProviders.Add(p => p.LoadChildren<TRequest>());
         return this;
     }
 
@@ -51,7 +52,7 @@ public class RequestConfigurationV2 : IRequestConfigurationV2
 
     bool IRequestConfigurationV2.ScanChildrenIfUnmatched => _scanChildrenIfUnmatched;
 
-    bool IRequestConfigurationV2.CanHaveChildren => _childRequests.Any();
+    bool IRequestConfigurationV2.CanHaveChildren => _childRequests.Any() || _childRequestProviders.Any();
 
     bool IRequestConfigurationV2.CanProcess(EnvironmentContext environmentContext)
     {
@@ -65,10 +66,17 @@ public class RequestConfigurationV2 : IRequestConfigurationV2
 
     IEnumerable<IRequestV2> IRequestConfigurationV2.GetChildren(IChildRequestsProviderV2 childRequestsProvider)
     {
-        foreach (var childRequest in childRequestsProvider.LoadChildren(_request))
-            yield return childRequest;
+        foreach (var provider in _childRequestProviders)
+        {
+            foreach (var childRequest in provider.Invoke(childRequestsProvider))
+            {
+                yield return childRequest;
+            }
+        }
 
         foreach (var childRequest in _childRequests)
+        {
             yield return childRequest;
+        }
     }
 }

@@ -11,8 +11,22 @@ namespace BTurk.Automation.DependencyResolution;
 
 public class MainMenuRequest : CollectionRequest<IRequest>
 {
-    public MainMenuRequest() : base("Main menu")
+    public MainMenuRequest()
     {
+        Configure()
+            .ProcessCondition(c => c == EnvironmentContext.Empty)
+            .AddChildRequests(
+                new CommitRepositoryRequest(),
+                new ShowRepositoryLogRequest(),
+                new OpenSolutionRequest(),
+                new OpenNoteRequest(),
+                new OpenWindowRequest(),
+                new UrlCollectionRequest(),
+                new GitConsoleRequest(),
+                new BuildCleanupRequest(),
+                new SalonsCollectionRequest(),
+                new OpenProgramRequest("gvim")
+            );
     }
 
     protected override IEnumerable<IRequest> GetRequests()

@@ -49,7 +49,7 @@ public class RequestActionDispatcher<TRequest> : IRequestActionDispatcher<TReque
         if (actionType == ActionType.Execute)
             OnExecute(request);
 
-        if (actionType == ActionType.Complete)
+        if (actionType == ActionType.Search)
             OnComplete(request);
 
         if (actionType == ActionType.StepBack)
@@ -100,10 +100,10 @@ public class RequestActionDispatcher<TRequest> : IRequestActionDispatcher<TReque
             return;
         }
 
-        var nextRequest = GetNextVisitableRequest(ActionType.Complete);
+        var nextRequest = GetNextVisitableRequest(ActionType.Search);
 
         if (nextRequest != null)
-            OnMoveToNextRequest(request, nextRequest, ActionType.Complete);
+            OnMoveToNextRequest(request, nextRequest, ActionType.Search);
     }
 
     private void OnMoveNextWithNoChildren(TRequest request)
@@ -146,7 +146,7 @@ public class RequestActionDispatcher<TRequest> : IRequestActionDispatcher<TReque
 
     private void OnMoveToNextRequest(TRequest request, IRequest child, ActionType actionType)
     {
-        Visit(request, child, ActionType.Complete);
+        Visit(request, child, ActionType.Search);
         _searchEngine.Steps.Add(new SearchStep(child));
         _dispatcher.Dispatch(child, actionType);
     }
@@ -161,7 +161,7 @@ public class RequestActionDispatcher<TRequest> : IRequestActionDispatcher<TReque
         else if (CurrentStep.Text.Length > 0)
         {
             CurrentStep.Text = CurrentStep.Text.Remove(CurrentStep.Text.Length - 1);
-            _dispatcher.Dispatch(CurrentStep.Request, ActionType.Complete);
+            _dispatcher.Dispatch(CurrentStep.Request, ActionType.Search);
         }
     }
 

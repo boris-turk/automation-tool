@@ -61,8 +61,21 @@ public class ChildRequestsProvider : IChildRequestsProvider, IChildRequestsProvi
         return collectionElementType;
     }
 
-    IEnumerable<IRequestV2> IChildRequestsProviderV2.LoadChildren(IRequestV2 request)
+    IEnumerable<IRequestV2> IChildRequestsProviderV2.LoadChildren<TRequest>()
     {
-        return LoadChildren((IRequest)request);
+        var childRequests = GenericMethodInvoker.Instance(this)
+            .Method(nameof(GetRequestsV2))
+            .WithGenericTypes(typeof(TRequest))
+            .Invoke();
+
+        return (IEnumerable<IRequest>)childRequests;
+
+    }
+
+    private IEnumerable<TRequest> GetRequestsV2<TRequest>() where TRequest : IRequest
+    {
+        var provider = Container.GetInstance<IRequestsProvider<TRequest>>();
+        var suppliedRequests = provider.GetRequests().ToList();
+        return suppliedRequests;
     }
 }

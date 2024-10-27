@@ -27,7 +27,7 @@ public class OptionRequest : CollectionRequest<IRequest>
 
     protected override bool CanAccept(DispatchPredicateContext context)
     {
-        return context.ActionType is ActionType.Execute or ActionType.Complete;
+        return context.ActionType is ActionType.Execute or ActionType.Search;
     }
 
     protected override IEnumerable<IRequest> GetRequests() => _childRequests;

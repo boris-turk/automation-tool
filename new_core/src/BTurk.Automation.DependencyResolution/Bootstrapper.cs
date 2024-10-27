@@ -17,7 +17,6 @@ using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.Core.Serialization;
 using BTurk.Automation.Core.Views;
 using BTurk.Automation.DependencyResolution.AsyncServices;
-using BTurk.Automation.Standard;
 using BTurk.Automation.WinForms;
 using BTurk.Automation.WinForms.Controls;
 using BTurk.Automation.WinForms.Providers;
@@ -27,7 +26,7 @@ using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
-public class Bootstrapper
+public class Bootstrapper : IRequestActionDispatcherV2
 {
     public static Container Container { get; private set; }
 
@@ -125,7 +124,7 @@ public class Bootstrapper
     private void InitializeMainForm(MainForm mainForm)
     {
         mainForm.RootMenuRequest = new RootMenuRequest();
-        mainForm.Dispatcher = Container.GetInstance<IRequestActionDispatcher>();
+        mainForm.Dispatcher = this;
         mainForm.EnvironmentContextProvider = Container.GetInstance<IEnvironmentContextProvider>();
         mainForm.MessagePublisher = Container.GetInstance<IMessagePublisher>();
     }
@@ -179,5 +178,11 @@ public class Bootstrapper
         var implementorTypes = Container.GetTypesToRegister(serviceType, Assemblies, options);
 
         return implementorTypes;
+    }
+
+    void IRequestActionDispatcherV2.Dispatch(ActionType actionType)
+    {
+        var dispatcher = Container.GetInstance<IRequestActionDispatcherV2>();
+        dispatcher.Dispatch(actionType);
     }
 }

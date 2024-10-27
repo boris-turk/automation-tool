@@ -94,7 +94,30 @@ public class RequestActionDispatcherTests
     }
 
     [Fact]
-    public void Dispatch_EmptySearch_CollectsNonEmptyTextMenusAndSkipsTheirChildrenButContinuesScanningOtherBranches()
+    public void Dispatch_EmptySearch_CollectsNonEmptyTextMenusAndSkipsTheirChildren()
+    {
+        // Arrange
+        var searchEngine = new FakeSearchEngine(
+            new FakeRequest(name: "RootMenu").WithChildren(
+                new FakeRequest(name: "Menu", text: "menu").WithChildren(
+                    new FakeRequest(name: "Item1", "item1"),
+                    new FakeRequest(name: "Item2", "item2")
+                    )
+            )
+        );
+        var sut = GetRequestActionDispatcher(searchEngine);
+
+        // Act
+        sut.Dispatch(ActionType.Search);
+
+        // Assert
+        AssertSearchResults(searchEngine.SearchResults, [
+            ["RootMenu", "Menu"]
+        ]);
+    }
+
+    [Fact]
+    public void Dispatch_EmptySearch_CollectsNonEmptyTextMenusAndContinuesScanningOtherBranches()
     {
         // Arrange
         var searchEngine = new FakeSearchEngine(

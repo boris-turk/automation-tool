@@ -6,7 +6,7 @@ public class OptionRequestVisitor<TChild> : IRequestVisitor<OptionRequest, TChil
 {
     public void Visit(RequestVisitContext<OptionRequest, TChild> context)
     {
-        if (context.ActionType == ActionType.Complete)
+        if (context.ActionType == ActionType.Search)
             context.Request.ChildSelected?.Invoke(context.ChildRequest);
 
         if (context.ActionType == ActionType.StepBack)

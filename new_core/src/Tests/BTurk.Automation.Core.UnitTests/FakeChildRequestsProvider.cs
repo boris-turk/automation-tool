@@ -5,7 +5,7 @@ namespace BTurk.Automation.Core.UnitTests;
 
 public class FakeChildRequestsProvider : IChildRequestsProviderV2
 {
-    IEnumerable<IRequestV2> IChildRequestsProviderV2.LoadChildren(IRequestV2 request)
+    public IEnumerable<IRequestV2> LoadChildren<TRequest>() where TRequest : IRequestV2
     {
         return [];
     }
