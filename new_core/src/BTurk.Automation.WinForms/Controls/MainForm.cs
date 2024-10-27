@@ -251,6 +251,8 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
         return tokens;
     }
 
+    public SearchResult SelectedSearchResult => (SearchResult)ListBox.SelectedItem;
+
     public void SetSearchResults(List<SearchResult> resultsCollection)
     {
         ListBox.BeginUpdate();

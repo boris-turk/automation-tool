@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 
@@ -13,6 +14,8 @@ namespace BTurk.Automation.Core.UnitTests
             RootMenuRequest = rootMenuRequest;
         }
 
+        public int SelectedSearchResultIndex { get; set; }
+
         public void SetSearchTokens(params SearchToken[] searchTokens)
         {
             _searchTokens.AddRange(searchTokens ?? []);
@@ -20,9 +23,21 @@ namespace BTurk.Automation.Core.UnitTests
 
         public List<SearchResult> SearchResults { get; } = [];
 
+        public bool Hidden { get; private set; }
+
         public EnvironmentContext Context { get; set; } = EnvironmentContext.Empty;
 
         public IRequestV2 RootMenuRequest { get; }
+
+        void ISearchEngineV2.SetSearchResults(List<SearchResult> resultsCollection)
+        {
+            SearchResults.AddRange(resultsCollection);
+        }
+
+        void ISearchEngineV2.Hide()
+        {
+            Hidden = true;
+        }
 
         List<SearchToken> ISearchEngineV2.SearchTokens
         {
@@ -34,9 +49,6 @@ namespace BTurk.Automation.Core.UnitTests
             }
         }
 
-        void ISearchEngineV2.SetSearchResults(List<SearchResult> resultsCollection)
-        {
-            SearchResults.AddRange(resultsCollection);
-        }
+        SearchResult ISearchEngineV2.SelectedSearchResult => SearchResults.ElementAtOrDefault(SelectedSearchResultIndex);
     }
 }

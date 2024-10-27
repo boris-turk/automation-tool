@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using BTurk.Automation.Core.Commands;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Xunit;
 
 // ReSharper disable StringLiteralTypo
@@ -12,7 +14,7 @@ namespace BTurk.Automation.Core.UnitTests;
 public class RequestActionDispatcherTests
 {
     [Fact]
-    public void Dispatch_WithEmptyRootRequestAndEmptySearch_LoadsRootRequest()
+    public void Dispatch_WithSearchActionAndEmptyRootRequestAndEmptySearch_LoadsRootRequest()
     {
         // Arrange
         var searchEngine = new FakeSearchEngine(new FakeRequest(name: "RootMenu"));
@@ -26,7 +28,7 @@ public class RequestActionDispatcherTests
     }
 
     [Fact]
-    public void Dispatch_WithMatchingSearchTokens_LoadsOnlyMatchingResults()
+    public void Dispatch_WithSearchActionAndMatchingSearchTokens_LoadsOnlyMatchingResults()
     {
         // Arrange
         var searchEngine = new FakeSearchEngine(
@@ -48,7 +50,7 @@ public class RequestActionDispatcherTests
     }
 
     [Fact]
-    public void Dispatch_WithNonMatchingSearchTokens_LoadsNoResults()
+    public void Dispatch_WithSearchActionAndNonMatchingSearchTokens_LoadsNoResults()
     {
         // Arrange
         var searchEngine = new FakeSearchEngine(
@@ -68,7 +70,28 @@ public class RequestActionDispatcherTests
     }
 
     [Fact]
-    public void Dispatch_WithWordTokenFollowedBySpaceToken_LoadsChildrenOfMatchingMenu()
+    public void Dispatch_WithSearchActionAndImperfectMatch_LoadsMatchingChildren()
+    {
+        // Arrange
+        var searchEngine = new FakeSearchEngine(
+            new FakeRequest(name: "RootMenu").WithChildren(
+                new FakeRequest(name: "Program1", text: "Program1")
+            )
+        );
+        searchEngine.SetSearchTokens(new WordToken("1"));
+        var sut = GetRequestActionDispatcher(searchEngine);
+
+        // Act
+        sut.Dispatch(ActionType.Search);
+
+        // Assert
+        AssertSearchResults(searchEngine.SearchResults, [
+            ["RootMenu", "Program1"]
+        ]);
+    }
+
+    [Fact]
+    public void Dispatch_WithSearchActionAndWordTokenFollowedBySpaceToken_LoadsChildrenOfMatchingMenu()
     {
         // Arrange
         var searchEngine = new FakeSearchEngine(
@@ -94,7 +117,7 @@ public class RequestActionDispatcherTests
     }
 
     [Fact]
-    public void Dispatch_EmptySearch_CollectsNonEmptyTextMenusAndSkipsTheirChildren()
+    public void Dispatch_WithSearchActionAndEmptySearch_CollectsNonEmptyTextMenusAndSkipsTheirChildren()
     {
         // Arrange
         var searchEngine = new FakeSearchEngine(
@@ -117,7 +140,7 @@ public class RequestActionDispatcherTests
     }
 
     [Fact]
-    public void Dispatch_EmptySearch_CollectsNonEmptyTextMenusAndContinuesScanningOtherBranches()
+    public void Dispatch_WithSearchActionAndEmptySearch_CollectsNonEmptyTextMenusAndContinuesScanningOtherBranches()
     {
         // Arrange
         var searchEngine = new FakeSearchEngine(
@@ -145,7 +168,7 @@ public class RequestActionDispatcherTests
     }
 
     [Fact]
-    public void Dispatch_ChildMenuUnmatchedAndScanChildrenIfUnmatchedEnabled_ScansGrandchildren()
+    public void Dispatch_WithSearchActionAndChildMenuUnmatchedAndScanChildrenIfUnmatchedEnabled_ScansGrandchildren()
     {
         // Arrange
         var searchEngine = new FakeSearchEngine(
@@ -169,7 +192,7 @@ public class RequestActionDispatcherTests
     }
 
     [Fact]
-    public void Dispatch_RootWithoutMatchAndNonEmptyTextAndScanChildrenIfUnmatchedEnabled_LoadsMatchingChild()
+    public void Dispatch_WithSearchActionAndRootWithoutMatchAndNonEmptyTextAndScanChildrenIfUnmatchedEnabled_LoadsMatchingChild()
     {
         // Arrange
         var searchEngine = new FakeSearchEngine(
@@ -190,7 +213,7 @@ public class RequestActionDispatcherTests
     }
 
     [Fact]
-    public void Dispatch_MenuWithNonEmptyTextAndMatchingFirstWord_UsesRemainingWordsToMatchChild()
+    public void Dispatch_WithSearchActionAndMenuWithNonEmptyTextAndMatchingFirstWord_UsesRemainingWordsToMatchChild()
     {
         // Arrange
         var searchEngine = new FakeSearchEngine(
@@ -213,10 +236,34 @@ public class RequestActionDispatcherTests
         ]);
     }
 
-    private RequestActionDispatcherV2 GetRequestActionDispatcher(ISearchEngineV2 searchEngine,
-        IChildRequestsProviderV2 childRequestsProvider = null)
+    [Fact]
+    public void Dispatch_WithExecuteActionAndSelectedExecutableCommand_ExecutesCommand()
     {
-        return new RequestActionDispatcherV2(searchEngine, childRequestsProvider ?? new FakeChildRequestsProvider());
+        // Arrange
+        var command = new FakeCommand();
+        var commandProcessor = new FakeCommandProcessor();
+        var searchEngine = new FakeSearchEngine(
+            new FakeRequest(name: "RootMenu").WithChildren(
+                new FakeRequest(name: "Program", text: "program").ExecutesCommand(command)
+            )
+        );
+        var sut = GetRequestActionDispatcher(searchEngine, commandProcessor);
+        sut.Dispatch(ActionType.Search);
+
+        // Act
+        sut.Dispatch(ActionType.Execute);
+
+        // Assert
+        using var _ = new AssertionScope();
+        commandProcessor.ProcessedCommands.Should().Contain(command);
+        searchEngine.Hidden.Should().BeTrue();
+    }
+
+    private RequestActionDispatcherV2 GetRequestActionDispatcher(ISearchEngineV2 searchEngine,
+        ICommandProcessor commandProcessor = null, IChildRequestsProviderV2 childRequestsProvider = null)
+    {
+        return new RequestActionDispatcherV2(searchEngine, commandProcessor ?? new FakeCommandProcessor(),
+            childRequestsProvider ?? new FakeChildRequestsProvider());
     }
 
     private void AssertSearchResults(List<SearchResult> searchResults, List<List<string>> expectedFriendlyNamesCollection)

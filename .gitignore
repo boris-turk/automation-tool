@@ -187,3 +187,4 @@ FakesAssemblies/
 /src/.vs/*
 /new_core/src/.vs/*
 /new_core/documentation/*.bkp
+*.dtbcache.json

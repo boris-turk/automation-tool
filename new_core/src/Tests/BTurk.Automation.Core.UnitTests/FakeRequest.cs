@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using BTurk.Automation.Core.Commands;
 using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Core.UnitTests;
@@ -20,6 +21,12 @@ public class FakeRequest : Request
             var displayText = string.IsNullOrWhiteSpace(Text) ? $"{Name}" : $"{Name}: {Text}";
             return displayText;
         }
+    }
+
+    public FakeRequest ExecutesCommand(ICommand command)
+    {
+        Configure().SetCommand(command);
+        return this;
     }
 
     public FakeRequest WithChildren(params IRequestV2[] childRequests)

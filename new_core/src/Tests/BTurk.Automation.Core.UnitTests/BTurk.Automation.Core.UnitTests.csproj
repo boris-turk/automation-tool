@@ -69,6 +69,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FakeChildRequestsProvider.cs" />
+    <Compile Include="FakeCommand.cs" />
+    <Compile Include="FakeCommandProcessor.cs" />
     <Compile Include="FakeRequest.cs" />
     <Compile Include="FakeSearchEngine.cs" />
     <Compile Include="RequestActionDispatcherTests.cs" />

@@ -7,10 +7,13 @@ namespace BTurk.Automation.Core.Requests;
 public class OpenProgramRequest : Request, ICommand
 {
     public OpenProgramRequest(string programName)
-        : base(programName)
     {
         Command = this;
         ProgramName = programName;
+
+        Configure()
+            .SetText(programName)
+            .SetCommand(this);
     }
 
     public string ProgramName { get; }

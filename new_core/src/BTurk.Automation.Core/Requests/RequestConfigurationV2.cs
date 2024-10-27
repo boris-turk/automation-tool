@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BTurk.Automation.Core.Commands;
 using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests;
 
 public class RequestConfigurationV2 : IRequestConfigurationV2
 {
+    private ICommand _command;
     private Func<string> _textProvider;
     private readonly List<IRequestV2> _childRequests = [];
     private bool _scanChildrenIfUnmatched;
@@ -22,6 +24,11 @@ public class RequestConfigurationV2 : IRequestConfigurationV2
     {
         _textProvider = textProvider;
         return this;
+    }
+
+    public void SetCommand(ICommand command)
+    {
+        _command = command;
     }
 
     public RequestConfigurationV2 AddChildRequests(params IRequestV2[] requests)
@@ -49,6 +56,8 @@ public class RequestConfigurationV2 : IRequestConfigurationV2
     }
 
     string IRequestConfigurationV2.Text => _textProvider?.Invoke() ?? "";
+
+    ICommand IRequestConfigurationV2.Command => _command;
 
     bool IRequestConfigurationV2.ScanChildrenIfUnmatched => _scanChildrenIfUnmatched;
 

@@ -1,19 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using BTurk.Automation.Core.Commands;
 using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests;
 
 public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
 {
-    public RequestActionDispatcherV2(ISearchEngineV2 searchEngine, IChildRequestsProviderV2 childRequestsProvider)
+    public RequestActionDispatcherV2(ISearchEngineV2 searchEngine, ICommandProcessor commandProcessor,
+        IChildRequestsProviderV2 childRequestsProvider)
     {
         SearchEngine = searchEngine;
+        CommandProcessor = commandProcessor;
         ChildRequestsProvider = childRequestsProvider;
     }
 
     private ISearchEngineV2 SearchEngine { [DebuggerStepThrough] get; }
+
+    private ICommandProcessor CommandProcessor { [DebuggerStepThrough] get; }
 
     private IChildRequestsProviderV2 ChildRequestsProvider { get; }
 
@@ -21,6 +26,23 @@ public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
     {
         if (actionType == ActionType.Search)
             Search();
+
+        if (actionType == ActionType.Execute)
+            Execute();
+    }
+
+    private void Execute()
+    {
+        var selectedSearchResult = SearchEngine.SelectedSearchResult;
+        var selectedItem = selectedSearchResult?.Items?.LastOrDefault();
+        var selectedRequest = selectedItem?.Request;
+        var command = selectedRequest?.Configuration.Command;
+
+        if (command == null)
+            return;
+
+        CommandProcessor.Process(command);
+        SearchEngine.Hide();
     }
 
     private void Search()
@@ -40,18 +62,13 @@ public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
         {
             var request = result.Items.Last().Request;
 
-            if (request.Configuration.CanHaveChildren == false && result.Items.Count == 1)
+            if (ShouldSkipSearchResult(request, result))
             {
                 resultsCollection.Remove(result);
-                break;
-            }
-
-            if (request.Configuration.CanHaveChildren == false && searchTokens.Any() == false)
-            {
                 continue;
             }
 
-            if (request.Configuration.Text.HasLength() && searchTokens.Any() == false)
+            if (ShouldSkipChildren(searchTokens, request))
             {
                 continue;
             }
@@ -75,6 +92,28 @@ public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
         }
     }
 
+    private static bool ShouldSkipSearchResult(IRequestV2 request, SearchResult result)
+    {
+        if (request.Configuration.CanHaveChildren)
+            return false;
+
+        return result.Items.Count == 1;
+    }
+
+    private static bool ShouldSkipChildren(List<SearchToken> searchTokens, IRequestV2 request)
+    {
+        if (request.Configuration.Text.HasLength() && searchTokens.Any() == false)
+            return true;
+
+        if (request.Configuration.CanHaveChildren)
+            return false;
+
+        if (searchTokens.Any() == false)
+            return true;
+
+        return false;
+    }
+
     private List<SearchToken> GetChildSearchTokens((int Score, IRequestV2 Request) child, List<SearchToken> searchTokens)
     {
         const int sufficientMatch = 1;
@@ -90,9 +129,10 @@ public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
         {
             sufficientMatch when request.Configuration.ScanChildrenIfUnmatched == false => 1,
             sufficientMatch when searchTokens.All(x => x is SpaceToken) => 1,
-            > optimalMatch when request.Configuration.CanHaveChildren => 1,
-            > optimalMatch => searchTokens.TakeWhile(x => x is WordToken).Count(),
-            _ => 0
+            sufficientMatch => 0,
+            < optimalMatch => searchTokens.TakeWhile(x => x is WordToken).Count(),
+            >= optimalMatch when request.Configuration.CanHaveChildren => 1,
+            >= optimalMatch => searchTokens.TakeWhile(x => x is WordToken).Count(),
         };
 
         return searchTokens.Skip(skipCount).ToList();
