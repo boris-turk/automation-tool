@@ -237,6 +237,45 @@ public class RequestActionDispatcherTests
     }
 
     [Fact]
+    public void Dispatch_WithExecuteActionAndNoSearchResultWithAssociatedCommandExists_DoesNothing()
+    {
+        // Arrange
+        var commandProcessor = new FakeCommandProcessor();
+        var searchEngine = new FakeSearchEngine(new FakeRequest(name: "Request"));
+        var sut = GetRequestActionDispatcher(searchEngine, commandProcessor);
+
+        // Act
+        sut.Dispatch(ActionType.Execute);
+
+        // Assert
+        using var _ = new AssertionScope();
+        commandProcessor.ProcessedCommands.Should().BeEmpty();
+        searchEngine.Hidden.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Dispatch_WithExecuteActionAndSelectedSearchResultHasNoAssociatedCommand_DoesNothing()
+    {
+        // Arrange
+        var commandProcessor = new FakeCommandProcessor();
+        var searchEngine = new FakeSearchEngine(
+            new FakeRequest(name: "RootMenu").WithChildren(
+                new FakeRequest(name: "Program", text: "program")
+            )
+        );
+        var sut = GetRequestActionDispatcher(searchEngine, commandProcessor);
+        sut.Dispatch(ActionType.Search);
+
+        // Act
+        sut.Dispatch(ActionType.Execute);
+
+        // Assert
+        using var _ = new AssertionScope();
+        commandProcessor.ProcessedCommands.Should().BeEmpty();
+        searchEngine.Hidden.Should().BeFalse();
+    }
+
+    [Fact]
     public void Dispatch_WithExecuteActionAndSelectedExecutableCommand_ExecutesCommand()
     {
         // Arrange
