@@ -8,12 +8,12 @@ namespace BTurk.Automation.Core.Requests;
 
 public class RequestConfiguration : IRequestConfiguration
 {
-    private ICommand _command;
     private Func<string> _textProvider;
     private readonly List<IRequest> _childRequests = [];
     private bool _scanChildrenIfUnmatched;
     private Predicate<EnvironmentContext> _processCondition;
     private readonly List<Func<IChildRequestsProvider, IEnumerable<IRequest>>> _childRequestProviders = [];
+    private Func<ICommandProcessor, IRequest, bool> _commandDispatcher;
 
     public RequestConfiguration SetText(string text)
     {
@@ -28,7 +28,11 @@ public class RequestConfiguration : IRequestConfiguration
 
     public void SetCommand(ICommand command)
     {
-        _command = command;
+        _commandDispatcher = (processor, _) =>
+        {
+            processor.Process(command);
+            return true;
+        };
     }
 
     public RequestConfiguration AddChildRequests(params IRequest[] requests)
@@ -37,10 +41,10 @@ public class RequestConfiguration : IRequestConfiguration
         return this;
     }
 
-    public RequestConfiguration AddChildRequestsProvider<TRequest>() where TRequest : IRequest
+    public Child<TRequest> AddChildRequestsProvider<TRequest>() where TRequest : IRequest
     {
         _childRequestProviders.Add(p => p.LoadChildren<TRequest>().Cast<IRequest>());
-        return this;
+        return new Child<TRequest>(this);
     }
 
     public RequestConfiguration ScanChildrenIfUnmatched()
@@ -57,8 +61,6 @@ public class RequestConfiguration : IRequestConfiguration
 
     string IRequestConfiguration.Text => _textProvider?.Invoke() ?? "";
 
-    ICommand IRequestConfiguration.Command => _command;
-
     bool IRequestConfiguration.ScanChildrenIfUnmatched => _scanChildrenIfUnmatched;
 
     bool IRequestConfiguration.CanHaveChildren => _childRequests.Any() || _childRequestProviders.Any();
@@ -71,6 +73,16 @@ public class RequestConfiguration : IRequestConfiguration
         var canProcess = _processCondition.Invoke(environmentContext);
 
         return canProcess;
+    }
+
+    bool IRequestConfiguration.ExecuteCommand(ICommandProcessor commandProcessor, IRequest childRequest)
+    {
+        if (_commandDispatcher == null)
+            return false;
+
+        var executed = _commandDispatcher.Invoke(commandProcessor, childRequest);
+
+        return executed;
     }
 
     IEnumerable<IRequest> IRequestConfiguration.GetChildren(IChildRequestsProvider childRequestsProvider)
@@ -88,4 +100,29 @@ public class RequestConfiguration : IRequestConfiguration
             yield return childRequest;
         }
     }
+
+    public class Child<TRequest> : RequestConfiguration where TRequest : IRequest
+    {
+        private readonly RequestConfiguration _configuration;
+
+        public Child(RequestConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        public void SetCommand(Func<TRequest, ICommand> commandProvider)
+        {
+            _configuration._commandDispatcher = (processor, childRequest) =>
+            {
+                if (childRequest is not TRequest properChildRequest)
+                    return false;
+
+                var command = commandProvider.Invoke(properChildRequest);
+                processor.Process(command);
+
+                return true;
+            };
+        }
+    }
+
 }

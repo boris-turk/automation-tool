@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using BTurk.Automation.Core.Commands;
@@ -24,25 +25,41 @@ public class RequestActionDispatcher : IRequestActionDispatcher
 
     public void Dispatch(ActionType actionType)
     {
-        if (actionType == ActionType.Search)
-            Search();
-
-        if (actionType == ActionType.Execute)
-            Execute();
+        switch (actionType)
+        {
+            case ActionType.Execute:
+                Execute();
+                break;
+            case ActionType.Search:
+                Search();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(actionType), actionType, null);
+        }
     }
 
     private void Execute()
     {
-        var selectedSearchResult = SearchEngine.SelectedSearchResult;
-        var selectedItem = selectedSearchResult?.Items?.LastOrDefault();
-        var selectedRequest = selectedItem?.Request;
-        var command = selectedRequest?.Configuration.Command;
+        var items = SearchEngine.SelectedSearchResult?.Items;
 
-        if (command == null)
+        if (items == null)
             return;
 
-        CommandProcessor.Process(command);
-        SearchEngine.Hide();
+        var executed = false;
+
+        for (int i = items.Count - 1; i >= 0; i--)
+        {
+            var childRequest = items.ElementAtOrDefault(i + 1)?.Request;
+
+            var configuration = items[i].Request.Configuration;
+            executed = configuration.ExecuteCommand(CommandProcessor, childRequest);
+
+            if (executed)
+                break;
+        }
+
+        if (executed)
+            SearchEngine.Hide();
     }
 
     private void Search()
@@ -80,14 +97,18 @@ public class RequestActionDispatcher : IRequestActionDispatcher
 
             foreach (var child in childrenCollection.OrderByDescending(c => c.Score))
             {
-                resultsCollection.Insert(insertIndex, result.Append(child.Request));
+                var childResultsCollection = new List<SearchResult> { result.Append(child.Request) };
 
-                var oldCount = resultsCollection.Count;
                 var childSearchTokens = GetChildSearchTokens(child, searchTokens);
-                CollectSearchResults(resultsCollection, childSearchTokens);
-                var newCount = resultsCollection.Count;
 
-                insertIndex += newCount - oldCount + 1;
+                if (searchTokens.Count - childSearchTokens.Count > 1 && child.Request.Configuration.CanHaveChildren)
+                    continue;
+
+                CollectSearchResults(childResultsCollection, childSearchTokens);
+
+                resultsCollection.InsertRange(insertIndex, childResultsCollection);
+
+                insertIndex += childResultsCollection.Count;
             }
         }
     }
@@ -102,13 +123,13 @@ public class RequestActionDispatcher : IRequestActionDispatcher
 
     private static bool ShouldSkipChildren(List<SearchToken> searchTokens, IRequest request)
     {
-        if (request.Configuration.Text.HasLength() && searchTokens.Any() == false)
+        if (request.Configuration.Text.HasLength() && !searchTokens.Any())
             return true;
 
         if (request.Configuration.CanHaveChildren)
             return false;
 
-        if (searchTokens.Any() == false)
+        if (!searchTokens.Any())
             return true;
 
         return false;
@@ -118,21 +139,22 @@ public class RequestActionDispatcher : IRequestActionDispatcher
     {
         const int sufficientMatch = 1;
         const int optimalMatch = 1000;
+        const int perfectMatch = 5000;
 
         var request = child.Request;
         var text = request.Configuration.Text;
 
-        if (text.HasLength() == false)
+        if (!text.HasLength())
             return searchTokens.ToList();
 
         var skipCount = child.Score switch
         {
-            sufficientMatch when request.Configuration.ScanChildrenIfUnmatched == false => 1,
+            sufficientMatch when !request.Configuration.ScanChildrenIfUnmatched => 1,
             sufficientMatch when searchTokens.All(x => x is SpaceToken) => 1,
             sufficientMatch => 0,
+            >= perfectMatch when request.Configuration.CanHaveChildren => 1,
             < optimalMatch => searchTokens.TakeWhile(x => x is WordToken).Count(),
-            >= optimalMatch when request.Configuration.CanHaveChildren => 1,
-            >= optimalMatch => searchTokens.TakeWhile(x => x is WordToken).Count(),
+            >= optimalMatch => searchTokens.TakeWhile(x => x is WordToken).Count()
         };
 
         return searchTokens.Skip(skipCount).ToList();
@@ -145,7 +167,7 @@ public class RequestActionDispatcher : IRequestActionDispatcher
 
         foreach (var child in request.Configuration.GetChildren(ChildRequestsProvider))
         {
-            if (child.Configuration.CanProcess(SearchEngine.Context) == false)
+            if (!child.Configuration.CanProcess(SearchEngine.Context))
                 continue;
 
             var text = child.Configuration.Text;
@@ -169,13 +191,13 @@ public class RequestActionDispatcher : IRequestActionDispatcher
                 continue;
             }
 
-            if (text.HasLength() == false)
+            if (!text.HasLength())
             {
                 yield return (Score: 1, child);
                 continue;
             }
 
-            if (searchTokens.Any() == false || child.Configuration.ScanChildrenIfUnmatched)
+            if (!searchTokens.Any() || child.Configuration.ScanChildrenIfUnmatched)
             {
                 yield return (Score: 1, child);
             }
@@ -202,7 +224,7 @@ public class RequestActionDispatcher : IRequestActionDispatcher
         if (string.IsNullOrEmpty(searchText))
             return 0;
 
-        if (text.HasLength() == false)
+        if (!text.HasLength())
             return 0;
 
         var filterAlgorithm = new FilterAlgorithm(searchText);

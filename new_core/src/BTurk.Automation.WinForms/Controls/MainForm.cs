@@ -210,21 +210,8 @@ public partial class MainForm : Form, ISearchEngine
 
     public List<SearchToken> SearchTokens
     {
-        get => GetSearchTokens();
+        get => SearchToken.GetSearchTokens(TextBox.Text);
         set { }
-    }
-
-    private List<SearchToken> GetSearchTokens()
-    {
-        var searchText = TextBox.Text;
-
-        var words = searchText.Split([' ', '\t'], StringSplitOptions.RemoveEmptyEntries).ToArray();
-        var tokens = words.Select(w => new WordToken(w)).Cast<SearchToken>().ToList();
-
-        if (tokens.Any() && (searchText.EndsWith(" ") || searchText.EndsWith("\t")))
-            tokens.Insert(tokens.Count, new SpaceToken());
-
-        return tokens;
     }
 
     public SearchResult SelectedSearchResult => (SearchResult)ListBox.SelectedItem;

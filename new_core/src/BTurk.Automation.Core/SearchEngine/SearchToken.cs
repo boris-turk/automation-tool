@@ -1,5 +1,6 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BTurk.Automation.Core.SearchEngine;
 
@@ -7,22 +8,14 @@ public abstract class SearchToken
 {
     public string Text { get; protected set; }
 
-    public static SearchToken[] GetSearchTokens(string text)
+    public static List<SearchToken> GetSearchTokens(string text)
     {
-        var tokens = (
-            from part in Regex.Split(text ?? "", @"\b")
-            where string.IsNullOrEmpty(part) == false
-            select ToSearchToken(part)
-            ).ToArray();
+        var words = text.Split([' ', '\t'], StringSplitOptions.RemoveEmptyEntries).ToArray();
+        var tokens = words.Select(w => new WordToken(w)).Cast<SearchToken>().ToList();
+
+        if (tokens.Any() && (text.EndsWith(" ") || text.EndsWith("\t")))
+            tokens.Insert(tokens.Count, new SpaceToken());
 
         return tokens;
-
-        SearchToken ToSearchToken(string textPart)
-        {
-            if (Regex.IsMatch(textPart, @"^\s+$"))
-                return new SpaceToken();
-
-            return new WordToken(textPart.Trim());
-        }
     }
 }

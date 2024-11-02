@@ -16,8 +16,9 @@ namespace BTurk.Automation.Core.UnitTests
 
         public int SelectedSearchResultIndex { get; set; }
 
-        public void SetSearchTokens(params SearchToken[] searchTokens)
+        public void SetSearchTokens(string searchText)
         {
+            var searchTokens = SearchToken.GetSearchTokens(searchText);
             _searchTokens.AddRange(searchTokens ?? []);
         }
 

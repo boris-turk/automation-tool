@@ -37,7 +37,7 @@ public class RequestActionDispatcherTests
                 new FakeRequest(name: "Gvim", text: "gvim")
             )
         );
-        searchEngine.SetSearchTokens(new WordToken("so"));
+        searchEngine.SetSearchTokens("so");
         var sut = GetRequestActionDispatcher(searchEngine);
 
         // Act
@@ -59,7 +59,7 @@ public class RequestActionDispatcherTests
                 new FakeRequest(name: "Gvim", text: "gvim")
             )
         );
-        searchEngine.SetSearchTokens(new WordToken("co"));
+        searchEngine.SetSearchTokens("co");
         var sut = GetRequestActionDispatcher(searchEngine);
 
         // Act
@@ -78,7 +78,7 @@ public class RequestActionDispatcherTests
                 new FakeRequest(name: "Program1", text: "Program1")
             )
         );
-        searchEngine.SetSearchTokens(new WordToken("1"));
+        searchEngine.SetSearchTokens("1");
         var sut = GetRequestActionDispatcher(searchEngine);
 
         // Act
@@ -103,7 +103,7 @@ public class RequestActionDispatcherTests
                 new FakeRequest(name: "Gvim", text: "gvim")
             )
         );
-        searchEngine.SetSearchTokens(new WordToken("so"), new SpaceToken());
+        searchEngine.SetSearchTokens("so ");
         var sut = GetRequestActionDispatcher(searchEngine);
 
         // Act
@@ -179,7 +179,7 @@ public class RequestActionDispatcherTests
                 )
             )
         );
-        searchEngine.SetSearchTokens(new WordToken("fi"), new WordToken("ch"));
+        searchEngine.SetSearchTokens("fi ch");
         var sut = GetRequestActionDispatcher(searchEngine);
 
         // Act
@@ -200,7 +200,7 @@ public class RequestActionDispatcherTests
                 new FakeRequest(name: "ChildMenu", text: "abc")
             )
         );
-        searchEngine.SetSearchTokens(new WordToken("ab"));
+        searchEngine.SetSearchTokens("ab");
         var sut = GetRequestActionDispatcher(searchEngine);
 
         // Act
@@ -224,7 +224,7 @@ public class RequestActionDispatcherTests
                 )
             )
         );
-        searchEngine.SetSearchTokens(new WordToken("u"), new WordToken("ab"), new WordToken("ef"));
+        searchEngine.SetSearchTokens("u ab ef");
         var sut = GetRequestActionDispatcher(searchEngine);
 
         // Act
@@ -233,6 +233,86 @@ public class RequestActionDispatcherTests
         // Assert
         AssertSearchResults(searchEngine.SearchResults, [
             ["RootMenu", "Url", "url1"]
+        ]);
+    }
+
+    [Fact]
+    public void Dispatch_WithSearchActionAndExpandingMatchInTwoDistinctParents_LoadsBothParentsAndTheirChildren()
+    {
+        // Arrange
+        var searchEngine = new FakeSearchEngine(
+            new FakeRequest(name: "RootMenu").WithChildren(
+                new FakeRequest(name: "Child", text: "child").WithChildren(
+                    new FakeRequest(name: "GrandChild", text: "grand child")
+                ),
+                new FakeRequest(name: "AnotherChild", text: "another child").WithChildren(
+                    new FakeRequest(name: "AnotherGrandChild", text: "another grand child")
+                )
+            )
+        );
+        searchEngine.SetSearchTokens("c ");
+        var sut = GetRequestActionDispatcher(searchEngine);
+
+        // Act
+        sut.Dispatch(ActionType.Search);
+
+        // Assert
+        AssertSearchResults(searchEngine.SearchResults, [
+            ["RootMenu", "Child", "GrandChild"],
+            ["RootMenu", "AnotherChild", "AnotherGrandChild"]
+        ]);
+    }
+
+    [Fact]
+    public void Dispatch_WithSearchActionAndMatchesParentAndChildInTwoDistinctPairs_LoadsBothParentsAndTheirChildren()
+    {
+        // Arrange
+        var searchEngine = new FakeSearchEngine(
+            new FakeRequest(name: "RootMenu").WithChildren(
+                new FakeRequest(name: "Child", text: "child").WithChildren(
+                    new FakeRequest(name: "GrandChild", text: "grand child 1")
+                ),
+                new FakeRequest(name: "AnotherChild", text: "another child").WithChildren(
+                    new FakeRequest(name: "AnotherGrandChild", text: "grand child 2")
+                )
+            )
+        );
+        searchEngine.SetSearchTokens("c g");
+        var sut = GetRequestActionDispatcher(searchEngine);
+
+        // Act
+        sut.Dispatch(ActionType.Search);
+
+        // Assert
+        AssertSearchResults(searchEngine.SearchResults, [
+            ["RootMenu", "Child", "GrandChild"],
+            ["RootMenu", "AnotherChild", "AnotherGrandChild"]
+        ]);
+    }
+
+    [Fact]
+    public void Dispatch_WithSearchActionAndMatchesBothParentsButOnlyOneChild_LoadsOnlyParentWithMatchingChild()
+    {
+        // Arrange
+        var searchEngine = new FakeSearchEngine(
+            new FakeRequest(name: "RootMenu").WithChildren(
+                new FakeRequest(name: "Child", text: "child").WithChildren(
+                    new FakeRequest(name: "GrandChild", text: "grand child 1")
+                ),
+                new FakeRequest(name: "AnotherChild", text: "another child").WithChildren(
+                    new FakeRequest(name: "AnotherGrandChild", text: "grand child 2")
+                )
+            )
+        );
+        searchEngine.SetSearchTokens("c 1");
+        var sut = GetRequestActionDispatcher(searchEngine);
+
+        // Act
+        sut.Dispatch(ActionType.Search);
+
+        // Assert
+        AssertSearchResults(searchEngine.SearchResults, [
+            ["RootMenu", "Child", "GrandChild"]
         ]);
     }
 

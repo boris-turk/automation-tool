@@ -7,9 +7,9 @@ namespace BTurk.Automation.Core.Requests;
 public interface IRequestConfiguration
 {
     string Text { get; }
-    ICommand Command { get; }
     bool ScanChildrenIfUnmatched { get; }
     bool CanHaveChildren { get; }
     bool CanProcess(EnvironmentContext environmentContext);
+    bool ExecuteCommand(ICommandProcessor commandProcessor, IRequest childRequest);
     IEnumerable<IRequest> GetChildren(IChildRequestsProvider childRequestsProvider);
 }
