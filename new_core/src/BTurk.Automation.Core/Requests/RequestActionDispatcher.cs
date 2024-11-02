@@ -67,100 +67,51 @@ public class RequestActionDispatcher : IRequestActionDispatcher
         var rootRequest = SearchEngine.RootMenuRequest;
         var searchTokens = SearchEngine.SearchTokens.ToList();
 
-        var searchResults = new List<SearchResult> { new SearchResult().Append(rootRequest) };
-        CollectSearchResults(searchResults, searchTokens);
+        var rootSearchResult = new SearchResult().Append(rootRequest);
+        var searchScope = new SearchScope(searchTokens);
+        var searchResults = CollectSearchResults(rootSearchResult, searchScope).ToList();
 
         SearchEngine.SetSearchResults(searchResults);
     }
 
-    private void CollectSearchResults(List<SearchResult> resultsCollection, List<SearchToken> searchTokens)
+    private IEnumerable<SearchResult> CollectSearchResults(SearchResult result, SearchScope searchScope)
     {
-        foreach (var result in resultsCollection.ToList())
+        var searchTokens = searchScope.SearchTokens;
+
+        var request = result.Items.Last().Request;
+
+        if (searchScope.ShouldSkipSearchResult(request, result))
         {
-            var request = result.Items.Last().Request;
+            yield break;
+        }
 
-            if (ShouldSkipSearchResult(request, result))
-            {
-                resultsCollection.Remove(result);
+        if (searchScope.ShouldSkipChildren(searchTokens, request))
+        {
+            yield return result;
+            yield break;
+        }
+
+        var childrenCollection = GetChildren(request, searchTokens)
+            .OrderByDescending(c => c.Score)
+            .ToList();
+
+        foreach (var child in childrenCollection)
+        {
+            var childResult = result.Append(child.Request);
+
+            var childSearchScope = searchScope.GetChildrenSearchScope(child);
+
+            if (childSearchScope.ShouldSkipChild(child))
                 continue;
-            }
 
-            if (ShouldSkipChildren(searchTokens, request))
+            foreach (var grandChildResult in CollectSearchResults(childResult, childSearchScope))
             {
-                continue;
-            }
-
-            var childrenCollection = GetChildren(request, searchTokens).ToList();
-
-            var insertIndex = resultsCollection.IndexOf(result);
-            resultsCollection.Remove(result);
-
-            foreach (var child in childrenCollection.OrderByDescending(c => c.Score))
-            {
-                var childResultsCollection = new List<SearchResult> { result.Append(child.Request) };
-
-                var childSearchTokens = GetChildSearchTokens(child, searchTokens);
-
-                if (searchTokens.Count - childSearchTokens.Count > 1 && child.Request.Configuration.CanHaveChildren)
-                    continue;
-
-                CollectSearchResults(childResultsCollection, childSearchTokens);
-
-                resultsCollection.InsertRange(insertIndex, childResultsCollection);
-
-                insertIndex += childResultsCollection.Count;
+                yield return grandChildResult;
             }
         }
     }
 
-    private static bool ShouldSkipSearchResult(IRequest request, SearchResult result)
-    {
-        if (request.Configuration.CanHaveChildren)
-            return false;
-
-        return result.Items.Count == 1;
-    }
-
-    private static bool ShouldSkipChildren(List<SearchToken> searchTokens, IRequest request)
-    {
-        if (request.Configuration.Text.HasLength() && !searchTokens.Any())
-            return true;
-
-        if (request.Configuration.CanHaveChildren)
-            return false;
-
-        if (!searchTokens.Any())
-            return true;
-
-        return false;
-    }
-
-    private List<SearchToken> GetChildSearchTokens((int Score, IRequest Request) child, List<SearchToken> searchTokens)
-    {
-        const int sufficientMatch = 1;
-        const int optimalMatch = 1000;
-        const int perfectMatch = 5000;
-
-        var request = child.Request;
-        var text = request.Configuration.Text;
-
-        if (!text.HasLength())
-            return searchTokens.ToList();
-
-        var skipCount = child.Score switch
-        {
-            sufficientMatch when !request.Configuration.ScanChildrenIfUnmatched => 1,
-            sufficientMatch when searchTokens.All(x => x is SpaceToken) => 1,
-            sufficientMatch => 0,
-            >= perfectMatch when request.Configuration.CanHaveChildren => 1,
-            < optimalMatch => searchTokens.TakeWhile(x => x is WordToken).Count(),
-            >= optimalMatch => searchTokens.TakeWhile(x => x is WordToken).Count()
-        };
-
-        return searchTokens.Skip(skipCount).ToList();
-    }
-
-    private IEnumerable<(int Score, IRequest Request)> GetChildren(IRequest request, List<SearchToken> searchTokens)
+    private IEnumerable<RequestMatch> GetChildren(IRequest request, List<SearchToken> searchTokens)
     {
         string singleWordSearchText = null;
         string multiWordSearchText = null;
@@ -187,19 +138,19 @@ public class RequestActionDispatcher : IRequestActionDispatcher
 
             if (score > 0)
             {
-                yield return (score, child);
+                yield return new(score, child);
                 continue;
             }
 
             if (!text.HasLength())
             {
-                yield return (Score: 1, child);
+                yield return new(score: 1, child);
                 continue;
             }
 
             if (!searchTokens.Any() || child.Configuration.ScanChildrenIfUnmatched)
             {
-                yield return (Score: 1, child);
+                yield return new(score: 1, child);
             }
         }
     }
@@ -232,5 +183,90 @@ public class RequestActionDispatcher : IRequestActionDispatcher
         var score = filterAlgorithm.GetScore(text);
 
         return score;
+    }
+
+    private class SearchScope
+    {
+        private readonly List<SearchToken> _previousSearchTokens = new();
+
+        public SearchScope(List<SearchToken> searchTokens)
+        {
+            SearchTokens = searchTokens;
+        }
+
+        public List<SearchToken> SearchTokens { get; }
+
+        public bool ShouldSkipSearchResult(IRequest request, SearchResult result)
+        {
+            if (request.Configuration.CanHaveChildren)
+                return false;
+
+            return result.Items.Count == 1;
+        }
+
+        public bool ShouldSkipChildren(List<SearchToken> searchTokens, IRequest request)
+        {
+            if (request.Configuration.Text.HasLength() && !searchTokens.Any())
+                return true;
+
+            if (request.Configuration.CanHaveChildren)
+                return false;
+
+            if (!searchTokens.Any())
+                return true;
+
+            return false;
+        }
+
+        public SearchScope GetChildrenSearchScope(RequestMatch match)
+        {
+            var childSearchTokens = GetChildSearchTokens(match);
+            var scope = new SearchScope(childSearchTokens);
+            scope._previousSearchTokens.AddRange(SearchTokens);
+            return scope;
+        }
+
+        private List<SearchToken> GetChildSearchTokens(RequestMatch match)
+        {
+            const int sufficientMatch = 1;
+            const int optimalMatch = 1000;
+            const int perfectMatch = 5000;
+
+            var request = match.Request;
+            var text = request.Configuration.Text;
+
+            if (!text.HasLength())
+                return SearchTokens.ToList();
+
+            var skipCount = match.Score switch
+            {
+                sufficientMatch when !request.Configuration.ScanChildrenIfUnmatched => 1,
+                sufficientMatch when SearchTokens.All(x => x is SpaceToken) => 1,
+                sufficientMatch => 0,
+                >= perfectMatch when request.Configuration.CanHaveChildren => 1,
+                < optimalMatch => SearchTokens.TakeWhile(x => x is WordToken).Count(),
+                >= optimalMatch => SearchTokens.TakeWhile(x => x is WordToken).Count()
+            };
+
+            return SearchTokens.Skip(skipCount).ToList();
+        }
+
+        public bool ShouldSkipChild(RequestMatch match)
+        {
+            return _previousSearchTokens.Count - SearchTokens.Count > 1 && match.Request.Configuration.CanHaveChildren;
+        }
+    }
+
+    private class RequestMatch
+    {
+        public RequestMatch(int score, IRequest request)
+        {
+            Score = score;
+            Request = request;
+        }
+
+        public int Score { get; }
+
+        public IRequest Request { get; }
     }
 }
