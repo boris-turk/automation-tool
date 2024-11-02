@@ -1,12 +1,14 @@
-﻿using BTurk.Automation.Core.Requests;
+﻿using System.Collections.Generic;
+using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Core.SearchEngine;
 
-public interface ISearchEngine : IEnvironmentContextProvider
+public interface ISearchEngine
 {
-    string SearchText { get; set; }
-
-    Request SelectedItem { get; }
-
     void Hide();
+    EnvironmentContext Context { get; }
+    IRequest RootMenuRequest { get; }
+    List<SearchToken> SearchTokens { get; set; }
+    SearchResult SelectedSearchResult { get; }
+    void SetSearchResults(List<SearchResult> resultsCollection);
 }

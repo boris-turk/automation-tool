@@ -26,7 +26,7 @@ using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
-public class Bootstrapper : IRequestActionDispatcherV2
+public class Bootstrapper : IRequestActionDispatcher
 {
     public static Container Container { get; private set; }
 
@@ -49,9 +49,8 @@ public class Bootstrapper : IRequestActionDispatcherV2
     {
         Container = new Container();
 
-        Container.RegisterSingleton<ISearchEngineV2, MainForm>();
-        Container.RegisterSingleton<IChildRequestsProviderV2, ChildRequestsProvider>();
-        Container.RegisterSingleton<IRequestActionDispatcherV2, RequestActionDispatcherV2>();
+        Container.RegisterSingleton<IChildRequestsProvider, ChildRequestsProvider>();
+        Container.RegisterSingleton<IRequestActionDispatcher, RequestActionDispatcher>();
 
         Container.RegisterSingleton<MainForm>();
         Container.RegisterSingleton<ISearchEngine, MainForm>();
@@ -170,9 +169,9 @@ public class Bootstrapper : IRequestActionDispatcherV2
         return implementorTypes;
     }
 
-    void IRequestActionDispatcherV2.Dispatch(ActionType actionType)
+    void IRequestActionDispatcher.Dispatch(ActionType actionType)
     {
-        var dispatcher = Container.GetInstance<IRequestActionDispatcherV2>();
+        var dispatcher = Container.GetInstance<IRequestActionDispatcher>();
         dispatcher.Dispatch(actionType);
     }
 }

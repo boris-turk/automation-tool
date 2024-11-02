@@ -5,7 +5,7 @@ using SimpleInjector;
 
 namespace BTurk.Automation.DependencyResolution;
 
-public class ChildRequestsProvider : IChildRequestsProviderV2
+public class ChildRequestsProvider : IChildRequestsProvider
 {
     public ChildRequestsProvider(Container container)
     {
@@ -14,7 +14,7 @@ public class ChildRequestsProvider : IChildRequestsProviderV2
 
     private Container Container { get; }
 
-    IEnumerable<TRequest> IChildRequestsProviderV2.LoadChildren<TRequest>()
+    IEnumerable<TRequest> IChildRequestsProvider.LoadChildren<TRequest>()
     {
         var provider = Container.GetInstance<IRequestsProvider<TRequest>>();
         var requests = provider.GetRequests().ToList();

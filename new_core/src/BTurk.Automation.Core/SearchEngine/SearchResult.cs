@@ -11,7 +11,7 @@ public class SearchResult
 
     public IReadOnlyList<Item> Items => _items.AsReadOnly();
 
-    public SearchResult Append(IRequestV2 request)
+    public SearchResult Append(IRequest request)
     {
         var searchResult = new SearchResult
         {
@@ -32,13 +32,13 @@ public class SearchResult
 
     public class Item
     {
-        public Item(IRequestV2 request, string text = null)
+        public Item(IRequest request, string text = null)
         {
             Text = text ?? request.Configuration.Text;
             Request = request;
         }
 
         public string Text { get; }
-        public IRequestV2 Request { get; }
+        public IRequest Request { get; }
     }
 }

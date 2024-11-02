@@ -5,11 +5,11 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.UnitTests
 {
-    public class FakeSearchEngine : ISearchEngineV2
+    public class FakeSearchEngine : ISearchEngine
     {
         private readonly List<SearchToken> _searchTokens = [];
 
-        public FakeSearchEngine(IRequestV2 rootMenuRequest)
+        public FakeSearchEngine(IRequest rootMenuRequest)
         {
             RootMenuRequest = rootMenuRequest;
         }
@@ -27,19 +27,19 @@ namespace BTurk.Automation.Core.UnitTests
 
         public EnvironmentContext Context { get; set; } = EnvironmentContext.Empty;
 
-        public IRequestV2 RootMenuRequest { get; }
+        public IRequest RootMenuRequest { get; }
 
-        void ISearchEngineV2.SetSearchResults(List<SearchResult> resultsCollection)
+        void ISearchEngine.SetSearchResults(List<SearchResult> resultsCollection)
         {
             SearchResults.AddRange(resultsCollection);
         }
 
-        void ISearchEngineV2.Hide()
+        void ISearchEngine.Hide()
         {
             Hidden = true;
         }
 
-        List<SearchToken> ISearchEngineV2.SearchTokens
+        List<SearchToken> ISearchEngine.SearchTokens
         {
             get => _searchTokens;
             set
@@ -49,6 +49,6 @@ namespace BTurk.Automation.Core.UnitTests
             }
         }
 
-        SearchResult ISearchEngineV2.SelectedSearchResult => SearchResults.ElementAtOrDefault(SelectedSearchResultIndex);
+        SearchResult ISearchEngine.SelectedSearchResult => SearchResults.ElementAtOrDefault(SelectedSearchResultIndex);
     }
 }

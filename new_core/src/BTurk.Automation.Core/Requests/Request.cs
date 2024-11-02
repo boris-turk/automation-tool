@@ -7,15 +7,15 @@ namespace BTurk.Automation.Core.Requests;
 
 [DataContract]
 [DebuggerDisplay("{" + nameof(RequestTypeName) + "}")]
-public class Request : IRequestV2
+public class Request : IRequest
 {
     private string _text;
 
-    private readonly RequestConfigurationV2 _configuration;
+    private readonly RequestConfiguration _configuration;
 
     public Request()
     {
-        _configuration = new RequestConfigurationV2();
+        _configuration = new RequestConfiguration();
     }
 
     public Request(string text) : this()
@@ -39,9 +39,9 @@ public class Request : IRequestV2
     private string RequestTypeName => Extensions.GetDebuggerDisplayText(this);
 
     [DebuggerStepThrough]
-    protected RequestConfigurationV2 Configure() => _configuration;
+    protected RequestConfiguration Configure() => _configuration;
 
-    IRequestConfigurationV2 IRequestV2.Configuration
+    IRequestConfiguration IRequest.Configuration
     {
         [DebuggerStepThrough]
         get => _configuration;

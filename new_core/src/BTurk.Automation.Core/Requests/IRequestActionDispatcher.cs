@@ -2,7 +2,7 @@
 
 namespace BTurk.Automation.Core.Requests;
 
-public interface IRequestActionDispatcherV2
+public interface IRequestActionDispatcher
 {
     void Dispatch(ActionType actionType);
 }

@@ -6,21 +6,21 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests;
 
-public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
+public class RequestActionDispatcher : IRequestActionDispatcher
 {
-    public RequestActionDispatcherV2(ISearchEngineV2 searchEngine, ICommandProcessor commandProcessor,
-        IChildRequestsProviderV2 childRequestsProvider)
+    public RequestActionDispatcher(ISearchEngine searchEngine, ICommandProcessor commandProcessor,
+        IChildRequestsProvider childRequestsProvider)
     {
         SearchEngine = searchEngine;
         CommandProcessor = commandProcessor;
         ChildRequestsProvider = childRequestsProvider;
     }
 
-    private ISearchEngineV2 SearchEngine { [DebuggerStepThrough] get; }
+    private ISearchEngine SearchEngine { [DebuggerStepThrough] get; }
 
     private ICommandProcessor CommandProcessor { [DebuggerStepThrough] get; }
 
-    private IChildRequestsProviderV2 ChildRequestsProvider { get; }
+    private IChildRequestsProvider ChildRequestsProvider { get; }
 
     public void Dispatch(ActionType actionType)
     {
@@ -92,7 +92,7 @@ public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
         }
     }
 
-    private static bool ShouldSkipSearchResult(IRequestV2 request, SearchResult result)
+    private static bool ShouldSkipSearchResult(IRequest request, SearchResult result)
     {
         if (request.Configuration.CanHaveChildren)
             return false;
@@ -100,7 +100,7 @@ public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
         return result.Items.Count == 1;
     }
 
-    private static bool ShouldSkipChildren(List<SearchToken> searchTokens, IRequestV2 request)
+    private static bool ShouldSkipChildren(List<SearchToken> searchTokens, IRequest request)
     {
         if (request.Configuration.Text.HasLength() && searchTokens.Any() == false)
             return true;
@@ -114,7 +114,7 @@ public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
         return false;
     }
 
-    private List<SearchToken> GetChildSearchTokens((int Score, IRequestV2 Request) child, List<SearchToken> searchTokens)
+    private List<SearchToken> GetChildSearchTokens((int Score, IRequest Request) child, List<SearchToken> searchTokens)
     {
         const int sufficientMatch = 1;
         const int optimalMatch = 1000;
@@ -138,7 +138,7 @@ public class RequestActionDispatcherV2 : IRequestActionDispatcherV2
         return searchTokens.Skip(skipCount).ToList();
     }
 
-    private IEnumerable<(int Score, IRequestV2 Request)> GetChildren(IRequestV2 request, List<SearchToken> searchTokens)
+    private IEnumerable<(int Score, IRequest Request)> GetChildren(IRequest request, List<SearchToken> searchTokens)
     {
         string singleWordSearchText = null;
         string multiWordSearchText = null;

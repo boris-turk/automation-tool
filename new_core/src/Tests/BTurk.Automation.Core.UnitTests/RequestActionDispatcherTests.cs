@@ -298,10 +298,10 @@ public class RequestActionDispatcherTests
         searchEngine.Hidden.Should().BeTrue();
     }
 
-    private RequestActionDispatcherV2 GetRequestActionDispatcher(ISearchEngineV2 searchEngine,
-        ICommandProcessor commandProcessor = null, IChildRequestsProviderV2 childRequestsProvider = null)
+    private RequestActionDispatcher GetRequestActionDispatcher(ISearchEngine searchEngine,
+        ICommandProcessor commandProcessor = null, IChildRequestsProvider childRequestsProvider = null)
     {
-        return new RequestActionDispatcherV2(searchEngine, commandProcessor ?? new FakeCommandProcessor(),
+        return new RequestActionDispatcher(searchEngine, commandProcessor ?? new FakeCommandProcessor(),
             childRequestsProvider ?? new FakeChildRequestsProvider());
     }
 

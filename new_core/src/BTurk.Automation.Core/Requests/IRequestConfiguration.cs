@@ -4,12 +4,12 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests;
 
-public interface IRequestConfigurationV2
+public interface IRequestConfiguration
 {
     string Text { get; }
     ICommand Command { get; }
     bool ScanChildrenIfUnmatched { get; }
     bool CanHaveChildren { get; }
     bool CanProcess(EnvironmentContext environmentContext);
-    IEnumerable<IRequestV2> GetChildren(IChildRequestsProviderV2 childRequestsProvider);
+    IEnumerable<IRequest> GetChildren(IChildRequestsProvider childRequestsProvider);
 }

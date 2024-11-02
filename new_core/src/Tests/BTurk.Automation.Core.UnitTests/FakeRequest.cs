@@ -30,7 +30,7 @@ public class FakeRequest : Request
         return this;
     }
 
-    public FakeRequest WithChildren(params IRequestV2[] childRequests)
+    public FakeRequest WithChildren(params IRequest[] childRequests)
     {
         Configure().AddChildRequests(childRequests);
         return this;

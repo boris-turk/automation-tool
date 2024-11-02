@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace BTurk.Automation.Core.Requests;
 
-public class EmptyRequestProvider<TRequest> : IRequestsProvider<TRequest> where TRequest : IRequestV2
+public class EmptyRequestProvider<TRequest> : IRequestsProvider<TRequest> where TRequest : IRequest
 {
     public IEnumerable<TRequest> GetRequests()
     {

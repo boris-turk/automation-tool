@@ -12,7 +12,7 @@ using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.WinForms.Controls;
 
-public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
+public partial class MainForm : Form, ISearchEngine
 {
     public static Font PreferredFont = new("Microsoft Sans Serif", 12F);
 
@@ -40,11 +40,11 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
         TextBox.KeyDown += (_, args) => OnTextBoxKeyDown(args);
     }
 
-    public IRequestV2 RootMenuRequest { get; set; }
+    public IRequest RootMenuRequest { get; set; }
 
-    IRequestV2 ISearchEngineV2.RootMenuRequest => RootMenuRequest;
+    IRequest ISearchEngine.RootMenuRequest => RootMenuRequest;
 
-    public IRequestActionDispatcherV2 Dispatcher { [DebuggerStepThrough] get; [DebuggerStepThrough] set; }
+    public IRequestActionDispatcher Dispatcher { [DebuggerStepThrough] get; [DebuggerStepThrough] set; }
 
     public EnvironmentContext Context => EnvironmentContextProvider.Context;
 
