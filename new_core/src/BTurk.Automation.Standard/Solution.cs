@@ -8,7 +8,8 @@ public class Solution : Request, IFileRequest
 {
     public Solution()
     {
-        Command = new OpenWithDefaultProgramCommand(this);
+        Configure()
+            .SetCommand(new OpenWithDefaultProgramCommand(this));
     }
 
     [DataMember(Name = "Path")]

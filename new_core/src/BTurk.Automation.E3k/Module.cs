@@ -5,10 +5,10 @@ namespace BTurk.Automation.E3k;
 public class Module : Request
 {
     public Module(int number, string name)
-        : base($"{number:000} - {name}")
     {
         Number = number;
         Name = name;
+        Configure().SetText($"{number:000} - {name}");
     }
 
     public int Number { get; }

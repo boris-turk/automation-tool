@@ -39,7 +39,7 @@ public class RequestConfigurationV2 : IRequestConfigurationV2
 
     public RequestConfigurationV2 AddChildRequestsProvider<TRequest>() where TRequest : IRequestV2
     {
-        _childRequestProviders.Add(p => p.LoadChildren<TRequest>());
+        _childRequestProviders.Add(p => p.LoadChildren<TRequest>().Cast<IRequestV2>());
         return this;
     }
 

@@ -9,7 +9,7 @@ namespace BTurk.Automation.Core.UnitTests
     {
         private readonly List<SearchToken> _searchTokens = [];
 
-        public FakeSearchEngine(IRequest rootMenuRequest)
+        public FakeSearchEngine(IRequestV2 rootMenuRequest)
         {
             RootMenuRequest = rootMenuRequest;
         }

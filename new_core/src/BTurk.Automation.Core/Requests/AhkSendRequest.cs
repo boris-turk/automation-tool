@@ -8,7 +8,9 @@ public class AhkSendRequest : Request, ICommand
 {
     public AhkSendRequest()
     {
-        Command = this;
+        Configure()
+            .SetText(() => Text)
+            .SetCommand(this);
     }
 
     public string Keys { get; set; }

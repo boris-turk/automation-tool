@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-using BTurk.Automation.Core.Requests;
+﻿using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Core.SearchEngine;
 
-public interface ISearchEngine : IEnvironmentContextProvider, ISearchItemsProvider
+public interface ISearchEngine : IEnvironmentContextProvider
 {
-    List<SearchStep> Steps { get; }
-
     string SearchText { get; set; }
 
     Request SelectedItem { get; }

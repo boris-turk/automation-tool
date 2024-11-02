@@ -8,7 +8,6 @@ public class OpenProgramRequest : Request, ICommand
 {
     public OpenProgramRequest(string programName)
     {
-        Command = this;
         ProgramName = programName;
 
         Configure()

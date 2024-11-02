@@ -8,7 +8,8 @@ public class UrlRequest : Request, IFileRequest
 {
     public UrlRequest()
     {
-        Command = new OpenWithDefaultProgramCommand(this);
+        Configure()
+            .SetCommand(new OpenWithDefaultProgramCommand(this));
     }
 
     [DataMember(Name = "Url")]

@@ -4,5 +4,5 @@ namespace BTurk.Automation.Core.Requests;
 
 public interface IChildRequestsProviderV2
 {
-    IEnumerable<IRequestV2> LoadChildren<TRequest>() where TRequest : IRequestV2;
+    IEnumerable<TRequest> LoadChildren<TRequest>() where TRequest : IRequestV2;
 }

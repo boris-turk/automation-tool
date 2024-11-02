@@ -61,8 +61,6 @@
     <Compile Include="GuestProcess.cs" />
     <Compile Include="MainMenuRequest.cs" />
     <Compile Include="QueryProcessor.cs" />
-    <Compile Include="RequestActionDispatcher.cs" />
-    <Compile Include="RequestVisitor.cs" />
     <Compile Include="RootMenuRequest.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

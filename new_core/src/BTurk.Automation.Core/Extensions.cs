@@ -56,7 +56,7 @@ public static class Extensions
         return list.Any() ? list.Select(selector).Max() : default;
     }
 
-    public static string GetDebuggerDisplayText(IRequest request)
+    public static string GetDebuggerDisplayText(IRequestV2 request)
     {
         var type = request.GetType();
 
@@ -74,8 +74,8 @@ public static class Extensions
             displayText = type.Name;
         }
 
-        if (!string.IsNullOrWhiteSpace(request.Text))
-            displayText = $"{displayText}: {request.Text}";
+        if (!string.IsNullOrWhiteSpace(request.Configuration.Text))
+            displayText = $"{displayText}: {request.Configuration.Text}";
 
         return displayText;
     }

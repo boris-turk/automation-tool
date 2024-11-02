@@ -6,7 +6,7 @@ public class Note : Request, IFileRequest
 {
     public Note()
     {
-        Command = new OpenWithDefaultProgramCommand(this);
+        Configure().SetCommand(new OpenWithDefaultProgramCommand(this));
     }
 
     public string Path { get; set; }

@@ -7,9 +7,10 @@ namespace BTurk.Automation.Core.UnitTests;
 [DebuggerDisplay("{" + nameof(DebuggerDisplayText) + "}")]
 public class FakeRequest : Request
 {
-    public FakeRequest(string name, string text = null) : base(text)
+    public FakeRequest(string name, string text = null)
     {
         Name = name;
+        Configure().SetText(text);
     }
 
     public string Name { get; }

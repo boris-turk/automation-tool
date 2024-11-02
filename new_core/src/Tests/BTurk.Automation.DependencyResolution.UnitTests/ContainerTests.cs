@@ -6,7 +6,6 @@ using BTurk.Automation.Core.Converters;
 using BTurk.Automation.Core.DataPersistence;
 using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
-using BTurk.Automation.Core.SearchEngine;
 using BTurk.Automation.Core.UnitTests;
 using BTurk.Automation.Core.Views;
 using BTurk.Automation.Standard;
@@ -35,7 +34,6 @@ public class ContainerTests
         {
             var types = new List<Type>
             {
-                typeof(ISearchItemsProvider),
                 typeof(IResourceProvider),
                 typeof(IRequestsProvider<Repository>),
                 typeof(IRequestsProvider<FakeRequest>),

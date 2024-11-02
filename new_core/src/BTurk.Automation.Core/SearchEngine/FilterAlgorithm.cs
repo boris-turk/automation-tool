@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using BTurk.Automation.Core.Requests;
 
 namespace BTurk.Automation.Core.SearchEngine;
 
@@ -14,18 +12,6 @@ public class FilterAlgorithm
         _filterWords = filterText.Split([' ', '\t'], StringSplitOptions.RemoveEmptyEntries).ToArray();
     }
 
-    public IEnumerable<IRequest> Filter(IEnumerable<IRequest> items)
-    {
-        var result =
-            from item in items
-            let score = GetScore(item.Text)
-            where score > 0
-            orderby score descending
-            select item;
-
-        return result;
-    }
-
     public int GetScore(string text)
     {
         if (!_filterWords.Any())
@@ -33,7 +19,7 @@ public class FilterAlgorithm
 
         var score = 0;
 
-        var words = text.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        var words = text.Split([' ', '\t'], StringSplitOptions.RemoveEmptyEntries).ToList();
 
         if (!words.Any())
             return 0; // name not specified => item is not properly defined, filter it out
@@ -43,7 +29,7 @@ public class FilterAlgorithm
             if (words.Count == 0)
                 return 0;
 
-            // get name word with highest match score for the current filter word
+            // get name word with the highest match score for the current filter word
             var element = words
                 .Select((value, index) => new
                 {

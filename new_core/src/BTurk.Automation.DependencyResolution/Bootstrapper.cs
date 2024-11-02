@@ -30,14 +30,15 @@ public class Bootstrapper : IRequestActionDispatcherV2
 {
     public static Container Container { get; private set; }
 
-    private Assembly[] Assemblies { get; } = {
+    private Assembly[] Assemblies { get; } =
+    [
         typeof(global::BTurk.Automation.Core.Requests.Request).Assembly,
         typeof(global::BTurk.Automation.DependencyResolution.Bootstrapper).Assembly,
         typeof(global::BTurk.Automation.E3k.Module).Assembly,
         typeof(global::BTurk.Automation.Mic.Salon).Assembly,
         typeof(global::BTurk.Automation.Standard.Note).Assembly,
-        typeof(global::BTurk.Automation.WinForms.Controls.CustomForm).Assembly,
-    };
+        typeof(global::BTurk.Automation.WinForms.Controls.CustomForm).Assembly
+    ];
 
     public static void InitializeContainer()
     {
@@ -54,16 +55,12 @@ public class Bootstrapper : IRequestActionDispatcherV2
 
         Container.RegisterSingleton<MainForm>();
         Container.RegisterSingleton<ISearchEngine, MainForm>();
-        Container.RegisterSingleton<ISearchItemsProvider, MainForm>();
         Container.RegisterInitializer<MainForm>(InitializeMainForm);
         Container.RegisterSingleton<IAsyncExecution, AsyncExecutionDialog>();
         Container.RegisterSingleton<IAsyncExecutionDialog, AsyncExecutionDialog>();
         Container.RegisterSingleton<IProcessStarter, ProcessStarter>();
         Container.RegisterSingleton<IConfigurationProvider, ConfigurationProvider>();
-        Container.RegisterSingleton<IChildRequestsProvider, ChildRequestsProvider>();
         Container.RegisterSingleton<IResourceProvider, JsonResourceProvider>();
-        Container.RegisterSingleton<IRequestActionDispatcher, RequestActionDispatcher>();
-        Container.RegisterSingleton<IRequestVisitor, RequestVisitor>();
         Container.RegisterSingleton<IEnvironmentContextProvider, EnvironmentContextProvider>();
         Container.RegisterSingleton<IMessagePublisher, MessagePublisher>();
         Container.RegisterSingleton<IViewProvider, ViewProvider>();
@@ -86,10 +83,6 @@ public class Bootstrapper : IRequestActionDispatcherV2
         RegisterGenericServiceImplementations(typeof(IRequestsProvider<>), Lifestyle.Singleton,
             excluded: typeof(EmptyRequestProvider<>));
 
-        RegisterGenericServiceImplementations(typeof(IRequestActionDispatcher<>), Lifestyle.Singleton);
-        RegisterGenericServiceImplementations(typeof(IRequestVisitor<,>), Lifestyle.Singleton,
-            excluded: typeof(DefaultRequestVisitor<,>));
-
         RegisterGenericServiceImplementations(typeof(IControlProvider<>), Lifestyle.Singleton);
         RegisterGenericServiceImplementations(typeof(IGuiValueConverter<,>), Lifestyle.Singleton);
 
@@ -101,9 +94,6 @@ public class Bootstrapper : IRequestActionDispatcherV2
             excluded: typeof(CompositeMessageHandler<>));
 
         Container.RegisterConditional(typeof(IRequestsProvider<>), typeof(EmptyRequestProvider<>),
-            Lifestyle.Singleton, c => !c.Handled);
-
-        Container.RegisterConditional(typeof(IRequestVisitor<,>), typeof(DefaultRequestVisitor<,>),
             Lifestyle.Singleton, c => !c.Handled);
     }
 
@@ -159,7 +149,7 @@ public class Bootstrapper : IRequestActionDispatcherV2
 
             var parentClosedGenericServiceTypes = serviceType.IsGenericType
                 ? implementorType.FindAllParentClosedGenerics(serviceType)
-                : new[] { serviceType };
+                : [serviceType];
 
             foreach (var closedGenericServiceType in parentClosedGenericServiceTypes)
                 Container.Collection.Append(closedGenericServiceType, implementorType, lifestyle);

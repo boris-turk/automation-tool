@@ -2,14 +2,13 @@
 
 namespace BTurk.Automation.Standard;
 
-public class UrlCollectionRequest : CollectionRequest<UrlRequest>
+public class UrlCollectionRequest : Request
 {
-    public UrlCollectionRequest() : base("url")
+    public UrlCollectionRequest()
     {
-    }
-
-    protected override void OnRequestLoaded(UrlRequest urlRequest)
-    {
-        urlRequest.Command = new OpenWithDefaultProgramCommand(urlRequest);
+        Configure()
+            .SetText("url")
+            .AddChildRequestsProvider<UrlRequest>();
+            //.SetCommand(r => new OpenWithDefaultProgramCommand(r));
     }
 }

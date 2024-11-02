@@ -16,17 +16,11 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
 {
     public static Font PreferredFont = new("Microsoft Sans Serif", 12F);
 
-    private string _currentText;
-
     private const int OutOfScreenOffset = -20000;
 
     public MainForm()
     {
         InitializeComponent();
-
-        _currentText = "";
-
-        Items = new List<IRequest>();
 
         Font = PreferredFont;
         TopMost = false;
@@ -46,11 +40,9 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
         TextBox.KeyDown += (_, args) => OnTextBoxKeyDown(args);
     }
 
-    public IRequest RootMenuRequest { get; set; }
+    public IRequestV2 RootMenuRequest { get; set; }
 
     IRequestV2 ISearchEngineV2.RootMenuRequest => RootMenuRequest;
-
-    public List<IRequest> Items { get; }
 
     public IRequestActionDispatcherV2 Dispatcher { [DebuggerStepThrough] get; [DebuggerStepThrough] set; }
 
@@ -84,11 +76,6 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
             else
                 _workInProgressPictureBox.SendToBack();
         }
-    }
-
-    private void CreateInitialStep()
-    {
-        Steps = [new(RootMenuRequest)];
     }
 
     protected override void OnKeyDown(KeyEventArgs e)
@@ -172,7 +159,6 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
 
     protected override void OnLoad(EventArgs e)
     {
-        CreateInitialStep();
         TextBox.TextChanged += (_, _) => OnSearchTextChanged();
         MessagePublisher.Publish(ShowingAutomationWindowMessage.MainMenu);
         base.OnLoad(e);
@@ -181,15 +167,7 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
     private void OnSearchTextChanged()
     {
         if (Visible)
-        {
-            _currentText = TextBox.Text;
             Dispatcher.Dispatch(ActionType.Search);
-        }
-        else
-        {
-            _currentText = TextBox.Text;
-            CreateInitialStep();
-        }
     }
 
     private void SelectItem(int itemIndex)
@@ -214,8 +192,6 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
         TopMost = true;
         Activate();
     }
-
-    public List<SearchStep> Steps { [DebuggerStepThrough] get; [DebuggerStepThrough] private set; }
 
     public string SearchText
     {
@@ -277,9 +253,6 @@ public partial class MainForm : Form, ISearchEngine, ISearchEngineV2
 
     private void OnGlobalShortcutKeyPressed(int shortcutId)
     {
-        if (!Visible)
-            CreateInitialStep();
-
         var message = shortcutId == GlobalShortcuts.OpenMainWindowShortcutId
             ? ShowingAutomationWindowMessage.MainMenu
             : ShowingAutomationWindowMessage.ApplicationMenu;

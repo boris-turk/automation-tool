@@ -2,14 +2,13 @@
 
 namespace BTurk.Automation.Standard;
 
-public class OpenNoteRequest : CollectionRequest<Note>
+public class OpenNoteRequest : Request
 {
-    public OpenNoteRequest() : base("note")
+    public OpenNoteRequest()
     {
-    }
-
-    protected override void OnRequestLoaded(Note note)
-    {
-        note.Command = new OpenWithDefaultProgramCommand(note);
+        Configure()
+            .SetText("note")
+            .AddChildRequestsProvider<Note>();
+            //.SetCommand(r => new OpenWithDefaultProgramCommand(r));
     }
 }

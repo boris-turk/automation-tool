@@ -2,14 +2,13 @@
 
 namespace BTurk.Automation.Standard;
 
-public class OpenSolutionRequest : CollectionRequest<Solution>
+public class OpenSolutionRequest : Request
 {
-    public OpenSolutionRequest() : base("solution")
+    public OpenSolutionRequest()
     {
-    }
-
-    protected override void OnRequestLoaded(Solution solution)
-    {
-        solution.Command = new OpenWithDefaultProgramCommand(solution);
+        Configure()
+            .SetText("solution")
+            .AddChildRequestsProvider<Solution>();
+            //.SetCommand(r => new OpenWithDefaultProgramCommand(r));
     }
 }
