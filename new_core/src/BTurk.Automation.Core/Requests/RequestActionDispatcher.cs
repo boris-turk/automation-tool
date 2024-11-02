@@ -101,9 +101,6 @@ public class RequestActionDispatcher : IRequestActionDispatcher
 
             var childSearchScope = searchScope.GetChildrenSearchScope(child);
 
-            if (childSearchScope.ShouldSkipChild(child))
-                continue;
-
             foreach (var grandChildResult in CollectSearchResults(childResult, childSearchScope))
             {
                 yield return grandChildResult;
@@ -198,10 +195,13 @@ public class RequestActionDispatcher : IRequestActionDispatcher
 
         public bool ShouldSkipSearchResult(IRequest request, SearchResult result)
         {
-            if (request.Configuration.CanHaveChildren)
-                return false;
+            if (!request.Configuration.CanHaveChildren)
+                return result.Items.Count == 1;
 
-            return result.Items.Count == 1;
+            if (_previousSearchTokens.Count - SearchTokens.Count > 1)
+                return true;
+
+            return false;
         }
 
         public bool ShouldSkipChildren(List<SearchToken> searchTokens, IRequest request)
@@ -249,11 +249,6 @@ public class RequestActionDispatcher : IRequestActionDispatcher
             };
 
             return SearchTokens.Skip(skipCount).ToList();
-        }
-
-        public bool ShouldSkipChild(RequestMatch match)
-        {
-            return _previousSearchTokens.Count - SearchTokens.Count > 1 && match.Request.Configuration.CanHaveChildren;
         }
     }
 
