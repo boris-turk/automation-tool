@@ -272,7 +272,7 @@ public class RequestActionDispatcherTests
                 new FakeRequest(name: "Child", text: "child").WithChildren(
                     new FakeRequest(name: "GrandChild", text: "grand child 1")
                 ),
-                new FakeRequest(name: "AnotherChild", text: "another child").WithChildren(
+                new FakeRequest(name: "AnotherChild", text: "another_child").WithChildren(
                     new FakeRequest(name: "AnotherGrandChild", text: "grand child 2")
                 )
             )

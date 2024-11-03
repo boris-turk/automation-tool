@@ -183,8 +183,6 @@ public class RequestActionDispatcher : IRequestActionDispatcher
 
     private class SearchScope
     {
-        private readonly List<SearchToken> _previousSearchTokens = new();
-
         public SearchScope(List<SearchToken> searchTokens)
         {
             SearchTokens = searchTokens;
@@ -194,18 +192,13 @@ public class RequestActionDispatcher : IRequestActionDispatcher
 
         public bool ShouldSkipSearchResult(IRequest request)
         {
-            if (!request.Configuration.CanHaveChildren)
-            {
-                if (!request.Configuration.Text.HasLength())
-                    return true;
-
-                if (SearchTokens.Any())
-                    return true;
-
+            if (request.Configuration.CanHaveChildren)
                 return false;
-            }
 
-            if (_previousSearchTokens.Count - SearchTokens.Count > 1)
+            if (!request.Configuration.Text.HasLength())
+                return true;
+
+            if (SearchTokens.Any())
                 return true;
 
             return false;
@@ -229,7 +222,6 @@ public class RequestActionDispatcher : IRequestActionDispatcher
         {
             var childSearchTokens = GetChildSearchTokens(match);
             var scope = new SearchScope(childSearchTokens);
-            scope._previousSearchTokens.AddRange(SearchTokens);
             return scope;
         }
 
@@ -237,7 +229,6 @@ public class RequestActionDispatcher : IRequestActionDispatcher
         {
             const int sufficientMatch = 1;
             const int optimalMatch = 1000;
-            const int perfectMatch = 5000;
 
             var request = match.Request;
             var text = request.Configuration.Text;
@@ -250,7 +241,7 @@ public class RequestActionDispatcher : IRequestActionDispatcher
                 sufficientMatch when !request.Configuration.ScanChildrenIfUnmatched => 1,
                 sufficientMatch when SearchTokens.All(x => x is SpaceToken) => 1,
                 sufficientMatch => 0,
-                >= perfectMatch when request.Configuration.CanHaveChildren => 1,
+                > sufficientMatch when request.Configuration.CanHaveChildren => 1,
                 < optimalMatch => SearchTokens.TakeWhile(x => x is WordToken).Count(),
                 >= optimalMatch => SearchTokens.TakeWhile(x => x is WordToken).Count()
             };
