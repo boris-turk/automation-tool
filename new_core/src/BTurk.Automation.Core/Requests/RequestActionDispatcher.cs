@@ -80,12 +80,12 @@ public class RequestActionDispatcher : IRequestActionDispatcher
 
         var request = result.Items.Last().Request;
 
-        if (searchScope.ShouldSkipSearchResult(request, result))
+        if (searchScope.ShouldSkipSearchResult(request))
         {
             yield break;
         }
 
-        if (searchScope.ShouldSkipChildren(searchTokens, request))
+        if (searchScope.ShouldSkipChildren(request))
         {
             yield return result;
             yield break;
@@ -98,7 +98,6 @@ public class RequestActionDispatcher : IRequestActionDispatcher
         foreach (var child in childrenCollection)
         {
             var childResult = result.Append(child.Request);
-
             var childSearchScope = searchScope.GetChildrenSearchScope(child);
 
             foreach (var grandChildResult in CollectSearchResults(childResult, childSearchScope))
@@ -193,10 +192,18 @@ public class RequestActionDispatcher : IRequestActionDispatcher
 
         public List<SearchToken> SearchTokens { get; }
 
-        public bool ShouldSkipSearchResult(IRequest request, SearchResult result)
+        public bool ShouldSkipSearchResult(IRequest request)
         {
             if (!request.Configuration.CanHaveChildren)
-                return result.Items.Count == 1;
+            {
+                if (!request.Configuration.Text.HasLength())
+                    return true;
+
+                if (SearchTokens.Any())
+                    return true;
+
+                return false;
+            }
 
             if (_previousSearchTokens.Count - SearchTokens.Count > 1)
                 return true;
@@ -204,15 +211,15 @@ public class RequestActionDispatcher : IRequestActionDispatcher
             return false;
         }
 
-        public bool ShouldSkipChildren(List<SearchToken> searchTokens, IRequest request)
+        public bool ShouldSkipChildren(IRequest request)
         {
-            if (request.Configuration.Text.HasLength() && !searchTokens.Any())
+            if (request.Configuration.Text.HasLength() && !SearchTokens.Any())
                 return true;
 
             if (request.Configuration.CanHaveChildren)
                 return false;
 
-            if (!searchTokens.Any())
+            if (!SearchTokens.Any())
                 return true;
 
             return false;
