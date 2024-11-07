@@ -7,8 +7,9 @@ public class GitConsoleRequest : Request
     public GitConsoleRequest()
     {
         Configure()
-            .SetText("git");
-            //.SetCommand(r => new OpenGitConsoleCommand(r.Path))
-            //.ProcessCondition(r => r.Type == RepositoryType.Git);
+            .SetText("git")
+            .AddChildRequestsProvider<Repository>()
+            .SetCommand(r => new OpenGitConsoleCommand(r.Path))
+            .ProcessCondition(r => r.Type == RepositoryType.Git);
     }
 }

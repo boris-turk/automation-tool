@@ -114,7 +114,10 @@ public class RequestActionDispatcher : IRequestActionDispatcher
 
         foreach (var child in request.Configuration.GetChildren(ChildRequestsProvider))
         {
-            if (!child.Configuration.CanProcess(SearchEngine.Context))
+            if (!child.Configuration.CanProcess(null, SearchEngine.Context))
+                continue;
+
+            if (!request.Configuration.CanProcess(child, SearchEngine.Context))
                 continue;
 
             var text = child.Configuration.Text;

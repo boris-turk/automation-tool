@@ -9,7 +9,7 @@ public interface IRequestConfiguration
     string Text { get; }
     bool ScanChildrenIfUnmatched { get; }
     bool CanHaveChildren { get; }
-    bool CanProcess(EnvironmentContext environmentContext);
+    bool CanProcess(IRequest childRequest, EnvironmentContext environmentContext);
     bool ExecuteCommand(ICommandProcessor commandProcessor, IRequest childRequest);
     IEnumerable<IRequest> GetChildren(IChildRequestsProvider childRequestsProvider);
 }

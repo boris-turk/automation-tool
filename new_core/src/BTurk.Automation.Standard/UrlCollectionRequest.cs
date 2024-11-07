@@ -8,7 +8,8 @@ public class UrlCollectionRequest : Request
     {
         Configure()
             .SetText("url")
-            .AddChildRequestsProvider<UrlRequest>();
-            //.SetCommand(r => new OpenWithDefaultProgramCommand(r));
+            .ScanChildrenIfUnmatched()
+            .AddChildRequestsProvider<UrlRequest>()
+            .SetCommand(r => new OpenWithDefaultProgramCommand(r));
     }
 }

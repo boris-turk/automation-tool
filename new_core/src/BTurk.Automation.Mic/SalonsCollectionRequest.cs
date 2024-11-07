@@ -11,8 +11,8 @@ public class SalonsCollectionRequest : Request
     {
         Configure()
             .SetText("salon")
-            .AddChildRequestsProvider<Salon>();
-            //.SetCommand(GetCommand);
+            .AddChildRequestsProvider<Salon>()
+            .SetCommand(GetCommand);
     }
 
     public ICommand GetCommand(Salon salon)

@@ -8,7 +8,8 @@ public class OpenNoteRequest : Request
     {
         Configure()
             .SetText("note")
-            .AddChildRequestsProvider<Note>();
-            //.SetCommand(r => new OpenWithDefaultProgramCommand(r));
+            .ScanChildrenIfUnmatched()
+            .AddChildRequestsProvider<Note>()
+            .SetCommand(r => new OpenWithDefaultProgramCommand(r));
     }
 }

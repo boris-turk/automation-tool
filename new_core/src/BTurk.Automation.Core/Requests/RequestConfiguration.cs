@@ -12,6 +12,7 @@ public class RequestConfiguration : IRequestConfiguration
     private readonly List<IRequest> _childRequests = [];
     private bool _scanChildrenIfUnmatched;
     private Predicate<EnvironmentContext> _processCondition;
+    private Predicate<IRequest> _childProcessCondition;
     private readonly List<Func<IChildRequestsProvider, IEnumerable<IRequest>>> _childRequestProviders = [];
     private Func<ICommandProcessor, IRequest, bool> _commandDispatcher;
 
@@ -65,14 +66,15 @@ public class RequestConfiguration : IRequestConfiguration
 
     bool IRequestConfiguration.CanHaveChildren => _childRequests.Any() || _childRequestProviders.Any();
 
-    bool IRequestConfiguration.CanProcess(EnvironmentContext environmentContext)
+    bool IRequestConfiguration.CanProcess(IRequest childRequest, EnvironmentContext environmentContext)
     {
-        if (_processCondition == null)
-            return true;
+        if (_processCondition != null && childRequest == null)
+            return _processCondition.Invoke(environmentContext);
 
-        var canProcess = _processCondition.Invoke(environmentContext);
+        if (_childProcessCondition != null && childRequest != null)
+            return _childProcessCondition.Invoke(childRequest);
 
-        return canProcess;
+        return true;
     }
 
     bool IRequestConfiguration.ExecuteCommand(ICommandProcessor commandProcessor, IRequest childRequest)
@@ -110,7 +112,7 @@ public class RequestConfiguration : IRequestConfiguration
             _configuration = configuration;
         }
 
-        public void SetCommand(Func<TRequest, ICommand> commandProvider)
+        public Child<TRequest> SetCommand(Func<TRequest, ICommand> commandProvider)
         {
             _configuration._commandDispatcher = (processor, childRequest) =>
             {
@@ -122,7 +124,16 @@ public class RequestConfiguration : IRequestConfiguration
 
                 return true;
             };
+
+            return this;
+        }
+
+        public RequestConfiguration ProcessCondition(Predicate<TRequest> condition)
+        {
+            _configuration._childProcessCondition = r =>
+                r is TRequest properRequest && condition.Invoke(properRequest);
+
+            return this;
         }
     }
-
 }

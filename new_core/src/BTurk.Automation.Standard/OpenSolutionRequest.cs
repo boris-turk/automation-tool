@@ -8,7 +8,7 @@ public class OpenSolutionRequest : Request
     {
         Configure()
             .SetText("solution")
-            .AddChildRequestsProvider<Solution>();
-            //.SetCommand(r => new OpenWithDefaultProgramCommand(r));
+            .AddChildRequestsProvider<Solution>()
+            .SetCommand(r => new OpenWithDefaultProgramCommand(r));
     }
 }

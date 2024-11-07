@@ -9,8 +9,8 @@ public class BuildCleanupRequest : Request
     {
         Configure()
             .SetText("cleanup")
-            .AddChildRequestsProvider<Repository>();
-            //.SetCommand(r => new BuildCleanupCommand(r.Path))
-            //.ProcessCondition(r => r.IsTrunk() || r.IsClean() || r.Revision() >= 8);
+            .AddChildRequestsProvider<Repository>()
+            .SetCommand(r => new BuildCleanupCommand(r.Path))
+            .ProcessCondition(r => r.IsTrunk() || r.IsClean() || r.Revision() >= 8);
     }
 }
