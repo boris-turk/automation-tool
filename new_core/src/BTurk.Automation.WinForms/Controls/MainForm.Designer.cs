@@ -30,7 +30,7 @@
         {
             this._stackLabel = new System.Windows.Forms.Label();
             this._stateLabel = new System.Windows.Forms.Label();
-            this._listBox = new System.Windows.Forms.ListBox();
+            this._listBox = new CustomListBox();
             this.TextBox = new System.Windows.Forms.TextBox();
             this._workInProgressPictureBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this._workInProgressPictureBox)).BeginInit();
@@ -112,7 +112,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ListBox _listBox;
+        private CustomListBox _listBox;
         private System.Windows.Forms.Label _stackLabel;
         private System.Windows.Forms.PictureBox _workInProgressPictureBox;
         private System.Windows.Forms.Label _stateLabel;

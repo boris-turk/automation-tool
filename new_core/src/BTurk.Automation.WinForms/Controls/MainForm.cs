@@ -62,7 +62,7 @@ public partial class MainForm : Form, ISearchEngine
 
     public TextBox TextBox { get; private set; }
 
-    public ListBox ListBox => _listBox;
+    public CustomListBox ListBox => _listBox;
 
     public bool WorkInProgressVisible
     {
@@ -112,16 +112,9 @@ public partial class MainForm : Form, ISearchEngine
     {
         var handled = false;
 
-        if (args.KeyCode == Keys.Down)
+        if (args.KeyCode is Keys.Up or Keys.Down or Keys.PageUp or Keys.PageDown)
         {
-            SelectItem(ListBox.SelectedIndex + 1);
-            handled = true;
-        }
-
-        if (args.KeyCode == Keys.Up)
-        {
-            SelectItem(ListBox.SelectedIndex - 1);
-            handled = true;
+            ListBox.OnNavigationKeyPressed(args.KeyCode);
         }
 
         if (args.KeyData == (Keys.Control | Keys.Back))
@@ -222,12 +215,39 @@ public partial class MainForm : Form, ISearchEngine
 
         ListBox.Items.Clear();
 
-        foreach (var item in resultsCollection)
-            ListBox.Items.Add(item);
+        bool separatorAdded = false;
+
+        for (int i = 0; i < resultsCollection.Count; i++)
+        {
+            ListBox.Items.Add(resultsCollection[i]);
+
+            if (!separatorAdded && ShouldAddSeparator(i, resultsCollection))
+            {
+                ListBox.AddSeparator();
+                separatorAdded = true;
+            }
+        }
 
         ListBox.EndUpdate();
 
         SelectItem(itemIndex: 0);
+    }
+
+    private bool ShouldAddSeparator(int resultIndex, List<SearchResult> resultsCollection)
+    {
+        if (resultIndex == resultsCollection.Count - 1)
+            return false;
+
+        for (int i = 0; i < resultsCollection[resultIndex + 1].Items.Count - 1; i++)
+        {
+            var item1 = resultsCollection[resultIndex].Items.ElementAtOrDefault(i);
+            var item2 = resultsCollection[resultIndex + 1].Items.ElementAtOrDefault(i);
+
+            if (item1 != item2)
+                return true;
+        }
+
+        return false;
     }
 
     protected override void WndProc(ref Message m)
