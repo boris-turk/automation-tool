@@ -26,8 +26,6 @@ public class Salon : Request
     [DataMember(Name = "Company")]
     public string Company { get; set; }
 
-    public override string Text => GetText();
-
     private string GetText()
     {
         var text = $"{Name} {Type} {Address} {Company}";

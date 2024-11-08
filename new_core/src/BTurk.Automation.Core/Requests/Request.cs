@@ -9,29 +9,13 @@ namespace BTurk.Automation.Core.Requests;
 [DebuggerDisplay("{" + nameof(RequestTypeName) + "}")]
 public class Request : IRequest
 {
-    private string _text;
-
-    private readonly RequestConfiguration _configuration;
-
-    public Request()
-    {
-        _configuration = new RequestConfiguration();
-    }
-
-    public Request(string text) : this()
-    {
-        Text = text;
-    }
+    private readonly RequestConfiguration _configuration = new();
 
     [DataMember(Name = "Text")]
-    public virtual string Text
+    public string Text
     {
-        get => _text;
-        set
-        {
-            _text = value;
-            Configure().SetText(value);
-        }
+        get => ((IRequestConfiguration)_configuration).Text;
+        set => Configure().SetText(value);
     }
 
     public override string ToString() => Text ?? "";
