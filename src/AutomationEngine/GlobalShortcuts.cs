@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -95,7 +94,14 @@ namespace AutomationEngine
                 if (count == 0 || !File.Exists(_filePath))
                     return null;
 
-                return File.ReadAllLines(_filePath).FirstOrDefault();
+                using (var fileStream = new FileStream(_filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var reader = new StreamReader(fileStream))
+                {
+                    if (!reader.EndOfStream)
+                        return reader.ReadLine();
+                }
+
+                return string.Empty;
             }
             catch
             {
