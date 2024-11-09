@@ -1,24 +1,27 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
+using BTurk.Automation.Core.Annotations;
 using BTurk.Automation.Host.AssemblyLoading;
 using BTurk.Automation.Standard;
 using BTurk.Automation.WinForms;
 using BTurk.Automation.WinForms.Controls;
 
-// ReSharper disable UnusedMember.Global
+// ReSharper disable LocalizableElement
 
 namespace BTurk.Automation.DependencyResolution;
 
+[IgnoreUnusedTypeWarning<GuestProcess>]
 public class GuestProcess : IGuestProcess
 {
     private MainForm _mainForm;
     private GlobalShortcuts _globalShortcuts;
 
-    private Form ActiveForm => _mainForm ?? Form.ActiveForm;
-
     public void Start()
     {
         try
         {
+            AppDomain.CurrentDomain.UnhandledException += OnAppDomainUnhandledException;
+
             Bootstrapper.InitializeContainer();
 
             if (!AskForCredentials())
@@ -30,10 +33,13 @@ public class GuestProcess : IGuestProcess
 
             Application.Run(_mainForm);
         }
+        catch (Exception e)
+        {
+            ReportError(e);
+        }
         finally
         {
-            _globalShortcuts?.Uninstall();
-            _globalShortcuts = null;
+            DisposeResources();
         }
     }
 
@@ -46,12 +52,28 @@ public class GuestProcess : IGuestProcess
 
     public void Dispose()
     {
-        ActiveForm?.Invoke(DisposeResources);
+        if (_mainForm is { IsDisposed: false })
+            _mainForm?.Invoke(_mainForm.Dispose);
     }
 
     private void DisposeResources()
     {
-        _globalShortcuts?.Uninstall();
-        ActiveForm?.Dispose();
+        if (_mainForm is { IsDisposed: false })
+            _mainForm?.Dispose();
+    }
+
+    private static void OnAppDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
+        if (e?.ExceptionObject is Exception exception)
+            ReportError(exception);
+        else
+            ReportError(null);
+    }
+
+    private static void ReportError(Exception exception)
+    {
+        var errorMessage = StartupProcess.GetErrorMessage(exception);
+        StartupProcess.LogErrorMessage(errorMessage);
+        MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 }

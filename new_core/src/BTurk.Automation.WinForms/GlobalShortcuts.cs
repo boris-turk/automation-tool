@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using BTurk.Automation.Core.WinApi;
 using BTurk.Automation.WinForms.Controls;
@@ -9,18 +11,21 @@ namespace BTurk.Automation.WinForms;
 
 public class GlobalShortcuts
 {
+    private static readonly HashSet<int> RegisteredHotKeys = [];
+
     public const int OpenMainWindowShortcutId = 1;
     public const int OpenAppContextWindowShortcutId = 2;
 
     private readonly string _filePath = Path.Combine(Path.GetTempPath(), "new_automation_activity.txt");
 
     private Timer _timer;
-    private bool _shortcutsInstalled;
     private readonly MainForm _form;
+    private bool _uninstalled;
 
     public GlobalShortcuts(MainForm mainForm)
     {
         _form = mainForm;
+        _form.Disposed += (_, _) => Uninstall();
     }
 
     public void Install()
@@ -29,24 +34,26 @@ public class GlobalShortcuts
         _timer.Change(0, Timeout.Infinite);
     }
 
-    public void Uninstall()
+    private void Uninstall()
     {
-        if (!_shortcutsInstalled)
-            return;
-
         _timer?.Dispose();
         _timer = null;
 
-        _shortcutsInstalled = false;
+        UnRegisterHotKeys();
 
-        _form.Invoke(UnRegisterHotKeys);
+        _uninstalled = true;
     }
         
     private void OnTimerElapsed(object state)
     {
         WriteActivity();
 
-        if (!_shortcutsInstalled)
+        bool hotKeysNotYetRegistered;
+
+        lock (RegisteredHotKeys)
+            hotKeysNotYetRegistered = !RegisteredHotKeys.Any();
+
+        if (hotKeysNotYetRegistered)
         {
             Thread.Sleep(1000);
             _form.Invoke(RegisterHotKeys);
@@ -72,16 +79,44 @@ public class GlobalShortcuts
 
     private void RegisterHotKeys()
     {
-        _shortcutsInstalled = Methods.RegisterHotKey(
-            _form.Handle, OpenMainWindowShortcutId, Constants.MOD_ALT, Constants.VK_SPACE);
+        if (_uninstalled)
+            return;
 
-        _shortcutsInstalled = Methods.RegisterHotKey(
-            _form.Handle, OpenAppContextWindowShortcutId, Constants.MOD_ALT, Constants.VK_OEM_1);
+        lock (RegisteredHotKeys)
+        {
+            if (RegisteredHotKeys.Any())
+                return;
+        }
+
+        RegisterSingleHotKey(OpenMainWindowShortcutId, Constants.MOD_ALT, Constants.VK_SPACE);
+        RegisterSingleHotKey(OpenAppContextWindowShortcutId, Constants.MOD_ALT, Constants.VK_OEM_1);
     }
 
     private void UnRegisterHotKeys()
     {
-        Methods.UnregisterHotKey(_form.Handle, OpenMainWindowShortcutId);
-        Methods.UnregisterHotKey(_form.Handle, OpenAppContextWindowShortcutId);
+        lock (RegisteredHotKeys)
+        {
+            foreach (int id in RegisteredHotKeys)
+                UnRegisterSingleHotKey(id);
+        }
+    }
+
+    private void RegisterSingleHotKey(int id, uint modifiers, uint virtualKey)
+    {
+        lock (RegisteredHotKeys)
+        {
+            var shortcutInstalled = Methods.RegisterHotKey(_form.Handle, id, modifiers, virtualKey);
+
+            if (shortcutInstalled)
+                RegisteredHotKeys.Add(id);
+        }
+    }
+
+    private void UnRegisterSingleHotKey(int id)
+    {
+        var result = Methods.UnregisterHotKey(_form.Handle, id);
+
+        if (result)
+            RegisteredHotKeys.Remove(id);
     }
 }

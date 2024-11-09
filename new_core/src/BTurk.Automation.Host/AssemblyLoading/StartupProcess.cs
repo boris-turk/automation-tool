@@ -16,8 +16,7 @@ public class StartupProcess : IDisposable
     {
     }
 
-    internal static readonly string CurrentAssemblyDirectory =
-        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+    internal static string CurrentAssemblyDirectory => AppDomain.CurrentDomain.BaseDirectory;
 
     private AssemblyManager _assemblyManager;
     private FileSystemWatcher _fileSystemWatcher;
@@ -90,5 +89,20 @@ public class StartupProcess : IDisposable
         _waitHandle?.Dispose();
         _fileSystemWatcher?.Dispose();
         _assemblyManager?.Dispose();
+    }
+
+    public static string GetErrorMessage(Exception exception)
+    {
+        var message = exception == null
+            ? "Unknown error occurred."
+            : $"{exception.Message}{Environment.NewLine}{exception.StackTrace}";
+
+        return message;
+    }
+
+    public static void LogErrorMessage(string errorMessage)
+    {
+        string errorFilePath = Path.Combine(CurrentAssemblyDirectory, "ERROR_REPORT.txt");
+        File.AppendAllText(errorFilePath, errorMessage);
     }
 }

@@ -17,30 +17,29 @@ public static class Program
     [STAThread]
     static void Main()
     {
-        AppDomain.CurrentDomain.UnhandledException += OnAppDomainUnhandledException;
-
         if (!CreateMutex())
             return;
 
-        Application.EnableVisualStyles();
-        Application.SetCompatibleTextRenderingDefault(false);
-
-        Environment.CurrentDirectory = GetExecutingAssemblyDirectory();
-
         StartupProcess startupProcess = null;
+
         try
         {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            Environment.CurrentDirectory = GetExecutingAssemblyDirectory();
+
             startupProcess = StartupProcess.Instance;
             startupProcess?.Run();
         }
         catch (Exception e)
         {
-            ReportError(e);
+            var errorMessage = StartupProcess.GetErrorMessage(e);
+            StartupProcess.LogErrorMessage(errorMessage);
         }
         finally
         {
             startupProcess?.Dispose();
-            AppDomain.CurrentDomain.UnhandledException -= OnAppDomainUnhandledException;
             ReleaseMutex();
         }
     }
@@ -54,30 +53,15 @@ public static class Program
     private static bool CreateMutex()
     {
         var mutexId = GetMutexId(Environment.CurrentDirectory);
-        _mutex = new Mutex(true, mutexId, out var result);
+        _mutex = new Mutex(true, mutexId, out var acquiredOwnership);
 
-        if (result)
+        if (acquiredOwnership)
             return true;
 
         _mutex.Close();
         _mutex = null;
+
         return false;
-    }
-
-    private static void OnAppDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
-    {
-        ReleaseMutex();
-
-        if (e == null)
-        {
-            ReportError(null);
-            return;
-        }
-
-        if (e.ExceptionObject is Exception exception)
-            ReportError(exception);
-        else
-            ReportError(null);
     }
 
     private static string GetMutexId(string directory)
@@ -98,16 +82,5 @@ public static class Program
         {
             // ignore possible exceptions
         }
-    }
-
-    private static void ReportError(Exception exception)
-    {
-        var message = exception == null
-            ? "Unknown error occurred."
-            : $"{exception.Message}{Environment.NewLine}{exception.StackTrace}";
-
-        string errorFilePath = Path.Combine(StartupProcess.CurrentAssemblyDirectory, @"ERROR_REPORT.txt");
-
-        File.AppendAllText(errorFilePath, message);
     }
 }
