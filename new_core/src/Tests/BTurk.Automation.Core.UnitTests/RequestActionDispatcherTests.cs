@@ -317,6 +317,28 @@ public class RequestActionDispatcherTests
     }
 
     [Fact]
+    public void Dispatch_WithSearchActionAndWordTokenFollowedBySpaceTokenAndMatchesItemWithNoChildren_LoadsThatItem()
+    {
+        // Arrange
+        var commandProcessor = new FakeCommandProcessor();
+        var searchEngine = new FakeSearchEngine(
+            new FakeRequest(name: "RootMenu").WithChildren(
+                new FakeRequest(name: "Item", text: "item 1")
+            )
+        );
+        searchEngine.SetSearchTokens("item ");
+        var sut = GetRequestActionDispatcher(searchEngine, commandProcessor);
+
+        // Act
+        sut.Dispatch(ActionType.Search);
+
+        // Assert
+        AssertSearchResults(searchEngine.SearchResults, [
+            ["RootMenu", "Item"],
+        ]);
+    }
+
+    [Fact]
     public void Dispatch_WithExecuteActionAndNoSearchResultWithAssociatedCommandExists_DoesNothing()
     {
         // Arrange

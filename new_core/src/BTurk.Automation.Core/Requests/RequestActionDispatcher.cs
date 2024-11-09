@@ -249,7 +249,12 @@ public class RequestActionDispatcher : IRequestActionDispatcher
                 >= optimalMatch => SearchTokens.TakeWhile(x => x is WordToken).Count()
             };
 
-            return SearchTokens.Skip(skipCount).ToList();
+            var reducedSearchTokens = SearchTokens.Skip(skipCount).ToList();
+
+            if (!request.Configuration.CanHaveChildren && reducedSearchTokens.All(x => x is SpaceToken))
+                reducedSearchTokens = [];
+
+            return reducedSearchTokens;
         }
     }
 
