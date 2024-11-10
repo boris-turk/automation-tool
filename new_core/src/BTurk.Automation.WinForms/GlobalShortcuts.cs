@@ -83,7 +83,10 @@ public class GlobalShortcuts
 
         try
         {
-            File.WriteAllText(_filePath, text);
+            using var fileStream = new FileStream(_filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+            using var writer = new StreamWriter(fileStream);
+
+            writer.WriteLine(text);
         }
         catch
         {

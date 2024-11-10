@@ -18,6 +18,11 @@ public static class Extensions
         return ContainsPartially(testedText, value, true);
     }
 
+    public static bool ContainsIgnoreCase(this string searchString, string substring)
+    {
+        return searchString.IndexOf(substring, StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
     public static bool ContainsPartially(this string testedText, string value)
     {
         return ContainsPartially(testedText, value, false);

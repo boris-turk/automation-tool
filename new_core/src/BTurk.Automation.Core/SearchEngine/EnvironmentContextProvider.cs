@@ -28,18 +28,10 @@ public class EnvironmentContextProvider : IEnvironmentContextProvider,
 
         var context = new EnvironmentContext(windowText, windowClass);
 
-        var additionalDataProvider = GetAdditionalDataProvider(context);
-        additionalDataProvider?.Process(context);
-
-        return context;
-    }
-
-    private IAdditionalEnvironmentDataProvider GetAdditionalDataProvider(EnvironmentContext context)
-    {
         foreach (var provider in _additionalDataProviders)
             provider.Process(context);
 
-        return null;
+        return context;
     }
 
     EnvironmentContext IEnvironmentContextProvider.Context => _context;
