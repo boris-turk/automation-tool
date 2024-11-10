@@ -60,6 +60,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Extensions.cs" />
+    <Compile Include="Interop\Win32Constants.cs" />
     <Compile Include="Providers\FieldControlProvider.cs" />
     <Compile Include="Views\FieldValueAccessor.cs" />
     <Compile Include="Views\FocusCoordinator.cs" />

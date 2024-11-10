@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using BTurk.Automation.WinForms.Interop;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable InconsistentNaming
@@ -8,8 +9,6 @@ namespace BTurk.Automation.WinForms.Controls;
 
 public sealed class CustomListBox : ListBox
 {
-    private const int WM_LBUTTONDOWN = 0x0201;
-
     public CustomListBox()
     {
         DrawMode = DrawMode.OwnerDrawFixed;
@@ -106,7 +105,7 @@ public sealed class CustomListBox : ListBox
 
     protected override void WndProc(ref Message m)
     {
-        if (m.Msg == WM_LBUTTONDOWN)
+        if (m.Msg == Win32Constants.WM_LBUTTONDOWN)
         {
             var mousePosition = PointToClient(Cursor.Position);
             var index = IndexFromPoint(mousePosition);

@@ -22,7 +22,7 @@ public class StartupPresenter : IPresenter
 
     public void Start()
     {
-        string password = null;
+        string password = "";
 
         var viewBuilder = ViewProvider.Builder();
 

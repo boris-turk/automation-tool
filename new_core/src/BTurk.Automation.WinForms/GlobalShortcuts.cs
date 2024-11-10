@@ -21,11 +21,12 @@ public class GlobalShortcuts
     private Timer _timer;
     private readonly MainForm _form;
     private bool _uninstalled;
+    private readonly object _lockKey = new();
 
     public GlobalShortcuts(MainForm mainForm)
     {
         _form = mainForm;
-        _form.Disposed += (_, _) => Uninstall();
+        _form.BeforeDispose += Uninstall;
     }
 
     public void Install()
@@ -36,8 +37,11 @@ public class GlobalShortcuts
 
     private void Uninstall()
     {
-        _timer?.Dispose();
-        _timer = null;
+        lock (_lockKey)
+        {
+            _timer?.Dispose();
+            _timer = null;
+        }
 
         UnRegisterHotKeys();
 
@@ -50,7 +54,7 @@ public class GlobalShortcuts
 
         bool hotKeysNotYetRegistered;
 
-        lock (RegisteredHotKeys)
+        lock (_lockKey)
             hotKeysNotYetRegistered = !RegisteredHotKeys.Any();
 
         if (hotKeysNotYetRegistered)
@@ -59,7 +63,8 @@ public class GlobalShortcuts
             _form.Invoke(RegisterHotKeys);
         }
 
-        _timer.Change(500, Timeout.Infinite);
+        lock (_lockKey)
+            _timer?.Change(500, Timeout.Infinite);
     }
 
     private void WriteActivity()
@@ -82,7 +87,7 @@ public class GlobalShortcuts
         if (_uninstalled)
             return;
 
-        lock (RegisteredHotKeys)
+        lock (_lockKey)
         {
             if (RegisteredHotKeys.Any())
                 return;
@@ -94,7 +99,7 @@ public class GlobalShortcuts
 
     private void UnRegisterHotKeys()
     {
-        lock (RegisteredHotKeys)
+        lock (_lockKey)
         {
             foreach (int id in RegisteredHotKeys)
                 UnRegisterSingleHotKey(id);
@@ -103,7 +108,7 @@ public class GlobalShortcuts
 
     private void RegisterSingleHotKey(int id, uint modifiers, uint virtualKey)
     {
-        lock (RegisteredHotKeys)
+        lock (_lockKey)
         {
             var shortcutInstalled = Methods.RegisterHotKey(_form.Handle, id, modifiers, virtualKey);
 
