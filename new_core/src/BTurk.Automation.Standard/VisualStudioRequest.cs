@@ -10,12 +10,15 @@ public class VisualStudioRequest : Request
         Configure()
             .ProcessCondition(IsVisualStudioContext)
             .AddChildRequests(
-                new AhkSendRequest
-                {
-                    Text = "close all tabs but current",
-                    Keys = "!^c"
-                }
+                AhkRequest("close all tabs but current", "^!c"),
+				AhkRequest("file folder", "^!t")
             );
+    }
+
+    private AhkSendRequest AhkRequest(string text, string keys)
+    {
+        var request = new AhkSendRequest { Text = text, Keys = keys };
+        return request;
     }
 
     private bool IsVisualStudioContext(EnvironmentContext context)

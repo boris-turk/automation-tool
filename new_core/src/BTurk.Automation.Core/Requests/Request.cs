@@ -18,8 +18,6 @@ public class Request : IRequest
         set => Configure().SetText(value);
     }
 
-    public override string ToString() => Text ?? "";
-
     private string RequestTypeName => Extensions.GetDebuggerDisplayText(this);
 
     [DebuggerStepThrough]

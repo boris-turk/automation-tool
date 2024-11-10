@@ -1,3 +1,5 @@
+WorkInProgressVisible: is this still needed?
+
 Alt+R shortcut for entering regex search pattern, introduce RegexToken class, show in text box withing enclosing markers, e.g. ⌠<reg>\.mp3$⌡
 
 Request.Command property should be part of an interface and only executable Request sub-classes should implement it
