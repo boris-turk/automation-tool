@@ -60,7 +60,16 @@ public class GlobalShortcuts
         if (hotKeysNotYetRegistered)
         {
             Thread.Sleep(1000);
-            _form.Invoke(RegisterHotKeys);
+
+            try
+            {
+                _form.Invoke(RegisterHotKeys);
+            }
+            catch (Exception ex) when (ex is ObjectDisposedException or InvalidOperationException)
+            {
+                // this rare case occurs if an error crashes (disposing of) the main form before the parallel timer
+                // registers hotkeys during new core startup
+            }
         }
 
         lock (_lockKey)
