@@ -9,6 +9,6 @@ public class CommitRepositoryRequest : Request
         Configure()
             .SetText("commit")
             .AddChildRequestsProvider<Repository>()
-            .SetCommand(r => new CommitRepositoryCommand(r));
+            .SetCommand(r => new RepositoryCommitCommand(r.Path));
     }
 }

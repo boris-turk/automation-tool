@@ -4,6 +4,9 @@ namespace BTurk.Automation.Standard;
 
 public enum RepositoryType
 {
+    [EnumMember(Value = "None")]
+    None,
+
     [EnumMember(Value = "Svn")]
     Svn,
 

@@ -23,6 +23,11 @@ public static class Extensions
         return searchString.IndexOf(substring, StringComparison.OrdinalIgnoreCase) >= 0;
     }
 
+    public static bool StartsWithIgnoreCase(this string searchString, string substring)
+    {
+        return searchString.StartsWith(substring, StringComparison.OrdinalIgnoreCase);
+    }
+
     public static bool ContainsPartially(this string testedText, string value)
     {
         return ContainsPartially(testedText, value, false);

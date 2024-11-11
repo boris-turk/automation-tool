@@ -37,7 +37,7 @@ public class ContainerTests
                 typeof(IResourceProvider),
                 typeof(IRequestsProvider<Repository>),
                 typeof(IRequestsProvider<FakeRequest>),
-                typeof(ICommandHandler<CommitRepositoryCommand>),
+                typeof(ICommandHandler<RepositoryCommitCommand>),
                 typeof(IMessageHandler<ShowingAutomationWindowMessage>),
                 typeof(IGuiValueConverter<int, int>),
                 typeof(IGuiValueConverter<string, string>),

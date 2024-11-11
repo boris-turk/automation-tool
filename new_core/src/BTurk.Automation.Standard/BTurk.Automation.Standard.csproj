@@ -47,8 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommitRepositoryCommand.cs" />
-    <Compile Include="CommitRepositoryCommandHandler.cs" />
+    <Compile Include="RepositoryCommitCommand.cs" />
+    <Compile Include="RepositoryCommitCommandHandler.cs" />
     <Compile Include="ConnectWithAlwaysOnCommandHandler.cs" />
     <Compile Include="DTEInstanceProvider.cs" />
     <Compile Include="GitConsoleRequest.cs" />
@@ -64,8 +64,8 @@
     <Compile Include="RepositoryCommand.cs" />
     <Compile Include="SecurityServices\UserCredentialsQuery.cs" />
     <Compile Include="SecurityServices\UserCredentials.cs" />
-    <Compile Include="ShowRepositoryLogCommand.cs" />
-    <Compile Include="ShowRepositoryLogCommandHandler.cs" />
+    <Compile Include="RepositoryLogCommand.cs" />
+    <Compile Include="RepositoryLogCommandHandler.cs" />
     <Compile Include="ShowRepositoryLogRequest.cs" />
     <Compile Include="StartupPresenter.cs" />
     <Compile Include="UrlCollectionRequest.cs" />

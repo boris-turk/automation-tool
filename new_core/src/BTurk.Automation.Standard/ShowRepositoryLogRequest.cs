@@ -9,6 +9,6 @@ public class ShowRepositoryLogRequest : Request
         Configure()
             .SetText("log")
             .AddChildRequestsProvider<Repository>()
-            .SetCommand(r => new ShowRepositoryLogCommand(r));
+            .SetCommand(r => new RepositoryLogCommand(r.Path));
     }
 }
