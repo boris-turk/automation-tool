@@ -24,6 +24,13 @@ public static class Methods
     [DllImport("user32.dll")]
     public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
+    [DllImport("user32.dll")]
+    public static extern IntPtr SendMessageTimeout(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam, uint fuFlags,
+        uint uTimeout, out IntPtr lpdwResult);
+
+    [DllImport("user32.dll")]
+    public static extern bool IsWindow(IntPtr hWnd);
+
     public static int GetActiveProcessId()
     {
         var windowHandle = GetActiveWindow();
@@ -36,6 +43,11 @@ public static class Methods
         var foregroundWindow = GetForegroundWindow();
         var parentWindow = GetParent(foregroundWindow);
         return parentWindow != IntPtr.Zero ? parentWindow : foregroundWindow;
+    }
+
+    public static void SetActiveWindow(IntPtr handle)
+    {
+        SetForegroundWindow(handle);
     }
 
     public static string GetWindowText(IntPtr hWnd)
@@ -64,6 +76,10 @@ public static class Methods
 
     [DllImport("user32.dll")]
     private static extern IntPtr GetForegroundWindow();
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
 
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     private static extern int GetWindowText(IntPtr hWnd, StringBuilder strText, int maxCount);

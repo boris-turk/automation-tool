@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
-using BTurk.Automation.WinForms.Interop;
+using BTurk.Automation.Core.WinApi;
 
 // ReSharper disable VirtualMemberCallInConstructor
 
@@ -243,7 +243,7 @@ public partial class MainForm : Form, ISearchEngine
         if (m.Msg == 0x0312)
             OnGlobalShortcutKeyPressed(m.WParam.ToInt32());
 
-        if (m.Msg == Win32Constants.WM_DESTROY)
+        if (m.Msg == Constants.WM_DESTROY)
             BeforeDispose?.Invoke();
 
         base.WndProc(ref m);

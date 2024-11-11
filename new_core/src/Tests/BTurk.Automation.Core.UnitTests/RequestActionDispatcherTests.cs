@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BTurk.Automation.Core.Commands;
+using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.Requests;
 using BTurk.Automation.Core.SearchEngine;
 using FluentAssertions;
@@ -401,10 +402,11 @@ public class RequestActionDispatcherTests
     }
 
     private RequestActionDispatcher GetRequestActionDispatcher(ISearchEngine searchEngine,
-        ICommandProcessor commandProcessor = null, IChildRequestsProvider childRequestsProvider = null)
+        ICommandProcessor commandProcessor = null, IChildRequestsProvider childRequestsProvider = null,
+        IMessagePublisher messagePublisher = null)
     {
         return new RequestActionDispatcher(searchEngine, commandProcessor ?? new FakeCommandProcessor(),
-            childRequestsProvider ?? new FakeChildRequestsProvider());
+            childRequestsProvider ?? new FakeChildRequestsProvider(), messagePublisher ?? new FakeMessagePublisher());
     }
 
     private void AssertSearchResults(List<SearchResult> searchResults, List<List<string>> expectedFriendlyNamesCollection)

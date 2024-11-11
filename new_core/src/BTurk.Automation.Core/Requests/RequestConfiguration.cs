@@ -14,7 +14,7 @@ public class RequestConfiguration : IRequestConfiguration
     private Predicate<EnvironmentContext> _processCondition;
     private Predicate<IRequest> _childProcessCondition;
     private readonly List<Func<IChildRequestsProvider, IEnumerable<IRequest>>> _childRequestProviders = [];
-    private Func<ICommandProcessor, IRequest, bool> _commandDispatcher;
+    private Action<ICommandProcessor, IRequest> _commandDispatcher;
 
     public RequestConfiguration SetText(string text)
     {
@@ -29,11 +29,7 @@ public class RequestConfiguration : IRequestConfiguration
 
     public void SetCommand(ICommand command)
     {
-        _commandDispatcher = (processor, _) =>
-        {
-            processor.Process(command);
-            return true;
-        };
+        _commandDispatcher = (processor, _) => processor.Process(command);
     }
 
     public RequestConfiguration AddChildRequests(params IRequest[] requests)
@@ -60,6 +56,11 @@ public class RequestConfiguration : IRequestConfiguration
         return this;
     }
 
+    protected virtual bool CanExecute(IRequest childRequest)
+    {
+        return _commandDispatcher != null;
+    }
+
     string IRequestConfiguration.Text => _textProvider?.Invoke() ?? "";
 
     bool IRequestConfiguration.ScanChildrenIfUnmatched => _scanChildrenIfUnmatched;
@@ -77,14 +78,15 @@ public class RequestConfiguration : IRequestConfiguration
         return true;
     }
 
-    bool IRequestConfiguration.ExecuteCommand(ICommandProcessor commandProcessor, IRequest childRequest)
+    bool IRequestConfiguration.CanExecute(IRequest childRequest)
     {
-        if (_commandDispatcher == null)
-            return false;
+        return CanExecute(childRequest);
+    }
 
-        var executed = _commandDispatcher.Invoke(commandProcessor, childRequest);
-
-        return executed;
+    void IRequestConfiguration.ExecuteCommand(ICommandProcessor commandProcessor, IRequest childRequest)
+    {
+        if (CanExecute(childRequest))
+            _commandDispatcher.Invoke(commandProcessor, childRequest);    
     }
 
     IEnumerable<IRequest> IRequestConfiguration.GetChildren(IChildRequestsProvider childRequestsProvider)
@@ -112,17 +114,20 @@ public class RequestConfiguration : IRequestConfiguration
             _configuration = configuration;
         }
 
+        protected override bool CanExecute(IRequest childRequest)
+        {
+            return _configuration._commandDispatcher != null && childRequest is TRequest;
+        }
+
         public Child<TRequest> SetCommand(Func<TRequest, ICommand> commandProvider)
         {
             _configuration._commandDispatcher = (processor, childRequest) =>
             {
                 if (childRequest is not TRequest properChildRequest)
-                    return false;
+                    return;
 
                 var command = commandProvider.Invoke(properChildRequest);
                 processor.Process(command);
-
-                return true;
             };
 
             return this;

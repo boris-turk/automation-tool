@@ -77,6 +77,8 @@
     <Compile Include="FileSystem\IDirectoryProvider.cs" />
     <Compile Include="IProcessStarter.cs" />
     <Compile Include="IRequestProcessor.cs" />
+    <Compile Include="Messages\BeforeExecuteCommandMessage.cs" />
+    <Compile Include="Messages\CancelableMessage.cs" />
     <Compile Include="Messages\CompositeMessageHandler.cs" />
     <Compile Include="Messages\IMessage.cs" />
     <Compile Include="Messages\IMessageHandler.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="SearchEngine\SearchResult.cs" />
     <Compile Include="SearchEngine\SearchToken.cs" />
     <Compile Include="SearchEngine\SpaceToken.cs" />
+    <Compile Include="SearchEngine\WindowFocusHandler.cs" />
     <Compile Include="SearchEngine\WordToken.cs" />
     <Compile Include="Serialization\ContractResolver.cs" />
     <Compile Include="Serialization\JsonResourceProvider.cs" />

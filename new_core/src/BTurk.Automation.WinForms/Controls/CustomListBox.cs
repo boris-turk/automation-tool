@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
-using BTurk.Automation.WinForms.Interop;
+using BTurk.Automation.Core.WinApi;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable InconsistentNaming
@@ -105,7 +105,7 @@ public sealed class CustomListBox : ListBox
 
     protected override void WndProc(ref Message m)
     {
-        if (m.Msg == Win32Constants.WM_LBUTTONDOWN)
+        if (m.Msg == Constants.WM_LBUTTONDOWN)
         {
             var mousePosition = PointToClient(Cursor.Position);
             var index = IndexFromPoint(mousePosition);

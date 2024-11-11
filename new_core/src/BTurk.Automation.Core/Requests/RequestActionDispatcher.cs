@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using BTurk.Automation.Core.Commands;
+using BTurk.Automation.Core.Messages;
 using BTurk.Automation.Core.SearchEngine;
 
 namespace BTurk.Automation.Core.Requests;
@@ -10,16 +11,19 @@ namespace BTurk.Automation.Core.Requests;
 public class RequestActionDispatcher : IRequestActionDispatcher
 {
     public RequestActionDispatcher(ISearchEngine searchEngine, ICommandProcessor commandProcessor,
-        IChildRequestsProvider childRequestsProvider)
+        IChildRequestsProvider childRequestsProvider, IMessagePublisher messagePublisher)
     {
         SearchEngine = searchEngine;
         CommandProcessor = commandProcessor;
         ChildRequestsProvider = childRequestsProvider;
+        MessagePublisher = messagePublisher;
     }
 
     private ISearchEngine SearchEngine { [DebuggerStepThrough] get; }
 
     private ICommandProcessor CommandProcessor { [DebuggerStepThrough] get; }
+
+    private IMessagePublisher MessagePublisher { get; }
 
     private IChildRequestsProvider ChildRequestsProvider { get; }
 
@@ -45,21 +49,23 @@ public class RequestActionDispatcher : IRequestActionDispatcher
         if (items == null)
             return;
 
-        var executed = false;
-
         for (int i = items.Count - 1; i >= 0; i--)
         {
             var childRequest = items.ElementAtOrDefault(i + 1)?.Request;
 
             var configuration = items[i].Request.Configuration;
-            executed = configuration.ExecuteCommand(CommandProcessor, childRequest);
 
-            if (executed)
-                break;
+            if (!configuration.CanExecute(childRequest))
+                continue;
+
+            var message = new BeforeExecuteCommandMessage();
+            MessagePublisher.Publish(message);
+
+            if (!message.Canceled)
+                configuration.ExecuteCommand(CommandProcessor, childRequest);
+
+            break;
         }
-
-        if (executed)
-            SearchEngine.Hide();
     }
 
     private void Search()
