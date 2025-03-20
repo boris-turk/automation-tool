@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -11,6 +12,11 @@ namespace TravelOrderRecorder
     {
         public void Execute()
         {
+            if (!Debugger.IsAttached)
+            {
+                return;
+            }
+
             if (TravelOrdersCollection.Instance.TravelOrders.Any(x => x.Date == DateTime.Today))
             {
                 return;
